@@ -30,10 +30,12 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pnlScroll = new javax.swing.JScrollPane();
         tablaTurnos = new javax.swing.JTable();
         pnlFormularioTurno = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         txtNombre = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,10 +76,6 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 
         pnlFormularioTurno.setBackground(new java.awt.Color(39, 71, 125));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Gestor de Turnos");
-
         btnAgregar.setBackground(new java.awt.Color(255, 166, 43));
         btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAgregar.setForeground(new java.awt.Color(39, 71, 125));
@@ -87,21 +85,35 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 
         lblNombre.setText("Nombre:");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Gestor de Turnos");
+
+        jLabel2.setText("jLabel2");
+
+        jTextField1.setText("jTextField1");
+
         javax.swing.GroupLayout pnlFormularioTurnoLayout = new javax.swing.GroupLayout(pnlFormularioTurno);
         pnlFormularioTurno.setLayout(pnlFormularioTurnoLayout);
         pnlFormularioTurnoLayout.setHorizontalGroup(
             pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormularioTurnoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAgregar)
-                .addGap(32, 32, 32))
-            .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormularioTurnoLayout.createSequentialGroup()
+                        .addComponent(btnAgregar)
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormularioTurnoLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(62, 62, 62))))
+            .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1))
                     .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
-                        .addGap(74, 74, 74)
                         .addComponent(lblNombre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -116,6 +128,10 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNombre))
+                .addGap(24, 24, 24)
+                .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAgregar)
                 .addGap(26, 26, 26))
@@ -136,17 +152,17 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(pnlGestionTurnoLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionTurnoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRegresar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
         pnlGestionTurnoLayout.setVerticalGroup(
             pnlGestionTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionTurnoLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(21, 21, 21)
                 .addComponent(btnRegresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(pnlGestionTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pnlScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
                     .addComponent(pnlFormularioTurno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -208,6 +224,8 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JPanel pnlFormularioTurno;
     private javax.swing.JPanel pnlGestionTurno;
