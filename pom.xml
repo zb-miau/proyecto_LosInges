@@ -7,7 +7,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>Presentacion</module>
-        <module>../../NetBeansProjects/DTO_Negocios</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
