@@ -13,11 +13,8 @@ import java.time.LocalDate;
 public class DTOHorarioEmpleado {
 
     private DTOEmpleado empleado;
-
     private DTOTurno turno;
-
     private LocalDate fechaIncio;
-
     private LocalDate fechaFin;
 
     public DTOHorarioEmpleado() {

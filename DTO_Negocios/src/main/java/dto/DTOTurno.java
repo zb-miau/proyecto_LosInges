@@ -15,11 +15,8 @@ import java.util.Set;
 public class DTOTurno {
 
     private String tipo;
-
     private LocalTime horaInicio;
-
     private LocalTime horaFin;
-
     private Set<DayOfWeek> diasTrabajo;
 
     public DTOTurno() {
