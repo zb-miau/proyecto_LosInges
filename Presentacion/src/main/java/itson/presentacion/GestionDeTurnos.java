@@ -5,6 +5,7 @@
 package itson.presentacion;
 
 import dto.DTOTurno;
+import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -26,6 +28,7 @@ import javax.swing.SpinnerDateModel;
  */
 public class GestionDeTurnos extends javax.swing.JFrame {
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
+    Color colorEvento;
     /**
      * Creates new form GestionDeHorarios
      */
@@ -65,6 +68,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         chkViernes = new javax.swing.JCheckBox();
         chkSabado = new javax.swing.JCheckBox();
         chkDomingo = new javax.swing.JCheckBox();
+        btnColor = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -153,6 +157,16 @@ public class GestionDeTurnos extends javax.swing.JFrame {
 
         chkDomingo.setText("Domingo");
 
+        btnColor.setBackground(new java.awt.Color(255, 166, 43));
+        btnColor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnColor.setForeground(new java.awt.Color(39, 71, 125));
+        btnColor.setText("Agregar Color");
+        btnColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormularioTurnoLayout = new javax.swing.GroupLayout(pnlFormularioTurno);
         pnlFormularioTurno.setLayout(pnlFormularioTurnoLayout);
         pnlFormularioTurnoLayout.setHorizontalGroup(
@@ -168,20 +182,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                         .addComponent(btnModificar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregar)
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormularioTurnoLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(lblDias, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkMiercoles)
-                            .addComponent(chkLunes, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkViernes))
-                        .addGap(22, 22, 22)
-                        .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkMartes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(chkSabado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(chkJueves, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormularioTurnoLayout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,6 +190,18 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                                 .addComponent(lblNombre)
                                 .addGap(27, 27, 27)
                                 .addComponent(txtNombre))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormularioTurnoLayout.createSequentialGroup()
+                                .addComponent(lblDias, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkMiercoles)
+                                    .addComponent(chkLunes, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(chkViernes))
+                                .addGap(22, 22, 22)
+                                .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkMartes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(chkSabado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(chkJueves, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
                                 .addComponent(lblHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -197,12 +210,13 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                                 .addComponent(lblHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
                                 .addComponent(spnHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(45, 45, 45))
-            .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(chkDomingo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 1, Short.MAX_VALUE))
+                            .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
+                                .addGap(102, 102, 102)
+                                .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnColor)
+                                    .addComponent(chkDomingo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(44, 44, 44))
         );
         pnlFormularioTurnoLayout.setVerticalGroup(
             pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +233,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                     .addComponent(spnHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblHoraFin)
                     .addComponent(spnHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
+                .addGap(18, 18, 18)
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDias)
                     .addComponent(chkLunes)
@@ -234,6 +248,8 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                     .addComponent(chkViernes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chkDomingo)
+                .addGap(29, 29, 29)
+                .addComponent(btnColor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
@@ -303,11 +319,34 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         String nombre = txtNombre.getText();
         LocalTime[] horas = getHoras();
         Set<DayOfWeek> dias = getDias();
+        Color color;
         
-        DTOTurno turno = new DTOTurno(nombre,horas[0], horas[1], dias);
+        if (this.colorEvento == null) {
+            colorEvento = Color.GRAY;
+        }
+        
+        DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias, colorEvento);
         
         //todo
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    /**
+     * Permite al usuario seleccionar un color preferido para el evento que va a 
+     * crear en caso de que así lo desee. De lo contrario, el evento se agrega con
+     * un color gris.
+     * @param evt click al boton de agregar color
+     */
+    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+        Color colorSeleccionado = JColorChooser.showDialog(
+            null,                   
+            "Selecciona un Color",  
+            Color.GRAY               
+        );
+
+        if (colorSeleccionado != null) {
+            this.colorEvento = colorSeleccionado;
+        }
+    }//GEN-LAST:event_btnColorActionPerformed
 
     /**
      * Método que configura los spinners al iniciar la interfaz
@@ -368,6 +407,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnColor;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JCheckBox chkDomingo;

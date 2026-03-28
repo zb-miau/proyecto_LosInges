@@ -11,6 +11,6 @@ package itson.presentacion;
 public class Presentacion {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        GestionDeHorarios gH = new GestionDeHorarios();
     }
 }

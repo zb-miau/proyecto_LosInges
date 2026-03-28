@@ -4,6 +4,7 @@
  */
 package dto;
 
+import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
@@ -14,23 +15,33 @@ import java.util.Set;
  */
 public class DTOTurno {
 
-    private String tipo;
+    private String nombre;
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private Set<DayOfWeek> diasTrabajo;
+    private Color colorEvento;
 
     public DTOTurno() {
     }
 
     public DTOTurno(String tipo, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
-        this.tipo = tipo;
+        this.nombre = tipo;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.diasTrabajo = diasTrabajo;
     }
 
-    public String getTipo() {
-        return tipo;
+    public DTOTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
+        this.nombre = nombre;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.diasTrabajo = diasTrabajo;
+        this.colorEvento = colorEvento;
+    }
+    
+
+    public String getNombre() {
+        return nombre;
     }
 
     public LocalTime getHoraInicio() {
@@ -45,8 +56,8 @@ public class DTOTurno {
         return diasTrabajo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setHoraInicio(LocalTime horaInicio) {
@@ -61,4 +72,13 @@ public class DTOTurno {
         this.diasTrabajo = diasTrabajo;
     }
 
+    public Color getColorEvento() {
+        return colorEvento;
+    }
+
+    public void setColorEvento(Color colorEvento) {
+        this.colorEvento = colorEvento;
+    }
+
+    
 }

@@ -4,24 +4,34 @@
  */
 package itson.presentacion;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.time.temporal.TemporalAdjusters;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  *
  * @author Zaira
  */
 public class GestionDeHorarios extends javax.swing.JFrame {
-
+    JButton btnDia;
     /**
      * Creates new form GestionDeHorarios
      */
     public GestionDeHorarios() {
         initComponents();
+        pnlCalendario.setMinimumSize(new Dimension(627, 421));
+        configurarEtiquetas();
+        rdbtnMensual.setSelected(true);
+        rdbtnMensual.setEnabled(true);
         configurarCalendario();
+        setVisible(true);
     }
 
     /**
@@ -33,17 +43,12 @@ public class GestionDeHorarios extends javax.swing.JFrame {
          
         if (rdbtnSemanal.isSelected()){
             pnlCalendario.setLayout(new GridLayout(1, 7, 5, 5)); 
-            llenarDias(7);
+            LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            llenarDias(lunes);
+
         } else if (rdbtnMensual.isSelected()){
             pnlCalendario.setLayout(new GridLayout(0, 7, 5, 5)); 
-            if (lblMes.equals("FEBRERO")){
-                if(Year.of(LocalDate.now().getYear()).isLeap()){
-                    llenarDias(29);
-                } else {
-                    llenarDias(28);
-                }
-            }
-            llenarDias(31);
+            llenarDias();
         }
         
         pnlCalendario.revalidate();
@@ -51,32 +56,125 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     }
     
     /**
-     * Este método privado es auxiliar para configurar el horario
-     * ya que toma el número de días y crea un botón para cada uno para 
-     * después añadirlo al panel del calendario.
-     * @param dias número de días de la semana o el mes
+     * Calcula que día de la semana cae el primer día del mes
+     * @return Valor entero que representa el día de la semana del
+     * primer día del mes
      */
-    private void llenarDias(int dias){
-        for (int i = 1; i <= dias; i++) {
-            JButton btnDia = new JButton(String.valueOf(i));
+    public int primerDiaMes(){
+        int anio = Integer.parseInt(lblAnio.getText());
+        Month mes = Month.valueOf(lblMes.getText().toUpperCase());
+        
+        LocalDate primerDia = LocalDate.of(anio, mes, 1);
+        return primerDia.getDayOfWeek().getValue();
+    }
+    
+    /**
+     * Este método privado es auxiliar para configurar el horario mensual.
+     * Calcula cuántas casillas debe crear según el año y mes de las etiquetas
+     * y las llena de color en caso de existir un evento.
+     */
+    private void llenarDias(){
+        int primerDia = primerDiaMes();
+        int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
+        
+        for (int i = 1; i < primerDia; i++) {
+        pnlCalendario.add(new JLabel(""));
+        }
+        
+        for (int i = 1; i <= totalDias; i++) {
+            btnDia = new JButton(String.valueOf(i));
+            btnDia.setPreferredSize(new Dimension(80, 60));
+
+//            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+//            Color colorEvento = AQUI VA EL NOMBRE DE LA DAO.obtenerColorEvento(fechaActual);
+//            if (colorEvento != null) {
+//                btnDia.setBackground(colorEvento);
+//                btnDia.setForeground(Color.WHITE); 
+//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL EVENTO); 
+//            } else {
+//                btnDia.setBackground(Color.WHITE);
+//            }
+
+//            btnDia.addActionListener(e -> {
+//            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+//            if (filaSeleccionada != -1) {
+//                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
+//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarEvento(fechaActual, titulo);
+//                configurarCalendario();
+//            }
+//        });
+            
             pnlCalendario.add(btnDia);
         }
     }
     
+    /**
+     * Este método privado es auxiliar para configurar el horario.
+     * En este caso el número de días a llenar es personalizable. Utilizado
+     * en este caso para caclular las casillas a llenar en una semana.
+     * @param inicio dia de inicio del rango
+     * @param fin dia final del rango
+     */
+    private void llenarDias(LocalDate lunes){
+        
+        for (int i = 0; i < 7; i++) {
+         LocalDate diaActual = lunes.plusDays(i);
+
+         String textoBoton = String.valueOf(diaActual.getDayOfMonth());
+         
+         JButton btnDia = new JButton(textoBoton);
+         btnDia.setPreferredSize(new Dimension(80, 400));
+//            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+//            Color colorEvento = AQUI VA EL NOMBRE DE LA DAO.obtenerColorEvento(fechaActual);
+//            if (colorEvento != null) {
+//                btnDia.setBackground(colorEvento);
+//                btnDia.setForeground(Color.WHITE); 
+//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL EVENTO); 
+//            } else {
+//                btnDia.setBackground(Color.WHITE);
+//            }
+
+            //btnDia.addActionListener(e -> {
+//            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+//            if (filaSeleccionada != -1) {
+//                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
+//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarEvento(fechaActual, titulo);
+//                configurarCalendario();
+//            }
+//        });
+            
+            pnlCalendario.add(btnDia);
+        }
+    }
+    
+
+    
+    /**
+     * Ajusta las etiquetas al iniciar el sistema
+     */
     public void configurarEtiquetas(){
         lblAnio.setText(String.valueOf(LocalDate.now().getYear()));
         lblMes.setText(String.valueOf(LocalDate.now().getMonth()));
     }
     
+    /**
+     * Obtiene el año que está presentado en la etiqueta de año
+     * @return objeto tipo Year con el año de la etiqueta
+     */
     public Year getAnio(){
         String anio = lblAnio.getText();
         return Year.parse(anio);
     }
     
+    /**
+     * Obtiene el mes que está presentado en la etiqueta de mes
+     * @return objeto tipo Month con el mes de la etiqueta
+     */
     public Month getMes(){
         String mes = lblMes.getText();
         return Month.valueOf(mes.toUpperCase());
     }
+   
   
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -96,12 +194,19 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         lblViernes = new javax.swing.JLabel();
         lblSabado = new javax.swing.JLabel();
         lblDomingo = new javax.swing.JLabel();
-        btnSiguiente = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
+        btnMesSiguiente = new javax.swing.JButton();
+        btnMesAnterior = new javax.swing.JButton();
         lblAnio = new javax.swing.JLabel();
+        pnlEvento = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestión De Horarios");
+        setResizable(false);
 
+        pnlGestionHorario.setBackground(new java.awt.Color(255, 255, 255));
+        pnlGestionHorario.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaTurnosDisponibles.setBackground(new java.awt.Color(39, 71, 125));
         tablaTurnosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -130,148 +235,135 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         });
         jScrollPane.setViewportView(tablaTurnosDisponibles);
 
+        pnlGestionHorario.add(jScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 305));
+
         pnlCalendario.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlCalendarioLayout = new javax.swing.GroupLayout(pnlCalendario);
         pnlCalendario.setLayout(pnlCalendarioLayout);
         pnlCalendarioLayout.setHorizontalGroup(
             pnlCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 627, Short.MAX_VALUE)
         );
         pnlCalendarioLayout.setVerticalGroup(
             pnlCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 421, Short.MAX_VALUE)
         );
 
-        lblVista.setText("Vista:");
+        pnlGestionHorario.add(pnlCalendario, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 172, -1, -1));
 
+        lblVista.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblVista.setForeground(new java.awt.Color(39, 71, 125));
+        lblVista.setText("Vista:");
+        pnlGestionHorario.add(lblVista, new org.netbeans.lib.awtextra.AbsoluteConstraints(776, 31, 37, -1));
+
+        rdbtnSemanal.setBackground(new java.awt.Color(255, 255, 255));
+        rdbtnSemanal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        rdbtnSemanal.setForeground(new java.awt.Color(39, 71, 125));
         rdbtnSemanal.setText("Semanal");
         rdbtnSemanal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbtnSemanalActionPerformed(evt);
             }
         });
+        pnlGestionHorario.add(rdbtnSemanal, new org.netbeans.lib.awtextra.AbsoluteConstraints(839, 14, 98, -1));
 
+        rdbtnMensual.setBackground(new java.awt.Color(255, 255, 255));
+        rdbtnMensual.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        rdbtnMensual.setForeground(new java.awt.Color(39, 71, 125));
         rdbtnMensual.setText("Mensual");
         rdbtnMensual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbtnMensualActionPerformed(evt);
             }
         });
+        pnlGestionHorario.add(rdbtnMensual, new org.netbeans.lib.awtextra.AbsoluteConstraints(839, 41, 98, -1));
 
+        lblMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMes.setForeground(new java.awt.Color(39, 71, 125));
+        lblMes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMes.setText("MES");
+        pnlGestionHorario.add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 100, 130, -1));
 
+        lblLunes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblLunes.setForeground(new java.awt.Color(39, 71, 125));
+        lblLunes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLunes.setText("Lunes");
+        pnlGestionHorario.add(lblLunes, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 138, 79, -1));
 
+        lblMartes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMartes.setForeground(new java.awt.Color(39, 71, 125));
+        lblMartes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMartes.setText("Martes");
+        pnlGestionHorario.add(lblMartes, new org.netbeans.lib.awtextra.AbsoluteConstraints(395, 138, 81, -1));
 
+        lblMiercoles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMiercoles.setForeground(new java.awt.Color(39, 71, 125));
+        lblMiercoles.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMiercoles.setText("Miércoles");
+        pnlGestionHorario.add(lblMiercoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(482, 138, 81, -1));
 
+        lblJueves.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblJueves.setForeground(new java.awt.Color(39, 71, 125));
+        lblJueves.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblJueves.setText("Jueves");
+        pnlGestionHorario.add(lblJueves, new org.netbeans.lib.awtextra.AbsoluteConstraints(568, 138, 79, -1));
 
+        lblViernes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblViernes.setForeground(new java.awt.Color(39, 71, 125));
+        lblViernes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblViernes.setText("Viernes");
+        pnlGestionHorario.add(lblViernes, new org.netbeans.lib.awtextra.AbsoluteConstraints(653, 138, 80, -1));
 
+        lblSabado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSabado.setForeground(new java.awt.Color(39, 71, 125));
+        lblSabado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSabado.setText("Sábado");
+        pnlGestionHorario.add(lblSabado, new org.netbeans.lib.awtextra.AbsoluteConstraints(739, 138, 80, -1));
 
+        lblDomingo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDomingo.setForeground(new java.awt.Color(39, 71, 125));
+        lblDomingo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDomingo.setText("Domingo");
+        pnlGestionHorario.add(lblDomingo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 140, 90, -1));
 
-        btnSiguiente.setText("Siguiente");
-        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+        btnMesSiguiente.setBackground(new java.awt.Color(255, 166, 43));
+        btnMesSiguiente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnMesSiguiente.setForeground(new java.awt.Color(39, 71, 125));
+        btnMesSiguiente.setText("Siguiente");
+        btnMesSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSiguienteActionPerformed(evt);
+                btnMesSiguienteActionPerformed(evt);
             }
         });
+        pnlGestionHorario.add(btnMesSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(733, 97, -1, -1));
 
-        btnAnterior.setText("Anterior");
+        btnMesAnterior.setBackground(new java.awt.Color(255, 166, 43));
+        btnMesAnterior.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnMesAnterior.setForeground(new java.awt.Color(39, 71, 125));
+        btnMesAnterior.setText("Anterior");
+        pnlGestionHorario.add(btnMesAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 97, -1, -1));
 
+        lblAnio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblAnio.setForeground(new java.awt.Color(39, 71, 125));
+        lblAnio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAnio.setText("Año");
+        pnlGestionHorario.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 37, -1));
 
-        javax.swing.GroupLayout pnlGestionHorarioLayout = new javax.swing.GroupLayout(pnlGestionHorario);
-        pnlGestionHorario.setLayout(pnlGestionHorarioLayout);
-        pnlGestionHorarioLayout.setHorizontalGroup(
-            pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlCalendario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                        .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                                .addComponent(lblLunes, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(lblMartes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
-                                .addComponent(lblMiercoles))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionHorarioLayout.createSequentialGroup()
-                                .addComponent(btnAnterior)
-                                .addGap(10, 10, 10)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                        .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblMes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblJueves, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
-                        .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(lblViernes)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblSabado)
-                                .addGap(39, 39, 39)
-                                .addComponent(lblDomingo)
-                                .addGap(8, 8, 8))
-                            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnSiguiente)
-                                    .addComponent(lblVista, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26)
-                                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rdbtnSemanal, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(rdbtnMensual, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)))))
-                .addContainerGap())
+        pnlEvento.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlEventoLayout = new javax.swing.GroupLayout(pnlEvento);
+        pnlEvento.setLayout(pnlEventoLayout);
+        pnlEventoLayout.setHorizontalGroup(
+            pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 290, Short.MAX_VALUE)
         );
-        pnlGestionHorarioLayout.setVerticalGroup(
-            pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionHorarioLayout.createSequentialGroup()
-                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(lblVista))
-                            .addGroup(pnlGestionHorarioLayout.createSequentialGroup()
-                                .addComponent(rdbtnSemanal)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rdbtnMensual)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                        .addComponent(lblAnio)
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblMes)
-                            .addComponent(btnSiguiente)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionHorarioLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAnterior)))
-                .addGap(18, 18, 18)
-                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLunes, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblMartes, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblMiercoles, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblJueves, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblDomingo, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblViernes, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblSabado, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(18, 18, 18)
-                .addGroup(pnlGestionHorarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnlCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+        pnlEventoLayout.setVerticalGroup(
+            pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 180, Short.MAX_VALUE)
         );
+
+        pnlGestionHorario.add(pnlEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 290, 180));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -287,9 +379,10 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSiguienteActionPerformed
+    private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
+        Month mesActual = getMes();
+        
+    }//GEN-LAST:event_btnMesSiguienteActionPerformed
 
     private void rdbtnSemanalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnSemanalActionPerformed
         rdbtnSemanal.setSelected(true);
@@ -302,12 +395,13 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         rdbtnMensual.setSelected(true);
         configurarCalendario();
     }//GEN-LAST:event_rdbtnMensualActionPerformed
-
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnterior;
-    private javax.swing.JButton btnSiguiente;
+    private javax.swing.JButton btnMesAnterior;
+    private javax.swing.JButton btnMesSiguiente;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JLabel lblAnio;
     private javax.swing.JLabel lblDomingo;
@@ -320,6 +414,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JLabel lblViernes;
     private javax.swing.JLabel lblVista;
     private javax.swing.JPanel pnlCalendario;
+    private javax.swing.JPanel pnlEvento;
     private javax.swing.JPanel pnlGestionHorario;
     private javax.swing.JRadioButton rdbtnMensual;
     private javax.swing.JRadioButton rdbtnSemanal;
