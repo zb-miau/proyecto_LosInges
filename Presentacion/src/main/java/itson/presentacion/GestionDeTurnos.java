@@ -6,6 +6,7 @@ package itson.presentacion;
 
 import dto.DTOTurno;
 import java.awt.Color;
+import java.awt.Component;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -20,15 +21,19 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Zaira
  */
 public class GestionDeTurnos extends javax.swing.JFrame {
+    DefaultTableModel modeloTabla = new DefaultTableModel();
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
-    Color colorEvento;
+    Color colorTurno;
     /**
      * Creates new form GestionDeHorarios
      */
@@ -36,6 +41,23 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         initComponents();
         configurarSpinners();
         configurarDias();
+        configurarTabla();
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (value instanceof Color) {
+                Color colorEvento = (Color) value;
+                c.setBackground(colorEvento);
+                c.setForeground(colorEvento);
+            }
+            return c;
+            }
+        });
+        setVisible(true);
     }
 
     /**
@@ -119,14 +141,18 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             }
         });
 
-        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setBackground(new java.awt.Color(39, 71, 125));
 
+        lblNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(255, 255, 255));
         lblNombre.setText("Nombre:");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Gestor de Turnos");
 
+        lblHoraInicio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblHoraInicio.setForeground(new java.awt.Color(255, 255, 255));
         lblHoraInicio.setText("Hora Inicio");
 
         btnModificar.setBackground(new java.awt.Color(255, 166, 43));
@@ -134,12 +160,22 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         btnModificar.setForeground(new java.awt.Color(39, 71, 125));
         btnModificar.setText("Modificar");
 
+        lblHoraFin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblHoraFin.setForeground(new java.awt.Color(255, 255, 255));
         lblHoraFin.setText("Hora Fin");
 
+        lblDias.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDias.setForeground(new java.awt.Color(255, 255, 255));
         lblDias.setText("Días:");
 
+        chkLunes.setBackground(new java.awt.Color(39, 71, 125));
+        chkLunes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkLunes.setForeground(new java.awt.Color(255, 255, 255));
         chkLunes.setText("Lunes");
 
+        chkMiercoles.setBackground(new java.awt.Color(39, 71, 125));
+        chkMiercoles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkMiercoles.setForeground(new java.awt.Color(255, 255, 255));
         chkMiercoles.setText("Miércoles");
         chkMiercoles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,14 +183,29 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             }
         });
 
+        chkMartes.setBackground(new java.awt.Color(39, 71, 125));
+        chkMartes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkMartes.setForeground(new java.awt.Color(255, 255, 255));
         chkMartes.setText("Martes");
 
+        chkJueves.setBackground(new java.awt.Color(39, 71, 125));
+        chkJueves.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkJueves.setForeground(new java.awt.Color(255, 255, 255));
         chkJueves.setText("Jueves");
 
+        chkViernes.setBackground(new java.awt.Color(39, 71, 125));
+        chkViernes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkViernes.setForeground(new java.awt.Color(255, 255, 255));
         chkViernes.setText("Viernes");
 
+        chkSabado.setBackground(new java.awt.Color(39, 71, 125));
+        chkSabado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkSabado.setForeground(new java.awt.Color(255, 255, 255));
         chkSabado.setText("Sábado");
 
+        chkDomingo.setBackground(new java.awt.Color(39, 71, 125));
+        chkDomingo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkDomingo.setForeground(new java.awt.Color(255, 255, 255));
         chkDomingo.setText("Domingo");
 
         btnColor.setBackground(new java.awt.Color(255, 166, 43));
@@ -321,18 +372,18 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         Set<DayOfWeek> dias = getDias();
         Color color;
         
-        if (this.colorEvento == null) {
-            colorEvento = Color.GRAY;
+        if (this.colorTurno == null) {
+            colorTurno = Color.GRAY;
         }
         
-        DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias, colorEvento);
+        DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias, colorTurno);
         
         //todo
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
-     * Permite al usuario seleccionar un color preferido para el evento que va a 
-     * crear en caso de que así lo desee. De lo contrario, el evento se agrega con
+     * Permite al usuario seleccionar un color preferido para el turno que va a 
+     * crear en caso de que así lo desee. De lo contrario, el turno se agrega con
      * un color gris.
      * @param evt click al boton de agregar color
      */
@@ -344,7 +395,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         );
 
         if (colorSeleccionado != null) {
-            this.colorEvento = colorSeleccionado;
+            this.colorTurno = colorSeleccionado;
         }
     }//GEN-LAST:event_btnColorActionPerformed
 
@@ -361,6 +412,13 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         JSpinner.DateEditor editarHoraFin = new JSpinner.DateEditor(spnHoraFin, "HH:mm");
         spnHoraInicio.setEditor(editarHoraInicio);
         spnHoraFin.setEditor(editarHoraFin);
+    }
+    
+    public void configurarTabla(){
+        String[] columnas = {"Nombre", "Inicio", "Fin", "Días", "Color"};
+        modeloTabla.setColumnIdentifiers(columnas);
+        tablaTurnosDisponibles.setModel(modeloTabla);
+        
     }
     
     /**

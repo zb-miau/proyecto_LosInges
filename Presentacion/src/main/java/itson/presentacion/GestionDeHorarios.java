@@ -71,7 +71,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     /**
      * Este método privado es auxiliar para configurar el horario mensual.
      * Calcula cuántas casillas debe crear según el año y mes de las etiquetas
-     * y las llena de color en caso de existir un evento.
+     * y las llena de color en caso de existir un Turno.
      */
     private void llenarDias(){
         int primerDia = primerDiaMes();
@@ -86,11 +86,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
             btnDia.setPreferredSize(new Dimension(80, 60));
 
 //            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-//            Color colorEvento = AQUI VA EL NOMBRE DE LA DAO.obtenerColorEvento(fechaActual);
-//            if (colorEvento != null) {
-//                btnDia.setBackground(colorEvento);
+//            Color colorTurno = AQUI VA EL NOMBRE DE LA DAO.obtenerColorTurno(fechaActual);
+//            if (colorTurno != null) {
+//                btnDia.setBackground(colorTurno);
 //                btnDia.setForeground(Color.WHITE); 
-//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL EVENTO); 
+//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL Turno); 
 //            } else {
 //                btnDia.setBackground(Color.WHITE);
 //            }
@@ -99,7 +99,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 //            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 //            if (filaSeleccionada != -1) {
 //                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarEvento(fechaActual, titulo);
+//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarTurno(fechaActual, titulo);
 //                configurarCalendario();
 //            }
 //        });
@@ -125,11 +125,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
          JButton btnDia = new JButton(textoBoton);
          btnDia.setPreferredSize(new Dimension(80, 400));
 //            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-//            Color colorEvento = AQUI VA EL NOMBRE DE LA DAO.obtenerColorEvento(fechaActual);
-//            if (colorEvento != null) {
-//                btnDia.setBackground(colorEvento);
+//            Color colorTurno = AQUI VA EL NOMBRE DE LA DAO.obtenerColorTurno(fechaActual);
+//            if (colorTurno != null) {
+//                btnDia.setBackground(colorTurno);
 //                btnDia.setForeground(Color.WHITE); 
-//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL EVENTO); 
+//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL Turno); 
 //            } else {
 //                btnDia.setBackground(Color.WHITE);
 //            }
@@ -138,7 +138,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 //            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 //            if (filaSeleccionada != -1) {
 //                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarEvento(fechaActual, titulo);
+//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarTurno(fechaActual, titulo);
 //                configurarCalendario();
 //            }
 //        });
@@ -197,7 +197,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         btnMesSiguiente = new javax.swing.JButton();
         btnMesAnterior = new javax.swing.JButton();
         lblAnio = new javax.swing.JLabel();
-        pnlEvento = new javax.swing.JPanel();
+        pnlTurno = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión De Horarios");
@@ -350,20 +350,20 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         lblAnio.setText("Año");
         pnlGestionHorario.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 37, -1));
 
-        pnlEvento.setBackground(new java.awt.Color(255, 255, 255));
+        pnlTurno.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout pnlEventoLayout = new javax.swing.GroupLayout(pnlEvento);
-        pnlEvento.setLayout(pnlEventoLayout);
-        pnlEventoLayout.setHorizontalGroup(
-            pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlTurnoLayout = new javax.swing.GroupLayout(pnlTurno);
+        pnlTurno.setLayout(pnlTurnoLayout);
+        pnlTurnoLayout.setHorizontalGroup(
+            pnlTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 290, Short.MAX_VALUE)
         );
-        pnlEventoLayout.setVerticalGroup(
-            pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlTurnoLayout.setVerticalGroup(
+            pnlTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 180, Short.MAX_VALUE)
         );
 
-        pnlGestionHorario.add(pnlEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 290, 180));
+        pnlGestionHorario.add(pnlTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 290, 180));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -414,8 +414,8 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JLabel lblViernes;
     private javax.swing.JLabel lblVista;
     private javax.swing.JPanel pnlCalendario;
-    private javax.swing.JPanel pnlEvento;
     private javax.swing.JPanel pnlGestionHorario;
+    private javax.swing.JPanel pnlTurno;
     private javax.swing.JRadioButton rdbtnMensual;
     private javax.swing.JRadioButton rdbtnSemanal;
     private javax.swing.JTable tablaTurnosDisponibles;
