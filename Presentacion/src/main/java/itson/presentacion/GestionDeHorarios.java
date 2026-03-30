@@ -14,6 +14,7 @@ import java.time.Year;
 import java.time.temporal.TemporalAdjusters;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -61,8 +62,8 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * primer día del mes
      */
     public int primerDiaMes(){
-        int anio = Integer.parseInt(lblAnio.getText());
-        Month mes = Month.valueOf(lblMes.getText().toUpperCase());
+        int anio = Integer.parseInt(txtAnio.getText());
+        Month mes = Month.valueOf(txtMes.getText().toUpperCase());
         
         LocalDate primerDia = LocalDate.of(anio, mes, 1);
         return primerDia.getDayOfWeek().getValue();
@@ -147,22 +148,85 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         }
     }
     
-
-    
     /**
      * Ajusta las etiquetas al iniciar el sistema
      */
     public void configurarEtiquetas(){
-        lblAnio.setText(String.valueOf(LocalDate.now().getYear()));
-        lblMes.setText(String.valueOf(LocalDate.now().getMonth()));
+        txtAnio.setText(String.valueOf(LocalDate.now().getYear()));
+        txtMes.setText(String.valueOf(LocalDate.now().getMonth()));
     }
+    
+    /**
+     * Método que convierte lo escrito en el textField de Año al año
+     * establecido por el usuario.
+     */
+    public void convertirEtiquetaAnio(){
+        String anioTxt = txtAnio.getText();
+        
+        try {
+            Year anio = Year.parse(anioTxt);
+            txtAnio.setText(anio.toString());
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Formato de año inválido. El año sólo acepta números.", 
+                    "Error de Formato", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    
+    /**
+     * Método que convierte lo escrito en el textField de Mes al mes
+     * establecido por el usuario.
+     */
+    public void convertirEtiquetaMes(){
+        String mesTxt = txtMes.getText();
+        Month mes = getMes();
+        
+        switch (mesTxt.toLowerCase()){
+            case "enero":
+                txtMes.setText(mes.JANUARY.toString());
+            case "febrero":
+                txtMes.setText(mes.FEBRUARY.toString());;
+            case "marzo":
+                txtMes.setText(mes.MARCH.toString());;
+            case "abril":
+                txtMes.setText(mes.APRIL.toString());;
+            case "mayo":
+                txtMes.setText(mes.MAY.toString());;
+            case "junio":
+                txtMes.setText(mes.JUNE.toString());;
+            case "julio":
+                txtMes.setText(mes.JULY.toString());;
+            case "agosto":
+                txtMes.setText(mes.AUGUST.toString());;
+            case "septiembre":
+                txtMes.setText(mes.SEPTEMBER.toString());;
+            case "octubre":
+                txtMes.setText(mes.OCTOBER.toString());;
+            case "noviembre":
+                txtMes.setText(mes.NOVEMBER.toString());;
+            case "diciembre":
+                txtMes.setText(mes.DECEMBER.toString());;
+            default:
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Formato de mes inválido. No se reconoció el mes introducido.", 
+                    "Error de Formato", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+   
+    }
+    
     
     /**
      * Obtiene el año que está presentado en la etiqueta de año
      * @return objeto tipo Year con el año de la etiqueta
      */
     public Year getAnio(){
-        String anio = lblAnio.getText();
+        String anio = txtAnio.getText();
         return Year.parse(anio);
     }
     
@@ -171,7 +235,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * @return objeto tipo Month con el mes de la etiqueta
      */
     public Month getMes(){
-        String mes = lblMes.getText();
+        String mes = txtMes.getText();
         return Month.valueOf(mes.toUpperCase());
     }
    
@@ -186,7 +250,6 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         lblVista = new javax.swing.JLabel();
         rdbtnSemanal = new javax.swing.JRadioButton();
         rdbtnMensual = new javax.swing.JRadioButton();
-        lblMes = new javax.swing.JLabel();
         lblLunes = new javax.swing.JLabel();
         lblMartes = new javax.swing.JLabel();
         lblMiercoles = new javax.swing.JLabel();
@@ -196,8 +259,9 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         lblDomingo = new javax.swing.JLabel();
         btnMesSiguiente = new javax.swing.JButton();
         btnMesAnterior = new javax.swing.JButton();
-        lblAnio = new javax.swing.JLabel();
         pnlTurno = new javax.swing.JPanel();
+        txtMes = new javax.swing.JTextField();
+        txtAnio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión De Horarios");
@@ -279,12 +343,6 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         });
         pnlGestionHorario.add(rdbtnMensual, new org.netbeans.lib.awtextra.AbsoluteConstraints(839, 41, 98, -1));
 
-        lblMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblMes.setForeground(new java.awt.Color(39, 71, 125));
-        lblMes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMes.setText("MES");
-        pnlGestionHorario.add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 100, 130, -1));
-
         lblLunes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblLunes.setForeground(new java.awt.Color(39, 71, 125));
         lblLunes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -344,12 +402,6 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         btnMesAnterior.setText("Anterior");
         pnlGestionHorario.add(btnMesAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 97, -1, -1));
 
-        lblAnio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblAnio.setForeground(new java.awt.Color(39, 71, 125));
-        lblAnio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAnio.setText("Año");
-        pnlGestionHorario.add(lblAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 37, -1));
-
         pnlTurno.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlTurnoLayout = new javax.swing.GroupLayout(pnlTurno);
@@ -364,6 +416,20 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         );
 
         pnlGestionHorario.add(pnlTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 290, 180));
+
+        txtMes.setBackground(new java.awt.Color(255, 255, 255));
+        txtMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtMes.setForeground(new java.awt.Color(39, 71, 125));
+        txtMes.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMes.setBorder(null);
+        pnlGestionHorario.add(txtMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 100, 130, -1));
+
+        txtAnio.setBackground(new java.awt.Color(255, 255, 255));
+        txtAnio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtAnio.setForeground(new java.awt.Color(39, 71, 125));
+        txtAnio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtAnio.setBorder(null);
+        pnlGestionHorario.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -403,12 +469,10 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JButton btnMesAnterior;
     private javax.swing.JButton btnMesSiguiente;
     private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JLabel lblAnio;
     private javax.swing.JLabel lblDomingo;
     private javax.swing.JLabel lblJueves;
     private javax.swing.JLabel lblLunes;
     private javax.swing.JLabel lblMartes;
-    private javax.swing.JLabel lblMes;
     private javax.swing.JLabel lblMiercoles;
     private javax.swing.JLabel lblSabado;
     private javax.swing.JLabel lblViernes;
@@ -419,5 +483,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdbtnMensual;
     private javax.swing.JRadioButton rdbtnSemanal;
     private javax.swing.JTable tablaTurnosDisponibles;
+    private javax.swing.JTextField txtAnio;
+    private javax.swing.JTextField txtMes;
     // End of variables declaration//GEN-END:variables
 }
