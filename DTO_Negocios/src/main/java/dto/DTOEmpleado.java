@@ -5,6 +5,7 @@
 package dto;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
@@ -61,6 +62,30 @@ public class DTOEmpleado {
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DTOEmpleado other = (DTOEmpleado) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
+    
     
     
      

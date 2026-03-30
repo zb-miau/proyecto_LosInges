@@ -8,6 +8,7 @@
     <modules>
         <module>Presentacion</module>
         <module>DTO_Negocios</module>
+        <module>negocios_AsignarHorario</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

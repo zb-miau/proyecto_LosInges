@@ -1,0 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package asignarHorario;
+
+import dto.DTOEmpleado;
+import dto.DTOHorarioEmpleado;
+import dto.DTOTurno;
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ *
+ * @author RAMSES
+ */
+public class FacadeAsignarHorario implements IAsignarHorario{
+    private ControlAsignarHorario controlHorario;
+    
+    @Override
+    public List<DTOEmpleado> recuperarEmpleados() {
+        return controlHorario.recuperarEmpleados();
+    }
+
+    @Override
+    public DTOHorarioEmpleado obtenerHorarioEmpleado() {
+        return controlHorario.obtenerHorarioEmpleado();
+    }
+
+    @Override
+    public List<DTOTurno> recuperarTurno() {
+        return controlHorario.recuperarTurnos();
+    }
+
+    @Override
+    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
+        controlHorario.actualizarHorarioEmpleado(turno, empleado, fecha_inicio, fecha_fin);
+    }
+    
+}

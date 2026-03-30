@@ -80,5 +80,11 @@ public class DTOTurno {
         this.colorEvento = colorEvento;
     }
 
+    public DTOTurno(String nombre) {
+        this.nombre = nombre;
+    }
+
+    
+    
     
 }
