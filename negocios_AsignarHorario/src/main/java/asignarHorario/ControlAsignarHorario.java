@@ -40,9 +40,24 @@ public class ControlAsignarHorario{
      * Regresa el horario del horario empleado
      * @return DTOHorarioEmpleado
      */
-    public DTOHorarioEmpleado obtenerHorarioEmpleado() {
+    public DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
+        DTOEmpleado empleado = new DTOEmpleado();
+        long idEmpleado = id;
+        switch ((int) idEmpleado){
+            case 1: 
+                DTOEmpleado empleado1 = new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15));
+                empleado = empleado1;
+            case 2:
+                DTOEmpleado empleado2 = new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26));
+                empleado = empleado2;
+            case 3: 
+                DTOEmpleado empleado3 = new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20));
+                empleado = empleado3;
+            case 4:
+                DTOEmpleado empleado4 = new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24));
+                empleado = empleado4;
+        }
         
-        DTOEmpleado empleado = new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15));
         //Al no haber un turno en existencia para este horario se queda como nulo
         DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado, null, null, null);
         

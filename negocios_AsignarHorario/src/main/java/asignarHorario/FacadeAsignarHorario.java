@@ -16,6 +16,12 @@ import java.util.List;
  */
 public class FacadeAsignarHorario implements IAsignarHorario{
     private ControlAsignarHorario controlHorario;
+
+    public FacadeAsignarHorario() {
+        this.controlHorario = new ControlAsignarHorario();
+    }
+    
+    
     
     @Override
     public List<DTOEmpleado> recuperarEmpleados() {
@@ -23,8 +29,8 @@ public class FacadeAsignarHorario implements IAsignarHorario{
     }
 
     @Override
-    public DTOHorarioEmpleado obtenerHorarioEmpleado() {
-        return controlHorario.obtenerHorarioEmpleado();
+    public DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
+        return controlHorario.obtenerHorarioEmpleado(id);
     }
 
     @Override

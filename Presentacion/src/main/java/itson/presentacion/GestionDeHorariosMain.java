@@ -6,7 +6,20 @@ package itson.presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import dto.DTOEmpleado;
+import dto.DTOHorarioEmpleado;
+import dto.DTOTurno;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -19,14 +32,106 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
      */
     public GestionDeHorariosMain() {
         initComponents();
+        generarTabla();
+        setVisible(true);
     }
 
+    /**
+     * Método que llena la tabla con los empleados registrados
+     */
     public void generarTabla(){
-        DefaultTableModel modelo = new DefaultTableModel();
-        Object[] columnas = {"Nombre","Apellidos"};
-        modelo.setColumnIdentifiers(columnas);
+        String[] columnas = {"Numéro de Empleado", "Nombre", "Apellidos"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
+          @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }  
+        };
+        
+        List<DTOEmpleado> empleados = control.recuperarEmpleados();
+        for (DTOEmpleado e: empleados){
+             Object[] fila = {
+                 e.getId(),
+                 e.getNombre(),
+                 e.getApellidos()
+             };
+            modelo.addRow(fila);
+        }
+        
+        tablaEmpleados.setModel(modelo);
+        TableRowSorter<TableModel> buscador = new TableRowSorter<>(modelo);
+        tablaEmpleados.setRowSorter(buscador);
+        
+        txtBuscar.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String busqueda = txtBuscar.getText();
+                if (busqueda.isEmpty()) {
+                    buscador.setRowFilter(null); 
+                } else {
+                    List<RowFilter<Object,Object>> filtros = new ArrayList<>(2);
+                    filtros.add(RowFilter.regexFilter("(?i)" + busqueda, 1));
+                    filtros.add(RowFilter.regexFilter("(?i)" + busqueda, 2));
+                    
+                    buscador.setRowFilter(RowFilter.orFilter(filtros));
+                }
+            }
+        });
+        
+        accionAlSeleccionar();
+    }
+
+    
+    /**
+     * Método que obtiene al empleado que se desea editar y luego llama al método abrirVentana
+     */
+    public void accionAlSeleccionar(){
+        tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            if (e.getClickCount() == 2) {
+                int fila = tablaEmpleados.getSelectedRow();
+                
+                if (fila != -1) {
+                    try {
+                        int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
+                
+                        Object valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0);
+                        Long id = Long.valueOf(String.valueOf(valorId));
+                        
+                        abrirVentana(id);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Error al obtener el id del empleado", 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                            }
+                }
+            }
+        }
+    });
+       
     }
     
+    /**
+     * Método que determina qué ventana debe abrir de acuerdo a si existen turnos registrados.
+     * Si existe al menos un turno, abre el gestor de horarios, en caso contrario, abre el
+     * gestor de turnos.
+     * @param id el id del empleado seleccionado
+     */
+    private void abrirVentana(Long id){
+        DTOHorarioEmpleado horario = control.obtenerHorarioEmpleado(id);
+        List<DTOTurno> turnos = control.recuperarTurno();
+        if (turnos.isEmpty()){
+            GestionDeTurnos gT = new GestionDeTurnos();
+            gT.setVisible(true);
+        } else {
+            GestionDeHorarios gH = new GestionDeHorarios(id);
+            gH.setVisible(true);
+        }
+        this.dispose();
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,12 +150,18 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
         tablaEmpleados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Seleccion De Empleado");
         setResizable(false);
 
         pnlFondo.setBackground(new java.awt.Color(39, 71, 125));
 
         txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscar.setForeground(new java.awt.Color(51, 51, 51));
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
 
         lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblBuscar.setText("Buscar empleado:");
@@ -117,6 +228,10 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

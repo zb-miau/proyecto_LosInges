@@ -4,9 +4,14 @@
  */
 package itson.presentacion;
 
+import asignarHorario.IAsignarHorario;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -21,18 +26,45 @@ import javax.swing.JOptionPane;
  * @author Zaira
  */
 public class GestionDeHorarios extends javax.swing.JFrame {
+    Long idEmpleado;
     JButton btnDia;
     /**
      * Creates new form GestionDeHorarios
      */
-    public GestionDeHorarios() {
+    public GestionDeHorarios(Long id) {
         initComponents();
+        this.idEmpleado = id;
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
         configurarEtiquetas();
         rdbtnMensual.setSelected(true);
         rdbtnMensual.setEnabled(true);
         configurarCalendario();
-        setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                GestionDeHorariosMain main = new GestionDeHorariosMain();
+                main.setVisible(true);
+                dispose();
+            }
+        });
+        
+        txtMes.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    convertirEtiquetaMes();
+                }
+            }
+        });
+        
+        txtAnio.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    convertirEtiquetaAnio();
+                }
+            }
+        });
     }
 
     /**
@@ -165,7 +197,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         
         try {
             Year anio = Year.parse(anioTxt);
-            txtAnio.setText(anio.toString());
+            txtAnio.setText(String.valueOf(anio));
             
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(
@@ -175,6 +207,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
             
+        configurarCalendario();
     }
     
     /**
@@ -182,34 +215,46 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * establecido por el usuario.
      */
     public void convertirEtiquetaMes(){
-        String mesTxt = txtMes.getText();
-        Month mes = getMes();
+        String mesTxt = txtMes.getText().trim().toLowerCase();
+        Month mes = null;
         
-        switch (mesTxt.toLowerCase()){
+        switch (mesTxt){
             case "enero":
-                txtMes.setText(mes.JANUARY.toString());
+                mes = Month.JANUARY;
+                break;
             case "febrero":
-                txtMes.setText(mes.FEBRUARY.toString());;
+                mes = Month.FEBRUARY;
+                break;
             case "marzo":
-                txtMes.setText(mes.MARCH.toString());;
+                mes = Month.MARCH;
+                break;
             case "abril":
-                txtMes.setText(mes.APRIL.toString());;
+                 mes = Month.APRIL;
+                break;
             case "mayo":
-                txtMes.setText(mes.MAY.toString());;
+                 mes = Month.MAY;
+                break;
             case "junio":
-                txtMes.setText(mes.JUNE.toString());;
+                 mes = Month.JUNE;
+                break;
             case "julio":
-                txtMes.setText(mes.JULY.toString());;
+                 mes = Month.JULY;
+                break;
             case "agosto":
-                txtMes.setText(mes.AUGUST.toString());;
+                 mes = Month.AUGUST;
+                break;
             case "septiembre":
-                txtMes.setText(mes.SEPTEMBER.toString());;
+                 mes = Month.SEPTEMBER;
+                break;
             case "octubre":
-                txtMes.setText(mes.OCTOBER.toString());;
+                 mes = Month.OCTOBER;
+                break;
             case "noviembre":
-                txtMes.setText(mes.NOVEMBER.toString());;
+                 mes = Month.NOVEMBER;
+                break;
             case "diciembre":
-                txtMes.setText(mes.DECEMBER.toString());;
+                 mes = Month.DECEMBER;
+                break;
             default:
                 JOptionPane.showMessageDialog(
                     this, 
@@ -217,9 +262,10 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                     "Error de Formato", 
                     JOptionPane.ERROR_MESSAGE);
         }
-   
+        
+        txtMes.setText(mes.name());
+        configurarCalendario();
     }
-    
     
     /**
      * Obtiene el año que está presentado en la etiqueta de año
@@ -263,7 +309,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         txtMes = new javax.swing.JTextField();
         txtAnio = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gestión De Horarios");
         setResizable(false);
 
@@ -400,6 +446,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         btnMesAnterior.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnMesAnterior.setForeground(new java.awt.Color(39, 71, 125));
         btnMesAnterior.setText("Anterior");
+        btnMesAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMesAnteriorActionPerformed(evt);
+            }
+        });
         pnlGestionHorario.add(btnMesAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 97, -1, -1));
 
         pnlTurno.setBackground(new java.awt.Color(255, 255, 255));
@@ -445,22 +496,61 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Permite actualizar el calendario al mes siguiente al que se esta visualizando en
+     * ese momento.
+     * @param evt click en el botón siguiente
+     */
     private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
         Month mesActual = getMes();
-        
+        Month mesSiguiente = mesActual.plus(1);
+        txtMes.setText(mesSiguiente.name());
+        if (mesSiguiente.equals(Month.JANUARY)){
+            Year anioActual = getAnio();
+            Year anioSiguiente = anioActual.plusYears(1);
+            txtAnio.setText(String.valueOf(anioSiguiente));
+        }
+        configurarCalendario();
     }//GEN-LAST:event_btnMesSiguienteActionPerformed
 
+    /**
+     * Método que le da acción al radio button de la vista Semanal.
+     * Al activarlo, desactiva la vista mensual y configura el calendario.
+     * @param evt click al radio button semanal
+     */
     private void rdbtnSemanalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnSemanalActionPerformed
         rdbtnSemanal.setSelected(true);
         rdbtnMensual.setSelected(false);
         configurarCalendario();
     }//GEN-LAST:event_rdbtnSemanalActionPerformed
 
+    /**
+     * Método que le da acción al radio button de la vista mensual.
+     * Al activarlo, desactiva la vista semanal y configura el calendario.
+     * @param evt click al radio button mensual
+     */
     private void rdbtnMensualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnMensualActionPerformed
         rdbtnSemanal.setSelected(false);
         rdbtnMensual.setSelected(true);
         configurarCalendario();
     }//GEN-LAST:event_rdbtnMensualActionPerformed
+
+    /**
+     * Permite actualizar el calendario al mes anterior al que se esta visualizando en
+     * ese momento.
+     * @param evt click en el botón anterior
+     */
+    private void btnMesAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesAnteriorActionPerformed
+        Month mesActual = getMes();
+        Month mesAnterior = mesActual.minus(1);
+        txtMes.setText(mesAnterior.name());
+        if (mesAnterior.equals(Month.DECEMBER)){
+            Year anioActual = getAnio();
+            Year anioAnterior = anioActual.minusYears(1);
+            txtAnio.setText(String.valueOf(anioAnterior));
+        }
+        configurarCalendario();
+    }//GEN-LAST:event_btnMesAnteriorActionPerformed
     
     
 

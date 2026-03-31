@@ -7,6 +7,8 @@ package itson.presentacion;
 import dto.DTOTurno;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -35,7 +37,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
     /**
-     * Creates new form GestionDeHorarios
+     * Creates new form GestionDeTurnos
      */
     public GestionDeTurnos() {
         initComponents();
@@ -57,6 +59,16 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             return c;
             }
         });
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                GestionDeHorariosMain main = new GestionDeHorariosMain();
+                main.setVisible(true);
+                dispose();
+            }
+        });
+        
         setVisible(true);
     }
 
@@ -93,7 +105,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         btnColor = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gestión De Turno");
         setResizable(false);
 
@@ -316,6 +328,11 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlGestionTurnoLayout = new javax.swing.GroupLayout(pnlGestionTurno);
         pnlGestionTurno.setLayout(pnlGestionTurnoLayout);
@@ -400,6 +417,12 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnColorActionPerformed
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        GestionDeHorariosMain main = new GestionDeHorariosMain();
+        main.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     /**
      * Método que configura los spinners al iniciar la interfaz
      */
@@ -445,7 +468,11 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         LocalTime horaInicio = fechaHoraInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         LocalTime horaFin = fechaHoraFin.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         if (!horaInicio.isBefore(horaFin)) {
-            JOptionPane.showMessageDialog(this, "La hora de fin debe ser mayor a la de inicio", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "La hora de fin debe ser mayor a la de inicio", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
             return null;
         }
         LocalTime[] horas = {horaInicio,horaFin};
