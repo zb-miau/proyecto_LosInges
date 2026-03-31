@@ -4,6 +4,8 @@
  */
 package itson.presentacion;
 
+import asignarHorario.FacadeAsignarHorario;
+import asignarHorario.IAsignarHorario;
 import dto.DTOTurno;
 import java.awt.Color;
 import java.awt.Component;
@@ -16,11 +18,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -33,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Zaira
  */
 public class GestionDeTurnos extends javax.swing.JFrame {
+    IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
@@ -44,21 +49,8 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         configurarSpinners();
         configurarDias();
         configurarTabla();
-        tablaTurnosDisponibles.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
-            boolean isSelected, boolean hasFocus, int row, int column) {
-
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            if (value instanceof Color) {
-                Color colorEvento = (Color) value;
-                c.setBackground(colorEvento);
-                c.setForeground(colorEvento);
-            }
-            return c;
-            }
-        });
+        
+        
         
         addWindowListener(new WindowAdapter() {
             @Override
@@ -103,6 +95,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         chkSabado = new javax.swing.JCheckBox();
         chkDomingo = new javax.swing.JCheckBox();
         btnColor = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -115,26 +108,19 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         pnlScroll.setForeground(new java.awt.Color(4, 45, 98));
 
         tablaTurnosDisponibles.setBackground(new java.awt.Color(255, 255, 255));
+        tablaTurnosDisponibles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tablaTurnosDisponibles.setForeground(new java.awt.Color(4, 45, 98));
         tablaTurnosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Nombre", "Hora Inicio", "Hora Fin", "Días"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-        });
+        ));
         pnlScroll.setViewportView(tablaTurnosDisponibles);
         if (tablaTurnosDisponibles.getColumnModel().getColumnCount() > 0) {
             tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
@@ -232,6 +218,16 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             }
         });
 
+        btnEliminar.setBackground(new java.awt.Color(224, 30, 72));
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormularioTurnoLayout = new javax.swing.GroupLayout(pnlFormularioTurno);
         pnlFormularioTurno.setLayout(pnlFormularioTurnoLayout);
         pnlFormularioTurnoLayout.setHorizontalGroup(
@@ -257,10 +253,6 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
-                                .addComponent(btnModificar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAgregar))
-                            .addGroup(pnlFormularioTurnoLayout.createSequentialGroup()
                                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(chkLunes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -282,7 +274,14 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(lblHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spnHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(spnHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormularioTurnoLayout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(btnAgregar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnModificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminar)))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         pnlFormularioTurnoLayout.setVerticalGroup(
@@ -317,11 +316,12 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkDomingo)
                     .addComponent(btnColor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
-                    .addComponent(btnModificar))
-                .addGap(26, 26, 26))
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar))
+                .addGap(27, 27, 27))
         );
 
         btnRegresar.setBackground(new java.awt.Color(224, 30, 72));
@@ -388,15 +388,19 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         String nombre = txtNombre.getText();
         LocalTime[] horas = getHoras();
         Set<DayOfWeek> dias = getDias();
-        Color color;
+        Color colorTurno = this.colorTurno;
         
         if (this.colorTurno == null) {
-            colorTurno = Color.GRAY;
+            colorTurno = Color.RED;
         }
+        int ultimaFila = tablaTurnosDisponibles.getRowCount() - 1;
+        Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(ultimaFila, 0).toString());
+        Long idNuevo = id+1L;
+        DTOTurno turno = new DTOTurno(idNuevo, nombre, horas[0], horas[1], dias, colorTurno);
         
-        DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias, colorTurno);
+        control.agregarTurno(turno);
         
-        //todo
+        configurarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
@@ -423,6 +427,37 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        List<DTOTurno> turnos = control.recuperarTurno();
+        int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+        Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
+        Long idEliminar = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+               
+        
+        for (DTOTurno t: turnos){
+            if (t.getIdTurno().equals(idEliminar)){
+                int opcion = JOptionPane.showConfirmDialog(
+                        this, 
+                        "¿Eliminar este turno?", 
+                        "Confirmar eliminación", 
+                        JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION){
+                    control.eliminarTurno(t);
+                    JOptionPane.showMessageDialog(
+                            this, 
+                            "Se eliminó el turno.");
+                    tablaTurnosDisponibles.removeAll();
+                    configurarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this, 
+                            "No se eliminó el turno.");
+                }
+            }
+        }
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * Método que configura los spinners al iniciar la interfaz
      */
@@ -438,12 +473,59 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         spnHoraFin.setEditor(editarHoraFin);
     }
     
+    /**
+     * Método que genera la tabla de turnos disponibles
+     */
     public void configurarTabla(){
-        String[] columnas = {"Nombre", "Inicio", "Fin", "Días", "Color"};
+        String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
+        modeloTabla.setRowCount(0);
         modeloTabla.setColumnIdentifiers(columnas);
+
+        List<DTOTurno> turnos = control.recuperarTurno();
+        for (DTOTurno t: turnos){
+            Object[] fila = {
+                t.getIdTurno(),
+                t.getNombre(),
+                t.getHoraInicio(),
+                t.getHoraFin(),
+                t.getDiasTrabajo(),
+                t.getColorEvento()
+             };
+            modeloTabla.addRow(fila);
+        }
+        
         tablaTurnosDisponibles.setModel(modeloTabla);
         
+        tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (value instanceof Color) {
+                Color colorEvento = (Color) value;
+                ((JLabel)c).setOpaque(true);
+            
+                if (!isSelected) {
+                    c.setBackground(colorEvento);
+                    c.setForeground(colorEvento);
+                } else {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(table.getSelectionForeground());
+                }
+                
+                ((JLabel)c).setText("");
+            } else {
+                 c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+            }
+
+            return c;
+            }
+        });
+
     }
+  
     
     /**
      * Método que configura el mapa de días al iniciar la interfaz
@@ -490,10 +572,27 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             .map(Map.Entry::getValue)
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
+    
+    /**
+     * Método que limpia el formulario
+     */
+    public void limpiarFormulario(){
+        txtNombre.setText("");
+        chkLunes.setSelected(false);
+        chkMartes.setSelected(false);
+        chkMiercoles.setSelected(false);
+        chkJueves.setSelected(false);
+        chkViernes.setSelected(false);
+        chkSabado.setSelected(false);
+        chkDomingo.setSelected(false);
+        this.colorTurno = null;
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnColor;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JCheckBox chkDomingo;

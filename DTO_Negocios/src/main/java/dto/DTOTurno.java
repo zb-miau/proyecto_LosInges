@@ -7,6 +7,7 @@ package dto;
 import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Set;
  * @author jesus
  */
 public class DTOTurno {
-
+    private Long idTurno;
     private String nombre;
     private LocalTime horaInicio;
     private LocalTime horaFin;
@@ -24,14 +25,16 @@ public class DTOTurno {
     public DTOTurno() {
     }
 
-    public DTOTurno(String tipo, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
-        this.nombre = tipo;
+    public DTOTurno(Long idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
+        this.idTurno = idTurno;
+        this.nombre = nombre;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.diasTrabajo = diasTrabajo;
     }
 
-    public DTOTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
+    public DTOTurno(Long idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
+        this.idTurno = idTurno;
         this.nombre = nombre;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
@@ -83,6 +86,55 @@ public class DTOTurno {
     public DTOTurno(String nombre) {
         this.nombre = nombre;
     }
+
+    public Long getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(Long idTurno) {
+        this.idTurno = idTurno;
+    }
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.idTurno);
+        hash = 47 * hash + Objects.hashCode(this.nombre);
+        hash = 47 * hash + Objects.hashCode(this.horaInicio);
+        hash = 47 * hash + Objects.hashCode(this.horaFin);
+        hash = 47 * hash + Objects.hashCode(this.diasTrabajo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DTOTurno other = (DTOTurno) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.idTurno, other.idTurno)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaInicio, other.horaInicio)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaFin, other.horaFin)) {
+            return false;
+        }
+        return Objects.equals(this.diasTrabajo, other.diasTrabajo);
+    }
+
+
 
     
     

@@ -22,6 +22,10 @@ public interface IAsignarHorario {
     
     public List<DTOTurno> recuperarTurno();
     
-    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin);
+    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin);
+    
+    public void agregarTurno(DTOTurno turnoNuevo);
+    
+    public void eliminarTurno(DTOTurno turnoEliminar);
     
 }

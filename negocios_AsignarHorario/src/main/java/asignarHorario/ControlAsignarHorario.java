@@ -7,6 +7,7 @@ package asignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
+import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,7 +22,34 @@ import java.util.Set;
  * @author RAMSES
  */
 public class ControlAsignarHorario{
+    List<DTOTurno> turnosRegistrados = new ArrayList();
 
+    public ControlAsignarHorario(){
+        //Creamos los dias en los que se trabajara cada turno
+        Set<DayOfWeek> manana = new HashSet<>();
+        manana.add(DayOfWeek.MONDAY);
+        manana.add(DayOfWeek.WEDNESDAY);
+        manana.add(DayOfWeek.FRIDAY);
+        
+        Set<DayOfWeek> tarde = new HashSet<>();
+        tarde.add(DayOfWeek.TUESDAY);
+        tarde.add(DayOfWeek.THURSDAY);
+        
+        Set<DayOfWeek> noche = new HashSet<>();
+        noche.add(DayOfWeek.MONDAY);
+        noche.add(DayOfWeek.TUESDAY);
+        noche.add(DayOfWeek.WEDNESDAY);
+        //Creamos los turnos con sus dias, nombres, y horas de inicio y fin
+        DTOTurno turno_matutino = new DTOTurno(Long.valueOf("1"), "Turno matutino", LocalTime.of(8, 0), LocalTime.of(13, 0), manana, Color.YELLOW);
+        DTOTurno turno_vespertino = new DTOTurno(Long.valueOf("2"), "Turno Vespertino", LocalTime.of(13, 0), LocalTime.of(18, 0), tarde, Color.BLUE);
+        DTOTurno turno_nocturno = new DTOTurno(Long.valueOf("3"), "Turno nocturno", LocalTime.of(18, 0), LocalTime.of(23, 0), noche, Color.BLACK);
+        //Agregamos los turnos a la lista de turnos que declaramos como variable para la clase
+        
+        turnosRegistrados.add(turno_matutino);
+        turnosRegistrados.add(turno_vespertino);
+        turnosRegistrados.add(turno_nocturno);
+    }
+    
     /**
      *  Creamos la lista mock de los empleados para despues regresarlos
      * @return List DTOEmpleado
@@ -59,7 +87,7 @@ public class ControlAsignarHorario{
         }
         
         //Al no haber un turno en existencia para este horario se queda como nulo
-        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado, null, null, null);
+        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado.getId(), null, null, null);
         
         return horario_empleado;
         
@@ -70,31 +98,9 @@ public class ControlAsignarHorario{
      * @return 
      */
     public List<DTOTurno> recuperarTurnos() {
-        //Creamos los dias en los que se trabajara cada turno
-        Set<DayOfWeek> manana = new HashSet<>();
-        manana.add(DayOfWeek.MONDAY);
-        manana.add(DayOfWeek.WEDNESDAY);
-        manana.add(DayOfWeek.FRIDAY);
         
-        Set<DayOfWeek> tarde = new HashSet<>();
-        tarde.add(DayOfWeek.TUESDAY);
-        tarde.add(DayOfWeek.THURSDAY);
-        
-        Set<DayOfWeek> noche = new HashSet<>();
-        noche.add(DayOfWeek.MONDAY);
-        noche.add(DayOfWeek.TUESDAY);
-        noche.add(DayOfWeek.WEDNESDAY);
-        //Creamos los turnos con sus dias, nombres, y horas de inicio y fin
-        DTOTurno turno_matutino = new DTOTurno("Turno matutino", LocalTime.of(8, 0), LocalTime.of(13, 0), manana);
-        DTOTurno turno_vespertino = new DTOTurno("Turno Vespertino", LocalTime.of(13, 0), LocalTime.of(18, 0), manana);
-        DTOTurno turno_nocturno = new DTOTurno("Turno nocturno", LocalTime.of(18, 0), LocalTime.of(23, 0), manana);
-        //Creamos la lista de turnos que hay
-        List<DTOTurno> lista = new ArrayList<DTOTurno>();
-        lista.add(turno_matutino);
-        lista.add(turno_vespertino);
-        lista.add(turno_nocturno);
-        
-        return lista;
+        //Recuperamos los turnos agregados en el constructor
+        return turnosRegistrados;
         
     }
     
@@ -105,8 +111,22 @@ public class ControlAsignarHorario{
      * @param fecha_inicio
      * @param fecha_fin 
      */
-    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
-        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado, turno, fecha_inicio, fecha_fin);
+    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
+        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(idEmpleado, turno, fecha_inicio, fecha_fin);
+    }
+    
+    
+    public void agregarTurno(DTOTurno turno){
+        turnosRegistrados.add(turno);
+    }
+    
+    public void eliminarTurno(DTOTurno turno){
+        for (DTOTurno t: turnosRegistrados){
+            if(t.getIdTurno().equals(turno.getIdTurno())){
+                turnosRegistrados.remove(t);
+            }
+        }
+       
     }
     
 }

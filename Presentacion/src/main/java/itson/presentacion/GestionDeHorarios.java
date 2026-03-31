@@ -4,8 +4,12 @@
  */
 package itson.presentacion;
 
+import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import dto.DTOHorarioEmpleado;
+import dto.DTOTurno;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
@@ -14,18 +18,34 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Zaira
  */
 public class GestionDeHorarios extends javax.swing.JFrame {
+    IAsignarHorario control = new FacadeAsignarHorario();
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     Long idEmpleado;
     JButton btnDia;
     /**
@@ -47,7 +67,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                 dispose();
             }
         });
-        
+        configurarTabla();
         txtMes.addKeyListener(new KeyAdapter(){
             @Override
             public void keyPressed(KeyEvent e) {
@@ -66,6 +86,56 @@ public class GestionDeHorarios extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void configurarTabla(){
+        String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
+        modeloTabla.setRowCount(0);
+        modeloTabla.setColumnIdentifiers(columnas);
+
+        List<DTOTurno> turnos = control.recuperarTurno();
+        for (DTOTurno t: turnos){
+            Object[] fila = {
+                t.getIdTurno(),
+                t.getNombre(),
+                t.getHoraInicio(),
+                t.getHoraFin(),
+                t.getDiasTrabajo(),
+                t.getColorEvento()
+             };
+            modeloTabla.addRow(fila);
+        }
+        
+        tablaTurnosDisponibles.setModel(modeloTabla);
+        
+        tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (value instanceof Color) {
+                Color colorEvento = (Color) value;
+                ((JLabel)c).setOpaque(true);
+            
+                if (!isSelected) {
+                    c.setBackground(colorEvento);
+                    c.setForeground(colorEvento);
+                } else {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(table.getSelectionForeground());
+                }
+                
+                ((JLabel)c).setText("");
+            } else {
+                 c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+            }
+
+            return c;
+            }
+        });
+
+    }
 
     /**
      * Este método crea el calendario utilizando GridLayout para crear los días
@@ -76,8 +146,8 @@ public class GestionDeHorarios extends javax.swing.JFrame {
          
         if (rdbtnSemanal.isSelected()){
             pnlCalendario.setLayout(new GridLayout(1, 7, 5, 5)); 
-            LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            llenarDias(lunes);
+            LocalDate inicio = this.lunes;
+            llenarDias(inicio);
 
         } else if (rdbtnMensual.isSelected()){
             pnlCalendario.setLayout(new GridLayout(0, 7, 5, 5)); 
@@ -117,29 +187,95 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         for (int i = 1; i <= totalDias; i++) {
             btnDia = new JButton(String.valueOf(i));
             btnDia.setPreferredSize(new Dimension(80, 60));
+            
 
-//            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-//            Color colorTurno = AQUI VA EL NOMBRE DE LA DAO.obtenerColorTurno(fechaActual);
-//            if (colorTurno != null) {
-//                btnDia.setBackground(colorTurno);
-//                btnDia.setForeground(Color.WHITE); 
-//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL Turno); 
-//            } else {
-//                btnDia.setBackground(Color.WHITE);
-//            }
+            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(idEmpleado);
+            JMenuItem horario = new JMenuItem();
+            
+            if (horarioEmpleado != null && horarioEmpleado.getTurno() != null){
+                Set<DayOfWeek> diasPermitidos = horarioEmpleado.getTurno().getDiasTrabajo();
+                DayOfWeek diaDeLaSemana = fechaActual.getDayOfWeek();
+                Color colorTurno = horarioEmpleado.getTurno().getColorEvento();
+                if (diasPermitidos != null && diasPermitidos.contains(diaDeLaSemana)) {
+                    if (colorTurno != null) {
+                        horario = new JMenuItem();
+                        horario.setBackground(colorTurno);
+                        horario.setForeground(Color.WHITE); 
+                        horario.setToolTipText(horarioEmpleado.getTurno().getNombre());
+                        btnDia.setBackground(colorTurno);
 
-//            btnDia.addActionListener(e -> {
-//            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-//            if (filaSeleccionada != -1) {
-//                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarTurno(fechaActual, titulo);
-//                configurarCalendario();
-//            }
-//        });
+                    } else {
+                        btnDia.setBackground(Color.WHITE);
+                    }
+                }
+            }
+            
+  
+            btnDia.addActionListener(e -> {
+                int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
+                                                      ? horarioEmpleado
+                                                      : new DTOHorarioEmpleado();
+                    horarioAProcesar.setEmpleado(idEmpleado);
+                    Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+                    String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
+                    LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
+                    LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
+                    Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
+                    DTOTurno turno = new DTOTurno(
+                            id,
+                            titulo,
+                            turnoInicio,
+                            turnoFin,
+                            diasTurno
+                    );
+                    
+                    JTextField txtInicio = new JTextField(10);
+                    JTextField txtFin = new JTextField(10);
+
+                    JPanel confirmarFechas = new JPanel();
+                    confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
+                    confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
+                    confirmarFechas.add(txtInicio);
+                    confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
+                    confirmarFechas.add(txtFin);
+                        
+                        int result = JOptionPane.showConfirmDialog(
+                                null, 
+                                confirmarFechas, 
+                                "Ingresa el rango de fechas", 
+                                JOptionPane.OK_CANCEL_OPTION);
+                        
+                        if (result == JOptionPane.OK_OPTION) {
+                            try {
+                                LocalDate fin = null;
+                                LocalDate inicio = LocalDate.parse(txtInicio.getText().trim());
+                                if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
+                                    fin = LocalDate.parse(txtFin.getText().trim());
+                                } 
+                                
+                                control.actualizarHorarioEmpleado(turno, idEmpleado, inicio, fin);
+                                Set<DayOfWeek> diasPermitidos = turno.getDiasTrabajo();
+                                DayOfWeek diaDeLaSemana = fechaActual.getDayOfWeek();
+                                if (diasPermitidos.contains(diaDeLaSemana)){
+                                    btnDia.setBackground(turno.getColorEvento());
+                                }
+                                
+                            } catch (DateTimeParseException ex) {
+                                JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
+                            }
+                        }
+                        configurarCalendario();
+                    }
+                });
+            
             
             pnlCalendario.add(btnDia);
         }
     }
+    
     
     /**
      * Este método privado es auxiliar para configurar el horario.
@@ -148,33 +284,88 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * @param inicio dia de inicio del rango
      * @param fin dia final del rango
      */
-    private void llenarDias(LocalDate lunes){
+    private void llenarDias(LocalDate inicio){
         
         for (int i = 0; i < 7; i++) {
-         LocalDate diaActual = lunes.plusDays(i);
+         LocalDate diaActual = inicio.plusDays(i);
 
          String textoBoton = String.valueOf(diaActual.getDayOfMonth());
          
          JButton btnDia = new JButton(textoBoton);
          btnDia.setPreferredSize(new Dimension(80, 400));
-//            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-//            Color colorTurno = AQUI VA EL NOMBRE DE LA DAO.obtenerColorTurno(fechaActual);
-//            if (colorTurno != null) {
-//                btnDia.setBackground(colorTurno);
-//                btnDia.setForeground(Color.WHITE); 
-//                btnDia.setToolTipText(AQUI VA EL NOMBRE DEL Turno); 
-//            } else {
-//                btnDia.setBackground(Color.WHITE);
-//            }
 
-            //btnDia.addActionListener(e -> {
-//            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-//            if (filaSeleccionada != -1) {
-//                String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-//                AQUI VA EL NOMBRE DE LA DAO o BO.guardarTurno(fechaActual, titulo);
-//                configurarCalendario();
-//            }
-//        });
+            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(idEmpleado);
+            JMenuItem horario = new JMenuItem();
+            
+            if (horarioEmpleado != null && horarioEmpleado.getTurno() != null){
+                Color colorTurno = horarioEmpleado.getTurno().getColorEvento();
+                if (colorTurno != null) {
+                    horario = new JMenuItem();
+                    horario.setBackground(colorTurno);
+                    horario.setForeground(Color.WHITE); 
+                    horario.setToolTipText(horarioEmpleado.getTurno().getNombre());
+                } else {
+                    btnDia.setBackground(Color.WHITE);
+                }
+            }
+            
+  
+            btnDia.addActionListener(e -> {
+                int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
+                                                      ? horarioEmpleado
+                                                      : new DTOHorarioEmpleado();
+                    horarioAProcesar.setEmpleado(idEmpleado);
+                    Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+                    String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
+                    LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
+                    LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
+                    Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
+                    DTOTurno turno = new DTOTurno(
+                            id,
+                            titulo,
+                            turnoInicio,
+                            turnoFin,
+                            diasTurno
+                    );
+                    
+                    
+                    JTextField txtInicio = new JTextField(10);
+                    JTextField txtFin = new JTextField(10);
+
+                    JPanel confirmarFechas = new JPanel();
+                    confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
+                    confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
+                    confirmarFechas.add(txtInicio);
+                    confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
+                    confirmarFechas.add(txtFin);
+                        
+                        int result = JOptionPane.showConfirmDialog(
+                                null, 
+                                confirmarFechas, 
+                                "Ingresa el rango de fechas", 
+                                JOptionPane.OK_CANCEL_OPTION);
+                        
+                        if (result == JOptionPane.OK_OPTION) {
+                            try {
+                                LocalDate fin = null;
+                                LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim());
+                                if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
+                                    fin = LocalDate.parse(txtFin.getText().trim());
+                                } 
+                                
+                                control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                                btnDia.setBackground(turno.getColorEvento());
+                                
+                            } catch (DateTimeParseException ex) {
+                                JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
+                            }
+                        }
+                        configurarCalendario();
+                    }
+                });
             
             pnlCalendario.add(btnDia);
         }
@@ -308,6 +499,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pnlTurno = new javax.swing.JPanel();
         txtMes = new javax.swing.JTextField();
         txtAnio = new javax.swing.JTextField();
+        btnTurno = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gestión De Horarios");
@@ -317,6 +509,8 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pnlGestionHorario.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaTurnosDisponibles.setBackground(new java.awt.Color(39, 71, 125));
+        tablaTurnosDisponibles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tablaTurnosDisponibles.setForeground(new java.awt.Color(255, 255, 255));
         tablaTurnosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -345,7 +539,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         });
         jScrollPane.setViewportView(tablaTurnosDisponibles);
 
-        pnlGestionHorario.add(jScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 305));
+        pnlGestionHorario.add(jScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 260));
 
         pnlCalendario.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -482,6 +676,17 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         txtAnio.setBorder(null);
         pnlGestionHorario.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 130, -1));
 
+        btnTurno.setBackground(new java.awt.Color(255, 166, 43));
+        btnTurno.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnTurno.setForeground(new java.awt.Color(39, 71, 125));
+        btnTurno.setText("Agregar Turno");
+        btnTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTurnoActionPerformed(evt);
+            }
+        });
+        pnlGestionHorario.add(btnTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 560, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -502,13 +707,29 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * @param evt click en el botón siguiente
      */
     private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
-        Month mesActual = getMes();
-        Month mesSiguiente = mesActual.plus(1);
-        txtMes.setText(mesSiguiente.name());
-        if (mesSiguiente.equals(Month.JANUARY)){
-            Year anioActual = getAnio();
-            Year anioSiguiente = anioActual.plusYears(1);
-            txtAnio.setText(String.valueOf(anioSiguiente));
+        if (rdbtnSemanal.isSelected()){
+            this.lunes = this.lunes.plusWeeks(1);
+            Month mesActual = getMes();
+            
+            if (this.lunes.getMonth() != mesActual){
+                mesActual = this.lunes.getMonth();
+                txtMes.setText(mesActual.name());
+            }
+            
+            int anioActual = getAnio().getValue();
+            if (this.lunes.getYear() != anioActual){
+                anioActual = this.lunes.getYear();
+                txtAnio.setText(String.valueOf(anioActual));
+            }
+        } else if (rdbtnMensual.isSelected()){
+            Month mesActual = getMes();
+            Month mesSiguiente = mesActual.plus(1);
+            txtMes.setText(mesSiguiente.name());
+            if (mesSiguiente.equals(Month.JANUARY)){
+                Year anioActual = getAnio();
+                Year anioSiguiente = anioActual.plusYears(1);
+                txtAnio.setText(String.valueOf(anioSiguiente));
+            }
         }
         configurarCalendario();
     }//GEN-LAST:event_btnMesSiguienteActionPerformed
@@ -541,16 +762,38 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * @param evt click en el botón anterior
      */
     private void btnMesAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesAnteriorActionPerformed
-        Month mesActual = getMes();
-        Month mesAnterior = mesActual.minus(1);
-        txtMes.setText(mesAnterior.name());
-        if (mesAnterior.equals(Month.DECEMBER)){
-            Year anioActual = getAnio();
-            Year anioAnterior = anioActual.minusYears(1);
-            txtAnio.setText(String.valueOf(anioAnterior));
+        if (rdbtnSemanal.isSelected()){
+            this.lunes = this.lunes.minusWeeks(1);
+            Month mesActual = getMes();
+            
+            if (this.lunes.getMonth() != mesActual){
+                mesActual = this.lunes.getMonth();
+                txtMes.setText(mesActual.name());
+            }
+            
+            int anioActual = getAnio().getValue();
+            if (this.lunes.getYear() != anioActual){
+                anioActual = this.lunes.getYear();
+                txtAnio.setText(String.valueOf(anioActual));
+            }
+        } else if (rdbtnMensual.isSelected()){
+            Month mesActual = getMes();
+            Month mesAnterior = mesActual.minus(1);
+            txtMes.setText(mesAnterior.name());
+            if (mesAnterior.equals(Month.DECEMBER)){
+                Year anioActual = getAnio();
+                Year anioAnterior = anioActual.minusYears(1);
+                txtAnio.setText(String.valueOf(anioAnterior));
+            }
         }
         configurarCalendario();
     }//GEN-LAST:event_btnMesAnteriorActionPerformed
+
+    private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
+        GestionDeTurnos gT = new GestionDeTurnos();
+        gT.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnTurnoActionPerformed
     
     
 
@@ -558,6 +801,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMesAnterior;
     private javax.swing.JButton btnMesSiguiente;
+    private javax.swing.JButton btnTurno;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JLabel lblDomingo;
     private javax.swing.JLabel lblJueves;
