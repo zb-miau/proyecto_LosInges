@@ -5,6 +5,7 @@
 package dto;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -14,12 +15,11 @@ import java.util.Objects;
 public class DTOEmpleado {
     
     private Long id;
-    
     private String nombre;
-    
     private String apellidos;
-    
     private LocalDate fechaNacimiento;
+    LinkedList<DTOHorarioEmpleado> historial;
+    
 
     public DTOEmpleado() {
     }
@@ -29,6 +29,7 @@ public class DTOEmpleado {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
+        this.historial = new LinkedList();
     }
 
     public Long getId() {
@@ -83,6 +84,14 @@ public class DTOEmpleado {
         }
         final DTOEmpleado other = (DTOEmpleado) obj;
         return Objects.equals(this.id, other.id);
+    }
+
+    public LinkedList<DTOHorarioEmpleado> getHistorial() {
+        return historial;
+    }
+
+    public void setHistorial(LinkedList<DTOHorarioEmpleado> historial) {
+        this.historial = historial;
     }
     
     

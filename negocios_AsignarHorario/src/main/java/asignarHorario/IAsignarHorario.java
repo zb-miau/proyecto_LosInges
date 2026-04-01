@@ -18,6 +18,8 @@ public interface IAsignarHorario {
     
     public List<DTOEmpleado> recuperarEmpleados();
     
+    public DTOEmpleado recuperarEmpleado(Long id);
+    
     public DTOHorarioEmpleado obtenerHorarioEmpleado(Long id);
     
     public List<DTOTurno> recuperarTurno();

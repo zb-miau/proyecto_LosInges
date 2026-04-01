@@ -6,8 +6,11 @@ package itson.presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
+import itson.presentacion.GestionDeHorariosMain;
+import itson.presentacion.GestionDeTurnos;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,6 +28,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JButton;
@@ -177,6 +181,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * y las llena de color en caso de existir un Turno.
      */
     private void llenarDias(){
+        pnlCalendario.removeAll();
+        DTOEmpleado empleado = control.recuperarEmpleado(idEmpleado);
+        LinkedList<DTOHorarioEmpleado> historial = (empleado != null && empleado.getHistorial() != null) 
+                                            ? empleado.getHistorial() 
+                                            : new LinkedList<>();
         int primerDia = primerDiaMes();
         int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
         
@@ -191,89 +200,66 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 
             LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
             DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(idEmpleado);
-            JMenuItem horario = new JMenuItem();
             
-            if (horarioEmpleado != null && horarioEmpleado.getTurno() != null){
-                Set<DayOfWeek> diasPermitidos = horarioEmpleado.getTurno().getDiasTrabajo();
-                DayOfWeek diaDeLaSemana = fechaActual.getDayOfWeek();
-                Color colorTurno = horarioEmpleado.getTurno().getColorEvento();
-                if (diasPermitidos != null && diasPermitidos.contains(diaDeLaSemana)) {
-                    if (colorTurno != null) {
-                        horario = new JMenuItem();
-                        horario.setBackground(colorTurno);
-                        horario.setForeground(Color.WHITE); 
-                        horario.setToolTipText(horarioEmpleado.getTurno().getNombre());
-                        btnDia.setBackground(colorTurno);
+            DTOHorarioEmpleado horarioParaEsteDia = null;
+            if (historial == null){
+                historial = new LinkedList();
+            }
+            
+            for (DTOHorarioEmpleado h : historial) {
+                LocalDate fechaInicio = h.getFechaIncio();
+                LocalDate fin = h.getFechaFin(); 
 
-                    } else {
-                        btnDia.setBackground(Color.WHITE);
-                    }
+                if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
+                    horarioParaEsteDia = h;
+                    break;
                 }
             }
             
-  
-            btnDia.addActionListener(e -> {
-                int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
-                                                      ? horarioEmpleado
-                                                      : new DTOHorarioEmpleado();
-                    horarioAProcesar.setEmpleado(idEmpleado);
-                    Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
-                    String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
-                    LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
-                    LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
-                    Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
-                    DTOTurno turno = new DTOTurno(
-                            id,
-                            titulo,
-                            turnoInicio,
-                            turnoFin,
-                            diasTurno
-                    );
-                    
-                    JTextField txtInicio = new JTextField(10);
-                    JTextField txtFin = new JTextField(10);
+            if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
+                DTOTurno turno = horarioParaEsteDia.getTurno();
+                if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
+                    btnDia.setBackground(turno.getColorEvento());
+                    btnDia.setOpaque(true);
+                    btnDia.setContentAreaFilled(true);
+                    btnDia.setBorderPainted(false);
+                    btnDia.setForeground(new Color(128, 128, 128));
 
-                    JPanel confirmarFechas = new JPanel();
-                    confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
-                    confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
-                    confirmarFechas.add(txtInicio);
-                    confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
-                    confirmarFechas.add(txtFin);
-                        
-                        int result = JOptionPane.showConfirmDialog(
-                                null, 
-                                confirmarFechas, 
-                                "Ingresa el rango de fechas", 
-                                JOptionPane.OK_CANCEL_OPTION);
-                        
-                        if (result == JOptionPane.OK_OPTION) {
-                            try {
-                                LocalDate fin = null;
-                                LocalDate inicio = LocalDate.parse(txtInicio.getText().trim());
-                                if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
-                                    fin = LocalDate.parse(txtFin.getText().trim());
-                                } 
-                                
-                                control.actualizarHorarioEmpleado(turno, idEmpleado, inicio, fin);
-                                Set<DayOfWeek> diasPermitidos = turno.getDiasTrabajo();
-                                DayOfWeek diaDeLaSemana = fechaActual.getDayOfWeek();
-                                if (diasPermitidos.contains(diaDeLaSemana)){
-                                    btnDia.setBackground(turno.getColorEvento());
-                                }
-                                
-                            } catch (DateTimeParseException ex) {
-                                JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
-                            }
-                        }
-                        configurarCalendario();
+                    btnDia.setToolTipText(turno.getNombre());
+                } else {
+                    restablecerBotonDefecto(btnDia);
+                }
+            } else {
+                restablecerBotonDefecto(btnDia);
+            }
+            
+  
+            final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia; 
+    
+            btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (horarioFinal != null && horarioFinal.getTurno() != null) {
+                        DTOTurno t = horarioFinal.getTurno();
+                        lblNombreDetalle.setText("Turno: " + t.getNombre());
+                        lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
+                        lblDiasDetalle.setText("Días: " + t.getDiasTrabajo().toString());
+                        pnlTurno.setBackground(t.getColorEvento());
+                    } else {
+                        lblNombreDetalle.setText("Sin turno");
+                        lblHorarioDetalle.setText("");
+                        lblDiasDetalle.setText("");
+                        pnlTurno.setBackground(Color.LIGHT_GRAY);
                     }
-                });
+                }
+            });
             
             
             pnlCalendario.add(btnDia);
         }
+       
+        pnlCalendario.revalidate();
+        pnlCalendario.repaint();
     }
     
     
@@ -285,7 +271,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
      * @param fin dia final del rango
      */
     private void llenarDias(LocalDate inicio){
-        
+        pnlCalendario.removeAll();
+        DTOEmpleado empleado = control.recuperarEmpleado(idEmpleado);
+        LinkedList<DTOHorarioEmpleado> historial = (empleado != null && empleado.getHistorial() != null) 
+                                            ? empleado.getHistorial() 
+                                            : new LinkedList<>();
         for (int i = 0; i < 7; i++) {
          LocalDate diaActual = inicio.plusDays(i);
 
@@ -294,81 +284,71 @@ public class GestionDeHorarios extends javax.swing.JFrame {
          JButton btnDia = new JButton(textoBoton);
          btnDia.setPreferredSize(new Dimension(80, 400));
 
-            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+            LocalDate fechaActual = diaActual;
             DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(idEmpleado);
-            JMenuItem horario = new JMenuItem();
             
-            if (horarioEmpleado != null && horarioEmpleado.getTurno() != null){
-                Color colorTurno = horarioEmpleado.getTurno().getColorEvento();
-                if (colorTurno != null) {
-                    horario = new JMenuItem();
-                    horario.setBackground(colorTurno);
-                    horario.setForeground(Color.WHITE); 
-                    horario.setToolTipText(horarioEmpleado.getTurno().getNombre());
-                } else {
-                    btnDia.setBackground(Color.WHITE);
+            DTOHorarioEmpleado horarioParaEsteDia = null;
+            if (historial == null){
+                historial = new LinkedList();
+            }
+            
+            for (DTOHorarioEmpleado h : historial) {
+                LocalDate fechaInicio = h.getFechaIncio();
+                LocalDate fin = h.getFechaFin(); 
+
+                if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
+                    horarioParaEsteDia = h;
+                    break;
                 }
             }
             
-  
-            btnDia.addActionListener(e -> {
-                int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
-                                                      ? horarioEmpleado
-                                                      : new DTOHorarioEmpleado();
-                    horarioAProcesar.setEmpleado(idEmpleado);
-                    Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
-                    String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
-                    LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
-                    LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
-                    Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
-                    DTOTurno turno = new DTOTurno(
-                            id,
-                            titulo,
-                            turnoInicio,
-                            turnoFin,
-                            diasTurno
-                    );
-                    
-                    
-                    JTextField txtInicio = new JTextField(10);
-                    JTextField txtFin = new JTextField(10);
-
-                    JPanel confirmarFechas = new JPanel();
-                    confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
-                    confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
-                    confirmarFechas.add(txtInicio);
-                    confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
-                    confirmarFechas.add(txtFin);
-                        
-                        int result = JOptionPane.showConfirmDialog(
-                                null, 
-                                confirmarFechas, 
-                                "Ingresa el rango de fechas", 
-                                JOptionPane.OK_CANCEL_OPTION);
-                        
-                        if (result == JOptionPane.OK_OPTION) {
-                            try {
-                                LocalDate fin = null;
-                                LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim());
-                                if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
-                                    fin = LocalDate.parse(txtFin.getText().trim());
-                                } 
-                                
-                                control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
-                                btnDia.setBackground(turno.getColorEvento());
-                                
-                            } catch (DateTimeParseException ex) {
-                                JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
-                            }
-                        }
-                        configurarCalendario();
-                    }
-                });
+            if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
+                DTOTurno turno = horarioParaEsteDia.getTurno();
+                if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
+                    btnDia.setBackground(turno.getColorEvento());
+                    btnDia.setOpaque(true);
+                    btnDia.setContentAreaFilled(true);
+                    btnDia.setBorderPainted(false);
+                    btnDia.setForeground(new Color(128, 128, 128));
+                    btnDia.setToolTipText(turno.getNombre());
+                }
+            } else {
+                btnDia.setBackground(Color.WHITE);
+            }
             
+            final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia; 
+    
+            btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (horarioFinal != null && horarioFinal.getTurno() != null) {
+                        DTOTurno t = horarioFinal.getTurno();
+                        lblNombreDetalle.setText("Turno: " + t.getNombre());
+                        lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
+                        lblDiasDetalle.setText("Días: " + t.getDiasTrabajo().toString());
+                        pnlTurno.setBackground(t.getColorEvento());
+                    } else {
+                        lblNombreDetalle.setText("Sin turno");
+                        lblHorarioDetalle.setText("");
+                        lblDiasDetalle.setText("");
+                        pnlTurno.setBackground(Color.LIGHT_GRAY);
+                    }
+                }
+            });
             pnlCalendario.add(btnDia);
         }
+        
+        pnlCalendario.revalidate();
+        pnlCalendario.repaint();
+    }
+    
+    
+    private void restablecerBotonDefecto(JButton btn) {
+        btn.setBackground(Color.WHITE);      
+        btn.setForeground(Color.BLACK);     
+        btn.setOpaque(true);
+        btn.setContentAreaFilled(true);
+        btn.setBorderPainted(true);          
     }
     
     /**
@@ -497,9 +477,13 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         btnMesSiguiente = new javax.swing.JButton();
         btnMesAnterior = new javax.swing.JButton();
         pnlTurno = new javax.swing.JPanel();
+        lblNombreDetalle = new javax.swing.JLabel();
+        lblHorarioDetalle = new javax.swing.JLabel();
+        lblDiasDetalle = new javax.swing.JLabel();
         txtMes = new javax.swing.JTextField();
         txtAnio = new javax.swing.JTextField();
         btnTurno = new javax.swing.JButton();
+        btnAgregarHorario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gestión De Horarios");
@@ -653,14 +637,27 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         pnlTurno.setLayout(pnlTurnoLayout);
         pnlTurnoLayout.setHorizontalGroup(
             pnlTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+            .addGroup(pnlTurnoLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(pnlTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblNombreDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblHorarioDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblDiasDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         pnlTurnoLayout.setVerticalGroup(
             pnlTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 180, Short.MAX_VALUE)
+            .addGroup(pnlTurnoLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(lblNombreDetalle)
+                .addGap(18, 18, 18)
+                .addComponent(lblHorarioDetalle)
+                .addGap(28, 28, 28)
+                .addComponent(lblDiasDetalle)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
-        pnlGestionHorario.add(pnlTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 290, 180));
+        pnlGestionHorario.add(pnlTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 290, 160));
 
         txtMes.setBackground(new java.awt.Color(255, 255, 255));
         txtMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -686,6 +683,14 @@ public class GestionDeHorarios extends javax.swing.JFrame {
             }
         });
         pnlGestionHorario.add(btnTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 560, -1, -1));
+
+        btnAgregarHorario.setText("Agregar Horario");
+        btnAgregarHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarHorarioActionPerformed(evt);
+            }
+        });
+        pnlGestionHorario.add(btnAgregarHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -794,20 +799,89 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         gT.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnTurnoActionPerformed
-    
+
+    private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
+        int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+        DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(idEmpleado);
+        if (filaSeleccionada != -1) {
+            DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
+                                              ? horarioEmpleado
+                                              : new DTOHorarioEmpleado();
+            horarioAProcesar.setEmpleado(idEmpleado);
+            Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+            String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
+            LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
+            LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
+            Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
+            Color color = (Color) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 5);
+            DTOTurno turno = new DTOTurno(
+                    id,
+                    titulo,
+                    turnoInicio,
+                    turnoFin,
+                    diasTurno,
+                    color
+            );
+
+
+            JTextField txtInicio = new JTextField(10);
+            JTextField txtFin = new JTextField(10);
+
+            JPanel confirmarFechas = new JPanel();
+            confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
+            confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
+            confirmarFechas.add(txtInicio);
+            confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
+            confirmarFechas.add(txtFin);
+
+            int result = JOptionPane.showConfirmDialog(
+                    null, 
+                    confirmarFechas, 
+                    "Ingresa el rango de fechas", 
+                    JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    try {
+                        LocalDate fin = null;
+                        LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim());
+                        if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
+                            fin = LocalDate.parse(txtFin.getText().trim());
+                        } 
+
+                        control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        configurarCalendario();
+
+
+                    } catch (DateTimeParseException ex) {
+                        JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
+                    }
+                }
+            } else {
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Seleccione el turno que desea agregar.", 
+                    "Sin turno seleccionado", 
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnAgregarHorarioActionPerformed
     
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarHorario;
     private javax.swing.JButton btnMesAnterior;
     private javax.swing.JButton btnMesSiguiente;
     private javax.swing.JButton btnTurno;
     private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JLabel lblDiasDetalle;
     private javax.swing.JLabel lblDomingo;
+    private javax.swing.JLabel lblHorarioDetalle;
     private javax.swing.JLabel lblJueves;
     private javax.swing.JLabel lblLunes;
     private javax.swing.JLabel lblMartes;
     private javax.swing.JLabel lblMiercoles;
+    private javax.swing.JLabel lblNombreDetalle;
     private javax.swing.JLabel lblSabado;
     private javax.swing.JLabel lblViernes;
     private javax.swing.JLabel lblVista;

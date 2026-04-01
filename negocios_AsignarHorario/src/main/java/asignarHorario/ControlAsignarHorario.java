@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import java.util.Set;
  */
 public class ControlAsignarHorario{
     List<DTOTurno> turnosRegistrados = new ArrayList();
+    List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
 
     public ControlAsignarHorario(){
         //Creamos los dias en los que se trabajara cada turno
@@ -48,20 +50,21 @@ public class ControlAsignarHorario{
         turnosRegistrados.add(turno_matutino);
         turnosRegistrados.add(turno_vespertino);
         turnosRegistrados.add(turno_nocturno);
+        
+        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
+        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
+        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
+        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24)));
+        
     }
     
     /**
-     *  Creamos la lista mock de los empleados para despues regresarlos
+     *  Creamos la lista mock de los empleadosRegistrados para despues regresarlos
      * @return List DTOEmpleado
      */
     public List<DTOEmpleado> recuperarEmpleados() {
-        List<DTOEmpleado> empleados = new ArrayList<>();
-        empleados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
-        empleados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
-        empleados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
-        empleados.add(new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24)));
         
-        return empleados;
+        return empleadosRegistrados;
     }
     
     /**
@@ -104,15 +107,28 @@ public class ControlAsignarHorario{
         
     }
     
-    /**
-     * Modificamos el horario del empleado con el turno que se selecciono, la fecha de inicio y la fecha en que termina
-     * @param turno
-     * @param empleado
-     * @param fecha_inicio
-     * @param fecha_fin 
-     */
+    
     public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
-        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(idEmpleado, turno, fecha_inicio, fecha_fin);
+        DTOHorarioEmpleado horarioEmpleado = new DTOHorarioEmpleado(idEmpleado, turno, fecha_inicio, fecha_fin);
+        List<DTOEmpleado> empleados = recuperarEmpleados();
+        boolean encontrado = false;
+        for (DTOEmpleado e : empleados) {
+            if (e.getId().equals(idEmpleado)) {
+                LinkedList<DTOHorarioEmpleado> historial = e.getHistorial();
+                if (historial == null) {
+                    historial = new LinkedList<>();
+                    e.setHistorial(historial); 
+                }
+
+                historial.add(horarioEmpleado);
+                encontrado = true;
+                break; 
+            }
+        }
+        
+        if (encontrado){
+            guardarEmpleados(empleados);
+        }
     }
     
     
@@ -124,9 +140,23 @@ public class ControlAsignarHorario{
         for (DTOTurno t: turnosRegistrados){
             if(t.getIdTurno().equals(turno.getIdTurno())){
                 turnosRegistrados.remove(t);
+                break;
             }
         }
-       
+    }
+    
+    public DTOEmpleado recuperarEmpleado(Long id){
+        List<DTOEmpleado> empleados = empleadosRegistrados;
+        for (DTOEmpleado e : empleados){
+            if (e.getId().equals(id)){
+                return e;
+            }
+        }
+        return null;
+    }
+    
+    public void guardarEmpleados(List<DTOEmpleado> listaActualizada) {
+        this.empleadosRegistrados = listaActualizada; 
     }
     
 }

@@ -5,6 +5,7 @@
 package dto;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -81,7 +82,13 @@ public class DTOHorarioEmpleado {
         final DTOHorarioEmpleado other = (DTOHorarioEmpleado) obj;
         return Objects.equals(this.idEmpleado, other.idEmpleado);
     }
-    
-    
+
+    public Long getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
 
 }

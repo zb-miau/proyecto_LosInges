@@ -159,6 +159,11 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         btnModificar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(39, 71, 125));
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         lblHoraFin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblHoraFin.setForeground(new java.awt.Color(255, 255, 255));
@@ -385,9 +390,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
      * @param evt click al botón agregar
      */
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String nombre = txtNombre.getText();
-        LocalTime[] horas = getHoras();
-        Set<DayOfWeek> dias = getDias();
+        boolean validacion = validarFormulario();
         Color colorTurno = this.colorTurno;
         
         if (this.colorTurno == null) {
@@ -396,9 +399,22 @@ public class GestionDeTurnos extends javax.swing.JFrame {
         int ultimaFila = tablaTurnosDisponibles.getRowCount() - 1;
         Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(ultimaFila, 0).toString());
         Long idNuevo = id+1L;
-        DTOTurno turno = new DTOTurno(idNuevo, nombre, horas[0], horas[1], dias, colorTurno);
         
-        control.agregarTurno(turno);
+        if (validacion){
+            String nombre = txtNombre.getText().trim();
+            LocalTime[] horas = getHoras();
+            Set<DayOfWeek> dias = getDias();
+            
+            DTOTurno turno = new DTOTurno(idNuevo, nombre, horas[0], horas[1], dias, colorTurno);
+            control.agregarTurno(turno);
+            
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Se agregó el turno", 
+                    "Turno Agregado", 
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } 
         
         configurarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -448,16 +464,123 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                             "Se eliminó el turno.");
                     tablaTurnosDisponibles.removeAll();
                     configurarTabla();
+                    break;
                 } else {
                     JOptionPane.showMessageDialog(
                             this, 
                             "No se eliminó el turno.");
+                    break;
                 }
             }
         }
         
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+        Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+        List<DTOTurno> turnos = control.recuperarTurno();
+        DTOTurno turnoModificar = null;
+        for (DTOTurno t: turnos){
+            if (t.getIdTurno().equals(id)){
+                turnoModificar = t;
+            }
+        }
+        
+        boolean validacion = validarFormulario();
+        Color colorTurno = this.colorTurno;
+        
+        if (this.colorTurno == null) {
+            colorTurno = Color.RED;
+        }
+        
+        if (validacion && turnoModificar != null){
+            turnoModificar.setNombre(txtNombre.getText());
+            
+            LocalTime[] horas = getHoras();
+            turnoModificar.setHoraInicio(horas[0]);
+            turnoModificar.setHoraFin(horas[1]);
+            
+            Set<DayOfWeek> dias = getDias();
+            turnoModificar.setDiasTrabajo(dias);
+            
+            turnoModificar.setColorEvento(colorTurno);
+            
+            
+            
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Se modificó el turno", 
+                    "Turno modificado", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            
+        } else if (turnoModificar != null){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al obtener el turno a modificar", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+        } else {
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Campo incorrecto. Por favor, verifique la información.", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+               
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    /**
+     * Valida que los datos del formulario son válidos
+     * @return true si no hay datos inválidos, false en caso contrario
+     */
+    public boolean validarFormulario(){
+        
+        String nombre = txtNombre.getText().trim();
+        if (nombre.isEmpty() || nombre.isBlank()){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "El nombre no puede estar vacío.", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        LocalTime[] horas = getHoras();
+        
+        if (horas == null || horas[0] == null || horas[1] == null){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Las horas no pueden ser nulas o vacías", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+            
+        } else if (horas[0].isAfter(horas[1]) || horas[0].equals(horas[1])){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "La hora de fin debe ser mayor a la de inicio", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        Set<DayOfWeek> dias = getDias();
+        if (dias == null || dias.isEmpty()){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Los días no pueden estar vacíos", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+            
+        }
+        
+        return true;
+    }
+    
     /**
      * Método que configura los spinners al iniciar la interfaz
      */
@@ -547,9 +670,9 @@ public class GestionDeTurnos extends javax.swing.JFrame {
     public LocalTime[] getHoras(){
         Date fechaHoraInicio = (Date) spnHoraInicio.getValue();
         Date fechaHoraFin = (Date) spnHoraFin.getValue();
-        LocalTime horaInicio = fechaHoraInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-        LocalTime horaFin = fechaHoraFin.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-        if (!horaInicio.isBefore(horaFin)) {
+        LocalTime horaInicio = fechaHoraInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalTime().withSecond(0).withNano(0);
+        LocalTime horaFin = fechaHoraFin.toInstant().atZone(ZoneId.systemDefault()).toLocalTime().withSecond(0).withNano(0);
+        if (!horaInicio.isBefore(horaFin) || horaInicio.equals(horaFin)) {
             JOptionPane.showMessageDialog(
                     this, 
                     "La hora de fin debe ser mayor a la de inicio", 

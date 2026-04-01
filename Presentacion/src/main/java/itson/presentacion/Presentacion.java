@@ -11,8 +11,8 @@ package itson.presentacion;
 public class Presentacion {
 
     public static void main(String[] args) {
-        GestionDeTurnos gT = new GestionDeTurnos();
+//        GestionDeTurnos gT = new GestionDeTurnos();
 //        GestionDeHorarios gH = new GestionDeHorarios();
-//          GestionDeHorariosMain main = new GestionDeHorariosMain();
+          GestionDeHorariosMain main = new GestionDeHorariosMain();
     }
 }

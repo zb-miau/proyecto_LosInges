@@ -164,6 +164,7 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
         });
 
         lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblBuscar.setForeground(new java.awt.Color(255, 255, 255));
         lblBuscar.setText("Buscar empleado:");
 
         btnBuscar.setBackground(new java.awt.Color(255, 166, 43));
