@@ -30,4 +30,6 @@ public interface IAsignarHorario {
     
     public void eliminarTurno(DTOTurno turnoEliminar);
     
+    public void modificarTurno(DTOTurno turnoModificar);
+    
 }

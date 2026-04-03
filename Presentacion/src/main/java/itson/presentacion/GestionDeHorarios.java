@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -829,10 +830,11 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 
             JPanel confirmarFechas = new JPanel();
             confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
-            confirmarFechas.add(new JLabel("Fecha de Inicio (aaaa-mm-dd):"));
+            confirmarFechas.add(new JLabel("Fecha de Inicio (dd-MM-yyyy):"));
             confirmarFechas.add(txtInicio);
-            confirmarFechas.add(new JLabel("Fecha de Fin (aaaa-mm-dd):"));
+            confirmarFechas.add(new JLabel("Fecha de Fin (dd-MM-yyyy):"));
             confirmarFechas.add(txtFin);
+            DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
             int result = JOptionPane.showConfirmDialog(
                     null, 
@@ -843,9 +845,9 @@ public class GestionDeHorarios extends javax.swing.JFrame {
                 if (result == JOptionPane.OK_OPTION) {
                     try {
                         LocalDate fin = null;
-                        LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim());
+                        LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim(), formateador);
                         if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
-                            fin = LocalDate.parse(txtFin.getText().trim());
+                            fin = LocalDate.parse(txtFin.getText().trim(), formateador);
                         } 
 
                         control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
@@ -853,7 +855,12 @@ public class GestionDeHorarios extends javax.swing.JFrame {
 
 
                     } catch (DateTimeParseException ex) {
-                        JOptionPane.showMessageDialog(null, "Formato de fecha inválido.");
+                        JOptionPane.showMessageDialog(
+                                null, 
+                                "Formato de fecha inválido; utilice el formato dd-MM-yyyy",
+                                "Error de formato",
+                                JOptionPane.ERROR_MESSAGE
+                        );
                     }
                 }
             } else {

@@ -57,5 +57,10 @@ public class FacadeAsignarHorario implements IAsignarHorario{
     public DTOEmpleado recuperarEmpleado(Long id) {
         return controlHorario.recuperarEmpleado(id);
     }
+
+    @Override
+    public void modificarTurno(DTOTurno turnoModificar) {
+        controlHorario.modificarTurno(turnoModificar);
+    }
     
 }

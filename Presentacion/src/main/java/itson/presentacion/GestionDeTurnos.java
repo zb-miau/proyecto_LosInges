@@ -478,6 +478,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+        if (filaSeleccionada != -1){
         Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
         List<DTOTurno> turnos = control.recuperarTurno();
         DTOTurno turnoModificar = null;
@@ -505,8 +506,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             turnoModificar.setDiasTrabajo(dias);
             
             turnoModificar.setColorEvento(colorTurno);
-            
-            
+            control.modificarTurno(turnoModificar);
             
             JOptionPane.showMessageDialog(
                     this, 
@@ -515,7 +515,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
             
             
-        } else if (turnoModificar != null){
+        } else if (turnoModificar == null){
             JOptionPane.showMessageDialog(
                     this, 
                     "Error al obtener el turno a modificar", 
@@ -528,6 +528,8 @@ public class GestionDeTurnos extends javax.swing.JFrame {
                     "Campo incorrecto. Por favor, verifique la información.", 
                     "Error", 
                     JOptionPane.ERROR_MESSAGE);
+        }
+        
         }
                
     }//GEN-LAST:event_btnModificarActionPerformed

@@ -108,8 +108,8 @@ public class ControlAsignarHorario{
     }
     
     
-    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
-        DTOHorarioEmpleado horarioEmpleado = new DTOHorarioEmpleado(idEmpleado, turno, fecha_inicio, fecha_fin);
+    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fechaInicio, LocalDate fechFin) {
+        DTOHorarioEmpleado horarioEmpleado = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechFin);
         List<DTOEmpleado> empleados = recuperarEmpleados();
         boolean encontrado = false;
         for (DTOEmpleado e : empleados) {
@@ -119,7 +119,15 @@ public class ControlAsignarHorario{
                     historial = new LinkedList<>();
                     e.setHistorial(historial); 
                 }
+                
+                for (DTOHorarioEmpleado hAntiguo : historial) {
+                    if (hAntiguo.getFechaFin() == null || hAntiguo.getFechaFin().isAfter(fechaInicio)) {
+                        LocalDate diaAnterior = fechaInicio.minusDays(1);
+                        hAntiguo.setFechaFin(diaAnterior);
 
+                    }
+                }
+                
                 historial.add(horarioEmpleado);
                 encontrado = true;
                 break; 
@@ -141,6 +149,14 @@ public class ControlAsignarHorario{
             if(t.getIdTurno().equals(turno.getIdTurno())){
                 turnosRegistrados.remove(t);
                 break;
+            }
+        }
+    }
+    
+    public void modificarTurno(DTOTurno turno){
+        for (DTOTurno t: turnosRegistrados){
+            if(t.getIdTurno().equals(turno.getIdTurno())){
+                t = turno;
             }
         }
     }

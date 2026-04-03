@@ -145,7 +145,6 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
         pnlFondo = new javax.swing.JPanel();
         txtBuscar = new javax.swing.JTextField();
         lblBuscar = new javax.swing.JLabel();
-        btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEmpleados = new javax.swing.JTable();
 
@@ -166,11 +165,6 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
         lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblBuscar.setForeground(new java.awt.Color(255, 255, 255));
         lblBuscar.setText("Buscar empleado:");
-
-        btnBuscar.setBackground(new java.awt.Color(255, 166, 43));
-        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(39, 71, 125));
-        btnBuscar.setText("Buscar");
 
         tablaEmpleados.setBackground(new java.awt.Color(255, 255, 255));
         tablaEmpleados.setForeground(new java.awt.Color(39, 71, 125));
@@ -197,9 +191,7 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
                     .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
@@ -209,11 +201,10 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
                 .addGap(62, 62, 62)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBuscar)
-                    .addComponent(btnBuscar))
+                    .addComponent(lblBuscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -235,7 +226,6 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JPanel pnlFondo;
