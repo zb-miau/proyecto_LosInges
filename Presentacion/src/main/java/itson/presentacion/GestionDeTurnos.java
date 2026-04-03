@@ -12,6 +12,8 @@ import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -29,6 +31,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -507,6 +511,7 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             
             turnoModificar.setColorEvento(colorTurno);
             control.modificarTurno(turnoModificar);
+            configurarTabla();
             
             JOptionPane.showMessageDialog(
                     this, 
@@ -648,9 +653,42 @@ public class GestionDeTurnos extends javax.swing.JFrame {
             return c;
             }
         });
+        
+        tablaTurnosDisponibles.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        llenarFormulario(filaSeleccionada);
+                    }
+                }
+            }
+        });
 
     }
   
+    public void llenarFormulario(int fila){
+        txtNombre.setText(tablaTurnosDisponibles.getValueAt(fila, 1).toString());
+        LocalTime inicio = (LocalTime) tablaTurnosDisponibles.getValueAt(fila, 2);
+        Instant instantI = inicio.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        spnHoraInicio.setValue(Date.from(instantI));
+        
+        LocalTime fin = (LocalTime) tablaTurnosDisponibles.getValueAt(fila, 3);
+        Instant instantF = fin.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        spnHoraFin.setValue(Date.from(instantF));
+        
+        Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(fila, 4);
+        mapaDias.keySet().forEach(chk -> chk.setSelected(false));
+        
+        mapaDias.forEach((chk, dia) -> {
+        if (semana.contains(dia)) {
+                chk.setSelected(true);
+            }
+        });
+
+        colorTurno = (Color) tablaTurnosDisponibles.getValueAt(fila, 5);
+    }
     
     /**
      * Método que configura el mapa de días al iniciar la interfaz
