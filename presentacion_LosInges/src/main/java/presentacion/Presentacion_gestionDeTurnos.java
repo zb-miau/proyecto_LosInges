@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.presentacion;
+package presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
@@ -40,26 +40,27 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Zaira
  */
-public class GestionDeTurnos extends javax.swing.JFrame {
+public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
+    Long idEmpleado;
     /**
      * Creates new form GestionDeTurnos
      */
-    public GestionDeTurnos() {
+    public Presentacion_gestionDeTurnos(Long id) {
         initComponents();
         configurarSpinners();
         configurarDias();
         configurarTabla();
-        
+        this.idEmpleado = id;
         
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GestionDeHorariosMain main = new GestionDeHorariosMain();
+                Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
                 main.setVisible(true);
                 dispose();
             }
@@ -442,8 +443,8 @@ public class GestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        GestionDeHorariosMain main = new GestionDeHorariosMain();
-        main.setVisible(true);
+        Presentacion_gestionDeHorarios calendario = new Presentacion_gestionDeHorarios(idEmpleado);
+        calendario.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

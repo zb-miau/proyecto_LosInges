@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.presentacion;
+package presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
@@ -25,12 +25,12 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Zaira
  */
-public class GestionDeHorariosMain extends javax.swing.JFrame {
+public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     /**
      * Creates new form GestionDeHorariosMain
      */
-    public GestionDeHorariosMain() {
+    public Presentacion_gestionDeHorariosMenu() {
         initComponents();
         generarTabla();
         setVisible(true);
@@ -124,10 +124,10 @@ public class GestionDeHorariosMain extends javax.swing.JFrame {
         DTOHorarioEmpleado horario = control.obtenerHorarioEmpleado(id);
         List<DTOTurno> turnos = control.recuperarTurno();
         if (turnos.isEmpty()){
-            GestionDeTurnos gT = new GestionDeTurnos();
+            Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(id);
             gT.setVisible(true);
         } else {
-            GestionDeHorarios gH = new GestionDeHorarios(id);
+            Presentacion_gestionDeHorarios gH = new Presentacion_gestionDeHorarios(id);
             gH.setVisible(true);
         }
         this.dispose();

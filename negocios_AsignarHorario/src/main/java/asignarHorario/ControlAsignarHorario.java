@@ -26,7 +26,7 @@ public class ControlAsignarHorario{
     List<DTOTurno> turnosRegistrados = new ArrayList();
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
 
-    public ControlAsignarHorario(){
+    protected ControlAsignarHorario(){
         //Creamos los dias en los que se trabajara cada turno
         Set<DayOfWeek> manana = new HashSet<>();
         manana.add(DayOfWeek.MONDAY);
@@ -62,7 +62,7 @@ public class ControlAsignarHorario{
      *  Creamos la lista mock de los empleadosRegistrados para despues regresarlos
      * @return List DTOEmpleado
      */
-    public List<DTOEmpleado> recuperarEmpleados() {
+    protected List<DTOEmpleado> recuperarEmpleados() {
         
         return empleadosRegistrados;
     }
@@ -71,7 +71,7 @@ public class ControlAsignarHorario{
      * Regresa el horario del horario empleado
      * @return DTOHorarioEmpleado
      */
-    public DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
+    protected DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
         DTOEmpleado empleado = new DTOEmpleado();
         long idEmpleado = id;
         switch ((int) idEmpleado){
@@ -100,7 +100,7 @@ public class ControlAsignarHorario{
      * Metodo que nos da una lista de turnos con los cuales usaremos para modificar el horario
      * @return 
      */
-    public List<DTOTurno> recuperarTurnos() {
+    protected List<DTOTurno> recuperarTurnos() {
         
         //Recuperamos los turnos agregados en el constructor
         return turnosRegistrados;
@@ -108,7 +108,7 @@ public class ControlAsignarHorario{
     }
     
     
-    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fechaInicio, LocalDate fechFin) {
+    protected void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fechaInicio, LocalDate fechFin) {
         DTOHorarioEmpleado horarioEmpleado = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechFin);
         List<DTOEmpleado> empleados = recuperarEmpleados();
         boolean encontrado = false;
@@ -140,11 +140,11 @@ public class ControlAsignarHorario{
     }
     
     
-    public void agregarTurno(DTOTurno turno){
+    protected void agregarTurno(DTOTurno turno){
         turnosRegistrados.add(turno);
     }
     
-    public void eliminarTurno(DTOTurno turno){
+    protected void eliminarTurno(DTOTurno turno){
         for (DTOTurno t: turnosRegistrados){
             if(t.getIdTurno().equals(turno.getIdTurno())){
                 turnosRegistrados.remove(t);
@@ -153,7 +153,7 @@ public class ControlAsignarHorario{
         }
     }
     
-    public void modificarTurno(DTOTurno turno){
+    protected void modificarTurno(DTOTurno turno){
         for (DTOTurno t: turnosRegistrados){
             if(t.getIdTurno().equals(turno.getIdTurno())){
                 t = turno;
@@ -161,7 +161,7 @@ public class ControlAsignarHorario{
         }
     }
     
-    public DTOEmpleado recuperarEmpleado(Long id){
+    protected DTOEmpleado recuperarEmpleado(Long id){
         List<DTOEmpleado> empleados = empleadosRegistrados;
         for (DTOEmpleado e : empleados){
             if (e.getId().equals(id)){

@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.presentacion;
+package presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
-import itson.presentacion.GestionDeHorariosMain;
-import itson.presentacion.GestionDeTurnos;
+import presentacion.Presentacion_gestionDeHorariosMenu;
+import presentacion.Presentacion_gestionDeTurnos;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -47,7 +47,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Zaira
  */
-public class GestionDeHorarios extends javax.swing.JFrame {
+public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -56,7 +56,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     /**
      * Creates new form GestionDeHorarios
      */
-    public GestionDeHorarios(Long id) {
+    public Presentacion_gestionDeHorarios(Long id) {
         initComponents();
         this.idEmpleado = id;
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
@@ -67,7 +67,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GestionDeHorariosMain main = new GestionDeHorariosMain();
+                Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
                 main.setVisible(true);
                 dispose();
             }
@@ -485,6 +485,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         txtAnio = new javax.swing.JTextField();
         btnTurno = new javax.swing.JButton();
         btnAgregarHorario = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gestión De Horarios");
@@ -693,6 +694,17 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         });
         pnlGestionHorario.add(btnAgregarHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
+        btnRegresar.setBackground(new java.awt.Color(224, 30, 72));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+        pnlGestionHorario.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -796,7 +808,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMesAnteriorActionPerformed
 
     private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
-        GestionDeTurnos gT = new GestionDeTurnos();
+        Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(idEmpleado);
         gT.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnTurnoActionPerformed
@@ -872,6 +884,12 @@ public class GestionDeHorarios extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
+        main.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
     
 
 
@@ -879,6 +897,7 @@ public class GestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarHorario;
     private javax.swing.JButton btnMesAnterior;
     private javax.swing.JButton btnMesSiguiente;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnTurno;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JLabel lblDiasDetalle;
