@@ -353,7 +353,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }
     
     /**
-     * Ajusta las etiquetas al iniciar el sistema
+     * Ajusta las etiquetas al iniciar el sistema.
      */
     public void configurarEtiquetas(){
         txtAnio.setText(String.valueOf(LocalDate.now().getYear()));

@@ -37,7 +37,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     }
 
     /**
-     * Método que llena la tabla con los empleados registrados
+     * Método que llena la tabla con los empleados registrados.
      */
     public void generarTabla(){
         String[] columnas = {"Numéro de Empleado", "Nombre", "Apellidos"};
@@ -83,7 +83,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
 
     
     /**
-     * Método que obtiene al empleado que se desea editar y luego llama al método abrirVentana
+     * Método que obtiene al empleado que se desea editar y luego llama al método abrirVentana.
      */
     public void accionAlSeleccionar(){
         tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -115,7 +115,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     }
     
     /**
-     * Método que determina qué ventana debe abrir de acuerdo a si existen turnos registrados.
+     * Método que determina qué ventana debe abrir de acuerdo a si existen turnos registrados
      * Si existe al menos un turno, abre el gestor de horarios, en caso contrario, abre el
      * gestor de turnos.
      * @param id el id del empleado seleccionado

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- *
+ * Clase de interface para los metodos de controlHorario
  * @author RAMSES
  */
 public interface IAsignarHorario {

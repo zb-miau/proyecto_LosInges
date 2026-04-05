@@ -426,7 +426,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
     /**
      * Permite al usuario seleccionar un color preferido para el turno que va a 
-     * crear en caso de que así lo desee. De lo contrario, el turno se agrega con
+     * crear en caso de que así lo desee De lo contrario, el turno se agrega con
      * un color gris.
      * @param evt click al boton de agregar color
      */
@@ -480,7 +480,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnEliminarActionPerformed
-
+    
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         if (filaSeleccionada != -1){
@@ -590,7 +590,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }
     
     /**
-     * Método que configura los spinners al iniciar la interfaz
+     * Método que configura los spinners al iniciar la interfaz.
      */
     public void configurarSpinners(){
         SpinnerDateModel modeloInicio = new SpinnerDateModel();
@@ -605,7 +605,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }
     
     /**
-     * Método que genera la tabla de turnos disponibles
+     * Método que genera la tabla de turnos disponibles.
      */
     public void configurarTabla(){
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
@@ -692,7 +692,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }
     
     /**
-     * Método que configura el mapa de días al iniciar la interfaz
+     * Método que configura el mapa de días al iniciar la interfaz.
      */
     public void configurarDias(){
         mapaDias.put(chkLunes, DayOfWeek.MONDAY);
@@ -738,7 +738,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }
     
     /**
-     * Método que limpia el formulario
+     * Método que limpia el formulario.
      */
     public void limpiarFormulario(){
         txtNombre.setText("");
