@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOHorarioEmpleado {
-    private Long idHorarioEmpleado;
+    private Long idEmpleado;
     private DTOTurno turno;
     private LocalDate fechaIncio;
     private LocalDate fechaFin;
@@ -22,14 +22,14 @@ public class DTOHorarioEmpleado {
     }
 
     public DTOHorarioEmpleado(Long id, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
-        this.idHorarioEmpleado = id;
+        this.idEmpleado = id;
         this.turno = turno;
         this.fechaIncio = fechaIncio;
         this.fechaFin = fechaFin;
     }
 
     public Long getEmpleado() {
-        return idHorarioEmpleado;
+        return idEmpleado;
     }
 
     public DTOTurno getTurno() {
@@ -45,7 +45,7 @@ public class DTOHorarioEmpleado {
     }
 
     public void setEmpleado(Long empleado) {
-        this.idHorarioEmpleado = empleado;
+        this.idEmpleado = empleado;
     }
 
     public void setTurno(DTOTurno turno) {
@@ -63,7 +63,7 @@ public class DTOHorarioEmpleado {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.idHorarioEmpleado);
+        hash = 29 * hash + Objects.hashCode(this.idEmpleado);
         return hash;
     }
 
@@ -79,15 +79,15 @@ public class DTOHorarioEmpleado {
             return false;
         }
         final DTOHorarioEmpleado other = (DTOHorarioEmpleado) obj;
-        return Objects.equals(this.idHorarioEmpleado, other.idHorarioEmpleado);
+        return Objects.equals(this.idEmpleado, other.idEmpleado);
     }
 
-    public Long getIdHorarioEmpleado() {
-        return idHorarioEmpleado;
+    public Long getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setIdHorarioEmpleado(Long idHorarioEmpleado) {
-        this.idHorarioEmpleado = idHorarioEmpleado;
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
 }

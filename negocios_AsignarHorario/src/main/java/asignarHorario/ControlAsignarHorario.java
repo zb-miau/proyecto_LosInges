@@ -90,7 +90,7 @@ public class ControlAsignarHorario{
         }
         
         //Al no haber un turno en existencia para este horario se queda como nulo
-        DTOHorarioEmpleado horario_empleado = empleado.getHorarioActual();
+        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado.getId(), null,null,null);
         
         return horario_empleado;
         
