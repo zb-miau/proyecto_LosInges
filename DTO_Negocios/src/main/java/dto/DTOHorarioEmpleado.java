@@ -13,8 +13,7 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOHorarioEmpleado {
-
-    private Long idEmpleado;
+    private Long idHorarioEmpleado;
     private DTOTurno turno;
     private LocalDate fechaIncio;
     private LocalDate fechaFin;
@@ -22,15 +21,15 @@ public class DTOHorarioEmpleado {
     public DTOHorarioEmpleado() {
     }
 
-    public DTOHorarioEmpleado(Long empleado, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
-        this.idEmpleado = empleado;
+    public DTOHorarioEmpleado(Long id, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+        this.idHorarioEmpleado = id;
         this.turno = turno;
         this.fechaIncio = fechaIncio;
         this.fechaFin = fechaFin;
     }
 
     public Long getEmpleado() {
-        return idEmpleado;
+        return idHorarioEmpleado;
     }
 
     public DTOTurno getTurno() {
@@ -46,7 +45,7 @@ public class DTOHorarioEmpleado {
     }
 
     public void setEmpleado(Long empleado) {
-        this.idEmpleado = empleado;
+        this.idHorarioEmpleado = empleado;
     }
 
     public void setTurno(DTOTurno turno) {
@@ -64,7 +63,7 @@ public class DTOHorarioEmpleado {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.idEmpleado);
+        hash = 29 * hash + Objects.hashCode(this.idHorarioEmpleado);
         return hash;
     }
 
@@ -80,15 +79,15 @@ public class DTOHorarioEmpleado {
             return false;
         }
         final DTOHorarioEmpleado other = (DTOHorarioEmpleado) obj;
-        return Objects.equals(this.idEmpleado, other.idEmpleado);
+        return Objects.equals(this.idHorarioEmpleado, other.idHorarioEmpleado);
     }
 
-    public Long getIdEmpleado() {
-        return idEmpleado;
+    public Long getIdHorarioEmpleado() {
+        return idHorarioEmpleado;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setIdHorarioEmpleado(Long idHorarioEmpleado) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
     }
 
 }

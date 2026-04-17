@@ -37,8 +37,8 @@ public class FacadeAsignarHorario implements IAsignarHorario{
      * @return DTOHorarioEmpleado
      */
     @Override
-    public DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
-        return controlHorario.obtenerHorarioEmpleado(id);
+    public DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado) {
+        return controlHorario.obtenerHorarioEmpleado(empleado);
     }
     /**
      * Por medio de controlHorario recupera una lista de los turnos
@@ -81,8 +81,8 @@ public class FacadeAsignarHorario implements IAsignarHorario{
      * @return DTOEmpleado
      */
     @Override
-    public DTOEmpleado recuperarEmpleado(Long id) {
-        return controlHorario.recuperarEmpleado(id);
+    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
+        return controlHorario.recuperarEmpleado(empleado);
     }
     /**
      * Por medio de controlHorario se modifica el turno deseado

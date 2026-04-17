@@ -18,6 +18,7 @@ public class DTOEmpleado {
     private String nombre;
     private String apellidos;
     private LocalDate fechaNacimiento;
+    private DTOHorarioEmpleado horarioActual;
     LinkedList<DTOHorarioEmpleado> historial;
     
 
@@ -30,6 +31,7 @@ public class DTOEmpleado {
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.historial = new LinkedList();
+        horarioActual = null;
     }
 
     public Long getId() {
@@ -62,6 +64,14 @@ public class DTOEmpleado {
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public DTOHorarioEmpleado getHorarioActual() {
+        return horarioActual;
+    }
+
+    public void setHorarioActual(DTOHorarioEmpleado horarioActual) {
+        this.horarioActual = horarioActual;
     }
 
     @Override

@@ -72,9 +72,8 @@ public class ControlAsignarHorario{
      * @return DTOHorarioEmpleado
      * @param id
      */
-    protected DTOHorarioEmpleado obtenerHorarioEmpleado(Long id) {
-        DTOEmpleado empleado = new DTOEmpleado();
-        long idEmpleado = id;
+    protected DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado) {
+        long idEmpleado = empleado.getId();
         switch ((int) idEmpleado){
             case 1: 
                 DTOEmpleado empleado1 = new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15));
@@ -91,7 +90,7 @@ public class ControlAsignarHorario{
         }
         
         //Al no haber un turno en existencia para este horario se queda como nulo
-        DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado.getId(), null, null, null);
+        DTOHorarioEmpleado horario_empleado = empleado.getHorarioActual();
         
         return horario_empleado;
         
@@ -186,7 +185,8 @@ public class ControlAsignarHorario{
      * @param id del empleado 
      * @return DTOEmpleado 
      */
-    protected DTOEmpleado recuperarEmpleado(Long id){
+    protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
+        Long id = empleado.getId();
         List<DTOEmpleado> empleados = empleadosRegistrados;
         for (DTOEmpleado e : empleados){
             if (e.getId().equals(id)){
