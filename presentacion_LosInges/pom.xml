@@ -28,7 +28,7 @@
     <properties>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
-        <exec.mainClass>itson.presentacion.Presentacion</exec.mainClass>
+        <exec.mainClass>presentacion.Presentacion_main</exec.mainClass>
     </properties>
     <name>presentacion_LosInges</name>
 </project>
