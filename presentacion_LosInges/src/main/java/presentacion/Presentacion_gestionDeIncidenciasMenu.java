@@ -76,7 +76,7 @@ public class Presentacion_gestionDeIncidenciasMenu extends javax.swing.JPanel im
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Registrar Incidencia");
 
-        jButton2.setBackground(new java.awt.Color(255, 153, 0));
+        jButton2.setBackground(new java.awt.Color(224, 30, 72));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Cancelar");
