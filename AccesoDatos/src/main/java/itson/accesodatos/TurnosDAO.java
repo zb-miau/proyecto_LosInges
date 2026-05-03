@@ -8,8 +8,12 @@ import ObjetosNegocio.Turno;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -22,9 +26,9 @@ public class TurnosDAO implements IAccesoDatos{
     public Object crear(Object entidad) {
          try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<Turno> coleccionRestaurante = bd.getCollection(COLECCION_TURNOS, Turno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
             
-             InsertOneResult resultado = coleccionRestaurante.insertOne((Turno) entidad);
+            InsertOneResult resultado = coleccionTurnos.insertOne((Turno) entidad);
             
             return entidad;
          }
@@ -32,22 +36,78 @@ public class TurnosDAO implements IAccesoDatos{
 
     @Override
     public Object eliminar(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try(MongoClient cliente = ManejadorConexiones.crearConexion()){
+            Turno turno = (Turno) entidad;
+            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
+
+            Document filtro = new Document("_id", new ObjectId(turno.getId()));
+            
+            Turno eliminado = coleccionTurnos.findOneAndDelete(filtro);
+            
+            return eliminado;
+        }
     }
 
     @Override
     public Object modificar(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            Turno turno = (Turno) entidad;
+            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
+            
+            Document filtro = new Document("_id", new ObjectId(turno.getId()));
+            
+            
+            if (turno.getNombre() != null){
+                coleccionTurnos.updateOne(filtro, Updates.set("nombre", turno.getNombre()));
+            }
+            
+            if (turno.getHoraInicio()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set("horaInicio", turno.getHoraInicio()));
+            }
+            
+            if (turno.getHoraFin()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set("horaFin", turno.getHoraFin()));
+            }
+            
+            if (turno.getDiasTrabajo()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set("diasTrabajo", turno.getDiasTrabajo()));
+            }
+            
+            if (turno.getColorEvento()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set("colorEvento", turno.getColorEvento()));
+            }
+            
+            return coleccionTurnos.find(filtro).first();
+
+        }
     }
 
     @Override
     public Object obtener(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            Turno turno = (Turno) entidad;
+            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
+            
+            Document filtro = new Document("_id", new ObjectId(turno.getId()));
 
+            return coleccionTurnos.find(filtro).first();
+        }
+    }
+    
     @Override
-    public List obtener() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List obtenerLista() {
+        List<Turno> listaTurnos = new ArrayList();
+        
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
+
+            coleccionTurnos.find().into(listaTurnos);
+            return listaTurnos;
+        }
     }
     
 }

@@ -48,6 +48,6 @@ public interface IAccesoDatos<T> {
      * Método para obtener una lista de objetos de la entidad que lo llama 
      * @return regresa la lista de entidades que se busca en la base de datos.
      */
-    public abstract List<T> obtener();
+    public abstract List<T> obtenerLista();
     
 }
