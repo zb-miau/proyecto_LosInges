@@ -9,6 +9,7 @@
         <module>DTO_Negocios</module>
         <module>negocios_AsignarHorario</module>
         <module>presentacion_LosInges</module>
+        <module>AccesoDatos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
