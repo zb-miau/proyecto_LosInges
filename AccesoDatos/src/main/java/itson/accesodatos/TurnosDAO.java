@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import ObjetosNegocio.Turno;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -23,7 +24,7 @@ public class TurnosDAO implements IAccesoDatos{
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
             MongoCollection<Turno> coleccionRestaurante = bd.getCollection(COLECCION_TURNOS, Turno.class);
             
-             InsertOneResult resultado = coleccionRestaurante.insertOne(entidad);
+             InsertOneResult resultado = coleccionRestaurante.insertOne((Turno) entidad);
             
             return entidad;
          }

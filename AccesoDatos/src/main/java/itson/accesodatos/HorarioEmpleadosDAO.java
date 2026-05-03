@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import ObjetosNegocio.HorarioEmpleado;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -22,7 +23,7 @@ public class HorarioEmpleadosDAO implements IAccesoDatos{
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
             MongoCollection<HorarioEmpleado> coleccionRestaurante = bd.getCollection(COLECCION_HORARIO_EMPLEADO, HorarioEmpleado.class);
             
-             InsertOneResult resultado = coleccionRestaurante.insertOne(entidad);
+             InsertOneResult resultado = coleccionRestaurante.insertOne((HorarioEmpleado) entidad);
             
             return entidad;
          }
