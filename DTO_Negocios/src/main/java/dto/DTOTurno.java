@@ -9,23 +9,36 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
  * @author jesus
  */
 public class DTOTurno {
-    private Long idTurno;
+    @BsonId
+    @BsonRepresentation(BsonType.OBJECT_ID)
+    private String idTurno;
     private String nombre;
+    
     private LocalTime horaInicio;
+    
     private LocalTime horaFin;
+    
     private Set<DayOfWeek> diasTrabajo;
+    
+    @BsonIgnore
     private Color colorEvento;
+    
+    private String colorHexadecimal;
 
     public DTOTurno() {
     }
 
-    public DTOTurno(Long idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
+    public DTOTurno(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
         this.idTurno = idTurno;
         this.nombre = nombre;
         this.horaInicio = horaInicio;
@@ -33,7 +46,7 @@ public class DTOTurno {
         this.diasTrabajo = diasTrabajo;
     }
 
-    public DTOTurno(Long idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
+    public DTOTurno(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
         this.idTurno = idTurno;
         this.nombre = nombre;
         this.horaInicio = horaInicio;
@@ -41,6 +54,22 @@ public class DTOTurno {
         this.diasTrabajo = diasTrabajo;
         this.colorEvento = colorEvento;
     }
+
+    public DTOTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
+        this.nombre = nombre;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.diasTrabajo = diasTrabajo;
+    }
+
+    public DTOTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, Color colorEvento) {
+        this.nombre = nombre;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.diasTrabajo = diasTrabajo;
+        this.colorEvento = colorEvento;
+    }
+    
     
 
     public String getNombre() {
@@ -78,32 +107,37 @@ public class DTOTurno {
     public Color getColorEvento() {
         return colorEvento;
     }
+    
+    public String getColorHexadecimal(){
+        return colorHexadecimal;
+    }
 
     public void setColorEvento(Color colorEvento) {
         this.colorEvento = colorEvento;
+        
+        this.colorHexadecimal = String.format("#%02x%02x%02x", colorEvento.getRed(), colorEvento.getGreen(), colorEvento.getBlue());
     }
 
     public DTOTurno(String nombre) {
         this.nombre = nombre;
     }
 
-    public Long getIdTurno() {
+    public String getIdTurno() {
         return idTurno;
     }
 
-    public void setIdTurno(Long idTurno) {
+    public void setIdTurno(String idTurno) {
         this.idTurno = idTurno;
     }
-    
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.idTurno);
-        hash = 47 * hash + Objects.hashCode(this.nombre);
-        hash = 47 * hash + Objects.hashCode(this.horaInicio);
-        hash = 47 * hash + Objects.hashCode(this.horaFin);
-        hash = 47 * hash + Objects.hashCode(this.diasTrabajo);
+        hash = 23 * hash + Objects.hashCode(this.idTurno);
+        hash = 23 * hash + Objects.hashCode(this.nombre);
+        hash = 23 * hash + Objects.hashCode(this.horaInicio);
+        hash = 23 * hash + Objects.hashCode(this.horaFin);
+        hash = 23 * hash + Objects.hashCode(this.diasTrabajo);
         return hash;
     }
 
@@ -119,20 +153,11 @@ public class DTOTurno {
             return false;
         }
         final DTOTurno other = (DTOTurno) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.idTurno, other.idTurno)) {
-            return false;
-        }
-        if (!Objects.equals(this.horaInicio, other.horaInicio)) {
-            return false;
-        }
-        if (!Objects.equals(this.horaFin, other.horaFin)) {
-            return false;
-        }
-        return Objects.equals(this.diasTrabajo, other.diasTrabajo);
+        return true;
     }
+    
+
+   
 
 
 

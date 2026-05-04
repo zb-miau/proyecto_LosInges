@@ -17,40 +17,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import objetosNegocio.Turno;
 
 /**
  * Esta clase permita el control total de los horarios de empleados 
  * @author RAMSES
  */
 public class ControlAsignarHorario{
-    List<DTOTurno> turnosRegistrados = new ArrayList();
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
-
+    Turno turno;
+    
     protected ControlAsignarHorario(){
-        //Creamos los dias en los que se trabajara cada turno
-        Set<DayOfWeek> manana = new HashSet<>();
-        manana.add(DayOfWeek.MONDAY);
-        manana.add(DayOfWeek.WEDNESDAY);
-        manana.add(DayOfWeek.FRIDAY);
-        
-        Set<DayOfWeek> tarde = new HashSet<>();
-        tarde.add(DayOfWeek.TUESDAY);
-        tarde.add(DayOfWeek.THURSDAY);
-        
-        Set<DayOfWeek> noche = new HashSet<>();
-        noche.add(DayOfWeek.MONDAY);
-        noche.add(DayOfWeek.TUESDAY);
-        noche.add(DayOfWeek.WEDNESDAY);
-        //Creamos los turnos con sus dias, nombres, y horas de inicio y fin
-        DTOTurno turno_matutino = new DTOTurno(Long.valueOf("1"), "Turno matutino", LocalTime.of(8, 0), LocalTime.of(13, 0), manana, Color.YELLOW);
-        DTOTurno turno_vespertino = new DTOTurno(Long.valueOf("2"), "Turno Vespertino", LocalTime.of(13, 0), LocalTime.of(18, 0), tarde, Color.BLUE);
-        DTOTurno turno_nocturno = new DTOTurno(Long.valueOf("3"), "Turno nocturno", LocalTime.of(18, 0), LocalTime.of(23, 0), noche, Color.BLACK);
-        //Agregamos los turnos a la lista de turnos que declaramos como variable para la clase
-        
-        turnosRegistrados.add(turno_matutino);
-        turnosRegistrados.add(turno_vespertino);
-        turnosRegistrados.add(turno_nocturno);
-        
+        turno = new Turno();
+
         empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
         empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
         empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
@@ -98,13 +77,10 @@ public class ControlAsignarHorario{
     
     /**
      * Metodo que nos da una lista de turnos con los cuales usaremos para modificar el horario
-     * @return DTOTurno 
+     * @return lista con los turnos registrados en la base de datos
      */
     protected List<DTOTurno> recuperarTurnos() {
-        
-        //Recuperamos los turnos agregados en el constructor
-        return turnosRegistrados;
-        
+        return turno.obtenerLista();
     }
     
     /**
@@ -149,36 +125,28 @@ public class ControlAsignarHorario{
     }
     
     /**
-     * Este es un metodo que agrega el turno creado a la lista de turnos
-     * @param turno 
+     * Este es un metodo que agrega el turno creado a la base de datos.
+     * @param dtoTurno 
      */
-    protected void agregarTurno(DTOTurno turno){
-        turnosRegistrados.add(turno);
+    protected void agregarTurno(DTOTurno dtoTurno){
+        turno.crear(dtoTurno);
     }
     /**
      * Itera en la lista de los turnos existentes y si el turno existe lo elimina
-     * @param turno guardado en una lista
+     * @param dtoTurno 
      */
-    protected void eliminarTurno(DTOTurno turno){
-        for (DTOTurno t: turnosRegistrados){
-            if(t.getIdTurno().equals(turno.getIdTurno())){
-                turnosRegistrados.remove(t);
-                break;
-            }
-        }
+    protected void eliminarTurno(DTOTurno dtoTurno){
+        turno.eliminar(dtoTurno);
     }
     /**
      * Itera en el arreglo de turnos, si el turno se encuentra, lo reemplaza con 
      * el nuevo turno
-     * @param turno el turno que va a recibir el metodo para modificar
+     * @param dtoTurno el turno que va a recibir el metodo para modificar
      */
-    protected void modificarTurno(DTOTurno turno){
-        for (DTOTurno t: turnosRegistrados){
-            if(t.getIdTurno().equals(turno.getIdTurno())){
-                t = turno;
-            }
-        }
+    protected void modificarTurno(DTOTurno dtoTurno){
+        turno.modificar(dtoTurno);
     }
+    
     /**
      * Crea una lista de empleadosDTO en la que busca el empleado solicitado
      * si el empleado existe lo regresa, en caso contrario devuelve null

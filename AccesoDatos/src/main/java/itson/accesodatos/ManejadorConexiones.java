@@ -13,6 +13,7 @@ import org.bson.codecs.configuration.CodecProvider;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.jsr310.Jsr310CodecProvider;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 /**
@@ -28,7 +29,11 @@ public class ManejadorConexiones {
                 .automatic(true)
                 .build();
         
-        CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
+        CodecRegistry pojoCodecRegistry = fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(new Jsr310CodecProvider()), 
+            fromProviders(pojoCodecProvider)
+        );
        
         MongoClientSettings settings = MongoClientSettings.builder()
             .applyConnectionString(new ConnectionString(CADENA_CONEXION))

@@ -401,16 +401,14 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         if (this.colorTurno == null) {
             colorTurno = Color.RED;
         }
-        int ultimaFila = tablaTurnosDisponibles.getRowCount() - 1;
-        Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(ultimaFila, 0).toString());
-        Long idNuevo = id+1L;
         
         if (validacion){
             String nombre = txtNombre.getText().trim();
             LocalTime[] horas = getHoras();
             Set<DayOfWeek> dias = getDias();
             
-            DTOTurno turno = new DTOTurno(idNuevo, nombre, horas[0], horas[1], dias, colorTurno);
+            DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias);
+            turno.setColorEvento(colorTurno);
             control.agregarTurno(turno);
             
             JOptionPane.showMessageDialog(
@@ -452,7 +450,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         List<DTOTurno> turnos = control.recuperarTurno();
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
-        Long idEliminar = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+        String idEliminar = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
                
         
         for (DTOTurno t: turnos){
@@ -484,7 +482,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         if (filaSeleccionada != -1){
-        Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+        String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
         List<DTOTurno> turnos = control.recuperarTurno();
         DTOTurno turnoModificar = null;
         for (DTOTurno t: turnos){
@@ -620,7 +618,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 t.getHoraInicio(),
                 t.getHoraFin(),
                 t.getDiasTrabajo(),
-                t.getColorEvento()
+                t.getColorHexadecimal()
              };
             modeloTabla.addRow(fila);
         }
@@ -634,19 +632,23 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (value instanceof Color) {
-                Color colorEvento = (Color) value;
-                ((JLabel)c).setOpaque(true);
-            
-                if (!isSelected) {
-                    c.setBackground(colorEvento);
-                    c.setForeground(colorEvento);
-                } else {
-                    c.setBackground(table.getSelectionBackground());
-                    c.setForeground(table.getSelectionForeground());
+            if (value != null && value.toString().startsWith("#")) {
+                try {
+                    Color colorEvento = Color.decode((String) value);
+                    ((JLabel)c).setOpaque(true);
+
+                    if (!isSelected) {
+                        c.setBackground(colorEvento);
+                        c.setForeground(colorEvento);
+                    } else {
+                        c.setBackground(table.getSelectionBackground());
+                        c.setForeground(table.getSelectionForeground());
+                    }
+
+                    ((JLabel)c).setText("");
+                }catch (NumberFormatException e) {
+                    c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                 }
-                
-                ((JLabel)c).setText("");
             } else {
                  c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             }

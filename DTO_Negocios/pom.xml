@@ -8,6 +8,13 @@
     </parent>
     <artifactId>DTO_Negocios</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+     <dependency>
+            <groupId> org.mongodb </groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.6.5</version>
+        </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>itson.dto_negocios.DTO_Negocios</exec.mainClass>

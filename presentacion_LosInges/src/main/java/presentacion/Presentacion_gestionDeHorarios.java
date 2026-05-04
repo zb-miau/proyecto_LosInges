@@ -850,7 +850,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                               ? horarioEmpleado
                                               : new DTOHorarioEmpleado();
             horarioAProcesar.setEmpleado(idEmpleado);
-            Long id = Long.valueOf(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString());
+            String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
             String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
             LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
             LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());

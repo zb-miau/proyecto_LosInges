@@ -4,50 +4,52 @@
  */
 package itson.accesodatos;
 
-import ObjetosNegocio.Empleado;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertOneResult;
+import dto.DTOEmpleado;
 import java.util.List;
 
 /**
  *
  * @author Zaira
  */
-public class EmpleadosDAO implements IAccesoDatos{
+public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
     private static final String COLECCION_EMPLEADOS = "empleados";
-    
+
     @Override
-    public Object crear(Object entidad) {
+    public DTOEmpleado crear(DTOEmpleado entidad) {
         try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<Empleado> coleccionRestaurante = bd.getCollection(COLECCION_EMPLEADOS, Empleado.class);
+            MongoCollection<DTOEmpleado> coleccionRestaurante = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
             
-             InsertOneResult resultado = coleccionRestaurante.insertOne((Empleado) entidad);
+             InsertOneResult resultado = coleccionRestaurante.insertOne(entidad);
             
             return entidad;
          }
     }
 
     @Override
-    public Object eliminar(Object entidad) {
+    public DTOEmpleado eliminar(DTOEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Object modificar(Object entidad) {
+    public DTOEmpleado modificar(DTOEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Object obtener(Object entidad) {
+    public DTOEmpleado obtener(DTOEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List obtener() {
+    public List<DTOEmpleado> obtenerLista() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+  
     
 }

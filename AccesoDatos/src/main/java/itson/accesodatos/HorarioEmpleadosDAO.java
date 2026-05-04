@@ -4,49 +4,52 @@
  */
 package itson.accesodatos;
 
-import ObjetosNegocio.HorarioEmpleado;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertOneResult;
+import dto.DTOEmpleado;
+import dto.DTOHorarioEmpleado;
 import java.util.List;
 
 /**
  *
  * @author Zaira
  */
-public class HorarioEmpleadosDAO implements IAccesoDatos{
+public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado>{
     private static final String COLECCION_HORARIO_EMPLEADO = "horario_empleados";
+
     @Override
-    public Object crear(Object entidad) {
+    public DTOHorarioEmpleado crear(DTOHorarioEmpleado entidad) {
         try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<HorarioEmpleado> coleccionRestaurante = bd.getCollection(COLECCION_HORARIO_EMPLEADO, HorarioEmpleado.class);
+            MongoCollection<DTOHorarioEmpleado> coleccionRestaurante = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
             
-             InsertOneResult resultado = coleccionRestaurante.insertOne((HorarioEmpleado) entidad);
+             InsertOneResult resultado = coleccionRestaurante.insertOne(entidad);
             
             return entidad;
          }
     }
 
     @Override
-    public Object eliminar(Object entidad) {
+    public DTOHorarioEmpleado eliminar(DTOHorarioEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Object modificar(Object entidad) {
+    public DTOHorarioEmpleado modificar(DTOHorarioEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Object obtener(Object entidad) {
+    public DTOHorarioEmpleado obtener(DTOHorarioEmpleado entidad) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List obtener() {
+    public List<DTOHorarioEmpleado> obtenerLista() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+   
 }
