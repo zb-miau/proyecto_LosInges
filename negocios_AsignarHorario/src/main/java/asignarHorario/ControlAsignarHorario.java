@@ -7,8 +7,6 @@ package asignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
-import itson.accesodatos.EmpleadosDAO;
-import itson.accesodatos.IAccesoDatos;
 import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -20,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import objetosNegocio.Turno;
+import itson.accesodatos.IAccesoDatos;
+import itson.accesodatos.EmpleadosDAO;
 
 /**
  * Esta clase permita el control total de los horarios de empleados 
