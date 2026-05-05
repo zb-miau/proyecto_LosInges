@@ -45,11 +45,11 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
-    Long idEmpleado;
+    String idEmpleado;
     /**
      * Creates new form GestionDeTurnos
      */
-    public Presentacion_gestionDeTurnos(Long id) {
+    public Presentacion_gestionDeTurnos(String id) {
         initComponents();
         configurarSpinners();
         configurarDias();

@@ -7,6 +7,8 @@ package asignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
+import itson.accesodatos.EmpleadosDAO;
+import itson.accesodatos.IAccesoDatos;
 import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,16 +27,18 @@ import objetosNegocio.Turno;
  */
 public class ControlAsignarHorario{
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
+    private final IAccesoDatos<DTOEmpleado> empleadoDAO;
     Turno turno;
     
     protected ControlAsignarHorario(){
+        this.empleadoDAO = EmpleadosDAO.getInstanceEmpleadosDAO();
         turno = new Turno();
 
-        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
-        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
-        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
-        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24)));
-        
+//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
+//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
+//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
+//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24)));
+//        
     }
     
     /**
@@ -43,7 +47,7 @@ public class ControlAsignarHorario{
      */
     protected List<DTOEmpleado> recuperarEmpleados() {
         
-        return empleadosRegistrados;
+        return empleadoDAO.obtenerLista();
     }
     
     /**
@@ -52,21 +56,21 @@ public class ControlAsignarHorario{
      * @param id
      */
     protected DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado) {
-        long idEmpleado = empleado.getId();
-        switch ((int) idEmpleado){
-            case 1: 
-                DTOEmpleado empleado1 = new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15));
-                empleado = empleado1;
-            case 2:
-                DTOEmpleado empleado2 = new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26));
-                empleado = empleado2;
-            case 3: 
-                DTOEmpleado empleado3 = new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20));
-                empleado = empleado3;
-            case 4:
-                DTOEmpleado empleado4 = new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24));
-                empleado = empleado4;
-        }
+        String idEmpleado = empleado.getId();
+//        switch ((int) idEmpleado){
+//            case 1: 
+//                DTOEmpleado empleado1 = new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15));
+//                empleado = empleado1;
+//            case 2:
+//                DTOEmpleado empleado2 = new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26));
+//                empleado = empleado2;
+//            case 3: 
+//                DTOEmpleado empleado3 = new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20));
+//                empleado = empleado3;
+//            case 4:
+//                DTOEmpleado empleado4 = new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24));
+//                empleado = empleado4;
+//        }
         
         //Al no haber un turno en existencia para este horario se queda como nulo
         DTOHorarioEmpleado horario_empleado = new DTOHorarioEmpleado(empleado.getId(), null,null,null);
@@ -93,7 +97,7 @@ public class ControlAsignarHorario{
      * @param fechaInicio
      * @param fechFin 
      */
-    protected void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fechaInicio, LocalDate fechFin) {
+    protected void actualizarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fechaInicio, LocalDate fechFin) {
         DTOHorarioEmpleado horarioEmpleado = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechFin);
         List<DTOEmpleado> empleados = recuperarEmpleados();
         boolean encontrado = false;
@@ -154,21 +158,19 @@ public class ControlAsignarHorario{
      * @return DTOEmpleado 
      */
     protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
-        Long id = empleado.getId();
-        List<DTOEmpleado> empleados = empleadosRegistrados;
-        for (DTOEmpleado e : empleados){
-            if (e.getId().equals(id)){
-                return e;
-            }
-        }
-        return null;
+        
+        return empleadoDAO.obtener(empleado);
+        
     }
+    
     /**
      * Actualiza la lista de los empleados para que se agreguen nuevos
      * @param listaActualizada  de los empleados
      */
     public void guardarEmpleados(List<DTOEmpleado> listaActualizada) {
-        this.empleadosRegistrados = listaActualizada; 
+        for (DTOEmpleado emp : listaActualizada) {
+            empleadoDAO.modificar(emp);
+        }
     }
     
 }

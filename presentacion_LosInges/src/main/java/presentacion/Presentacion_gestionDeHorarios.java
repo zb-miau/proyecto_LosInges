@@ -51,12 +51,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-    Long idEmpleado;
+    String idEmpleado;
     JButton btnDia;
     /**
      * Creates new form GestionDeHorarios
      */
-    public Presentacion_gestionDeHorarios(Long id) {
+    public Presentacion_gestionDeHorarios(String id) {
         initComponents();
         this.idEmpleado = id;
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
@@ -842,22 +842,43 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-        DTOEmpleado empleado = new DTOEmpleado();
-        empleado.setId(idEmpleado);
-        DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(empleado);
+
+        // 1. Validamos primero si hay un turno seleccionado para no trabajar en vano
         if (filaSeleccionada != -1) {
+
+            // 2. Recuperar el empleado de la base de datos y validar que existe
+            DTOEmpleado empleadoBusqueda = new DTOEmpleado();
+            empleadoBusqueda.setId(idEmpleado); // idEmpleado debe ser String
+
+            DTOEmpleado empCompleto = control.recuperarEmpleado(empleadoBusqueda);
+
+            // VALIDACIÓN CRÍTICA: Evita el NullPointerException si el ID no existe en Mongo
+            if (empCompleto == null) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se encontró el empleado en la base de datos. Verifique el ID.", 
+                    "Error de datos", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 3. Obtener o inicializar el horario del empleado
+            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(empleadoBusqueda);
             DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
-                                              ? horarioEmpleado
-                                              : new DTOHorarioEmpleado();
+                                                  ? horarioEmpleado 
+                                                  : new DTOHorarioEmpleado();
+
             horarioAProcesar.setEmpleado(idEmpleado);
-            String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
+
+            // 4. Extraer datos del turno seleccionado en la tabla
+            String idTurno = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
             String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
             LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
             LocalTime turnoFin = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 3).toString());
             Set<DayOfWeek> diasTurno = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
             Color color = (Color) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 5);
+
             DTOTurno turno = new DTOTurno(
-                    id,
+                    idTurno,
                     titulo,
                     turnoInicio,
                     turnoFin,
@@ -865,7 +886,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     color
             );
 
-
+            // 5. Configurar el panel de captura de fechas
             JTextField txtInicio = new JTextField(10);
             JTextField txtFin = new JTextField(10);
 
@@ -875,6 +896,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             confirmarFechas.add(txtInicio);
             confirmarFechas.add(new JLabel("Fecha de Fin (dd-MM-yyyy):"));
             confirmarFechas.add(txtFin);
+
             DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
             int result = JOptionPane.showConfirmDialog(
@@ -883,50 +905,51 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     "Ingresa el rango de fechas", 
                     JOptionPane.OK_CANCEL_OPTION);
 
-                if (result == JOptionPane.OK_OPTION) {
-                    try {
-                        LocalDate fin = null;
-                        LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim(), formateador);
-                        if (!txtFin.getText().trim().isBlank() || !txtFin.getText().trim().isEmpty()){
-                            fin = LocalDate.parse(txtFin.getText().trim(), formateador);
-                        } 
-                        
-                        
-                        
-                        if (existeConflicto(inicioEvento, fin)){
-                            int opcion = JOptionPane.showConfirmDialog(
-                                    this,
-                                    "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
-                                    "Horario existente",
-                                    JOptionPane.YES_NO_OPTION
-                                    );
-                            if (opcion == JOptionPane.YES_OPTION) {
-                                control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
-                                configurarCalendario();
-                            } else {
-                                JOptionPane.showMessageDialog(
-                                        this,
-                                        "No se agregó el nuevo horario",
-                                        "Operación cancelada",
-                                        JOptionPane.INFORMATION_MESSAGE
-                                        );
-                            }
-                        } else {
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    LocalDate fin = null;
+                    LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim(), formateador);
+
+                    if (!txtFin.getText().trim().isBlank()) {
+                        fin = LocalDate.parse(txtFin.getText().trim(), formateador);
+                    } 
+
+                    // 6. Verificar conflictos usando el empleado completo recuperado
+                    if (existeConflicto(inicioEvento, fin)) {
+                        int opcion = JOptionPane.showConfirmDialog(
+                                this,
+                                "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
+                                "Horario existente",
+                                JOptionPane.YES_NO_OPTION
+                                );
+
+                        if (opcion == JOptionPane.YES_OPTION) {
                             control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
                             configurarCalendario();
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "No se agregó el nuevo horario",
+                                    "Operación cancelada",
+                                    JOptionPane.INFORMATION_MESSAGE
+                                    );
                         }
-
-
-                    } catch (DateTimeParseException ex) {
-                        JOptionPane.showMessageDialog(
-                                null, 
-                                "Formato de fecha inválido; utilice el formato dd-MM-yyyy",
-                                "Error de formato",
-                                JOptionPane.ERROR_MESSAGE
-                        );
+                    } else {
+                        // Si no hay conflicto, se agrega directamente
+                        control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        configurarCalendario();
                     }
+
+                } catch (DateTimeParseException ex) {
+                    JOptionPane.showMessageDialog(
+                            null, 
+                            "Formato de fecha inválido; utilice el formato dd-MM-yyyy",
+                            "Error de formato",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
-            } else {
+            }
+        } else {
             JOptionPane.showMessageDialog(
                     this, 
                     "Seleccione el turno que desea agregar.", 

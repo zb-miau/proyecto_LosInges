@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOHorarioEmpleado {
-    private Long idEmpleado;
+    private String idEmpleado;
     private DTOTurno turno;
     private LocalDate fechaIncio;
     private LocalDate fechaFin;
@@ -21,14 +21,14 @@ public class DTOHorarioEmpleado {
     public DTOHorarioEmpleado() {
     }
 
-    public DTOHorarioEmpleado(Long id, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+    public DTOHorarioEmpleado(String id, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
         this.idEmpleado = id;
         this.turno = turno;
         this.fechaIncio = fechaIncio;
         this.fechaFin = fechaFin;
     }
 
-    public Long getEmpleado() {
+    public String getEmpleado() {
         return idEmpleado;
     }
 
@@ -44,7 +44,7 @@ public class DTOHorarioEmpleado {
         return fechaFin;
     }
 
-    public void setEmpleado(Long empleado) {
+    public void setEmpleado(String empleado) {
         this.idEmpleado = empleado;
     }
 
@@ -82,11 +82,11 @@ public class DTOHorarioEmpleado {
         return Objects.equals(this.idEmpleado, other.idEmpleado);
     }
 
-    public Long getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 

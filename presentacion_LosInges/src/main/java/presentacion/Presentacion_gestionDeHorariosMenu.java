@@ -40,7 +40,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
      * Método que llena la tabla con los empleados registrados.
      */
     public void generarTabla(){
-        String[] columnas = {"Numéro de Empleado", "Nombre", "Apellidos"};
+        String[] columnas = {"Id de empleado", "Nombre", "Apellidos"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
           @Override
             public boolean isCellEditable(int row, int column) {
@@ -97,10 +97,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                         int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
                 
                         Object valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0);
-                        Long id = Long.valueOf(String.valueOf(valorId));
+                        String id = String.valueOf(valorId);
                         
                         abrirVentana(id);
-                    } catch (NumberFormatException ex) {
+                    } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
                             null, 
                             "Error al obtener el id del empleado", 
@@ -120,8 +120,9 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
      * gestor de turnos.
      * @param id el id del empleado seleccionado
      */
-    private void abrirVentana(Long id){
+    private void abrirVentana(String  id){
         DTOEmpleado empleadoId = new DTOEmpleado();
+        System.out.println("ID seleccionado en tabla: [" + id + "]");
         empleadoId.setId(id);
         DTOHorarioEmpleado horario = control.obtenerHorarioEmpleado(empleadoId);
         List<DTOTurno> turnos = control.recuperarTurno();

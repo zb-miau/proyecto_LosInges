@@ -56,7 +56,7 @@ public class FacadeAsignarHorario implements IAsignarHorario{
      * @param fecha_fin 
      */
     @Override
-    public void actualizarHorarioEmpleado(DTOTurno turno, Long idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
+    public void actualizarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fecha_inicio, LocalDate fecha_fin) {
         controlHorario.actualizarHorarioEmpleado(turno, idEmpleado, fecha_inicio, fecha_fin);
     }
     /**
