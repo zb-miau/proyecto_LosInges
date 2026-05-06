@@ -21,15 +21,26 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
+public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado>, IAccesoMongo {
 
     private static final String COLECCION_HORARIO_EMPLEADO = "horario_empleados";
 
+    
+    @Override
+    public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
+        return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+    }
+
+    @Override
+    public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
+        return baseDatos.getCollection(COLECCION_HORARIO_EMPLEADO, HorarioEmpleado.class);
+    }
+    
     @Override
     public DTOHorarioEmpleado crear(DTOHorarioEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionRestaurante = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
 
             InsertOneResult resultado = coleccionRestaurante.insertOne(entidad);
 
@@ -40,8 +51,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
     @Override
     public DTOHorarioEmpleado eliminar(DTOHorarioEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
 
             Document filtro = new Document("_id", new ObjectId(entidad.getIdEmpleado()));
 
@@ -54,8 +65,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
     @Override
     public DTOHorarioEmpleado modificar(DTOHorarioEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
 
             Document filtro = new Document("_id", new ObjectId(entidad.getIdEmpleado()));
 
@@ -79,9 +90,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
     @Override
     public DTOHorarioEmpleado obtener(DTOHorarioEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
-
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
             Document filtro = new Document("_id", new ObjectId(entidad.getIdEmpleado()));
 
             return coleccionHorarioEmpleados.find(filtro).first();
@@ -93,8 +103,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
          List<DTOHorarioEmpleado> listaHorarioEmpleados = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
 
             coleccionHorarioEmpleados.find().into(listaHorarioEmpleados);
             

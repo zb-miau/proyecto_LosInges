@@ -19,13 +19,23 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira y Ramses
  */
-public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
+public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>, IAccesoMongo{
     private static final String COLECCION_EMPLEADOS = "empleados";
     
     private static EmpleadosDAO empleadoDAO;
     
     private EmpleadosDAO(){
         
+    }
+
+    @Override
+    public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
+        return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
+    }
+
+    @Override
+    public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
+        return baseDatos.getCollection(COLECCION_EMPLEADOS, Empleado.class);
     }
     
     /**
@@ -50,8 +60,8 @@ public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
     @Override
     public DTOEmpleado crear(DTOEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOEmpleado> coleccionEmpleados = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
+             MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOEmpleado> coleccionEmpleados = recuperarColeccion(bd);
 
             coleccionEmpleados.insertOne(entidad);
             return entidad;
@@ -67,8 +77,8 @@ public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
     @Override
     public DTOEmpleado eliminar(DTOEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOEmpleado> coleccionEmpleados = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOEmpleado> coleccionEmpleados = recuperarColeccion(bd);
 
             Document filtro = new Document("_id", entidad.getId());
 
@@ -85,8 +95,8 @@ public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
     @Override
     public DTOEmpleado modificar(DTOEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOEmpleado> coleccionEmpleados = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
+             MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOEmpleado> coleccionEmpleados = recuperarColeccion(bd);
 
             Document filtro = new Document("_id", entidad.getId());
 
@@ -132,8 +142,8 @@ public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
     @Override
     public DTOEmpleado obtener(DTOEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOEmpleado> coleccionEmpleados = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
+             MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOEmpleado> coleccionEmpleados = recuperarColeccion(bd);
 
             Document filtro = new Document("_id", new ObjectId(entidad.getId()));
 
@@ -146,13 +156,15 @@ public class EmpleadosDAO implements IAccesoDatos<DTOEmpleado>{
         List<DTOEmpleado> listaEmpleados = new ArrayList<>();
 
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOEmpleado> coleccionEmpleados = bd.getCollection(COLECCION_EMPLEADOS, DTOEmpleado.class);
+             MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<DTOEmpleado> coleccionEmpleados = recuperarColeccion(bd);
 
             coleccionEmpleados.find().into(listaEmpleados);
 
             return listaEmpleados;
         }
     }
+
+
    
 }
