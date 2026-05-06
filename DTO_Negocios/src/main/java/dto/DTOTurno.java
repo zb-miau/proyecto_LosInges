@@ -9,28 +9,20 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
  * @author jesus
  */
 public class DTOTurno {
-    @BsonId
-    @BsonRepresentation(BsonType.OBJECT_ID)
+
     private String idTurno;
     private String nombre;
     
     private LocalTime horaInicio;
-    
     private LocalTime horaFin;
-    
     private Set<DayOfWeek> diasTrabajo;
-    
-    @BsonIgnore
+
     private Color colorEvento;
     
     private String colorHexadecimal;
@@ -118,10 +110,6 @@ public class DTOTurno {
         this.colorHexadecimal = String.format("#%02x%02x%02x", colorEvento.getRed(), colorEvento.getGreen(), colorEvento.getBlue());
     }
 
-    public DTOTurno(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getIdTurno() {
         return idTurno;
     }
@@ -130,35 +118,8 @@ public class DTOTurno {
         this.idTurno = idTurno;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.idTurno);
-        hash = 23 * hash + Objects.hashCode(this.nombre);
-        hash = 23 * hash + Objects.hashCode(this.horaInicio);
-        hash = 23 * hash + Objects.hashCode(this.horaFin);
-        hash = 23 * hash + Objects.hashCode(this.diasTrabajo);
-        return hash;
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DTOTurno other = (DTOTurno) obj;
-        return true;
-    }
-    
-
-   
-
+  
 
 
     

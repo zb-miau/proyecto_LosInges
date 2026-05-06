@@ -9,7 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
-import dto.DTOTurno;
+import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -19,14 +19,14 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class TurnosDAO implements IAccesoDatos<DTOTurno>{
+public class TurnosDAO implements IAccesoDatos<Turno>{
     private static final String COLECCION_TURNOS = "turnos";
     
     @Override
-    public DTOTurno crear(DTOTurno entidad) {
+    public Turno crear(Turno entidad) {
          try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOTurno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, DTOTurno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
             
             InsertOneResult resultado = coleccionTurnos.insertOne(entidad);
             
@@ -35,24 +35,24 @@ public class TurnosDAO implements IAccesoDatos<DTOTurno>{
     }
 
     @Override
-    public DTOTurno eliminar(DTOTurno entidad) {
+    public Turno eliminar(Turno entidad) {
         try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOTurno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, DTOTurno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
 
             Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
             
-            DTOTurno eliminado = coleccionTurnos.findOneAndDelete(filtro);
+            Turno eliminado = coleccionTurnos.findOneAndDelete(filtro);
             
             return eliminado;
         }
     }
 
     @Override
-    public DTOTurno modificar(DTOTurno entidad) {
+    public Turno modificar(Turno entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOTurno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, DTOTurno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
             
             Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
             
@@ -73,8 +73,8 @@ public class TurnosDAO implements IAccesoDatos<DTOTurno>{
                 coleccionTurnos.updateOne(filtro, Updates.set("diasTrabajo", entidad.getDiasTrabajo()));
             }
             
-            if (entidad.getColorEvento()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("colorEvento", entidad.getColorEvento()));
+            if (entidad.getColorHexadecimal()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set("colorEvento", entidad.getColorHexadecimal()));
             }
             
             return coleccionTurnos.find(filtro).first();
@@ -83,10 +83,10 @@ public class TurnosDAO implements IAccesoDatos<DTOTurno>{
     }
 
     @Override
-    public DTOTurno obtener(DTOTurno entidad) {
+    public Turno obtener(Turno entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOTurno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, DTOTurno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
             
             Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
 
@@ -96,11 +96,11 @@ public class TurnosDAO implements IAccesoDatos<DTOTurno>{
     
     @Override
     public List obtenerLista() {
-        List<DTOTurno> listaTurnos = new ArrayList();
+        List<Turno> listaTurnos = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOTurno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, DTOTurno.class);
+            MongoCollection<Turno> coleccionTurnos = bd.getCollection(COLECCION_TURNOS, Turno.class);
 
             coleccionTurnos.find().into(listaTurnos);
             

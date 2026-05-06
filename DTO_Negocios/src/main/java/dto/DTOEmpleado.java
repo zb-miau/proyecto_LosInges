@@ -7,17 +7,12 @@ package dto;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.Objects;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
  * @author jesus
  */
 public class DTOEmpleado {
-    @BsonId
-    @BsonRepresentation(BsonType.OBJECT_ID)
     private String id;
     
     private String nombre;

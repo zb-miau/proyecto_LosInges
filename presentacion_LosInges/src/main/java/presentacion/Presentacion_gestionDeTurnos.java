@@ -618,7 +618,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 t.getHoraInicio(),
                 t.getHoraFin(),
                 t.getDiasTrabajo(),
-                t.getColorHexadecimal()
+                t.getColorEvento()
              };
             modeloTabla.addRow(fila);
         }
@@ -632,10 +632,10 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (value != null && value.toString().startsWith("#")) {
-                try {
-                    Color colorEvento = Color.decode((String) value);
-                    ((JLabel)c).setOpaque(true);
+            if (value instanceof Color) {
+                Color colorEvento = (Color) value;
+
+                ((JLabel)c).setOpaque(true);
 
                     if (!isSelected) {
                         c.setBackground(colorEvento);
@@ -646,9 +646,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                     }
 
                     ((JLabel)c).setText("");
-                }catch (NumberFormatException e) {
-                    c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-                }
+             
             } else {
                  c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             }
