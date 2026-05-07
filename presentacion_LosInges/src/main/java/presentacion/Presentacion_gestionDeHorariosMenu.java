@@ -95,13 +95,12 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                 if (fila != -1) {
                     try {
                         int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
-                        Object valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0);
-                        String id = String.valueOf(valorId);
-                        abrirVentana(id);
+                        String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
+                        abrirVentana(valorId);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
                             null, 
-                            "Error al obtener el id del empleado", 
+                            "Error al obtener el empleado", 
                             "Error", 
                             JOptionPane.ERROR_MESSAGE);
                             }
@@ -122,7 +121,6 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         DTOEmpleado empleadoId = new DTOEmpleado();
         System.out.println("ID seleccionado en tabla: [" + id + "]");
         empleadoId.setId(id);
-        DTOHorarioEmpleado horario = control.obtenerHorarioEmpleado(empleadoId);
         List<DTOTurno> turnos = control.recuperarTurno();
         if (turnos.isEmpty()){
             Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(id);

@@ -30,7 +30,12 @@ public class TurnoToDTOTurnoAdapter {
     }
     
     public static DTOTurno adaptar(Turno turno){
-        Color color = Color.decode(turno.getColorHexadecimal());
+        String colorString = turno.getColorHexadecimal().trim();
+        int r = Integer.valueOf(colorString.substring(1, 3), 16);
+        int g = Integer.valueOf(colorString.substring(3, 5), 16);
+        int b = Integer.valueOf(colorString.substring(5, 7), 16);
+
+        Color color = new Color(r, g, b);
         
         DTOTurno turnoCrear = new DTOTurno(
                 turno.getIdTurno(),

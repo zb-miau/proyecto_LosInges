@@ -100,6 +100,9 @@ public class Turno {
         return colorHexadecimal;
     }
 
+    public void setColorHexadecimal(String colorHexadecimal) {
+        this.colorHexadecimal = colorHexadecimal;
+    }
 
     public String getIdTurno() {
         return idTurno;

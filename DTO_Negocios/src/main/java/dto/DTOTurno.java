@@ -106,7 +106,6 @@ public class DTOTurno {
 
     public void setColorEvento(Color colorEvento) {
         this.colorEvento = colorEvento;
-        
         this.colorHexadecimal = String.format("#%02x%02x%02x", colorEvento.getRed(), colorEvento.getGreen(), colorEvento.getBlue());
     }
 

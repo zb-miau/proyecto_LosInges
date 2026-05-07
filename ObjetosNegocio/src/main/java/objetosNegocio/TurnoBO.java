@@ -57,11 +57,13 @@ public class TurnoBO{
     public List<DTOTurno> obtenerLista(){
         List<Turno> turnos = dao.obtenerLista();
         List<DTOTurno> listaTurnos = new ArrayList();
-        for (Turno t: turnos){
-            DTOTurno turnoNuevo = TurnoToDTOTurnoAdapter.adaptar(t);
-            listaTurnos.add(turnoNuevo);
-        }
         
+        if (!turnos.isEmpty()){
+            for (Turno t: turnos){
+                DTOTurno turnoNuevo = TurnoToDTOTurnoAdapter.adaptar(t);
+                listaTurnos.add(turnoNuevo);
+            }
+        }
         return listaTurnos;
     }
    

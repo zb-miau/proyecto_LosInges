@@ -4,15 +4,6 @@
 
 package presentacion;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import dto.DTOEmpleado;
-import itson.accesodatos.ManejadorConexiones;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import objetosNegocio.EmpleadoBO;
 
 /**
  *
@@ -25,6 +16,6 @@ public class Presentacion_main {
 
         
           Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
-//           Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos("");
+//           Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos("69fc574637e1a5b2ce44152e");
     }
 }
