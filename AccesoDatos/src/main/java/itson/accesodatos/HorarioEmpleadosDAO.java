@@ -21,6 +21,20 @@ import org.bson.types.ObjectId;
 public class HorarioEmpleadosDAO  {
 
     private static final String COLECCION_HORARIO_EMPLEADO = "horario_empleados";
+    private static HorarioEmpleadosDAO horarioEmpleadoDAO;
+
+    /**
+     * Obtener la instancia del HorarioEmpleadosDAO
+     *
+     * @return HorarioEmpleadosDAO
+     */
+    public static HorarioEmpleadosDAO getInstanceHorarioEmpleadosDAO() {
+        if (horarioEmpleadoDAO == null) {
+            horarioEmpleadoDAO = new HorarioEmpleadosDAO();
+        }
+
+        return horarioEmpleadoDAO;
+    }
 
     
     @Override
@@ -78,6 +92,9 @@ public class HorarioEmpleadosDAO  {
             if (entidad.getTurno() != null) {
                 coleccionHorarioEmpleados.updateOne(filtro, Updates.set("turno", entidad.getTurno()));
             }
+            if (entidad.getIdEmpleado() != null) {
+                coleccionHorarioEmpleados.updateOne(filtro, Updates.set("idEmpleado", entidad.getIdEmpleado()));
+            }
 
             return coleccionHorarioEmpleados.find(filtro).first();
 
@@ -90,8 +107,8 @@ public class HorarioEmpleadosDAO  {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
             Document filtro = new Document("_id", new ObjectId(entidad.getIdEmpleado()));
-
-            return coleccionHorarioEmpleados.find(filtro).first();
+            
+            return coleccion.find(filtro).first();
         }
     }
 
@@ -104,7 +121,7 @@ public class HorarioEmpleadosDAO  {
             MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
 
             coleccionHorarioEmpleados.find().into(listaHorarioEmpleados);
-            
+
             return listaHorarioEmpleados;
         }
     }
