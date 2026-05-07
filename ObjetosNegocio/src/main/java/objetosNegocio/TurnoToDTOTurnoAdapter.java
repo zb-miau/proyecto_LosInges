@@ -15,6 +15,9 @@ import java.awt.Color;
 public class TurnoToDTOTurnoAdapter {
     
     public static Turno adaptar(DTOTurno turno){
+        if (turno == null) {
+            return null;
+        }
         Turno turnoCrear = new Turno(
                 turno.getNombre(),
                 turno.getHoraInicio(),
