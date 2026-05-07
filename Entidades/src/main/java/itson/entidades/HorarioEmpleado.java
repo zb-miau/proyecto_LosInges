@@ -20,7 +20,7 @@ public class HorarioEmpleado {
     private String idEmpleado;
     
     private Turno turno;
-    private LocalDate fechaIncio;
+    private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
     public HorarioEmpleado() {
@@ -29,7 +29,7 @@ public class HorarioEmpleado {
     public HorarioEmpleado(String id, Turno turno, LocalDate fechaIncio, LocalDate fechaFin) {
         this.idEmpleado = id;
         this.turno = turno;
-        this.fechaIncio = fechaIncio;
+        this.fechaInicio = fechaIncio;
         this.fechaFin = fechaFin;
     }
 
@@ -41,8 +41,8 @@ public class HorarioEmpleado {
         return turno;
     }
 
-    public LocalDate getFechaIncio() {
-        return fechaIncio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
     public LocalDate getFechaFin() {
@@ -57,8 +57,8 @@ public class HorarioEmpleado {
         this.turno = turno;
     }
 
-    public void setFechaIncio(LocalDate fechaIncio) {
-        this.fechaIncio = fechaIncio;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
     public void setFechaFin(LocalDate fechaFin) {

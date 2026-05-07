@@ -101,7 +101,7 @@ public class EmpleadoToDTOEmpleadoAdapter {
                     return new DTOHorarioEmpleado(
                             horario.getEmpleado(),
                             turnoDTO,
-                            horario.getFechaIncio(),
+                            horario.getFechaInicio(),
                             horario.getFechaFin()
                     );
                 })

@@ -79,6 +79,8 @@ public class FacadeAsignarHorario implements IAsignarHorario {
         controlHorario.agregarTurno(turnoNuevo);
     }
 
+    
+  
     /**
      * Por medio de controlHorarui elimina el turno que se desea eliminar
      *
@@ -109,6 +111,11 @@ public class FacadeAsignarHorario implements IAsignarHorario {
     @Override
     public void modificarTurno(DTOTurno turnoModificar) {
         controlHorario.modificarTurno(turnoModificar);
+    }
+
+    @Override
+    public DTOTurno consultarTurno(DTOTurno turnoConsultar) {
+        return controlHorario.consultarTurno(turnoConsultar);
     }
 
 }

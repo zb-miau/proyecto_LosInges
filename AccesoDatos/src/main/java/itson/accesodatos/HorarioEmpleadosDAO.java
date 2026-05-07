@@ -86,8 +86,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<HorarioEmpleado>, IAcce
                 coleccionHorarioEmpleados.updateOne(filtro, Updates.set("fechaFin", entidad.getFechaFin()));
             }
 
-            if (entidad.getFechaIncio() != null) {
-                coleccionHorarioEmpleados.updateOne(filtro, Updates.set("fechaInicio", entidad.getFechaIncio()));
+            if (entidad.getFechaInicio() != null) {
+                coleccionHorarioEmpleados.updateOne(filtro, Updates.set("fechaInicio", entidad.getFechaInicio()));
             }
 
             if (entidad.getTurno() != null) {

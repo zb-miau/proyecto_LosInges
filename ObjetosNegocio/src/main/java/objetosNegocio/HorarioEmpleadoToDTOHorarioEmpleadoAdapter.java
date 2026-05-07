@@ -27,8 +27,8 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
                  * adaptarla
                  */
                 TurnoToDTOTurnoAdapter.adaptar(horarioEmpleado.getTurno()),
-                horarioEmpleado.getFechaFin(),
-                horarioEmpleado.getFechaIncio()
+                horarioEmpleado.getFechaIncio(),
+                horarioEmpleado.getFechaFin()
         );
 
         return horarioEmpleadoCrear;
@@ -43,8 +43,9 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
         DTOHorarioEmpleado horarioEmpleadoCrear = new DTOHorarioEmpleado(
                 horarioEmpleado.getEmpleado(),
                 TurnoToDTOTurnoAdapter.adaptar(horarioEmpleado.getTurno()),
-                horarioEmpleado.getFechaFin(),
-                horarioEmpleado.getFechaIncio()
+                horarioEmpleado.getFechaInicio(),
+                horarioEmpleado.getFechaFin()
+                
         );
 
         return horarioEmpleadoCrear;

@@ -113,6 +113,10 @@ public class ControlAsignarHorario {
     protected void agregarTurno(DTOTurno dtoTurno) {
         turno.crear(dtoTurno);
     }
+    
+    protected DTOTurno consultarTurno(DTOTurno dtoTurno){
+        return turno.obtener(dtoTurno);
+    }
 
     /**
      * Itera en la lista de los turnos existentes y si el turno existe lo

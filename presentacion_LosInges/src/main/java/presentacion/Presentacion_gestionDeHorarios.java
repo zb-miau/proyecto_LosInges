@@ -220,7 +220,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
             
             if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                DTOTurno turno = horarioParaEsteDia.getTurno();
+                DTOTurno turno = control.consultarTurno(horarioParaEsteDia.getTurno());
                 if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
                     btnDia.setBackground(turno.getColorEvento());
                     btnDia.setOpaque(true);
@@ -309,7 +309,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
             
             if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                DTOTurno turno = horarioParaEsteDia.getTurno();
+                DTOTurno turno = control.consultarTurno(horarioParaEsteDia.getTurno());
                 if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
                     btnDia.setBackground(turno.getColorEvento());
                     btnDia.setOpaque(true);
