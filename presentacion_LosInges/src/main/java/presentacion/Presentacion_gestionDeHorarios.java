@@ -940,7 +940,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     } else {
                         System.out.println("HOLA ENTRE A LA AGREGACIÓN");
                         // Si no hay conflicto, se agrega directamente
-                        control.agregarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
                         System.out.println("HOLA SI ME AGREGARON JEJE");
                         configurarCalendario();
                     }
