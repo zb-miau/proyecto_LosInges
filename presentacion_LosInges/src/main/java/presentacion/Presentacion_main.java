@@ -21,7 +21,7 @@ public class Presentacion_main {
 
     public static void main(String[] args) {
         
-        // 1. Obtener la conexión mediante tu Manejador
+//        //1. Obtener la conexión mediante tu Manejador
 //        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
 //            MongoDatabase db = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
 //            
@@ -53,7 +53,7 @@ public class Presentacion_main {
 //            System.err.println("Error al insertar: " + e.getMessage());
 //            e.printStackTrace();
 //        }
-        
+//        
           Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
           // Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos(3L);
     }

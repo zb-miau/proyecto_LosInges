@@ -906,16 +906,19 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     JOptionPane.OK_CANCEL_OPTION);
 
             if (result == JOptionPane.OK_OPTION) {
+                System.out.println("HOLA YA SELECCIONE LA FECHA PARA EL HORARIO");
                 try {
                     LocalDate fin = null;
                     LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim(), formateador);
 
                     if (!txtFin.getText().trim().isBlank()) {
+                        System.out.println("HOLA ENTRE EN EL FORMATEO DE FECHA");
                         fin = LocalDate.parse(txtFin.getText().trim(), formateador);
                     } 
 
                     // 6. Verificar conflictos usando el empleado completo recuperado
                     if (existeConflicto(inicioEvento, fin)) {
+                        System.out.println("HOLA ENTRE EN CONFLICTO");
                         int opcion = JOptionPane.showConfirmDialog(
                                 this,
                                 "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
@@ -935,8 +938,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                     );
                         }
                     } else {
+                        System.out.println("HOLA ENTRE A LA AGREGACIÓN");
                         // Si no hay conflicto, se agrega directamente
-                        control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        control.agregarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        System.out.println("HOLA SI ME AGREGARON JEJE");
                         configurarCalendario();
                     }
 

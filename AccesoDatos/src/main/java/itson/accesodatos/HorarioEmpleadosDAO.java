@@ -24,6 +24,20 @@ import org.bson.types.ObjectId;
 public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
 
     private static final String COLECCION_HORARIO_EMPLEADO = "horario_empleados";
+    private static HorarioEmpleadosDAO horarioEmpleadoDAO;
+
+    /**
+     * Obtener la instancia del HorarioEmpleadosDAO
+     *
+     * @return HorarioEmpleadosDAO
+     */
+    public static HorarioEmpleadosDAO getInstanceHorarioEmpleadosDAO() {
+        if (horarioEmpleadoDAO == null) {
+            horarioEmpleadoDAO = new HorarioEmpleadosDAO();
+        }
+
+        return horarioEmpleadoDAO;
+    }
 
     @Override
     public DTOHorarioEmpleado crear(DTOHorarioEmpleado entidad) {
@@ -70,6 +84,9 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
             if (entidad.getTurno() != null) {
                 coleccionHorarioEmpleados.updateOne(filtro, Updates.set("turno", entidad.getTurno()));
             }
+            if (entidad.getIdEmpleado() != null) {
+                coleccionHorarioEmpleados.updateOne(filtro, Updates.set("idEmpleado", entidad.getIdEmpleado()));
+            }
 
             return coleccionHorarioEmpleados.find(filtro).first();
 
@@ -80,26 +97,26 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado> {
     public DTOHorarioEmpleado obtener(DTOHorarioEmpleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
-            MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
+            MongoCollection<DTOHorarioEmpleado> coleccion = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
 
             Document filtro = new Document("_id", new ObjectId(entidad.getIdEmpleado()));
-
-            return coleccionHorarioEmpleados.find(filtro).first();
+            
+            return coleccion.find(filtro).first();
         }
     }
 
     @Override
     public List<DTOHorarioEmpleado> obtenerLista() {
-         List<DTOHorarioEmpleado> listaHorarioEmpleados = new ArrayList();
-        
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+        List<DTOHorarioEmpleado> listaHorarioEmpleados = new ArrayList();
+
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
             MongoCollection<DTOHorarioEmpleado> coleccionHorarioEmpleados = bd.getCollection(COLECCION_HORARIO_EMPLEADO, DTOHorarioEmpleado.class);
 
             coleccionHorarioEmpleados.find().into(listaHorarioEmpleados);
-            
+
             return listaHorarioEmpleados;
         }
-        }
+    }
 
 }
