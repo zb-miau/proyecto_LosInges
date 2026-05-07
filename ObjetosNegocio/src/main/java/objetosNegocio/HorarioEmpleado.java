@@ -13,14 +13,14 @@ import java.time.LocalDate;
 public class HorarioEmpleado {
 
     private Empleado empleado;
-    private Turno turno;
+    private TurnoBO turno;
     private LocalDate fechaIncio;
     private LocalDate fechaFin;
 
     public HorarioEmpleado() {
     }
 
-    public HorarioEmpleado(Empleado empleado, Turno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+    public HorarioEmpleado(Empleado empleado, TurnoBO turno, LocalDate fechaIncio, LocalDate fechaFin) {
         this.empleado = empleado;
         this.turno = turno;
         this.fechaIncio = fechaIncio;
@@ -35,11 +35,11 @@ public class HorarioEmpleado {
         this.empleado = empleado;
     }
 
-    public Turno getTurno() {
+    public TurnoBO getTurno() {
         return turno;
     }
 
-    public void setTurno(Turno turno) {
+    public void setTurno(TurnoBO turno) {
         this.turno = turno;
     }
 

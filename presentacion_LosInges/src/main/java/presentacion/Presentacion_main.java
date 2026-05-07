@@ -55,6 +55,6 @@ public class Presentacion_main {
 //        }
 //        
           Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
-          // Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos(3L);
+//           Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos("");
     }
 }
