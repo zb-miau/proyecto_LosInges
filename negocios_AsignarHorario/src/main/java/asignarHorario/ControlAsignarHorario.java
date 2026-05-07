@@ -22,6 +22,7 @@ import itson.accesodatos.EmpleadosDAO;
 import objetosNegocio.TurnoBO;
 import objetosNegocio.EmpleadoBO;
 import itson.accesodatos.HorarioEmpleadosDAO;
+import objetosNegocio.HorarioEmpleadoBO;
 
 /**
  * Esta clase permita el control total de los horarios de empleados
@@ -32,12 +33,12 @@ public class ControlAsignarHorario {
 
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
     private EmpleadoBO empleadoBO;
-    private final IAccesoDatos<DTOHorarioEmpleado> horarioEmpleadoDAO;
+    private HorarioEmpleadoBO horarioEmpleadoBO;
     private TurnoBO turno;
-    
-    protected ControlAsignarHorario(){
+
+    protected ControlAsignarHorario() {
         this.empleadoBO = EmpleadoBO.getInstanceEmpleadoBO();
-        this.horarioEmpleadoDAO = HorarioEmpleadosDAO.getInstanceHorarioEmpleadosDAO();
+        this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstanceEmpleadoBO();
         turno = new TurnoBO();
     }
 
@@ -48,7 +49,7 @@ public class ControlAsignarHorario {
      * @return List DTOEmpleado
      */
     protected List<DTOEmpleado> recuperarEmpleados() {
-        
+
         return empleadoBO.obtenerLista();
     }
 
@@ -61,7 +62,7 @@ public class ControlAsignarHorario {
     protected DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado) {
         DTOHorarioEmpleado horarioBusqueda = new DTOHorarioEmpleado();
         horarioBusqueda.setIdEmpleado(empleado.getId());
-        return horarioEmpleadoDAO.obtener(horarioBusqueda);
+        return horarioEmpleadoBO.obtener(horarioBusqueda);
 
     }
 
@@ -76,39 +77,31 @@ public class ControlAsignarHorario {
     }
 
     /**
-     *Este memtodo permite la modificación de un horario
+     * Este memtodo permite la modificación de un horario
+     *
      * @param turno
      * @param idEmpleado
      * @param fechaInicio
      * @param fechaFin
      */
     protected void actualizarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) {
-        DTOHorarioEmpleado nuevoHorario = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechaFin);
+        DTOHorarioEmpleado horarioDTO = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechaFin);
 
-        DTOHorarioEmpleado resultado = horarioEmpleadoDAO.modificar(nuevoHorario);
-
-        if (resultado != null) {
-            System.out.println("Horario actualizado correctamente en la base de datos.");
-        } else {
-            System.err.println("No se pudo encontrar el horario para el empleado: " + idEmpleado);
-        }
-    }
-    /**
-     * Metodo para poder crear un horario cuando es por primera vez
-     * @param turno
-     * @param idEmpleado
-     * @param fechaInicio
-     * @param fechaFin 
-     */
-    protected void agregarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin){
-        DTOHorarioEmpleado nuevoHorario = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechaFin);
-
-        DTOHorarioEmpleado resultado = horarioEmpleadoDAO.crear(nuevoHorario);
+        // Intentamos modificar primero
+        DTOHorarioEmpleado resultado = horarioEmpleadoBO.modificar(horarioDTO);
 
         if (resultado != null) {
-            System.out.println("Horario actualizado correctamente en la base de datos.");
+            System.out.println("Horario actualizado correctamente para el empleado: " + idEmpleado);
         } else {
-            System.err.println("No se pudo encontrar el horario para el empleado: " + idEmpleado);
+            // Si modificar devolvió null lo creamos
+            System.out.println("EL HORARIO NO EXISTE. SE CREA");
+            resultado = horarioEmpleadoBO.crear(horarioDTO);
+
+            if (resultado != null) {
+                System.out.println("Horario creado exitosamente.");
+            } else {
+                System.err.println("Error crítico: No se pudo ni actualizar ni crear el horario.");
+            }
         }
     }
 
@@ -144,14 +137,13 @@ public class ControlAsignarHorario {
     /**
      * Crea una lista de empleadosDTO en la que busca el empleado solicitado si
      * el empleado existe lo regresa, en caso contrario devuelve null
-     *
-     * @param id del empleado
+     * @param empleado del empleado
      * @return DTOEmpleado
      */
-    protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
-        
+    protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
+
         return empleadoBO.obtener(empleado);
-        
+
     }
 
     /**

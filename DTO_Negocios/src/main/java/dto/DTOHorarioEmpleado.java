@@ -21,12 +21,21 @@ public class DTOHorarioEmpleado {
     public DTOHorarioEmpleado() {
     }
 
-    public DTOHorarioEmpleado(String id, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
-        this.idEmpleado = id;
+    public DTOHorarioEmpleado(String idEmpleado, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+        this.idEmpleado = idEmpleado;
         this.turno = turno;
         this.fechaIncio = fechaIncio;
         this.fechaFin = fechaFin;
     }
+
+    public DTOHorarioEmpleado(DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+        this.turno = turno;
+        this.fechaIncio = fechaIncio;
+        this.fechaFin = fechaFin;
+    }
+    
+    
+    
 
     public String getEmpleado() {
         return idEmpleado;

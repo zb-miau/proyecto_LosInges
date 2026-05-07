@@ -32,6 +32,4 @@ public interface IAsignarHorario {
     
     public void modificarTurno(DTOTurno turnoModificar);
     
-    public void agregarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin);
-    
 }
