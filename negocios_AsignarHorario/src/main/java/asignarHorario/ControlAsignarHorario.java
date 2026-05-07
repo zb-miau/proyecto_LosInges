@@ -17,9 +17,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import objetosNegocio.Turno;
 import itson.accesodatos.IAccesoDatos;
 import itson.accesodatos.EmpleadosDAO;
+import objetosNegocio.TurnoBO;
+import objetosNegocio.EmpleadoBO;
 import itson.accesodatos.HorarioEmpleadosDAO;
 
 /**
@@ -30,14 +31,14 @@ import itson.accesodatos.HorarioEmpleadosDAO;
 public class ControlAsignarHorario {
 
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
-    private final IAccesoDatos<DTOEmpleado> empleadoDAO;
+    private EmpleadoBO empleadoBO;
     private final IAccesoDatos<DTOHorarioEmpleado> horarioEmpleadoDAO;
-    Turno turno;
-
-    protected ControlAsignarHorario() {
-        this.empleadoDAO = EmpleadosDAO.getInstanceEmpleadosDAO();
+    private TurnoBO turno;
+    
+    protected ControlAsignarHorario(){
+        this.empleadoBO = EmpleadoBO.getInstanceEmpleadoBO();
         this.horarioEmpleadoDAO = HorarioEmpleadosDAO.getInstanceHorarioEmpleadosDAO();
-        turno = new Turno();
+        turno = new TurnoBO();
     }
 
     /**
@@ -47,8 +48,8 @@ public class ControlAsignarHorario {
      * @return List DTOEmpleado
      */
     protected List<DTOEmpleado> recuperarEmpleados() {
-
-        return empleadoDAO.obtenerLista();
+        
+        return empleadoBO.obtenerLista();
     }
 
     /**
@@ -147,10 +148,10 @@ public class ControlAsignarHorario {
      * @param id del empleado
      * @return DTOEmpleado
      */
-    protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
-
-        return empleadoDAO.obtener(empleado);
-
+    protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
+        
+        return empleadoBO.obtener(empleado);
+        
     }
 
     /**
@@ -160,7 +161,7 @@ public class ControlAsignarHorario {
      */
     public void guardarEmpleados(List<DTOEmpleado> listaActualizada) {
         for (DTOEmpleado emp : listaActualizada) {
-            empleadoDAO.modificar(emp);
+            empleadoBO.modificar(emp);
         }
     }
 

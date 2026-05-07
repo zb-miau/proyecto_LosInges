@@ -9,9 +9,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
-import dto.DTOEmpleado;
-import dto.DTOHorarioEmpleado;
-import dto.DTOTurno;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -21,7 +18,7 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class HorarioEmpleadosDAO implements IAccesoDatos<DTOHorarioEmpleado>, IAccesoMongo {
+public class HorarioEmpleadosDAO  {
 
     private static final String COLECCION_HORARIO_EMPLEADO = "horario_empleados";
     private static HorarioEmpleadosDAO horarioEmpleadoDAO;
