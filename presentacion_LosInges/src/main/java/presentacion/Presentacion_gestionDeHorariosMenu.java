@@ -53,7 +53,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
              Object[] fila = {
                  e.getId(),
                  e.getNombre(),
-                 e.getApellidos()
+                 e.getApellidoPaterno()
              };
             modelo.addRow(fila);
         }
@@ -95,10 +95,8 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                 if (fila != -1) {
                     try {
                         int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
-                
                         Object valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0);
                         String id = String.valueOf(valorId);
-                        
                         abrirVentana(id);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(

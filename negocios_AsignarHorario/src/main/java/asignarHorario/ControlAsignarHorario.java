@@ -17,9 +17,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import objetosNegocio.Turno;
 import itson.accesodatos.IAccesoDatos;
 import itson.accesodatos.EmpleadosDAO;
+import objetosNegocio.TurnoBO;
+import objetosNegocio.EmpleadoBO;
 
 /**
  * Esta clase permita el control total de los horarios de empleados 
@@ -27,18 +28,12 @@ import itson.accesodatos.EmpleadosDAO;
  */
 public class ControlAsignarHorario{
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
-    private final IAccesoDatos<DTOEmpleado> empleadoDAO;
-    Turno turno;
+    private EmpleadoBO empleadoBO;
+    private TurnoBO turno;
     
     protected ControlAsignarHorario(){
-        this.empleadoDAO = EmpleadosDAO.getInstanceEmpleadosDAO();
-        turno = new Turno();
-
-//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("1"), "Ramses", "Contreras Avila", LocalDate.of(2006, Month.SEPTEMBER, 15)));
-//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("2"), "Josmara", "Quintana Benitez", LocalDate.of(2006, Month.SEPTEMBER, 26)));
-//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("3"), "Hector", "Flores Montoya", LocalDate.of(2006, Month.OCTOBER, 20)));
-//        empleadosRegistrados.add(new DTOEmpleado(Long.valueOf("4"), "Zaira", "Barajaz Diaz", LocalDate.of(1998, Month.AUGUST, 24)));
-//        
+        this.empleadoBO = EmpleadoBO.getInstanceEmpleadoBO();
+        turno = new TurnoBO();
     }
     
     /**
@@ -47,7 +42,7 @@ public class ControlAsignarHorario{
      */
     protected List<DTOEmpleado> recuperarEmpleados() {
         
-        return empleadoDAO.obtenerLista();
+        return empleadoBO.obtenerLista();
     }
     
     /**
@@ -159,7 +154,7 @@ public class ControlAsignarHorario{
      */
     protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
         
-        return empleadoDAO.obtener(empleado);
+        return empleadoBO.obtener(empleado);
         
     }
     
@@ -169,7 +164,7 @@ public class ControlAsignarHorario{
      */
     public void guardarEmpleados(List<DTOEmpleado> listaActualizada) {
         for (DTOEmpleado emp : listaActualizada) {
-            empleadoDAO.modificar(emp);
+            empleadoBO.modificar(emp);
         }
     }
     

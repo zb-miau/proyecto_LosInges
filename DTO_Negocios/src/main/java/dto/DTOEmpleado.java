@@ -13,43 +13,29 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOEmpleado {
-    private String id;
+    private String id; 
     
     private String nombre;
-    private String apellidos;
-    private LocalDate fechaNacimiento;
-    private String calle;
-    private String colonia;
-    private Integer numeroCasa;
-    private Integer codigoPostal;
-    private String curp;
-    private String rfc;
-    private String nss;
+    private String apellidoPaterno;
+    private String apellidoMaterno;
     LinkedList<DTOHorarioEmpleado> historial;
     
 
     public DTOEmpleado() {
     }
 
-    public DTOEmpleado(String nombre, String apellidos, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss) {
+    public DTOEmpleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno) {
+        this.id = id;
         this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.fechaNacimiento = fechaNacimiento;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.numeroCasa = numeroCasa;
-        this.codigoPostal = codigoPostal;
-        this.curp = curp;
-        this.rfc = rfc;
-        this.nss = nss;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
         this.historial = new LinkedList();
     }
 
-    public DTOEmpleado(String id, String nombre, String apellidos, LocalDate fechaNacimiento) {
-        this.id = id;
+    public DTOEmpleado(String nombre, String apellidoPaterno, String apellidoMaterno) {
         this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.fechaNacimiento = fechaNacimiento;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
         this.historial = new LinkedList();
     }
 
@@ -57,55 +43,32 @@ public class DTOEmpleado {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public String getApellidoPaterno() {
+        return apellidoPaterno;
     }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
     }
 
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.id);
-        return hash;
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DTOEmpleado other = (DTOEmpleado) obj;
-        return Objects.equals(this.id, other.id);
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     public LinkedList<DTOHorarioEmpleado> getHistorial() {
@@ -116,64 +79,9 @@ public class DTOEmpleado {
         this.historial = historial;
     }
 
-    public String getCalle() {
-        return calle;
+    @Override
+    public String toString() {
+        return "DTOEmpleado{" + "id=" + id + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + '}';
     }
 
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getColonia() {
-        return colonia;
-    }
-
-    public void setColonia(String colonia) {
-        this.colonia = colonia;
-    }
-
-    public Integer getNumeroCasa() {
-        return numeroCasa;
-    }
-
-    public void setNumeroCasa(Integer numeroCasa) {
-        this.numeroCasa = numeroCasa;
-    }
-
-    public Integer getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(Integer codigoPostal) {
-        this.codigoPostal = codigoPostal;
-    }
-
-    public String getCurp() {
-        return curp;
-    }
-
-    public void setCurp(String curp) {
-        this.curp = curp;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public String getNss() {
-        return nss;
-    }
-
-    public void setNss(String nss) {
-        this.nss = nss;
-    }
-    
-    
-    
-    
-     
 }
