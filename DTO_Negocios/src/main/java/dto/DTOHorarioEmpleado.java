@@ -13,56 +13,55 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOHorarioEmpleado {
-    private String idEmpleado;
+    private String idHorarioEmpleado;
+    private DTOEmpleado empleado;
     private DTOTurno turno;
-    private LocalDate fechaIncio;
+    private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
     public DTOHorarioEmpleado() {
     }
 
     public DTOHorarioEmpleado(String idEmpleado, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
-        this.idEmpleado = idEmpleado;
+        this.idHorarioEmpleado = idEmpleado;
         this.turno = turno;
-        this.fechaIncio = fechaIncio;
+        this.fechaInicio = fechaIncio;
         this.fechaFin = fechaFin;
     }
 
-    public DTOHorarioEmpleado(DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+    public DTOHorarioEmpleado(DTOEmpleado empleado, DTOTurno turno, LocalDate fechaIncio, LocalDate fechaFin) {
+        this.empleado = empleado;
         this.turno = turno;
-        this.fechaIncio = fechaIncio;
+        this.fechaInicio = fechaIncio;
         this.fechaFin = fechaFin;
     }
-    
-    
-    
 
-    public String getEmpleado() {
-        return idEmpleado;
+    public DTOEmpleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(DTOEmpleado empleado) {
+        this.empleado = empleado;
     }
 
     public DTOTurno getTurno() {
         return turno;
     }
 
-    public LocalDate getFechaIncio() {
-        return fechaIncio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
     public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setEmpleado(String empleado) {
-        this.idEmpleado = empleado;
-    }
-
     public void setTurno(DTOTurno turno) {
         this.turno = turno;
     }
 
-    public void setFechaIncio(LocalDate fechaIncio) {
-        this.fechaIncio = fechaIncio;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
     public void setFechaFin(LocalDate fechaFin) {
@@ -72,7 +71,7 @@ public class DTOHorarioEmpleado {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.idEmpleado);
+        hash = 29 * hash + Objects.hashCode(this.idHorarioEmpleado);
         return hash;
     }
 
@@ -88,15 +87,15 @@ public class DTOHorarioEmpleado {
             return false;
         }
         final DTOHorarioEmpleado other = (DTOHorarioEmpleado) obj;
-        return Objects.equals(this.idEmpleado, other.idEmpleado);
+        return Objects.equals(this.idHorarioEmpleado, other.idHorarioEmpleado);
     }
 
-    public String getIdEmpleado() {
-        return idEmpleado;
+    public String getIdHorarioEmpleado() {
+        return idHorarioEmpleado;
     }
 
-    public void setIdEmpleado(String idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setIdHorarioEmpleado(String idHorarioEmpleado) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
     }
 
 }

@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
@@ -17,25 +19,37 @@ import org.bson.codecs.pojo.annotations.BsonRepresentation;
 public class HorarioEmpleado {
     @BsonId
     @BsonRepresentation(BsonType.OBJECT_ID)
-    private String idEmpleado;
+    private String idHorarioEmpleado;
+    
+    @BsonIgnore
+    private Empleado empleado;
     
     private Turno turno;
+    @BsonProperty("fecha_inicio") 
     private LocalDate fechaInicio;
+    @BsonProperty("fecha_fin") 
     private LocalDate fechaFin;
 
     public HorarioEmpleado() {
     }
 
-    public HorarioEmpleado(String id, Turno turno, LocalDate fechaIncio, LocalDate fechaFin) {
-        this.idEmpleado = id;
+    public HorarioEmpleado(String idHorarioEmpleado, Empleado empleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
+        this.empleado = empleado;
         this.turno = turno;
-        this.fechaInicio = fechaIncio;
+        this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
 
-    public String getEmpleado() {
-        return idEmpleado;
+
+    public HorarioEmpleado(Empleado empleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.empleado = empleado;
+        this.turno = turno;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
     }
+    
+  
 
     public Turno getTurno() {
         return turno;
@@ -47,10 +61,6 @@ public class HorarioEmpleado {
 
     public LocalDate getFechaFin() {
         return fechaFin;
-    }
-
-    public void setEmpleado(String empleado) {
-        this.idEmpleado = empleado;
     }
 
     public void setTurno(Turno turno) {
@@ -65,10 +75,28 @@ public class HorarioEmpleado {
         this.fechaFin = fechaFin;
     }
 
+    public String getIdHorarioEmpleado() {
+        return idHorarioEmpleado;
+    }
+
+    public void setIdHorarioEmpleado(String idHorarioEmpleado) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.idEmpleado);
+        hash = 29 * hash + Objects.hashCode(this.idHorarioEmpleado);
         return hash;
     }
 
@@ -84,7 +112,7 @@ public class HorarioEmpleado {
             return false;
         }
         final HorarioEmpleado other = (HorarioEmpleado) obj;
-        return Objects.equals(this.idEmpleado, other.idEmpleado);
+        return Objects.equals(this.idHorarioEmpleado, other.idHorarioEmpleado);
     }
     
 }

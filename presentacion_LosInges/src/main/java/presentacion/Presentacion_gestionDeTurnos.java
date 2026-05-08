@@ -112,7 +112,6 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         pnlScroll.setBackground(new java.awt.Color(255, 255, 255));
         pnlScroll.setForeground(new java.awt.Color(4, 45, 98));
 
-        tablaTurnosDisponibles.setBackground(new java.awt.Color(255, 255, 255));
         tablaTurnosDisponibles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tablaTurnosDisponibles.setForeground(new java.awt.Color(4, 45, 98));
         tablaTurnosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
@@ -145,8 +144,6 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-
-        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
 
         lblNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(255, 255, 255));
@@ -292,7 +289,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                         .addComponent(btnModificar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         pnlFormularioTurnoLayout.setVerticalGroup(
             pnlFormularioTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,9 +347,9 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
             pnlGestionTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionTurnoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnlFormularioTurno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlFormularioTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(pnlGestionTurnoLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
@@ -362,7 +359,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         pnlGestionTurnoLayout.setVerticalGroup(
             pnlGestionTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGestionTurnoLayout.createSequentialGroup()
-                .addContainerGap(69, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addComponent(btnRegresar)
                 .addGap(18, 18, 18)
                 .addGroup(pnlGestionTurnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -379,7 +376,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlGestionTurno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlGestionTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

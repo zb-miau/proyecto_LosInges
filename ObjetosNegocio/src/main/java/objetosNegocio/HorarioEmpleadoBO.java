@@ -19,29 +19,27 @@ import java.util.List;
 public class HorarioEmpleadoBO {
 
     private final IAccesoDatos<HorarioEmpleado> dao;
-    
-    private static HorarioEmpleadoBO horarioEmpleadoBO;
-    
-    public HorarioEmpleadoBO() {
-        this.dao = new HorarioEmpleadosDAO();
-    }
-    
-    public static HorarioEmpleadoBO getInstanceEmpleadoBO(){
-        if (horarioEmpleadoBO == null) {
-            horarioEmpleadoBO = new HorarioEmpleadoBO();
+    private static HorarioEmpleadoBO horarioEmpleadosBO;
+
+    public static synchronized HorarioEmpleadoBO getInstance() {
+        if (horarioEmpleadosBO == null) {
+            horarioEmpleadosBO = new HorarioEmpleadoBO();
         }
-        
-        return horarioEmpleadoBO;
+        return horarioEmpleadosBO;
     }
     
-    
+    private HorarioEmpleadoBO(){
+        this.dao = HorarioEmpleadosDAO.getInstance();
+
+    }
+
 
     public DTOHorarioEmpleado crear(DTOHorarioEmpleado horarioEmpleado) {
         HorarioEmpleado horarioEmpleadoCrear = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleado);
         horarioEmpleadoCrear = dao.crear(horarioEmpleadoCrear);
-        horarioEmpleado.setEmpleado(horarioEmpleadoCrear.getEmpleado());
-
-        return horarioEmpleado;
+        DTOHorarioEmpleado horario =  HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleadoCrear);
+        
+        return horario;
     }
 
     public DTOHorarioEmpleado eliminar(DTOHorarioEmpleado horarioEmpleado) {

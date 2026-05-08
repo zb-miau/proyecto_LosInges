@@ -12,6 +12,7 @@ import com.mongodb.client.result.InsertOneResult;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -21,7 +22,18 @@ import org.bson.types.ObjectId;
  */
 public class TurnosDAO implements IAccesoDatos<Turno>, IAccesoMongo{
     private static final String COLECCION_TURNOS = "turnos";
+    private static TurnosDAO turnosDAO;
+
+    public static synchronized TurnosDAO getInstance() {
+        if (turnosDAO == null) {
+            turnosDAO = new TurnosDAO();
+        }
+        return turnosDAO;
+    }
     
+    private TurnosDAO(){
+        
+    }
     
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
@@ -74,19 +86,19 @@ public class TurnosDAO implements IAccesoDatos<Turno>, IAccesoMongo{
             }
             
             if (entidad.getHoraInicio()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("horaInicio", entidad.getHoraInicio()));
+                coleccionTurnos.updateOne(filtro, Updates.set("hora_inicio", entidad.getHoraInicio()));
             }
             
             if (entidad.getHoraFin()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("horaFin", entidad.getHoraFin()));
+                coleccionTurnos.updateOne(filtro, Updates.set("hora_fin", entidad.getHoraFin()));
             }
             
             if (entidad.getDiasTrabajo()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("diasTrabajo", entidad.getDiasTrabajo()));
+                coleccionTurnos.updateOne(filtro, Updates.set("dias_trabajo", entidad.getDiasTrabajo()));
             }
             
             if (entidad.getColorHexadecimal()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("colorEvento", entidad.getColorHexadecimal()));
+                coleccionTurnos.updateOne(filtro, Updates.set("color_hexadecimal", entidad.getColorHexadecimal()));
             }
             
             return coleccionTurnos.find(filtro).first();

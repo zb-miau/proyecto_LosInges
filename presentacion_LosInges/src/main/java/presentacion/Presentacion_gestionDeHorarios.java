@@ -28,9 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -186,9 +188,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         DTOEmpleado empleadoId = new DTOEmpleado();
         empleadoId.setId(idEmpleado);
         DTOEmpleado empleado = control.recuperarEmpleado(empleadoId);
-        LinkedList<DTOHorarioEmpleado> historial = (empleado != null && empleado.getHistorial() != null) 
-                                            ? empleado.getHistorial() 
-                                            : new LinkedList<>();
+
+        List<DTOHorarioEmpleado> todosLosHorarios = new ArrayList<>();
+        if (empleado != null) {
+            if (empleado.getHorarioActual() != null) todosLosHorarios.add(empleado.getHorarioActual());
+            if (empleado.getHistorial() != null) todosLosHorarios.addAll(empleado.getHistorial());
+        }
+        
         int primerDia = primerDiaMes();
         int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
         
@@ -200,17 +206,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             btnDia = new JButton(String.valueOf(i));
             btnDia.setPreferredSize(new Dimension(80, 60));
             
-
             LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(empleadoId);
             
             DTOHorarioEmpleado horarioParaEsteDia = null;
-            if (historial == null){
-                historial = new LinkedList();
-            }
             
-            for (DTOHorarioEmpleado h : historial) {
-                LocalDate fechaInicio = h.getFechaIncio();
+            for (DTOHorarioEmpleado h : todosLosHorarios) {
+                LocalDate fechaInicio = h.getFechaInicio();
                 LocalDate fin = h.getFechaFin(); 
 
                 if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
@@ -220,7 +221,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
             
             if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                DTOTurno turno = control.consultarTurno(horarioParaEsteDia.getTurno());
+                DTOTurno turno = horarioParaEsteDia.getTurno();
                 if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
                     btnDia.setBackground(turno.getColorEvento());
                     btnDia.setOpaque(true);
@@ -278,9 +279,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         DTOEmpleado empleadoId = new DTOEmpleado();
         empleadoId.setId(idEmpleado);
         DTOEmpleado empleado = control.recuperarEmpleado(empleadoId);
-        LinkedList<DTOHorarioEmpleado> historial = (empleado != null && empleado.getHistorial() != null) 
-                                            ? empleado.getHistorial() 
-                                            : new LinkedList<>();
+         List<DTOHorarioEmpleado> todosLosHorarios = new ArrayList<>();
+        if (empleado != null) {
+            if (empleado.getHorarioActual() != null) todosLosHorarios.add(empleado.getHorarioActual());
+            if (empleado.getHistorial() != null) todosLosHorarios.addAll(empleado.getHistorial());
+        }
+        
         for (int i = 0; i < 7; i++) {
          LocalDate diaActual = inicio.plusDays(i);
 
@@ -291,15 +295,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
             LocalDate fechaActual = diaActual;
             
-            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(empleadoId);
             
             DTOHorarioEmpleado horarioParaEsteDia = null;
-            if (historial == null){
-                historial = new LinkedList();
-            }
-            
-            for (DTOHorarioEmpleado h : historial) {
-                LocalDate fechaInicio = h.getFechaIncio();
+
+            for (DTOHorarioEmpleado h : todosLosHorarios) {
+                LocalDate fechaInicio = h.getFechaInicio();
                 LocalDate fin = h.getFechaFin(); 
 
                 if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
@@ -309,7 +309,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
             
             if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                DTOTurno turno = control.consultarTurno(horarioParaEsteDia.getTurno());
+                DTOTurno turno = horarioParaEsteDia.getTurno();
                 if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
                     btnDia.setBackground(turno.getColorEvento());
                     btnDia.setOpaque(true);
@@ -783,22 +783,23 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         DTOEmpleado idEmp = new DTOEmpleado();
         idEmp.setId(idEmpleado);
         DTOEmpleado empCompleto = control.recuperarEmpleado(idEmp);
-        List<DTOHorarioEmpleado> historial = empCompleto.getHistorial();
-        
-        boolean conflicto = false;
-        if (historial != null) {
-            for (DTOHorarioEmpleado h : historial) {
-                LocalDate hInicio = h.getFechaIncio();
-                LocalDate hFin = h.getFechaFin();
+        List<DTOHorarioEmpleado> todos = new ArrayList<>();
+        if (empCompleto.getHorarioActual() != null) todos.add(empCompleto.getHorarioActual());
+        if (empCompleto.getHistorial() != null) todos.addAll(empCompleto.getHistorial());
 
-                if (!inicio.isBefore(hInicio) && (hFin == null || (fin != null && !fin.isAfter(hFin)))) {
-                    conflicto = true;
-                    break;
-                }
+        for (DTOHorarioEmpleado h : todos) {
+            LocalDate hInicio = h.getFechaInicio();
+            LocalDate hFin = h.getFechaFin();
+
+            boolean comienzaAntesDeQueTermine = (hFin == null) || !inicio.isAfter(hFin);
+            boolean terminaDespuesDeQueEmpiece = (fin == null) || !fin.isBefore(hInicio);
+
+            if (comienzaAntesDeQueTermine && terminaDespuesDeQueEmpiece) {
+                return true; 
             }
         }
-        
-        return conflicto;
+        return false;
+       
     }
     
     /**
@@ -862,12 +863,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
 
             // 3. Obtener o inicializar el horario del empleado
-            DTOHorarioEmpleado horarioEmpleado = control.obtenerHorarioEmpleado(empleadoBusqueda);
+            DTOHorarioEmpleado horarioEmpleado = empCompleto.getHorarioActual();
             DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
                                                   ? horarioEmpleado 
                                                   : new DTOHorarioEmpleado();
 
-            horarioAProcesar.setEmpleado(idEmpleado);
+            horarioAProcesar.setEmpleado(empCompleto);
 
             // 4. Extraer datos del turno seleccionado en la tabla
             String idTurno = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
@@ -882,10 +883,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     titulo,
                     turnoInicio,
                     turnoFin,
-                    diasTurno,
-                    color
+                    diasTurno
             );
 
+            turno.setColorEvento(color);
+            
             // 5. Configurar el panel de captura de fechas
             JTextField txtInicio = new JTextField(10);
             JTextField txtFin = new JTextField(10);
@@ -924,7 +926,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                 );
 
                         if (opcion == JOptionPane.YES_OPTION) {
-                            control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                            control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                             configurarCalendario();
                         } else {
                             JOptionPane.showMessageDialog(
@@ -936,7 +938,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                         }
                     } else {
                         // Si no hay conflicto, se agrega directamente
-                        control.actualizarHorarioEmpleado(turno, idEmpleado, inicioEvento, fin);
+                        control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                         configurarCalendario();
                     }
 

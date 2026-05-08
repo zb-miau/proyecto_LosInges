@@ -11,6 +11,7 @@ import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import itson.entidades.Turno;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -18,45 +19,43 @@ import java.util.stream.Collectors;
  * @author RAMSES
  */
 public class EmpleadoToDTOEmpleadoAdapter {
+
+    private static final Logger LOGGER = Logger.getLogger(EmpleadoToDTOEmpleadoAdapter.class.getName());
     
     public static Empleado adaptarDTO(DTOEmpleado dto) {
         if (dto == null) return null;
 
         // 1. Creamos la entidad. 
         // Usamos el constructor que recibe ID y datos personales.
-        // Los campos que el DTO no tiene (CURP, RFC, etc.) se pasan como null 
-        // para no perder la estructura del constructor.
+        // Los campos que el DTO no tiene (CURP, RFC, etc.) 
         Empleado empleado = new Empleado(
                 dto.getId(),
                 dto.getNombre(),
                 dto.getApellidoPaterno(),
-                dto.getApellidoMaterno(),
-                null, null, null, null, null, null, null, null
+                dto.getApellidoMaterno()
         );
 
+                
+        if (dto.getHorarioActual()!= null){
+            HorarioEmpleado horarioActual = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptarConEmpleado(dto.getHorarioActual(), empleado);
+            empleado.setHorarioActual(horarioActual);
+        }
+
         // 2. Mapeamos la lista de historial (DTO -> Entidad)
-        if (dto.getHistorial() != null) {
+        if (dto.getHistorial() != null && !dto.getHistorial().isEmpty()) {
             LinkedList<HorarioEmpleado> historialEntidad = dto.getHistorial().stream()
                 .map(dtoH -> {
                     // Mapeamos el DTOTurno de vuelta a la Entidad Turno
                     Turno turnoEntidad = null;
                     if (dtoH.getTurno() != null) {
-                        DTOTurno dt = dtoH.getTurno();
-                        turnoEntidad = new Turno(
-                                dt.getIdTurno(),
-                                dt.getNombre(),
-                                dt.getHoraInicio(),
-                                dt.getHoraFin(),
-                                dt.getDiasTrabajo(),
-                                dt.getColorHexadecimal()
-                        );
+                        DTOTurno dt = TurnoToDTOTurnoAdapter.adaptar(turnoEntidad);
                     }
                     
                     // Creamos el objeto de negocio HorarioEmpleadoBO
                     return new HorarioEmpleado(
-                            dtoH.getEmpleado(),
+                            empleado,
                             turnoEntidad,
-                            dtoH.getFechaIncio(),
+                            dtoH.getFechaInicio(),
                             dtoH.getFechaFin()
                     );
                 })
@@ -81,25 +80,23 @@ public class EmpleadoToDTOEmpleadoAdapter {
                 empleado.getApellidoPaterno(),
                 empleado.getApellidoMaterno()
         );
+        
+        if (empleado.getHorarioActual()!= null){
+            DTOHorarioEmpleado horarioActual = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptarConEmpleado(empleado.getHorarioActual(), empleadoDTO);
+            empleadoDTO.setHorarioActual(horarioActual);
+        }
 
-        if (empleado.getHistorial() != null) {
+        if (empleado.getHistorial() != null && !empleado.getHistorial().isEmpty()) {
             // Se especifica el tipo en el colector para evitar "cannot find symbol"
             LinkedList<DTOHorarioEmpleado> historialDTO = empleado.getHistorial().stream()
                 .map(horario -> {
                     DTOTurno turnoDTO = null;
                     if (horario.getTurno() != null) {
-                        Turno t = horario.getTurno();
-                        turnoDTO = new DTOTurno(
-                                t.getIdTurno(),
-                                t.getNombre(),
-                                t.getHoraInicio(),
-                                t.getHoraFin(),
-                                t.getDiasTrabajo()
-                        );
+                        Turno t = TurnoToDTOTurnoAdapter.adaptar(turnoDTO);
                     }
 
                     return new DTOHorarioEmpleado(
-                            horario.getEmpleado(),
+                            empleadoDTO,
                             turnoDTO,
                             horario.getFechaInicio(),
                             horario.getFechaFin()

@@ -13,6 +13,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
@@ -27,6 +28,8 @@ import javax.swing.table.TableRowSorter;
  */
 public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
+    private static final Logger LOGGER = Logger.getLogger(Presentacion_gestionDeHorariosMenu.class.getName());
+    
     /**
      * Creates new form GestionDeHorariosMain
      */
@@ -40,7 +43,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
      * Método que llena la tabla con los empleados registrados.
      */
     public void generarTabla(){
-        String[] columnas = {"Id de empleado", "Nombre", "Apellidos"};
+        String[] columnas = {"Id de empleado", "Nombre", "Apellido Paterno", "Apellido Materno"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
           @Override
             public boolean isCellEditable(int row, int column) {
@@ -53,7 +56,8 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
              Object[] fila = {
                  e.getId(),
                  e.getNombre(),
-                 e.getApellidoPaterno()
+                 e.getApellidoPaterno(),
+                 e.getApellidoMaterno()
              };
             modelo.addRow(fila);
         }
@@ -98,9 +102,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                         String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
                         abrirVentana(valorId);
                     } catch (Exception ex) {
+                        LOGGER.severe(ex.getMessage());
                         JOptionPane.showMessageDialog(
                             null, 
-                            "Error al obtener el empleado", 
+                            "Error al obtener el empleado: " + ex.getMessage(), 
                             "Error", 
                             JOptionPane.ERROR_MESSAGE);
                             }

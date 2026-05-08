@@ -10,6 +10,7 @@ import itson.accesodatos.TurnosDAO;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,11 +18,20 @@ import java.util.List;
  */
 public class TurnoBO{
     private final IAccesoDatos<Turno> dao;
+    private static TurnoBO turnoBO;
 
-    public TurnoBO(){
-        this.dao = new TurnosDAO();
+    public static synchronized TurnoBO getInstance() {
+        if (turnoBO == null) {
+            turnoBO = new TurnoBO();
+        }
+        return turnoBO;
     }
     
+    private TurnoBO(){
+        this.dao = TurnosDAO.getInstance();
+
+    }
+  
     
     
     public DTOTurno crear(DTOTurno turno){

@@ -7,21 +7,12 @@ package asignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
-import java.awt.Color;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import itson.accesodatos.IAccesoDatos;
-import itson.accesodatos.EmpleadosDAO;
 import objetosNegocio.TurnoBO;
 import objetosNegocio.EmpleadoBO;
-import itson.accesodatos.HorarioEmpleadosDAO;
+import java.util.logging.Logger;
 import objetosNegocio.HorarioEmpleadoBO;
 
 /**
@@ -31,15 +22,17 @@ import objetosNegocio.HorarioEmpleadoBO;
  */
 public class ControlAsignarHorario {
 
+    private static final Logger LOGGER = Logger.getLogger(ControlAsignarHorario.class.getName());
+
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
     private EmpleadoBO empleadoBO;
     private HorarioEmpleadoBO horarioEmpleadoBO;
     private TurnoBO turno;
 
     protected ControlAsignarHorario() {
-        this.empleadoBO = EmpleadoBO.getInstanceEmpleadoBO();
-        this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstanceEmpleadoBO();
-        turno = new TurnoBO();
+        this.empleadoBO = EmpleadoBO.getInstance();
+        this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstance();
+        turno = TurnoBO.getInstance();
     }
 
     /**
@@ -61,8 +54,9 @@ public class ControlAsignarHorario {
      */
     protected DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado) {
         DTOHorarioEmpleado horarioBusqueda = new DTOHorarioEmpleado();
-        horarioBusqueda.setIdEmpleado(empleado.getId());
-        return horarioEmpleadoBO.obtener(horarioBusqueda);
+        DTOEmpleado emp = empleadoBO.obtener(empleado);
+        horarioBusqueda = emp.getHorarioActual();
+        return horarioBusqueda;
 
     }
 
@@ -84,14 +78,18 @@ public class ControlAsignarHorario {
      * @param fechaInicio
      * @param fechaFin
      */
-    protected void actualizarHorarioEmpleado(DTOTurno turno, String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) {
-        DTOHorarioEmpleado horarioDTO = new DTOHorarioEmpleado(idEmpleado, turno, fechaInicio, fechaFin);
+    protected void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) {
+        DTOHorarioEmpleado horarioDTO = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
 
         // Intentamos modificar primero
-        DTOHorarioEmpleado resultado = horarioEmpleadoBO.modificar(horarioDTO);
+        DTOEmpleado emp = empleadoBO.obtener(empleado);
+        DTOHorarioEmpleado resultado = emp.getHorarioActual();
 
         if (resultado != null) {
-            System.out.println("Horario actualizado correctamente para el empleado: " + idEmpleado);
+            DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
+            empleado.setHorarioActual(nuevo);
+            horarioEmpleadoBO.modificar(nuevo);
+            System.out.println("Horario actualizado correctamente para el empleado: " + empleado);
         } else {
             // Si modificar devolvió null lo creamos
             System.out.println("EL HORARIO NO EXISTE. SE CREA");

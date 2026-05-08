@@ -18,6 +18,7 @@ public class DTOEmpleado {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
+    private DTOHorarioEmpleado horarioActual;
     LinkedList<DTOHorarioEmpleado> historial;
     
 
@@ -78,6 +79,16 @@ public class DTOEmpleado {
     public void setHistorial(LinkedList<DTOHorarioEmpleado> historial) {
         this.historial = historial;
     }
+
+    public DTOHorarioEmpleado getHorarioActual() {
+        return horarioActual;
+    }
+
+    public void setHorarioActual(DTOHorarioEmpleado horarioActual) {
+        this.horarioActual = horarioActual;
+    }
+    
+    
 
     @Override
     public String toString() {

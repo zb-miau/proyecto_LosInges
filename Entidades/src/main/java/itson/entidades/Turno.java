@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
@@ -22,9 +23,13 @@ public class Turno {
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String idTurno;
     private String nombre;
+    @BsonProperty("hora_inicio") 
     private LocalTime horaInicio;
+    @BsonProperty("hora_fin") 
     private LocalTime horaFin;
+    @BsonProperty("dias_trabajo") 
     private Set<DayOfWeek> diasTrabajo;
+    @BsonProperty("color_hexadecimal") 
     private String colorHexadecimal;
 
     public Turno() {

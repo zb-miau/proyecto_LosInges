@@ -7,12 +7,15 @@ package objetosNegocio;
 import dto.DTOTurno;
 import itson.entidades.Turno;
 import java.awt.Color;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Zaira
  */
 public class TurnoToDTOTurnoAdapter {
+
+    private static final Logger LOGGER = Logger.getLogger(TurnoToDTOTurnoAdapter.class.getName());
     
     public static Turno adaptar(DTOTurno turno){
         if (turno == null) {
@@ -31,9 +34,9 @@ public class TurnoToDTOTurnoAdapter {
     
     public static DTOTurno adaptar(Turno turno){
         String colorString = turno.getColorHexadecimal().trim();
-        int r = Integer.valueOf(colorString.substring(1, 3), 16);
-        int g = Integer.valueOf(colorString.substring(3, 5), 16);
-        int b = Integer.valueOf(colorString.substring(5, 7), 16);
+        int r = Integer.parseInt(colorString.substring(1, 3), 16);
+        int g = Integer.parseInt(colorString.substring(3, 5), 16);
+        int b = Integer.parseInt(colorString.substring(5, 7), 16);
 
         Color color = new Color(r, g, b);
         

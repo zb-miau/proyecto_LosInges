@@ -12,6 +12,7 @@ import com.mongodb.client.model.Updates;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -22,8 +23,16 @@ import org.bson.types.ObjectId;
  */
 public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
     private static final String COLECCION_EMPLEADOS = "empleados";
+    private static final Logger LOGGER = Logger.getLogger(EmpleadosDAO.class.getName());
     
-    private static EmpleadosDAO empleadoDAO;
+    private static EmpleadosDAO empleadosDAO;
+
+    public static synchronized EmpleadosDAO getInstance() {
+        if (empleadosDAO == null) {
+            empleadosDAO = new EmpleadosDAO();
+        }
+        return empleadosDAO;
+    }
     
     private EmpleadosDAO(){
         
@@ -39,18 +48,6 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
         return baseDatos.getCollection(COLECCION_EMPLEADOS, Empleado.class);
     }
     
-    /**
-     * Obtener la instancia del EmpleadoDAO
-     * 
-     * @return EmpleadosDAO
-     */
-    public static EmpleadosDAO getInstanceEmpleadosDAO(){
-        if (empleadoDAO == null) {
-            empleadoDAO = new EmpleadosDAO();
-        }
-        
-        return empleadoDAO;
-    }
 
     /**
      * Crea un empleado y lo guarda en la base de datos.
@@ -107,12 +104,12 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
 
             // Agrupamos todas las actualizaciones en una sola lista
             if (entidad.getNombre() != null) actualizaciones.add(Updates.set("nombre", entidad.getNombre()));
-            if (entidad.getApellidoPaterno() != null) actualizaciones.add(Updates.set("apellidoPaterno", entidad.getApellidoPaterno()));
-            if (entidad.getFechaNacimiento() != null) actualizaciones.add(Updates.set("fechaNacimiento", entidad.getFechaNacimiento()));
+            if (entidad.getApellidoPaterno() != null) actualizaciones.add(Updates.set("apellido_paterno", entidad.getApellidoPaterno()));
+            if (entidad.getFechaNacimiento() != null) actualizaciones.add(Updates.set("fecha_nacimiento", entidad.getFechaNacimiento()));
             if (entidad.getCalle() != null) actualizaciones.add(Updates.set("calle", entidad.getCalle()));
             if (entidad.getColonia() != null) actualizaciones.add(Updates.set("colonia", entidad.getColonia()));
-            if (entidad.getNumeroCasa() != null) actualizaciones.add(Updates.set("numeroCasa", entidad.getNumeroCasa()));
-            if (entidad.getCodigoPostal() != null) actualizaciones.add(Updates.set("codigoPostal", entidad.getCodigoPostal()));
+            if (entidad.getNumeroCasa() != null) actualizaciones.add(Updates.set("numero_casa", entidad.getNumeroCasa()));
+            if (entidad.getCodigoPostal() != null) actualizaciones.add(Updates.set("codigo_postal", entidad.getCodigoPostal()));
             if (entidad.getCurp() != null) actualizaciones.add(Updates.set("curp", entidad.getCurp()));
             if (entidad.getRfc() != null) actualizaciones.add(Updates.set("rfc", entidad.getRfc()));
             if (entidad.getNss() != null) actualizaciones.add(Updates.set("nss", entidad.getNss()));
@@ -138,6 +135,7 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
             Document filtro = new Document("_id", new ObjectId(idLimpio));
 
             return coleccionEmpleados.find(filtro).first();
+            
         } catch (IllegalArgumentException e) {
             System.err.println("Error: El ID no tiene formato hexadecimal válido: " + entidad.getId());
             return null;

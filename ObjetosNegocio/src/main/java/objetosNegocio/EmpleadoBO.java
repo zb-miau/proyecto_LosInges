@@ -10,6 +10,7 @@ import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,32 +20,29 @@ import java.util.List;
 public class EmpleadoBO {
     
     private final IAccesoDatos<Empleado> dao;
+    private static EmpleadoBO empleadosBO;
 
-    private static EmpleadoBO empleadoBO;
-
-    private EmpleadoBO(){
-        this.dao = EmpleadosDAO.getInstanceEmpleadosDAO();
+    public static synchronized EmpleadoBO getInstance() {
+        if (empleadosBO == null) {
+            empleadosBO = new EmpleadoBO();
+        }
+        return empleadosBO;
     }
     
-    public static EmpleadoBO getInstanceEmpleadoBO(){
-        if (empleadoBO == null) {
-            empleadoBO = new EmpleadoBO();
-        }
-        
-        return empleadoBO;
-    }
+    private EmpleadoBO(){
+        this.dao = EmpleadosDAO.getInstance();
 
+    }
     
 
     public DTOEmpleado crear(DTOEmpleado empleado){
 
         Empleado empleadoCrear = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
         empleadoCrear = dao.crear(empleadoCrear);
-        empleado.setId(empleadoCrear.getId());
-
+        DTOEmpleado empleadoCreado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoCrear);
                 
 
-        return empleado;
+        return empleadoCreado;
 
     }
 

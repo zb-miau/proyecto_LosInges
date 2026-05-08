@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
@@ -21,38 +22,31 @@ public class Empleado {
     private String id; 
     
     private String nombre;
+    
+    @BsonProperty("apellido_paterno") 
     private String apellidoPaterno;
+    @BsonProperty("apellido_materno") 
     private String apellidoMaterno;
+    @BsonProperty("fecha_nacimiento") 
     private LocalDate fechaNacimiento;
     private String calle;
     private String colonia;
+    @BsonProperty("numero_casa") 
     private Integer numeroCasa;
+    @BsonProperty("codigo_postal") 
     private Integer codigoPostal;
     private String curp;
     private String rfc;
     private String nss;
-    LinkedList<HorarioEmpleado> historial;
+    @BsonProperty("horario_actual") 
+    private HorarioEmpleado horarioActual;
+    private LinkedList<HorarioEmpleado> historial;
     
 
     public Empleado() {
     }
 
-    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss) {
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.fechaNacimiento = fechaNacimiento;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.numeroCasa = numeroCasa;
-        this.codigoPostal = codigoPostal;
-        this.curp = curp;
-        this.rfc = rfc;
-        this.nss = nss;
-        this.historial = new LinkedList();
-    }
-
-    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss) {
+    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -65,8 +59,52 @@ public class Empleado {
         this.curp = curp;
         this.rfc = rfc;
         this.nss = nss;
+        this.horarioActual = horarioActual;
         this.historial = new LinkedList();
     }
+
+    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.fechaNacimiento = fechaNacimiento;
+        this.calle = calle;
+        this.colonia = colonia;
+        this.numeroCasa = numeroCasa;
+        this.codigoPostal = codigoPostal;
+        this.curp = curp;
+        this.rfc = rfc;
+        this.nss = nss;
+        this.horarioActual = horarioActual;
+        this.historial = new LinkedList();
+    }
+
+    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+    }
+
+    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.horarioActual = null;
+        this.historial = new LinkedList();
+    }
+    
+    
+
+    public HorarioEmpleado getHorarioActual() {
+        return horarioActual;
+    }
+
+    public void setHorarioActual(HorarioEmpleado horarioActual) {
+        this.horarioActual = horarioActual;
+    }
+    
+    
 
     public String getId() {
         return id;
