@@ -10,7 +10,6 @@ import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 
 /**

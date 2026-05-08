@@ -106,10 +106,10 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
             if (entidad.getNombre() != null) actualizaciones.add(Updates.set("nombre", entidad.getNombre()));
             if (entidad.getApellidoPaterno() != null) actualizaciones.add(Updates.set("apellido_paterno", entidad.getApellidoPaterno()));
             if (entidad.getFechaNacimiento() != null) actualizaciones.add(Updates.set("fecha_nacimiento", entidad.getFechaNacimiento()));
-            if (entidad.getCalle() != null) actualizaciones.add(Updates.set("calle", entidad.getCalle()));
-            if (entidad.getColonia() != null) actualizaciones.add(Updates.set("colonia", entidad.getColonia()));
-            if (entidad.getNumeroCasa() != null) actualizaciones.add(Updates.set("numero_casa", entidad.getNumeroCasa()));
-            if (entidad.getCodigoPostal() != null) actualizaciones.add(Updates.set("codigo_postal", entidad.getCodigoPostal()));
+            if (entidad.getDireccion().getCalle() != null) actualizaciones.add(Updates.set("calle", entidad.getDireccion().getCalle()));
+            if (entidad.getDireccion().getColonia() != null) actualizaciones.add(Updates.set("colonia", entidad.getDireccion().getColonia()));
+            if (entidad.getDireccion().getNumeroCasa() != null) actualizaciones.add(Updates.set("numero_casa", entidad.getDireccion().getNumeroCasa()));
+            if (entidad.getDireccion().getCodigoPostal() != null) actualizaciones.add(Updates.set("codigo_postal", entidad.getDireccion().getCodigoPostal()));
             if (entidad.getCurp() != null) actualizaciones.add(Updates.set("curp", entidad.getCurp()));
             if (entidad.getRfc() != null) actualizaciones.add(Updates.set("rfc", entidad.getRfc()));
             if (entidad.getNss() != null) actualizaciones.add(Updates.set("nss", entidad.getNss()));

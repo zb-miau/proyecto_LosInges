@@ -25,37 +25,35 @@ public class Empleado {
     
     @BsonProperty("apellido_paterno") 
     private String apellidoPaterno;
+    
     @BsonProperty("apellido_materno") 
     private String apellidoMaterno;
+    
     @BsonProperty("fecha_nacimiento") 
     private LocalDate fechaNacimiento;
-    private String calle;
-    private String colonia;
-    @BsonProperty("numero_casa") 
-    private Integer numeroCasa;
-    @BsonProperty("codigo_postal") 
-    private Integer codigoPostal;
+    
+    private Direccion direccion;
+    
     private String curp;
     private String rfc;
     private String nss;
+    
     @BsonProperty("horario_actual") 
     private HorarioEmpleado horarioActual;
+    
     private LinkedList<HorarioEmpleado> historial;
     
 
     public Empleado() {
     }
 
-    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
+    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.numeroCasa = numeroCasa;
-        this.codigoPostal = codigoPostal;
+        this.direccion = direccion;
         this.curp = curp;
         this.rfc = rfc;
         this.nss = nss;
@@ -63,15 +61,12 @@ public class Empleado {
         this.historial = new LinkedList();
     }
 
-    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, String calle, String colonia, Integer numeroCasa, Integer codigoPostal, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
+    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.numeroCasa = numeroCasa;
-        this.codigoPostal = codigoPostal;
+        this.direccion = direccion;
         this.curp = curp;
         this.rfc = rfc;
         this.nss = nss;
@@ -146,36 +141,12 @@ public class Empleado {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getCalle() {
-        return calle;
+    public Direccion getDireccion() {
+        return direccion;
     }
 
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getColonia() {
-        return colonia;
-    }
-
-    public void setColonia(String colonia) {
-        this.colonia = colonia;
-    }
-
-    public Integer getNumeroCasa() {
-        return numeroCasa;
-    }
-
-    public void setNumeroCasa(Integer numeroCasa) {
-        this.numeroCasa = numeroCasa;
-    }
-
-    public Integer getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(Integer codigoPostal) {
-        this.codigoPostal = codigoPostal;
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     public String getCurp() {
@@ -212,9 +183,7 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "Empleado{" + "id=" + id + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", fechaNacimiento=" + fechaNacimiento + ", calle=" + calle + ", colonia=" + colonia + ", numeroCasa=" + numeroCasa + ", codigoPostal=" + codigoPostal + ", curp=" + curp + ", rfc=" + rfc + ", nss=" + nss + '}';
+        return "Empleado{" + "nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", fechaNacimiento=" + fechaNacimiento + ", direccion=" + direccion + ", curp=" + curp + ", rfc=" + rfc + ", nss=" + nss + '}';
     }
-    
-    
     
 }
