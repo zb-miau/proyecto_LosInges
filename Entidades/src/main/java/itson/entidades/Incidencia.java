@@ -16,28 +16,29 @@ import org.bson.codecs.pojo.annotations.BsonRepresentation;
  * @author jesus
  */
 public class Incidencia {
-    
+
     @BsonId
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String idIncidencia;
-    
-    @BsonProperty("tipo") 
+
+    @BsonProperty("tipo")
     private String tipo;
-    
-    @BsonProperty("empleado") 
+
+    @BsonProperty("empleado")
     private Empleado empleado;
-    
-    @BsonProperty("descripcion") 
+
+    @BsonProperty("descripcion")
     private String descripcion;
-    
-    @BsonProperty("fecha") 
+
+    @BsonProperty("fecha")
     private LocalDate fecha;
-    
-    @BsonProperty("estado") 
+
+    @BsonProperty("estado")
     private Estado estado;
-    
-    
-    private enum Estado{VALIDADA, RECHAZADA, PENDIENTE};
+
+    public enum Estado {
+        VALIDADA, RECHAZADA, PENDIENTE
+    };
 
     public Incidencia() {
     }
@@ -133,7 +134,5 @@ public class Incidencia {
         final Incidencia other = (Incidencia) obj;
         return Objects.equals(this.idIncidencia, other.idIncidencia);
     }
-    
-    
-    
+
 }

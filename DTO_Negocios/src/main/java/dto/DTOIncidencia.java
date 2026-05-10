@@ -32,19 +32,21 @@ public class DTOIncidencia {
     public DTOIncidencia() {
     }
 
-    public DTOIncidencia(String idIncidencia, String tipo, DTOEmpleado empleado, String descripcion, LocalDate fecha) {
+    public DTOIncidencia(String idIncidencia, String tipo, DTOEmpleado empleado, String descripcion, LocalDate fecha, Estado estado) {
         this.idIncidencia = idIncidencia;
         this.tipo = tipo;
         this.empleado = empleado;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.estado = estado;
     }
 
-    public DTOIncidencia(String tipo, DTOEmpleado empleado, String descripcion, LocalDate fecha) {
+    public DTOIncidencia(String tipo, DTOEmpleado empleado, String descripcion, LocalDate fecha, Estado estado) {
         this.tipo = tipo;
         this.empleado = empleado;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.estado = estado;
     }
 
     public String getIdIncidencia() {

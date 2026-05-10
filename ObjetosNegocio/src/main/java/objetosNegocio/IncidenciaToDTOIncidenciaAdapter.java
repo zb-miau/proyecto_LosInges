@@ -15,21 +15,38 @@ import java.util.logging.Logger;
  */
 public class IncidenciaToDTOIncidenciaAdapter {
 
-//    private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
-//    
-//    public static Incidencia adaptar(DTOIncidencia DTOIncidencia){
-//    
-//        if (DTOIncidencia == null) {
-//            return null;
-//        }
-//        
-//        Incidencia incidencia = new Incidencia(
-//                DTOIncidencia.getIdIncidencia(), 
-//                DTOIncidencia.getTipo(), 
-//                DTOIncidencia.getEmpleado(), 
-//                DTOIncidencia.getDescripcion(), 
-//                DTOIncidencia.getFecha(), 
-//                DTOIncidencia.getEstado());
-//        
-//    }
+    private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
+
+    public static Incidencia adaptar(DTOIncidencia DTOIncidencia) {
+
+        if (DTOIncidencia == null) {
+            return null;
+        }
+
+        Incidencia incidencia = new Incidencia(
+                DTOIncidencia.getIdIncidencia(),
+                DTOIncidencia.getTipo(),
+                EmpleadoToDTOEmpleadoAdapter.adaptarDTO(DTOIncidencia.getEmpleado()),
+                DTOIncidencia.getDescripcion(),
+                DTOIncidencia.getFecha(),
+                Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()));
+
+        return incidencia;
+
+    }
+
+    public static DTOIncidencia adaptar(Incidencia incidencia) {
+
+        DTOIncidencia dTOincidencia = new DTOIncidencia(
+                incidencia.getIdIncidencia(),
+                incidencia.getTipo(),
+                EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(incidencia.getEmpleado()),
+                incidencia.getDescripcion(),
+                incidencia.getFecha(),
+                DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()));
+
+        return dTOincidencia;
+
+    }
+
 }
