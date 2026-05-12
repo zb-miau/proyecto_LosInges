@@ -5,6 +5,9 @@
 package objetosNegocio;
 
 import dto.DTOIncidencia;
+import itson.accesodatos.EmpleadosDAO;
+import itson.accesodatos.IAccesoDatos;
+import itson.entidades.Empleado;
 import itson.entidades.Incidencia;
 import java.time.LocalDate;
 import java.util.logging.Logger;
@@ -17,6 +20,8 @@ public class IncidenciaToDTOIncidenciaAdapter {
 
     private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
 
+    private static final IAccesoDatos<Empleado> daoEmpleado = EmpleadosDAO.getInstance();
+
     public static Incidencia adaptar(DTOIncidencia DTOIncidencia) {
 
         if (DTOIncidencia == null) {
@@ -26,7 +31,7 @@ public class IncidenciaToDTOIncidenciaAdapter {
         Incidencia incidencia = new Incidencia(
                 DTOIncidencia.getIdIncidencia(),
                 DTOIncidencia.getTipo(),
-                EmpleadoToDTOEmpleadoAdapter.adaptarDTO(DTOIncidencia.getEmpleado()),
+                DTOIncidencia.getEmpleado().getId(),
                 DTOIncidencia.getDescripcion(),
                 DTOIncidencia.getFecha(),
                 Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()));
@@ -37,10 +42,13 @@ public class IncidenciaToDTOIncidenciaAdapter {
 
     public static DTOIncidencia adaptar(Incidencia incidencia) {
 
+        Empleado empleadoObtener = new Empleado();
+        empleadoObtener.setId(incidencia.getIdEmpleado());
+
         DTOIncidencia dTOincidencia = new DTOIncidencia(
                 incidencia.getIdIncidencia(),
                 incidencia.getTipo(),
-                EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(incidencia.getEmpleado()),
+                EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(daoEmpleado.obtener(empleadoObtener)),
                 incidencia.getDescripcion(),
                 incidencia.getFecha(),
                 DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()));

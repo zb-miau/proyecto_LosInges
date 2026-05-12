@@ -24,8 +24,8 @@ public class Incidencia {
     @BsonProperty("tipo")
     private String tipo;
 
-    @BsonProperty("empleado")
-    private Empleado empleado;
+    @BsonProperty("id_empleado")
+    private String idEmpleado;
 
     @BsonProperty("descripcion")
     private String descripcion;
@@ -43,26 +43,26 @@ public class Incidencia {
     public Incidencia() {
     }
 
-    public Incidencia(String tipo, Empleado empleado, String descripcion, LocalDate fecha, Estado estado) {
+    public Incidencia(String tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado) {
         this.tipo = tipo;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.estado = estado;
     }
 
-    public Incidencia(String idIncidencia, String tipo, Empleado empleado, String descripcion, LocalDate fecha, Estado estado) {
+    public Incidencia(String idIncidencia, String tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado) {
         this.idIncidencia = idIncidencia;
         this.tipo = tipo;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.estado = estado;
     }
 
-    public Incidencia(String tipo, Empleado empleado) {
+    public Incidencia(String tipo, String idEmpleado) {
         this.tipo = tipo;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
     }
 
     public String getIdIncidencia() {
@@ -73,8 +73,8 @@ public class Incidencia {
         return tipo;
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public String getIdEmpleado() {
+        return idEmpleado;
     }
 
     public String getDescripcion() {
@@ -97,8 +97,8 @@ public class Incidencia {
         this.tipo = tipo;
     }
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+    public void setEmpleado(String idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public void setDescripcion(String descripcion) {

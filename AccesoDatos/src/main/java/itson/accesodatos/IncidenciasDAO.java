@@ -71,8 +71,8 @@ public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
             if (entidad.getTipo() != null) {
                 coleccionIncidencias.updateOne(filtro, Updates.set("tipo", entidad.getTipo()));
             }
-            if (entidad.getEmpleado() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("empleado", entidad.getEmpleado()));
+            if (entidad.getIdEmpleado() != null) {
+                coleccionIncidencias.updateOne(filtro, Updates.set("id_empleado", entidad.getIdEmpleado()));
             }
             if (entidad.getDescripcion() != null) {
                 coleccionIncidencias.updateOne(filtro, Updates.set("descripcion", entidad.getDescripcion()));
