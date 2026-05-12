@@ -9,6 +9,7 @@ import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
 import java.time.LocalDate;
 import java.util.List;
+import objetosNegocio.NegocioException;
 
 /**
  * Siguiente la práctica del huevo, esta clase es una capa entre capas para el
@@ -17,9 +18,8 @@ import java.util.List;
  * @author RAMSES
  */
 public class FacadeAsignarHorario implements IAsignarHorario {
-
     private ControlAsignarHorario controlHorario;
-
+    
     public FacadeAsignarHorario() {
         this.controlHorario = new ControlAsignarHorario();
     }
@@ -52,7 +52,7 @@ public class FacadeAsignarHorario implements IAsignarHorario {
      * @return DTOTurno
      */
     @Override
-    public List<DTOTurno> recuperarTurno() {
+    public List<DTOTurno> recuperarTurno() throws NegocioException{
         return controlHorario.recuperarTurnos();
     }
 
@@ -75,7 +75,7 @@ public class FacadeAsignarHorario implements IAsignarHorario {
      * @param turnoNuevo
      */
     @Override
-    public void agregarTurno(DTOTurno turnoNuevo) {
+    public void agregarTurno(DTOTurno turnoNuevo) throws NegocioException{
         controlHorario.agregarTurno(turnoNuevo);
     }
 
@@ -87,7 +87,7 @@ public class FacadeAsignarHorario implements IAsignarHorario {
      * @param turnoEliminar
      */
     @Override
-    public void eliminarTurno(DTOTurno turnoEliminar) {
+    public void eliminarTurno(DTOTurno turnoEliminar) throws NegocioException{
         controlHorario.eliminarTurno(turnoEliminar);
     }
 
@@ -109,12 +109,12 @@ public class FacadeAsignarHorario implements IAsignarHorario {
      * @param turnoModificar
      */
     @Override
-    public void modificarTurno(DTOTurno turnoModificar) {
+    public void modificarTurno(DTOTurno turnoModificar) throws NegocioException{
         controlHorario.modificarTurno(turnoModificar);
     }
 
     @Override
-    public DTOTurno consultarTurno(DTOTurno turnoConsultar) {
+    public DTOTurno consultarTurno(DTOTurno turnoConsultar) throws NegocioException{
         return controlHorario.consultarTurno(turnoConsultar);
     }
 

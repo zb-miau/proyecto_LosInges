@@ -29,7 +29,7 @@ public class TurnosDAOTest {
     
     public TurnosDAOTest() {
     }
-//    
+    
 //    @Test
 //    public void testCrear(){
 //        Set<DayOfWeek> dias = new HashSet();
@@ -52,13 +52,15 @@ public class TurnosDAOTest {
 //                "#ff6633"
 //        );
 //        
-//        Turno turnoAgregado1 = dao.crear(turno1);
-//        assertNotNull(turnoAgregado1.getIdTurno());
-//        assertEquals(turnoAgregado1.getNombre(), turno1.getNombre());
-//        
-//        Turno turnoAgregado2 = dao.crear(turno2);
-//        assertNotNull(turnoAgregado2.getIdTurno());
-//        assertEquals(turnoAgregado2.getNombre(), turno2.getNombre());
+//        assertDoesNotThrow( () -> {
+//            Turno turnoAgregado1 = dao.crear(turno1);
+//            assertNotNull(turnoAgregado1.getIdTurno());
+//            assertEquals(turnoAgregado1.getNombre(), turno1.getNombre());
+//
+//            Turno turnoAgregado2 = dao.crear(turno2);
+//            assertNotNull(turnoAgregado2.getIdTurno());
+//            assertEquals(turnoAgregado2.getNombre(), turno2.getNombre());
+//        });
 //        
 //    }
    

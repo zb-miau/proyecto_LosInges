@@ -8,7 +8,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertOneResult;
 import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import java.util.ArrayList;
@@ -24,6 +23,9 @@ import org.bson.types.ObjectId;
 public class HorarioEmpleadosDAO implements IAccesoDatos<HorarioEmpleado>, IAccesoMongo {
 
     private static final String COLECCION_EMPLEADOS = "empleados";
+    private static final String COLECCION_HISTORIAL = "historial";
+    private static final String CAMPO_ID = "_id";
+    private static final String HORARIO_ACTUAL = "horario_actual";
     private static HorarioEmpleadosDAO horarioEmpleadosDAO;
 
     public static synchronized HorarioEmpleadosDAO getInstance() {
@@ -54,8 +56,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<HorarioEmpleado>, IAcce
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getEmpleado().getId()));
-            Bson operacion = Updates.set("horario_actual", entidad);
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getEmpleado().getId()));
+            Bson operacion = Updates.set(HORARIO_ACTUAL, entidad);
 
             coleccionEmpleados.updateOne(filtro, operacion);
         
@@ -70,8 +72,8 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<HorarioEmpleado>, IAcce
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getEmpleado().getId()));
-            Bson operacion = Updates.unset("horario_actual");
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getEmpleado().getId()));
+            Bson operacion = Updates.unset(HORARIO_ACTUAL);
 
             return entidad;
         }
@@ -117,7 +119,7 @@ public class HorarioEmpleadosDAO implements IAccesoDatos<HorarioEmpleado>, IAcce
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
-            Document filtro = new Document("_id", new ObjectId(entidad.getEmpleado().getId()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getEmpleado().getId()));
             
             return coleccionHorarioEmpleados.find(filtro).first();
         }

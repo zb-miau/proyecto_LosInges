@@ -7,6 +7,10 @@ package objetosNegocio;
 import dto.DTOTurno;
 import itson.entidades.Turno;
 import java.awt.Color;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -40,12 +44,14 @@ public class TurnoToDTOTurnoAdapter {
 
         Color color = new Color(r, g, b);
         
+        Set<DayOfWeek> diasTrabajo = turno.getDiasTrabajo();
+        
         DTOTurno turnoCrear = new DTOTurno(
                 turno.getIdTurno(),
                 turno.getNombre(),
                 turno.getHoraInicio(),
                 turno.getHoraFin(),
-                turno.getDiasTrabajo(),
+                diasTrabajo,
                 color
         );
         

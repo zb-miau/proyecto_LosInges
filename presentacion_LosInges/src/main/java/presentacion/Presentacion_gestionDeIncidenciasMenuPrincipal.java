@@ -9,6 +9,11 @@ import dto.DTOIncidencia;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.JFrame {
     DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
-    IGestionIncidencias control = new FacadeGestionIncidencias();
+//    IGestionIncidencias control = new FacadeGestionIncidencias();
 
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
@@ -39,8 +44,14 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         panelEncabezado = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
-        panelTabla = new javax.swing.JScrollPane();
+        pnlScroll = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
+        cmbTipoIncidencia = new javax.swing.JComboBox<>();
+        txtBuscarEmpleado = new javax.swing.JTextField();
+        rdbtnPendiente = new javax.swing.JRadioButton();
+        rdbtnRechazada = new javax.swing.JRadioButton();
+        lblEmpleado = new javax.swing.JLabel();
+        rdbtnAceptada = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -91,27 +102,79 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        panelTabla.setViewportView(tablaIncidencias);
+        pnlScroll.setViewportView(tablaIncidencias);
+
+        cmbTipoIncidencia.setBackground(new java.awt.Color(255, 255, 255));
+        cmbTipoIncidencia.setForeground(new java.awt.Color(51, 51, 51));
+        cmbTipoIncidencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoIncidenciaActionPerformed(evt);
+            }
+        });
+
+        txtBuscarEmpleado.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscarEmpleado.setForeground(new java.awt.Color(51, 51, 51));
+
+        rdbtnPendiente.setForeground(new java.awt.Color(51, 51, 51));
+        rdbtnPendiente.setText("Pendiente");
+
+        rdbtnRechazada.setForeground(new java.awt.Color(51, 51, 51));
+        rdbtnRechazada.setText("Rechazada");
+
+        lblEmpleado.setForeground(new java.awt.Color(51, 51, 51));
+        lblEmpleado.setText("Empleado:");
+
+        rdbtnAceptada.setForeground(new java.awt.Color(51, 51, 51));
+        rdbtnAceptada.setText("Aceptada");
 
         javax.swing.GroupLayout pnlIncidenciasLayout = new javax.swing.GroupLayout(pnlIncidencias);
         pnlIncidencias.setLayout(pnlIncidenciasLayout);
         pnlIncidenciasLayout.setHorizontalGroup(
             pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIncidenciasLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlIncidenciasLayout.createSequentialGroup()
                 .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(pnlIncidenciasLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIncidenciasLayout.createSequentialGroup()
+                        .addComponent(rdbtnPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdbtnAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdbtnRechazada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                        .addComponent(lblEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(124, 124, 124))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIncidenciasLayout.createSequentialGroup()
+                        .addComponent(cmbTipoIncidencia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(135, 135, 135)
+                        .addComponent(txtBuscarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlScroll, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlIncidenciasLayout.setVerticalGroup(
             pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIncidenciasLayout.createSequentialGroup()
                 .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlIncidenciasLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdbtnPendiente)
+                            .addComponent(rdbtnRechazada)
+                            .addComponent(rdbtnAceptada))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIncidenciasLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblEmpleado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbTipoIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(pnlScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -128,28 +191,56 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void crearTabla(){
-        String[] columnas = {"Id" };
-        modeloTablaIncidencias.setRowCount(0);
-        modeloTablaIncidencias.setColumnIdentifiers(columnas);
+    private void cmbTipoIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIncidenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
 
-        List<DTOIncidencia> incidencias = control.recuperarIncidencias();
-        for (DTOIncidencia i: incidencias){
-            Object[] fila = {
-                i.getIdIncidencia()
-             };
-            modeloTablaIncidencias.addRow(fila);
-        }
-        
-        tablaIncidencias.setModel(modeloTablaIncidencias);
-    }
+//    public void crearTabla(){
+//        String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
+//        modeloTablaIncidencias.setRowCount(0);
+//        modeloTablaIncidencias.setColumnIdentifiers(columnas);
+//        
+//        List<DTOIncidencia> incidencias = control.getIncidencias();
+//        for (DTOIncidencia i: incidencias){
+//            DTOEmpleado empleado = i.getEmpleado();
+//            Object[] fila = {
+//                i.getIdIncidencia(),
+//                empleado.getNombre(),
+//                empleado.getApellidoPaterno(),
+//                empleado.getApellidoMaterno(),
+//                i.getTipo(),
+//                i.getFecha(),
+//                i.getEstado()
+//             };
+//            modeloTablaIncidencias.addRow(fila);
+//        }
+//        
+//        tablaIncidencias.setModel(modeloTablaIncidencias);
+//            
+//     
+//        
+//    }
+//    
+//    public void configuracionFiltros(){
+//        rdbtnPendiente.setSelected(true);
+//        rdbtnAceptada.setSelected(false);
+//        rdbtnRechazada.setSelected(false);
+//        
+//        
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> cmbTipoIncidencia;
+    private javax.swing.JLabel lblEmpleado;
     private javax.swing.JPanel panelEncabezado;
-    private javax.swing.JScrollPane panelTabla;
     private javax.swing.JPanel pnlIncidencias;
+    private javax.swing.JScrollPane pnlScroll;
+    private javax.swing.JRadioButton rdbtnAceptada;
+    private javax.swing.JRadioButton rdbtnPendiente;
+    private javax.swing.JRadioButton rdbtnRechazada;
     private javax.swing.JTable tablaIncidencias;
+    private javax.swing.JTextField txtBuscarEmpleado;
     // End of variables declaration//GEN-END:variables
 }

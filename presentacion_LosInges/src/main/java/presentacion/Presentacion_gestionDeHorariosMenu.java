@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -126,13 +127,22 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         DTOEmpleado empleadoId = new DTOEmpleado();
         System.out.println("ID seleccionado en tabla: [" + id + "]");
         empleadoId.setId(id);
-        List<DTOTurno> turnos = control.recuperarTurno();
-        if (turnos.isEmpty()){
-            Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(id);
-            gT.setVisible(true);
-        } else {
-            Presentacion_gestionDeHorarios gH = new Presentacion_gestionDeHorarios(id);
-            gH.setVisible(true);
+        try {
+            List<DTOTurno> turnos = control.recuperarTurno();
+            if (turnos.isEmpty()){
+                Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(id);
+                gT.setVisible(true);
+
+            } else {
+                Presentacion_gestionDeHorarios gH = new Presentacion_gestionDeHorarios(id);
+                gH.setVisible(true);
+            }
+        } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al recuperar los turnos: " + ex.getMessage(), 
+                    "Error al recuperar.", 
+                    JOptionPane.ERROR_MESSAGE);
         }
         this.dispose();
     }

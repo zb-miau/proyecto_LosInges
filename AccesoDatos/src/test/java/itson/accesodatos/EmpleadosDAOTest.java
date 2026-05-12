@@ -29,8 +29,8 @@ public class EmpleadosDAOTest {
     public EmpleadosDAOTest() {
     }
 
-    @Test
-    public void testCrear() {
+//    @Test
+//    public void testCrear() {
 //        Empleado empleado = new Empleado(
 //                "Zaira",
 //                "Barajas",
@@ -71,8 +71,8 @@ public class EmpleadosDAOTest {
 //        assertNotNull(empleadoCreado);
 //        assertNotNull(empleadoCreado.getId());
 //
-    
-
+//    
+//
 ////        empleado = new Empleado(
 ////                "Juan Carlos",
 ////                "Pérez",
@@ -118,7 +118,7 @@ public class EmpleadosDAOTest {
 //        empleadoCreado = dao.crear(empleado);
 //        assertNotNull(empleadoCreado);
 //        assertNotNull(empleadoCreado.getId());
-
-    }
+//
+//    }
 
 }

@@ -9,6 +9,7 @@ import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
 import java.time.LocalDate;
 import java.util.List;
+import objetosNegocio.NegocioException;
 
 /**
  * Clase de interface para los metodos de controlHorario
@@ -22,16 +23,16 @@ public interface IAsignarHorario {
     
     public DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado);
     
-    public List<DTOTurno> recuperarTurno();
+    public List<DTOTurno> recuperarTurno() throws NegocioException;
     
     public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin);
     
-    public void agregarTurno(DTOTurno turnoNuevo);
+    public void agregarTurno(DTOTurno turnoNuevo)throws NegocioException;
     
-    public DTOTurno consultarTurno(DTOTurno turnoConsultar);
+    public DTOTurno consultarTurno(DTOTurno turnoConsultar)throws NegocioException;
     
-    public void eliminarTurno(DTOTurno turnoEliminar);
+    public void eliminarTurno(DTOTurno turnoEliminar)throws NegocioException;
     
-    public void modificarTurno(DTOTurno turnoModificar);
+    public void modificarTurno(DTOTurno turnoModificar)throws NegocioException;
     
 }

@@ -38,7 +38,6 @@ public class TurnoBO{
     
     public DTOTurno crear(DTOTurno turno) throws NegocioException{
         Turno turnoCrear = TurnoToDTOTurnoAdapter.adaptar(turno);
-
         try {
             //todo validaciones
             
@@ -68,7 +67,6 @@ public class TurnoBO{
     
     public DTOTurno modificar(DTOTurno turno)throws NegocioException{
         Turno turnoModificar = TurnoToDTOTurnoAdapter.adaptar(turno);
-        
         try {
             //todo validaciones
         turnoModificar = fachadaDAO.modificarTurno(turnoModificar);

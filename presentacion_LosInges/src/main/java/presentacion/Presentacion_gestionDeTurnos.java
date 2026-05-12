@@ -16,11 +16,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +37,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -406,7 +409,15 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
             
             DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias);
             turno.setColorEvento(colorTurno);
-            control.agregarTurno(turno);
+            try {
+                control.agregarTurno(turno);
+            } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al agregar el turno: " + ex.getMessage(), 
+                    "Error al agregar.", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
             
             JOptionPane.showMessageDialog(
                     this, 
@@ -444,7 +455,10 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
         List<DTOTurno> turnos = control.recuperarTurno();
+        
+        
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
         String idEliminar = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
@@ -458,7 +472,16 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                         "Confirmar eliminación", 
                         JOptionPane.YES_NO_OPTION);
                 if (opcion == JOptionPane.YES_OPTION){
+                    
+                    try {
                     control.eliminarTurno(t);
+                    } catch (NegocioException ex){
+                        JOptionPane.showMessageDialog(
+                        this, 
+                        "Error al eliminar el turno: " + ex.getMessage(), 
+                        "Error al eliminar.", 
+                        JOptionPane.ERROR_MESSAGE);
+                    }
                     JOptionPane.showMessageDialog(
                             this, 
                             "Se eliminó el turno.");
@@ -473,6 +496,13 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 }
             }
         }
+        } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al recuperar los turnos: " + ex.getMessage(), 
+                    "Error al recuperar.", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
         
     }//GEN-LAST:event_btnEliminarActionPerformed
     
@@ -480,6 +510,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         if (filaSeleccionada != -1){
         String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
+        try {
         List<DTOTurno> turnos = control.recuperarTurno();
         DTOTurno turnoModificar = null;
         for (DTOTurno t: turnos){
@@ -506,7 +537,15 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
             turnoModificar.setDiasTrabajo(dias);
             
             turnoModificar.setColorEvento(colorTurno);
-            control.modificarTurno(turnoModificar);
+            try {
+                control.modificarTurno(turnoModificar);
+            } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al modificar el turno: " + ex.getMessage(), 
+                    "Error al modificar.", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
             configurarTabla();
             
             JOptionPane.showMessageDialog(
@@ -531,8 +570,14 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
         
+        } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al recuperar la información del turno seleccionado: " + ex.getMessage(), 
+                    "Error al recuperar.", 
+                    JOptionPane.ERROR_MESSAGE);
         }
-               
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
@@ -606,15 +651,22 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
         modeloTabla.setRowCount(0);
         modeloTabla.setColumnIdentifiers(columnas);
-
+        
+        try {
         List<DTOTurno> turnos = control.recuperarTurno();
         for (DTOTurno t: turnos){
+            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+            Set<String> diasDisplay = new HashSet();
+            for(DayOfWeek d: diasTrabajo){
+                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                diasDisplay.add(dia);
+            }
             Object[] fila = {
                 t.getIdTurno(),
                 t.getNombre(),
                 t.getHoraInicio(),
                 t.getHoraFin(),
-                t.getDiasTrabajo(),
+                diasDisplay,
                 t.getColorEvento()
              };
             modeloTabla.addRow(fila);
@@ -663,6 +715,14 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 }
             }
         });
+        
+        } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al recuperar los turnos: " + ex.getMessage(), 
+                    "Error al recuperar.", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
     }
   

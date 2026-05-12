@@ -14,6 +14,7 @@ import objetosNegocio.TurnoBO;
 import objetosNegocio.EmpleadoBO;
 import java.util.logging.Logger;
 import objetosNegocio.HorarioEmpleadoBO;
+import objetosNegocio.NegocioException;
 
 /**
  * Esta clase permita el control total de los horarios de empleados
@@ -21,8 +22,6 @@ import objetosNegocio.HorarioEmpleadoBO;
  * @author RAMSES
  */
 public class ControlAsignarHorario {
-
-    private static final Logger LOGGER = Logger.getLogger(ControlAsignarHorario.class.getName());
 
     List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
     private EmpleadoBO empleadoBO;
@@ -66,7 +65,7 @@ public class ControlAsignarHorario {
      *
      * @return lista con los turnos registrados en la base de datos
      */
-    protected List<DTOTurno> recuperarTurnos() {
+    protected List<DTOTurno> recuperarTurnos() throws NegocioException {
         return turno.obtenerLista();
     }
 
@@ -108,11 +107,11 @@ public class ControlAsignarHorario {
      *
      * @param dtoTurno
      */
-    protected void agregarTurno(DTOTurno dtoTurno) {
+    protected void agregarTurno(DTOTurno dtoTurno) throws NegocioException{
         turno.crear(dtoTurno);
     }
     
-    protected DTOTurno consultarTurno(DTOTurno dtoTurno){
+    protected DTOTurno consultarTurno(DTOTurno dtoTurno) throws NegocioException{
         return turno.obtener(dtoTurno);
     }
 
@@ -122,7 +121,7 @@ public class ControlAsignarHorario {
      *
      * @param dtoTurno
      */
-    protected void eliminarTurno(DTOTurno dtoTurno) {
+    protected void eliminarTurno(DTOTurno dtoTurno) throws NegocioException{
         turno.eliminar(dtoTurno);
     }
 
@@ -132,7 +131,7 @@ public class ControlAsignarHorario {
      *
      * @param dtoTurno el turno que va a recibir el metodo para modificar
      */
-    protected void modificarTurno(DTOTurno dtoTurno) {
+    protected void modificarTurno(DTOTurno dtoTurno) throws NegocioException{
         turno.modificar(dtoTurno);
     }
 

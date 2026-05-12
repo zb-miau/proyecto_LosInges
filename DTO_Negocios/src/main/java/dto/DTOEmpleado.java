@@ -4,9 +4,7 @@
  */
 package dto;
 
-import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.Objects;
 
 /**
  *
@@ -20,6 +18,7 @@ public class DTOEmpleado {
     private String apellidoMaterno;
     private DTOHorarioEmpleado horarioActual;
     LinkedList<DTOHorarioEmpleado> historial;
+    LinkedList<DTOIncidencia> incidencias;
     
 
     public DTOEmpleado() {
@@ -87,9 +86,17 @@ public class DTOEmpleado {
     public void setHorarioActual(DTOHorarioEmpleado horarioActual) {
         this.horarioActual = horarioActual;
     }
-    
-    
 
+    public LinkedList<DTOIncidencia> getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(LinkedList<DTOIncidencia> incidencias) {
+        this.incidencias = incidencias;
+    }
+    
+    
+    
     @Override
     public String toString() {
         return "DTOEmpleado{" + "id=" + id + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + '}';

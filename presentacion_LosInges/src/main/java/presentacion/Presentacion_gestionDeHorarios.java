@@ -26,12 +26,14 @@ import java.time.Month;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JButton;
@@ -44,6 +46,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -98,7 +101,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
         modeloTabla.setRowCount(0);
         modeloTabla.setColumnIdentifiers(columnas);
-
+        try {
         List<DTOTurno> turnos = control.recuperarTurno();
         for (DTOTurno t: turnos){
             Object[] fila = {
@@ -141,6 +144,14 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             return c;
             }
         });
+        
+        } catch (NegocioException ex){
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error al recuperar los turnos: " + ex.getMessage(), 
+                    "Error al recuperar.", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
@@ -732,11 +743,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
         if (rdbtnSemanal.isSelected()){
             this.lunes = this.lunes.plusWeeks(1);
+            convertirEtiquetaMes();
             Month mesActual = getMes();
             
             if (this.lunes.getMonth() != mesActual){
                 mesActual = this.lunes.getMonth();
-                txtMes.setText(mesActual.name());
+                String mesEspanol = mesActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                txtMes.setText(mesEspanol);
             }
             
             int anioActual = getAnio().getValue();
@@ -810,11 +823,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void btnMesAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesAnteriorActionPerformed
         if (rdbtnSemanal.isSelected()){
             this.lunes = this.lunes.minusWeeks(1);
+            convertirEtiquetaMes();
             Month mesActual = getMes();
             
             if (this.lunes.getMonth() != mesActual){
                 mesActual = this.lunes.getMonth();
-                txtMes.setText(mesActual.name());
+                String mesEspanol = mesActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                txtMes.setText(mesEspanol);
             }
             
             int anioActual = getAnio().getValue();
@@ -841,6 +856,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnTurnoActionPerformed
 
+    private String traducirMes(Month mes){
+        return mes.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+    }
+    
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 
