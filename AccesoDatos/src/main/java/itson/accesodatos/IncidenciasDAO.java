@@ -22,6 +22,12 @@ import org.bson.types.ObjectId;
 public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
 
     private static final String COLECCION_INCIDENCIAS = "incidencias";
+    private static final String CAMPO_ID = "_id";
+    private static final String CAMPO_TIPO = "tipo";
+    private static final String CAMPO_FECHA = "fecha";
+    private static final String CAMPO_EMPLEADO = "id_empleado";
+    private static final String CAMPO_DESCRIPCION = "descripcion";
+    private static final String CAMPO_ESTADO = "estado";
     private static IncidenciasDAO incidenciasDAO;
 
     public static synchronized IncidenciasDAO getInstance() {
@@ -52,7 +58,7 @@ public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
 
             Incidencia eliminado = coleccionIncidencias.findOneAndDelete(filtro);
 
@@ -66,7 +72,7 @@ public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
 
             if (entidad.getTipo() != null) {
                 coleccionIncidencias.updateOne(filtro, Updates.set("tipo", entidad.getTipo()));
@@ -95,7 +101,7 @@ public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
 
             return coleccionIncidencias.find(filtro).first();
         }

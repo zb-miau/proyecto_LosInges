@@ -4,11 +4,20 @@
  */
 package presentacion;
 
+import dto.DTOEmpleado;
+import dto.DTOIncidencia;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Zaira
  */
 public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.JFrame {
+    DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
+    IGestionIncidencias control = new FacadeGestionIncidencias();
 
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
@@ -31,7 +40,7 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         btnRegresar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
         panelTabla = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaIncidencias = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -71,7 +80,7 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
                 .addGap(37, 37, 37))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaIncidencias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -82,7 +91,7 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        panelTabla.setViewportView(jTable1);
+        panelTabla.setViewportView(tablaIncidencias);
 
         javax.swing.GroupLayout pnlIncidenciasLayout = new javax.swing.GroupLayout(pnlIncidencias);
         pnlIncidencias.setLayout(pnlIncidenciasLayout);
@@ -119,47 +128,28 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Presentacion_gestionDeIncidenciasMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Presentacion_gestionDeIncidenciasMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Presentacion_gestionDeIncidenciasMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Presentacion_gestionDeIncidenciasMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    public void crearTabla(){
+        String[] columnas = {"Id" };
+        modeloTablaIncidencias.setRowCount(0);
+        modeloTablaIncidencias.setColumnIdentifiers(columnas);
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Presentacion_gestionDeIncidenciasMenuPrincipal().setVisible(true);
-            }
-        });
+        List<DTOIncidencia> incidencias = control.recuperarIncidencias();
+        for (DTOIncidencia i: incidencias){
+            Object[] fila = {
+                i.getIdIncidencia()
+             };
+            modeloTablaIncidencias.addRow(fila);
+        }
+        
+        tablaIncidencias.setModel(modeloTablaIncidencias);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JScrollPane panelTabla;
     private javax.swing.JPanel pnlIncidencias;
+    private javax.swing.JTable tablaIncidencias;
     // End of variables declaration//GEN-END:variables
 }

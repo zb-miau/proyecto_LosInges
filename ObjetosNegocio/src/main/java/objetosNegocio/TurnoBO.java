@@ -5,7 +5,8 @@
 package objetosNegocio;
 
 import dto.DTOTurno;
-import itson.accesodatos.IAccesoDatos;
+import itson.accesodatos.FacadeAccesoDatos;
+import itson.accesodatos.PersistenciaException;
 import itson.accesodatos.TurnosDAO;
 import itson.entidades.Turno;
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import java.util.logging.Logger;
  * @author josma
  */
 public class TurnoBO{
-    private final IAccesoDatos<Turno> dao;
     private static TurnoBO turnoBO;
+    private static FacadeAccesoDatos fachadaDAO;
+    private static final Logger LOGGER = Logger.getLogger(TurnoBO.class.getName());
 
     public static synchronized TurnoBO getInstance() {
         if (turnoBO == null) {
@@ -28,44 +30,77 @@ public class TurnoBO{
     }
     
     private TurnoBO(){
-        this.dao = TurnosDAO.getInstance();
+        this.fachadaDAO = FacadeAccesoDatos.getInstance();
 
     }
   
     
     
-    public DTOTurno crear(DTOTurno turno){
+    public DTOTurno crear(DTOTurno turno) throws NegocioException{
         Turno turnoCrear = TurnoToDTOTurnoAdapter.adaptar(turno);
-        turnoCrear = dao.crear(turnoCrear);
+
+        try {
+            //todo validaciones
+            
+        turnoCrear = fachadaDAO.crearTurno(turnoCrear);
         turno.setIdTurno(turnoCrear.getIdTurno());
-                
         return turno;
+        
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al insertar el turno");
+        }
     }
     
-    public DTOTurno eliminar(DTOTurno turno){
+    public DTOTurno eliminar(DTOTurno turno) throws NegocioException{
         Turno turnoEliminar = TurnoToDTOTurnoAdapter.adaptar(turno);
-        turnoEliminar = dao.eliminar(turnoEliminar);
-        
+        try {
+            //todo validaciones
+        turnoEliminar = fachadaDAO.eliminarTurno(turnoEliminar);
         return turno;
-    }
-    
-    public DTOTurno modificar(DTOTurno turno){
-        Turno turnoModificar = TurnoToDTOTurnoAdapter.adaptar(turno);
-        turnoModificar = dao.modificar(turnoModificar);
-        DTOTurno turnoModificado = TurnoToDTOTurnoAdapter.adaptar(turnoModificar);
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al eliminar el turno");
+        }
         
-        return turnoModificado;
+        
     }
     
-    public DTOTurno obtener(DTOTurno turno){
+    public DTOTurno modificar(DTOTurno turno)throws NegocioException{
+        Turno turnoModificar = TurnoToDTOTurnoAdapter.adaptar(turno);
+        
+        try {
+            //todo validaciones
+        turnoModificar = fachadaDAO.modificarTurno(turnoModificar);
+        DTOTurno turnoModificado = TurnoToDTOTurnoAdapter.adaptar(turnoModificar);
+        return turnoModificado;
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al modificar el turno");
+        }
+        
+        
+    }
+    
+    public DTOTurno obtener(DTOTurno turno)throws NegocioException{
         Turno turnoObtener = TurnoToDTOTurnoAdapter.adaptar(turno);
-        turnoObtener = dao.obtener(turnoObtener);
+        try {
+            //todo validaciones
+        turnoObtener = fachadaDAO.obtenerTurno(turnoObtener);
         DTOTurno turnoRecuperado = TurnoToDTOTurnoAdapter.adaptar(turnoObtener);
         return turnoRecuperado;
+        
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al recuperar el turno");
+        }
+        
     }
     
-    public List<DTOTurno> obtenerLista(){
-        List<Turno> turnos = dao.obtenerLista();
+    public List<DTOTurno> obtenerLista()throws NegocioException{
+        try {
+        List<Turno> turnos = fachadaDAO.obtenerListaTurnos();
+        
         List<DTOTurno> listaTurnos = new ArrayList();
         
         if (!turnos.isEmpty()){
@@ -75,6 +110,11 @@ public class TurnoBO{
             }
         }
         return listaTurnos;
+        
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al recuperar la lista de turnos");
+        }
     }
    
 }

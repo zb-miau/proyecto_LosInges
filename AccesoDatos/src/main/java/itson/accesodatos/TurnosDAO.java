@@ -12,7 +12,6 @@ import com.mongodb.client.result.InsertOneResult;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -20,8 +19,14 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class TurnosDAO implements IAccesoDatos<Turno>, IAccesoMongo{
+public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
     private static final String COLECCION_TURNOS = "turnos";
+    private static final String CAMPO_ID = "_id";
+    private static final String CAMPO_NOMBRE = "nombre";
+    private static final String CAMPO_HORA_INICIO = "hora_inicio";
+    private static final String CAMPO_HORA_FIN = "hora_fin";
+    private static final String CAMPO_DIAS_TRABAJO = "dias_trabajo";
+    private static final String CAMPO_COLOR_HEXADECIMAL = "color_hexadecimal";
     private static TurnosDAO turnosDAO;
 
     public static synchronized TurnosDAO getInstance() {
@@ -31,40 +36,65 @@ public class TurnosDAO implements IAccesoDatos<Turno>, IAccesoMongo{
         return turnosDAO;
     }
     
+    /**
+     * Constructor por defecto
+     */
     private TurnosDAO(){
         
     }
     
+    /**
+     * Método que permite recuperar la base de datos con pojoCodec 
+     * desde el cliente.
+     * @param cliente Cliente de la base de datos.
+     * @return Base de datos de MongoDB.
+     */
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
         return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
     }
 
+    /**
+     * Método que permite recuperar la colección en la que va a 
+     * trabajarse utilizando la base de datos.
+     * @param baseDatos Base de datos de MongoDB.
+     * @return Colección en la que va a trabajarse.
+     */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
         return baseDatos.getCollection(COLECCION_TURNOS, Turno.class);
     }
 
     
+    /**
+     * Método para crear un turno y lo agrega a la base de datos.
+     * @param turno el turno a agregar.
+     * @return regresa el turno creado en la base de datos.
+     */
     @Override
-    public Turno crear(Turno entidad) {
+    public Turno crear(Turno turno) {
          try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
             
-            InsertOneResult resultado = coleccionTurnos.insertOne(entidad);
+            InsertOneResult resultado = coleccionTurnos.insertOne(turno);
             
-            return entidad;
+            return turno;
          }
     }
 
+    /**
+     * Método para eliminar un turno de la base de datos.
+     * @param turno turno a eliminar.
+     * @return regresa el turno eliminado en la base de datos.
+     */
     @Override
-    public Turno eliminar(Turno entidad) {
+    public Turno eliminar(Turno turno) {
         try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
 
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
             
             Turno eliminado = coleccionTurnos.findOneAndDelete(filtro);
             
@@ -72,54 +102,67 @@ public class TurnosDAO implements IAccesoDatos<Turno>, IAccesoMongo{
         }
     }
 
+    /**
+     * Método para modificar un turno en la base de datos.
+     * @param turno turno a modificar.
+     * @return regresa el turno modificado en la base de datos.
+     */
     @Override
-    public Turno modificar(Turno entidad) {
+    public Turno modificar(Turno turno) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
             
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
             
             
-            if (entidad.getNombre() != null){
-                coleccionTurnos.updateOne(filtro, Updates.set("nombre", entidad.getNombre()));
+            if (turno.getNombre() != null){
+                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_NOMBRE, turno.getNombre()));
             }
             
-            if (entidad.getHoraInicio()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("hora_inicio", entidad.getHoraInicio()));
+            if (turno.getHoraInicio()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_HORA_INICIO, turno.getHoraInicio()));
             }
             
-            if (entidad.getHoraFin()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("hora_fin", entidad.getHoraFin()));
+            if (turno.getHoraFin()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_HORA_FIN, turno.getHoraFin()));
             }
             
-            if (entidad.getDiasTrabajo()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("dias_trabajo", entidad.getDiasTrabajo()));
+            if (turno.getDiasTrabajo()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo()));
             }
             
-            if (entidad.getColorHexadecimal()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set("color_hexadecimal", entidad.getColorHexadecimal()));
+            if (turno.getColorHexadecimal()!= null){
+                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_COLOR_HEXADECIMAL, turno.getColorHexadecimal()));
             }
             
             return coleccionTurnos.find(filtro).first();
-
         }
     }
 
+    /**
+     * Método para obtener un turno de la base de datos.
+     * @param turno turno a obtener.
+     * @return regresa el turno que se busca en la base de datos.
+     */
     @Override
-    public Turno obtener(Turno entidad) {
+    public Turno obtener(Turno turno) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
             
-            Document filtro = new Document("_id", new ObjectId(entidad.getIdTurno()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
 
             return coleccionTurnos.find(filtro).first();
         }
     }
     
+    /**
+     * Método para obtener una lista de turnos.
+     * @return regresa la lista de turnos que se busca en la base de datos.
+     */
     @Override
-    public List obtenerLista() {
+    public List<Turno> obtenerLista() {
         List<Turno> listaTurnos = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){

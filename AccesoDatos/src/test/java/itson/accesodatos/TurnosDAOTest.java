@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Zaira
  */
 public class TurnosDAOTest {
-    IAccesoDatos<Turno> dao = TurnosDAO.getInstance();
+    IAccesoTurnos<Turno> dao = TurnosDAO.getInstance();
     
     public TurnosDAOTest() {
     }
