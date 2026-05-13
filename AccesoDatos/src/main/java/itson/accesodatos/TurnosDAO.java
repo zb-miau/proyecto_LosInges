@@ -12,6 +12,7 @@ import com.mongodb.client.result.InsertOneResult;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -22,11 +23,11 @@ import org.bson.types.ObjectId;
 public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
     private static final String COLECCION_TURNOS = "turnos";
     private static final String CAMPO_ID = "_id";
-    private static final String CAMPO_NOMBRE = "nombre";
-    private static final String CAMPO_HORA_INICIO = "hora_inicio";
-    private static final String CAMPO_HORA_FIN = "hora_fin";
-    private static final String CAMPO_DIAS_TRABAJO = "dias_trabajo";
-    private static final String CAMPO_COLOR_HEXADECIMAL = "color_hexadecimal";
+    public static final String CAMPO_NOMBRE = "nombre";
+    public static final String CAMPO_HORA_INICIO = "hora_inicio";
+    public static final String CAMPO_HORA_FIN = "hora_fin";
+    public static final String CAMPO_DIAS_TRABAJO = "dias_trabajo";
+    public static final String CAMPO_COLOR_HEXADECIMAL = "color_hexadecimal";
     private static TurnosDAO turnosDAO;
 
     public static synchronized TurnosDAO getInstance() {
@@ -108,35 +109,17 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa el turno modificado en la base de datos.
      */
     @Override
-    public Turno modificar(Turno turno) {
+    public Turno modificar(Turno turno, Map<String, Object> cambios) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
             
             Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
             
-            
-            if (turno.getNombre() != null){
-                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_NOMBRE, turno.getNombre()));
-            }
-            
-            if (turno.getHoraInicio()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_HORA_INICIO, turno.getHoraInicio()));
-            }
-            
-            if (turno.getHoraFin()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_HORA_FIN, turno.getHoraFin()));
-            }
-            
-            if (turno.getDiasTrabajo()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo()));
-            }
-            
-            if (turno.getColorHexadecimal()!= null){
-                coleccionTurnos.updateOne(filtro, Updates.set(CAMPO_COLOR_HEXADECIMAL, turno.getColorHexadecimal()));
-            }
-            
-            return coleccionTurnos.find(filtro).first();
+            Document actualizaciones = new Document();
+            cambios.forEach(actualizaciones::append);
+           
+            return coleccionTurnos.findOneAndUpdate(filtro, new Document("$set", actualizaciones));
         }
     }
 
@@ -159,7 +142,7 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
     
     /**
      * Método para obtener una lista de turnos.
-     * @return regresa la lista de turnos que se busca en la base de datos.
+     * @return regresa la lista de turnos registrados en la base de datos.
      */
     @Override
     public List<Turno> obtenerLista() {

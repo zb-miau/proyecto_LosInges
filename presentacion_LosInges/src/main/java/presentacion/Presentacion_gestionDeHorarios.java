@@ -360,7 +360,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         pnlCalendario.repaint();
     }
     
-    
+    /**
+     * Método para cambiar los botones del calendario a su color por
+     * defecto.
+     * @param btn botón que representa el día del calendario.
+     */
     private void restablecerBotonDefecto(JButton btn) {
         btn.setBackground(Color.WHITE);      
         btn.setForeground(Color.BLACK);     
@@ -744,13 +748,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
         if (rdbtnSemanal.isSelected()){
             this.lunes = this.lunes.plusWeeks(1);
-            convertirEtiquetaMes();
             Month mesActual = getMes();
             
             if (this.lunes.getMonth() != mesActual){
                 mesActual = this.lunes.getMonth();
-                String mesEspanol = mesActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                txtMes.setText(mesEspanol);
+                txtMes.setText(mesActual.name());
             }
             
             int anioActual = getAnio().getValue();
@@ -768,6 +770,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 txtAnio.setText(String.valueOf(anioSiguiente));
             }
         }
+        
         configurarCalendario();
     }//GEN-LAST:event_btnMesSiguienteActionPerformed
 
@@ -824,13 +827,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void btnMesAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesAnteriorActionPerformed
         if (rdbtnSemanal.isSelected()){
             this.lunes = this.lunes.minusWeeks(1);
-            convertirEtiquetaMes();
             Month mesActual = getMes();
             
             if (this.lunes.getMonth() != mesActual){
                 mesActual = this.lunes.getMonth();
-                String mesEspanol = mesActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                txtMes.setText(mesEspanol);
+                txtMes.setText(mesActual.name());
             }
             
             int anioActual = getAnio().getValue();
@@ -864,16 +865,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 
-        // 1. Validamos primero si hay un turno seleccionado para no trabajar en vano
         if (filaSeleccionada != -1) {
 
-            // 2. Recuperar el empleado de la base de datos y validar que existe
             DTOEmpleado empleadoBusqueda = new DTOEmpleado();
-            empleadoBusqueda.setId(idEmpleado); // idEmpleado debe ser String
+            empleadoBusqueda.setId(idEmpleado); 
 
             DTOEmpleado empCompleto = control.recuperarEmpleado(empleadoBusqueda);
 
-            // VALIDACIÓN CRÍTICA: Evita el NullPointerException si el ID no existe en Mongo
             if (empCompleto == null) {
                 JOptionPane.showMessageDialog(this, 
                     "No se encontró el empleado en la base de datos. Verifique el ID.", 

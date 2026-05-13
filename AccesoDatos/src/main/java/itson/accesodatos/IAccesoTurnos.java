@@ -5,6 +5,7 @@
 package itson.accesodatos;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -37,7 +38,7 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract Turno modificar(Turno turno) throws PersistenciaException;
+    public abstract Turno modificar(Turno turno, Map<String, Object> cambios) throws PersistenciaException;
     
     /**
      * Método para obtener un turno de la base de datos.

@@ -22,8 +22,6 @@ import objetosNegocio.NegocioException;
  * @author RAMSES
  */
 public class ControlAsignarHorario {
-
-    List<DTOEmpleado> empleadosRegistrados = new ArrayList<>();
     private EmpleadoBO empleadoBO;
     private HorarioEmpleadoBO horarioEmpleadoBO;
     private TurnoBO turno;

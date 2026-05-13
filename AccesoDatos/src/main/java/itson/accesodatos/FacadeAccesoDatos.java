@@ -7,10 +7,11 @@ package itson.accesodatos;
 import com.mongodb.MongoException;
 import itson.entidades.Turno;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase Fachada que sirve como puente entre la capa de negocios y la de persistencia.
  * @author Zaira
  */
 public class FacadeAccesoDatos {
@@ -30,10 +31,18 @@ public class FacadeAccesoDatos {
         this.turnosDAO = TurnosDAO.getInstance();
     }
 
-    public Turno crearTurno(Turno t) throws PersistenciaException {
+    /**
+     * /**
+     * Método para crear un turno y lo agrega a la base de datos.
+     * @param turno el turno a agregar.
+     * @return regresa el turno creado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción si hay
+     * un problema al acceder a la base de datos.
+     */
+    public Turno crearTurno(Turno turno) throws PersistenciaException {
         try{
             
-            return this.turnosDAO.crear(t);
+            return this.turnosDAO.crear(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -41,10 +50,17 @@ public class FacadeAccesoDatos {
         }
     }
  
-    public Turno eliminarTurno(Turno t) throws PersistenciaException{
+    /**
+     * Método para eliminar un turno de la base de datos.
+     * @param turno turno a eliminar.
+     * @return regresa el turno eliminado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción si hay
+     * un problema al acceder a la base de datos.
+     */
+    public Turno eliminarTurno(Turno turno) throws PersistenciaException{
         try{
             
-            return turnosDAO.eliminar(t);
+            return turnosDAO.eliminar(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -52,10 +68,18 @@ public class FacadeAccesoDatos {
         }
     }
     
-    public Turno modificarTurno(Turno t) throws PersistenciaException{
+    /**
+     * Método para modificar un turno en la base de datos.
+     * @param turno turno a modificar.
+     * @return regresa el turno modificado en la base de datos.
+     * @param cambios mapa que contiene los cambios a realizar en el turno.
+     * @throws PersistenciaException Lanza una excepción si hay
+     * un problema al acceder a la base de datos.
+     */
+    public Turno modificarTurno(Turno turno, Map<String,Object> cambios) throws PersistenciaException{
         try{
             
-            return turnosDAO.modificar(t);
+            return turnosDAO.modificar(turno, cambios);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -63,10 +87,17 @@ public class FacadeAccesoDatos {
         }
     }
     
-    public Turno obtenerTurno(Turno t) throws PersistenciaException{
+    /**
+     * Método para obtener un turno de la base de datos.
+     * @param turno turno a obtener.
+     * @return regresa el turno que se busca en la base de datos.
+     * @throws PersistenciaException Lanza una excepción si hay
+     * un problema al acceder a la base de datos.
+     */
+    public Turno obtenerTurno(Turno turno) throws PersistenciaException{
         try{
             
-            return turnosDAO.obtener(t);
+            return turnosDAO.obtener(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -74,6 +105,12 @@ public class FacadeAccesoDatos {
         }
     }
     
+    /**
+     * Método para obtener una lista de turnos.
+     * @return regresa la lista de turnos registrados en la base de datos.
+     * @throws PersistenciaException Lanza una excepción si hay
+     * un problema al acceder a la base de datos.
+     */
     public List<Turno> obtenerListaTurnos() throws PersistenciaException{
         try{
             

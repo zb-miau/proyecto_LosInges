@@ -10,11 +10,14 @@ import itson.accesodatos.PersistenciaException;
 import itson.accesodatos.TurnosDAO;
 import itson.entidades.Turno;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase de negocios que valida la información de los DTO antes de
+ * pasarlos a la capa de persistencia.
  * @author josma
  */
 public class TurnoBO{
@@ -35,66 +38,142 @@ public class TurnoBO{
     }
   
     
-    
+    /**
+     * Método que valida la información del DTO recibido 
+     * para crear un turno y agregarlo a la base de datos.
+     * @param turno el turno a agregar.
+     * @return regresa el DTO del turno creado.
+     * @throws NegocioException Lanza una excepción si los datos necesarios
+     * del turno están incompletos, incorrectos o si hay un error al acceder
+     * a la base de datos.
+     */
     public DTOTurno crear(DTOTurno turno) throws NegocioException{
         Turno turnoCrear = TurnoToDTOTurnoAdapter.adaptar(turno);
         try {
-            //todo validaciones
+            if (turno == null){
+                throw new NegocioException("Error al insertar el turno: no se puede guardar un turno vacío.");
+            }
             
-        turnoCrear = fachadaDAO.crearTurno(turnoCrear);
-        turno.setIdTurno(turnoCrear.getIdTurno());
-        return turno;
+            if (turno.getNombre().isBlank()){
+                throw new NegocioException("Error al insertar el turno: el nombre no puede estar vacío.");
+            }
+            
+            if (turno.getHoraInicio() == null){
+                throw new NegocioException("Error al insertar el turno: la hora de inicio no puede estar vacía.");
+            } else if (turno.getHoraFin() != null && turno.getHoraInicio().isAfter(turno.getHoraFin())){
+                throw new NegocioException("Error al insertar el turno: la hora de inicio no puede ser posterior a la hora de fin.");
+            }
+            
+            
+            turnoCrear = fachadaDAO.crearTurno(turnoCrear);
+            if (turnoCrear.getIdTurno() == null){
+                throw new NegocioException("Error al insertar el turno: no pudo guardarse en la base de datos. Identificador nulo.");
+            }
+            
+            turno.setIdTurno(turnoCrear.getIdTurno());
+            
+            
+            return turno;
         
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al insertar el turno");
+            throw new NegocioException("Error al insertar el turno: " + ex.getMessage());
         }
     }
     
+    /**
+     * Método para eliminar un turno de la base de datos.
+     * @param turno turno a eliminar.
+     * @return regresa el turno eliminado en la base de datos.
+     * @throws NegocioException Lanza una excepción si hay un error al acceder
+     * a la base de datos.
+     */
     public DTOTurno eliminar(DTOTurno turno) throws NegocioException{
         Turno turnoEliminar = TurnoToDTOTurnoAdapter.adaptar(turno);
         try {
-            //todo validaciones
-        turnoEliminar = fachadaDAO.eliminarTurno(turnoEliminar);
-        return turno;
+            if (turno.getIdTurno() == null){
+                throw new NegocioException("Error al eliminar el turno: id nulo.");
+            }
+            turnoEliminar = fachadaDAO.eliminarTurno(turnoEliminar);
+            return turno;
+            
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al eliminar el turno");
+            throw new NegocioException("Error al eliminar el turno: " + ex.getMessage());
         }
-        
-        
     }
     
+    /**
+     * Método para modificar un turno en la base de datos.
+     * @param turno turno a modificar.
+     * @return regresa el turno modificado en la base de datos.
+     * @throws NegocioException Lanza una excepción si hay un error al acceder
+     * a la base de datos. 
+     */
     public DTOTurno modificar(DTOTurno turno)throws NegocioException{
         Turno turnoModificar = TurnoToDTOTurnoAdapter.adaptar(turno);
         try {
-            //todo validaciones
-        turnoModificar = fachadaDAO.modificarTurno(turnoModificar);
-        DTOTurno turnoModificado = TurnoToDTOTurnoAdapter.adaptar(turnoModificar);
-        return turnoModificado;
+            Map<String, Object> cambios = new HashMap();
+            if (!turno.getNombre().isBlank()){
+                cambios.put(TurnosDAO.CAMPO_NOMBRE, turno.getNombre());
+            } 
+            
+            if (turno.getHoraFin() != null){
+                cambios.put(TurnosDAO.CAMPO_HORA_FIN, turno.getHoraFin());
+            }
+            
+            if (turno.getHoraInicio() != null){
+                if (turno.getHoraInicio().isBefore(turno.getHoraFin())){
+                    cambios.put(TurnosDAO.CAMPO_HORA_INICIO, turno.getHoraInicio());
+                }
+            }
+            
+            if (turno.getDiasTrabajo() != null){
+                cambios.put(TurnosDAO.CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo());
+            }
+            
+            if (turno.getColorHexadecimal() != null){
+                cambios.put(TurnosDAO.CAMPO_COLOR_HEXADECIMAL, turno.getColorHexadecimal());
+            }
+            
+            turnoModificar = fachadaDAO.modificarTurno(turnoModificar, cambios);
+            DTOTurno turnoModificado = TurnoToDTOTurnoAdapter.adaptar(turnoModificar);
+            return turnoModificado;
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al modificar el turno");
+            throw new NegocioException("Error al modificar el turno: " + ex.getMessage());
         }
         
         
     }
     
+    /**
+     * Método para obtener un turno de la base de datos.
+     * @param turno turno a obtener.
+     * @return regresa el turno que se busca en la base de datos.
+     * @throws NegocioException 
+     */
     public DTOTurno obtener(DTOTurno turno)throws NegocioException{
         Turno turnoObtener = TurnoToDTOTurnoAdapter.adaptar(turno);
         try {
-            //todo validaciones
-        turnoObtener = fachadaDAO.obtenerTurno(turnoObtener);
-        DTOTurno turnoRecuperado = TurnoToDTOTurnoAdapter.adaptar(turnoObtener);
-        return turnoRecuperado;
+            if (turno.getIdTurno() == null){
+                throw new NegocioException("Error al recuperar el turno: id nulo.");
+            }
+            turnoObtener = fachadaDAO.obtenerTurno(turnoObtener);
+            DTOTurno turnoRecuperado = TurnoToDTOTurnoAdapter.adaptar(turnoObtener);
+            return turnoRecuperado;
         
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al recuperar el turno");
+            throw new NegocioException("Error al recuperar el turno: " + ex.getMessage());
         }
         
     }
     
+    /**
+     * Método para obtener una lista de turnos.
+     * @return regresa la lista de turnos registrados en la base de datos.
+     */
     public List<DTOTurno> obtenerLista()throws NegocioException{
         try {
         List<Turno> turnos = fachadaDAO.obtenerListaTurnos();
@@ -111,7 +190,7 @@ public class TurnoBO{
         
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al recuperar la lista de turnos");
+            throw new NegocioException("Error al recuperar la lista de turnos: " + ex.getMessage());
         }
     }
    
