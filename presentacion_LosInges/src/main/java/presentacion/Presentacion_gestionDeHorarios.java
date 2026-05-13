@@ -46,6 +46,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import com.github.lgooddatepicker.components.DatePicker;
 import objetosNegocio.NegocioException;
 
 /**
@@ -907,67 +908,58 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
             turno.setColorEvento(color);
             
-            // 5. Configurar el panel de captura de fechas
-            JTextField txtInicio = new JTextField(10);
-            JTextField txtFin = new JTextField(10);
+            DatePicker datePickerInicio = new DatePicker();
+            DatePicker datePickerFin = new DatePicker();
+
+            datePickerInicio.setDateToToday();
 
             JPanel confirmarFechas = new JPanel();
-            confirmarFechas.setLayout(new GridLayout(0, 1, 2, 2));
-            confirmarFechas.add(new JLabel("Fecha de Inicio (dd-MM-yyyy):"));
-            confirmarFechas.add(txtInicio);
-            confirmarFechas.add(new JLabel("Fecha de Fin (dd-MM-yyyy):"));
-            confirmarFechas.add(txtFin);
-
-            DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            confirmarFechas.setLayout(new GridLayout(0, 1, 5, 5));
+            confirmarFechas.add(new JLabel("Fecha de Inicio:"));
+            confirmarFechas.add(datePickerInicio);
+            confirmarFechas.add(new JLabel("Fecha de Fin (Opcional):"));
+            confirmarFechas.add(datePickerFin);
 
             int result = JOptionPane.showConfirmDialog(
-                    null, 
+                    this, 
                     confirmarFechas, 
-                    "Ingresa el rango de fechas", 
-                    JOptionPane.OK_CANCEL_OPTION);
+                    "Seleccione el rango de fechas", 
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION) {
-                try {
-                    LocalDate fin = null;
-                    LocalDate inicioEvento = LocalDate.parse(txtInicio.getText().trim(), formateador);
+                LocalDate inicioEvento = datePickerInicio.getDate();
+                LocalDate fin = datePickerFin.getDate();
 
-                    if (!txtFin.getText().trim().isBlank()) {
-                        fin = LocalDate.parse(txtFin.getText().trim(), formateador);
-                    } 
+                if (inicioEvento == null) {
+                    JOptionPane.showMessageDialog(this, "Debe seleccionar al menos una fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                     // 6. Verificar conflictos usando el empleado completo recuperado
-                    if (existeConflicto(inicioEvento, fin)) {
-                        int opcion = JOptionPane.showConfirmDialog(
-                                this,
-                                "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
-                                "Horario existente",
-                                JOptionPane.YES_NO_OPTION
-                                );
+                if (existeConflicto(inicioEvento, fin)) {
+                    int opcion = JOptionPane.showConfirmDialog(
+                            this,
+                            "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
+                            "Horario existente",
+                            JOptionPane.YES_NO_OPTION
+                            );
 
-                        if (opcion == JOptionPane.YES_OPTION) {
-                            control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
-                            configurarCalendario();
-                        } else {
-                            JOptionPane.showMessageDialog(
-                                    this,
-                                    "No se agregó el nuevo horario",
-                                    "Operación cancelada",
-                                    JOptionPane.INFORMATION_MESSAGE
-                                    );
-                        }
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                        configurarCalendario();
                     } else {
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "No se agregó el nuevo horario",
+                                "Operación cancelada",
+                                JOptionPane.INFORMATION_MESSAGE
+                                );
+                    }
+                } else {
                         // Si no hay conflicto, se agrega directamente
                         control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                         configurarCalendario();
-                    }
-
-                } catch (DateTimeParseException ex) {
-                    JOptionPane.showMessageDialog(
-                            null, 
-                            "Formato de fecha inválido; utilice el formato dd-MM-yyyy",
-                            "Error de formato",
-                            JOptionPane.ERROR_MESSAGE
-                    );
                 }
             }
         } else {
