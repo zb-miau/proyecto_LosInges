@@ -9,8 +9,6 @@ import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
-import presentacion.Presentacion_gestionDeHorariosMenu;
-import presentacion.Presentacion_gestionDeTurnos;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -24,29 +22,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
+import java.util.HashSet;
 import objetosNegocio.NegocioException;
 
 /**
@@ -111,12 +101,21 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 t.getHoraInicio(),
                 t.getHoraFin(),
                 t.getDiasTrabajo(),
-                t.getColorEvento()
+                t.getColorEvento(),
              };
             modeloTabla.addRow(fila);
         }
         
         tablaTurnosDisponibles.setModel(modeloTabla);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
+        
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
         
         tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
         @Override
@@ -162,6 +161,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      */
     public void configurarCalendario(){
         pnlCalendario.removeAll();
+        
          
         if (rdbtnSemanal.isSelected()){
             pnlCalendario.setLayout(new GridLayout(1, 7, 5, 5)); 
@@ -175,6 +175,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         
         pnlCalendario.revalidate();
         pnlCalendario.repaint();
+        txtMes.setText(traducirMesAEspanol(getMes()).toUpperCase());
     }
     
     /**
@@ -183,8 +184,8 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      * primer día del mes
      */
     public int primerDiaMes(){
-        int anio = Integer.parseInt(txtAnio.getText());
-        Month mes = Month.valueOf(txtMes.getText().toUpperCase());
+        int anio = getAnio().getValue();
+        Month mes = getMes();
         
         LocalDate primerDia = LocalDate.of(anio, mes, 1);
         return primerDia.getDayOfWeek().getValue();
@@ -259,7 +260,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                         DTOTurno t = horarioFinal.getTurno();
                         lblNombreDetalle.setText("Turno: " + t.getNombre());
                         lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
-                        lblDiasDetalle.setText("Días: " + t.getDiasTrabajo().toString());
+                        Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+                        Set<String> diasDisplay = new HashSet();
+                        for(DayOfWeek d: diasTrabajo){
+                            String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                            diasDisplay.add(dia);
+                        }
+                        lblDiasDetalle.setText("Días: " + diasDisplay);
                         pnlTurno.setBackground(t.getColorEvento());
                     } else {
                         lblNombreDetalle.setText("Sin turno");
@@ -475,7 +482,14 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      */
     public Month getMes(){
         String mes = txtMes.getText();
-        return Month.valueOf(mes.toUpperCase());
+        Month mesRecuperado;
+        try {
+            mesRecuperado = Month.valueOf(mes.toUpperCase());
+        } catch (IllegalArgumentException ex){
+            mesRecuperado = traducirMesAIngles();
+            return mesRecuperado;
+        }
+        return mesRecuperado;
     }
    
   
@@ -852,14 +866,46 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         configurarCalendario();
     }//GEN-LAST:event_btnMesAnteriorActionPerformed
 
+    /**
+     * Permite abrir la ventana de Gestión de Turnos
+     * @param evt 
+     */
     private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
         Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(idEmpleado);
         gT.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnTurnoActionPerformed
 
-    private String traducirMes(Month mes){
+    /**
+     * Método que traduce el mes a español
+     * @param mes el mes a traducir
+     * @return el mes del parámetro traducido al español
+     */
+    private String traducirMesAEspanol(Month mes){
         return mes.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+    }
+    
+    /**
+     * Convierte la etiqueta del mes a a un Month
+     * @return el Month equivalente a la etiqueta del mes.
+     */
+    private Month traducirMesAIngles(){
+        String mes = txtMes.getText().toLowerCase();
+        switch (mes){
+            case "enero":       return Month.JANUARY;
+            case "febrero":     return Month.FEBRUARY;
+            case "marzo":       return Month.MARCH;
+            case "abril":       return Month.APRIL;
+            case "mayo":        return Month.MAY;
+            case "junio":       return Month.JUNE;
+            case "julio":       return Month.JULY;
+            case "agosto":      return Month.AUGUST;
+            case "septiembre":  return Month.SEPTEMBER;
+            case "octubre":     return Month.OCTOBER;
+            case "noviembre":   return Month.NOVEMBER;
+            case "diciembre":   return Month.DECEMBER;
+            default: return null;
+        }
     }
     
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
@@ -880,7 +926,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 return;
             }
 
-            // 3. Obtener o inicializar el horario del empleado
             DTOHorarioEmpleado horarioEmpleado = empCompleto.getHorarioActual();
             DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
                                                   ? horarioEmpleado 
@@ -888,7 +933,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
             horarioAProcesar.setEmpleado(empCompleto);
 
-            // 4. Extraer datos del turno seleccionado en la tabla
             String idTurno = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
             String titulo = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 1).toString();
             LocalTime turnoInicio = LocalTime.parse(tablaTurnosDisponibles.getValueAt(filaSeleccionada, 2).toString());
@@ -930,11 +974,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 LocalDate fin = datePickerFin.getDate();
 
                 if (inicioEvento == null) {
-                    JOptionPane.showMessageDialog(this, "Debe seleccionar al menos una fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                    // 6. Verificar conflictos usando el empleado completo recuperado
                 if (existeConflicto(inicioEvento, fin)) {
                     int opcion = JOptionPane.showConfirmDialog(
                             this,
@@ -955,7 +998,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                 );
                     }
                 } else {
-                        // Si no hay conflicto, se agrega directamente
                         control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                         configurarCalendario();
                 }

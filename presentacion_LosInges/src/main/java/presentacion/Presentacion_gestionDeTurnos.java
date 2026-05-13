@@ -666,13 +666,23 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                 t.getNombre(),
                 t.getHoraInicio(),
                 t.getHoraFin(),
-                diasDisplay,
-                t.getColorEvento()
+                diasTrabajo,
+                t.getColorEvento(),
+                diasDisplay
              };
             modeloTabla.addRow(fila);
         }
         
         tablaTurnosDisponibles.setModel(modeloTabla);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
+        
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
         
         tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
         @Override
