@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Zaira
  */
-public interface IAccesoDatos<T> {
+public interface IAccesoEmpleados<Empleado> {
     
     /**
      * Método para crear un objeto de la entidad que lo llama y la agrega
@@ -18,7 +18,7 @@ public interface IAccesoDatos<T> {
      * @param entidad entidad que llama al método, entidad a agregar.
      * @return regresa la entidad creada en la base de datos.
      */
-    public abstract T crear(T entidad);
+    public abstract Empleado crear(Empleado entidad);
     
     /**
      * Método para eliminar un objeto de la entidad que lo llama de
@@ -26,7 +26,7 @@ public interface IAccesoDatos<T> {
      * @param entidad entidad que llama al método, entidad a eliminar.
      * @return regresa la entidad eliminada en la base de datos.
      */
-    public abstract T eliminar(T entidad);
+    public abstract Empleado eliminar(Empleado entidad);
     
     /**
      * Método para modificar un objeto de la entidad que lo llama de
@@ -34,7 +34,7 @@ public interface IAccesoDatos<T> {
      * @param entidad entidad que llama al método, entidad a modificar.
      * @return regresa la entidad modificada en la base de datos.
      */
-    public abstract T modificar(T entidad);
+    public abstract Empleado modificar(Empleado entidad);
     
     /**
      * Método para obtener un objeto de la entidad que lo llama desde
@@ -42,12 +42,19 @@ public interface IAccesoDatos<T> {
      * @param entidad entidad que llama al método, entidad a obtener.
      * @return regresa la entidad que se busca en la base de datos.
      */
-    public abstract T obtener(T entidad);
+    public abstract Empleado obtener(Empleado entidad);
     
     /**
      * Método para obtener una lista de objetos de la entidad que lo llama 
      * @return regresa la lista de entidades que se busca en la base de datos.
      */
-    public abstract List<T> obtenerLista();
+    public abstract List<Empleado> obtenerLista();
     
+    /**
+     * Método que actualiza solamente el horario actual del empleado.
+     * @param empleado entidad empleado que contiene la entidad horarioEmpleado
+     * para reemplazar el horario actual.
+     * @return regresa la entidad empleado con el horario actual actualizado.
+     */
+    public Empleado modificarHorarioActual(Empleado empleado);
 }

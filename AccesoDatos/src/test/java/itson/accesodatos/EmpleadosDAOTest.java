@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class EmpleadosDAOTest {
 
-    IAccesoDatos<Empleado> dao = EmpleadosDAO.getInstance();
+    IAccesoEmpleados<Empleado> dao = EmpleadosDAO.getInstance();
 
     public EmpleadosDAOTest() {
     }

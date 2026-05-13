@@ -5,11 +5,11 @@
 package objetosNegocio;
 
 import dto.DTOIncidencia;
-import itson.accesodatos.IAccesoDatos;
 import itson.accesodatos.IncidenciasDAO;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
+import itson.accesodatos.IAccesoEmpleados;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class IncidenciaBO {
 
-    private final IAccesoDatos<Incidencia> dao;
+    private final IAccesoEmpleados<Incidencia> dao;
     private static IncidenciaBO incidenciaBO;
 
     public static synchronized IncidenciaBO getInstance() {

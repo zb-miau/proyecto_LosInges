@@ -6,11 +6,11 @@ package objetosNegocio;
 
 import dto.DTOIncidencia;
 import itson.accesodatos.EmpleadosDAO;
-import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Empleado;
 import itson.entidades.Incidencia;
 import java.time.LocalDate;
 import java.util.logging.Logger;
+import itson.accesodatos.IAccesoEmpleados;
 
 /**
  *
@@ -20,7 +20,7 @@ public class IncidenciaToDTOIncidenciaAdapter {
 
     private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
 
-    private static final IAccesoDatos<Empleado> daoEmpleado = EmpleadosDAO.getInstance();
+    private static final IAccesoEmpleados<Empleado> daoEmpleado = EmpleadosDAO.getInstance();
 
     public static Incidencia adaptar(DTOIncidencia DTOIncidencia) {
 

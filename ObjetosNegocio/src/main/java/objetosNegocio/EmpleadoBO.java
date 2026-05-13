@@ -6,10 +6,10 @@ package objetosNegocio;
 
 import dto.DTOEmpleado;
 import itson.accesodatos.EmpleadosDAO;
-import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
+import itson.accesodatos.IAccesoEmpleados;
 
 
 /**
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class EmpleadoBO {
     
-    private final IAccesoDatos<Empleado> dao;
+    private final IAccesoEmpleados<Empleado> dao;
     private static EmpleadoBO empleadosBO;
 
     public static synchronized EmpleadoBO getInstance() {
@@ -96,5 +96,12 @@ public class EmpleadoBO {
 
         return listaEmpleados;
 
+    }
+    
+    public DTOEmpleado modificarHorarioActual(DTOEmpleado empleado){
+        Empleado empleadoModificar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
+        empleadoModificar = dao.modificarHorarioActual(empleadoModificar);
+        DTOEmpleado empleadoModificado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoModificar);
+        return empleadoModificado;
     }
 }

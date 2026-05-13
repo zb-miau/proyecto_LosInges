@@ -21,9 +21,10 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira y Ramses
  */
-public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
+public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
     private static final String COLECCION_EMPLEADOS = "empleados";
-    private static final Logger LOGGER = Logger.getLogger(EmpleadosDAO.class.getName());
+    private static final String CAMPO_HORARIO_ACTUAL = "horario_actual";
+    private static final String CAMPO_ID = "_id";
     
     private static EmpleadosDAO empleadosDAO;
 
@@ -58,7 +59,7 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
     @Override
     public Empleado crear(Empleado entidad) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-             MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
 
             coleccionEmpleados.insertOne(entidad);
@@ -113,7 +114,8 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
             if (entidad.getCurp() != null) actualizaciones.add(Updates.set("curp", entidad.getCurp()));
             if (entidad.getRfc() != null) actualizaciones.add(Updates.set("rfc", entidad.getRfc()));
             if (entidad.getNss() != null) actualizaciones.add(Updates.set("nss", entidad.getNss()));
-            if (entidad.getHistorial() != null) actualizaciones.add(Updates.set("historial", entidad.getHistorial()));
+            
+            
 
             if (!actualizaciones.isEmpty()) {
                 coleccionEmpleados.updateOne(filtro, Updates.combine(actualizaciones));
@@ -137,6 +139,7 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
             return coleccionEmpleados.find(filtro).first();
             
         } catch (IllegalArgumentException e) {
+            //todo
             System.err.println("Error: El ID no tiene formato hexadecimal válido: " + entidad.getId());
             return null;
         }
@@ -156,6 +159,18 @@ public class EmpleadosDAO implements IAccesoDatos<Empleado>, IAccesoMongo{
         }
     }
 
-
+    public Empleado modificarHorarioActual(Empleado empleado){
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
+            
+            Document filtro = new Document(CAMPO_ID, new ObjectId(empleado.getId()));
+            
+            coleccionEmpleados.updateOne(filtro, Updates.set(CAMPO_HORARIO_ACTUAL, empleado.getHorarioActual()));
+            Empleado resultado = coleccionEmpleados.find(filtro).first();
+            
+            return resultado;
+        }
+    }
    
 }

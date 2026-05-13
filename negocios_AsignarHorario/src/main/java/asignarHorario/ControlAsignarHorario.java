@@ -75,7 +75,7 @@ public class ControlAsignarHorario {
      * @param fechaInicio
      * @param fechaFin
      */
-    protected void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) {
+    protected void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
         DTOHorarioEmpleado horarioDTO = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
 
         // Intentamos modificar primero
@@ -83,19 +83,17 @@ public class ControlAsignarHorario {
         DTOHorarioEmpleado resultado = emp.getHorarioActual();
 
         if (resultado != null) {
-            DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
-            empleado.setHorarioActual(nuevo);
-            horarioEmpleadoBO.modificar(nuevo);
-            System.out.println("Horario actualizado correctamente para el empleado: " + empleado);
+            
+                DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
+                empleado.setHorarioActual(nuevo);
+                empleadoBO.modificarHorarioActual(empleado);
+            
         } else {
             // Si modificar devolvió null lo creamos
-            System.out.println("EL HORARIO NO EXISTE. SE CREA");
             resultado = horarioEmpleadoBO.crear(horarioDTO);
 
             if (resultado != null) {
-                System.out.println("Horario creado exitosamente.");
             } else {
-                System.err.println("Error crítico: No se pudo ni actualizar ni crear el horario.");
             }
         }
     }

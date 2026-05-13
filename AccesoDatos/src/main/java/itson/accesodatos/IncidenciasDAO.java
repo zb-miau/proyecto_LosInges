@@ -19,7 +19,7 @@ import org.bson.types.ObjectId;
  *
  * @author jesus
  */
-public class IncidenciasDAO implements IAccesoDatos<Incidencia>, IAccesoMongo {
+public class IncidenciasDAO implements IAccesoIncidencias<Incidencia>, IAccesoMongo {
 
     private static final String COLECCION_INCIDENCIAS = "incidencias";
     private static final String CAMPO_ID = "_id";
