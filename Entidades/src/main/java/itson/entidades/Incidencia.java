@@ -22,7 +22,7 @@ public class Incidencia {
     private String idIncidencia;
 
     @BsonProperty("tipo")
-    private String tipo;
+    private TiposIncidencia tipo;
 
     @BsonProperty("id_empleado")
     private String idEmpleado;
@@ -36,40 +36,73 @@ public class Incidencia {
     @BsonProperty("estado")
     private Estado estado;
 
+    @BsonProperty("observaciones")
+    private String observaciones;
+
     public enum Estado {
         VALIDADA, RECHAZADA, PENDIENTE
     };
 
+    public enum TiposIncidencia {
+        AUSENTISMO("Ausentismo"),
+        RETARDO("Retardo"),
+        INDISCIPLINA("Falta de Indisciplina"),
+        INCUMPLIMIENTO_SEGURIDAD("Incumplimiento de Seguridad"),
+        BAJO_RENDIMIENTO("Bajo Rendimiento"),
+        SANCION_ADMINISTRATIVA("Sanción Administrativa"),
+        ROBO("Robo o Hurto"),
+        ACOSO("Acoso / Hostigamiento"),
+        CONSUMO_SUSTANCIAS("Consumo de Sustancias"),
+        ABANDONO_PUESTO("Abandono de Puesto");
+
+        // Atributo para guardar el texto amigable
+        private final String nombre;
+
+        // Constructor del Enum (es privado por defecto)
+        TiposIncidencia(String nombre) {
+            this.nombre = nombre;
+        }
+
+        // Sobreescribimos toString para que el ComboBox muestre el 'nombre'
+        @Override
+        public String toString() {
+            return nombre;
+        }
+    }
+
     public Incidencia() {
     }
 
-    public Incidencia(String tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado) {
-        this.tipo = tipo;
-        this.idEmpleado = idEmpleado;
-        this.descripcion = descripcion;
-        this.fecha = fecha;
-        this.estado = estado;
-    }
-
-    public Incidencia(String idIncidencia, String tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado) {
+    public Incidencia(String idIncidencia, TiposIncidencia tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
         this.idIncidencia = idIncidencia;
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.estado = estado;
+        this.observaciones = observaciones;
     }
 
-    public Incidencia(String tipo, String idEmpleado) {
+    public Incidencia(TiposIncidencia tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.estado = estado;
+        this.observaciones = observaciones;
+    }
+
+    public Incidencia(TiposIncidencia tipo, String idEmpleado, String descripcion) {
+        this.tipo = tipo;
+        this.idEmpleado = idEmpleado;
+        this.descripcion = descripcion;
     }
 
     public String getIdIncidencia() {
         return idIncidencia;
     }
 
-    public String getTipo() {
+    public TiposIncidencia getTipo() {
         return tipo;
     }
 
@@ -89,15 +122,19 @@ public class Incidencia {
         return estado;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
     public void setIdIncidencia(String idIncidencia) {
         this.idIncidencia = idIncidencia;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TiposIncidencia tipo) {
         this.tipo = tipo;
     }
 
-    public void setEmpleado(String idEmpleado) {
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
@@ -111,6 +148,10 @@ public class Incidencia {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     @Override

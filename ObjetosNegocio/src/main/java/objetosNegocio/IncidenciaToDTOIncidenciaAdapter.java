@@ -18,44 +18,47 @@ import itson.accesodatos.IAccesoEmpleados;
  * @author jesus
  */
 public class IncidenciaToDTOIncidenciaAdapter {
-    
+
     private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
-    
+
     public static Incidencia adaptar(DTOIncidencia DTOIncidencia) {
-        
+
         if (DTOIncidencia == null) {
             return null;
         }
-        
+
         Incidencia incidencia = new Incidencia(
                 DTOIncidencia.getIdIncidencia(),
-                DTOIncidencia.getTipo(),
+                Incidencia.TiposIncidencia.valueOf(DTOIncidencia.getTipo().name()),
                 DTOIncidencia.getEmpleado().getId(),
                 DTOIncidencia.getDescripcion(),
                 DTOIncidencia.getFecha(),
-                Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()));
-        
+                Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()),
+                DTOIncidencia.getObservaciones());
+
+//Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()));
         return incidencia;
-        
+
     }
-    
+
     public static DTOIncidencia adaptar(Incidencia incidencia) {
-        
-        Empleado empleadoObtener = new Empleado();
-        empleadoObtener.setId(incidencia.getIdEmpleado());
-        
+
+        DTOEmpleado empleado = new DTOEmpleado();
+        empleado.setId(incidencia.getIdEmpleado());
+
         DTOIncidencia dTOincidencia = new DTOIncidencia(
                 incidencia.getIdIncidencia(),
-                incidencia.getTipo(),
-                new DTOEmpleado(),
+                DTOIncidencia.TiposIncidencia.valueOf(incidencia.getTipo().name()),
+                empleado,
                 incidencia.getDescripcion(),
                 incidencia.getFecha(),
-                DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()));
-        
+                DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()),
+                incidencia.getObservaciones());
+
         dTOincidencia.getEmpleado().setId(incidencia.getIdEmpleado());
-        
+
         return dTOincidencia;
-        
+
     }
-    
+
 }

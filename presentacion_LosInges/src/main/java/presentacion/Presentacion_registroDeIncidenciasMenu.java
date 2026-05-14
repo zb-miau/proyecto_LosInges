@@ -4,12 +4,15 @@
  */
 package presentacion;
 
+import dto.DTOIncidencia;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author jesus
  */
 public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JPanel implements java.beans.Customizer {
-    
+
     private Object bean;
 
     /**
@@ -17,8 +20,10 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JPanel i
      */
     public Presentacion_registroDeIncidenciasMenu() {
         initComponents();
+        comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
+
     }
-    
+
     public void setObject(Object bean) {
         this.bean = bean;
     }
@@ -31,43 +36,44 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JPanel i
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        lblBuscar = new javax.swing.JLabel();
-        lblBuscar1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jLabelMenu = new javax.swing.JLabel();
+        labelEmpleado = new javax.swing.JLabel();
+        labelTipo = new javax.swing.JLabel();
+        fieldEmpleado = new javax.swing.JTextField();
+        fieldDescripcion = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        labelDescripcion = new javax.swing.JLabel();
+        comboTipos = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(39, 71, 125));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Menu Incidencias");
+        jLabelMenu.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabelMenu.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelMenu.setText("Menu Incidencias");
 
-        lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblBuscar.setForeground(new java.awt.Color(255, 255, 255));
-        lblBuscar.setText("Empleado:");
+        labelEmpleado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelEmpleado.setForeground(new java.awt.Color(255, 255, 255));
+        labelEmpleado.setText("Empleado:");
 
-        lblBuscar1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblBuscar1.setForeground(new java.awt.Color(255, 255, 255));
-        lblBuscar1.setText("Tipo:");
+        labelTipo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelTipo.setForeground(new java.awt.Color(255, 255, 255));
+        labelTipo.setText("Tipo:");
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField1.setText("Nombre del empleado previamente seleccionado");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        fieldEmpleado.setEditable(false);
+        fieldEmpleado.setBackground(new java.awt.Color(255, 255, 255));
+        fieldEmpleado.setForeground(new java.awt.Color(0, 0, 0));
+        fieldEmpleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                fieldEmpleadoActionPerformed(evt);
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField2.setText("Tipo de la incidencia");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        fieldDescripcion.setBackground(new java.awt.Color(255, 255, 255));
+        fieldDescripcion.setForeground(new java.awt.Color(0, 0, 0));
+        fieldDescripcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                fieldDescripcionActionPerformed(evt);
             }
         });
 
@@ -81,42 +87,60 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JPanel i
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Cancelar");
 
+        labelDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelDescripcion.setForeground(new java.awt.Color(255, 255, 255));
+        labelDescripcion.setText("Descripción:");
+
+        comboTipos.setBackground(new java.awt.Color(255, 255, 255));
+        comboTipos.setForeground(new java.awt.Color(0, 0, 0));
+        comboTipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTiposActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2))
-                .addContainerGap(80, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(135, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(134, 134, 134))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelMenu))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fieldEmpleado)
+                    .addComponent(comboTipos, 0, 273, Short.MAX_VALUE)
+                    .addComponent(fieldDescripcion))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLabelMenu)
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBuscar)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelEmpleado)
+                    .addComponent(fieldEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBuscar1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                    .addComponent(labelTipo)
+                    .addComponent(comboTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDescripcion)
+                    .addComponent(fieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -124,22 +148,29 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JPanel i
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void fieldEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldEmpleadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_fieldEmpleadoActionPerformed
+
+    private void fieldDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldDescripcionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldDescripcionActionPerformed
+
+    private void comboTiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTiposActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTiposActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<DTOIncidencia.TiposIncidencia> comboTipos;
+    private javax.swing.JTextField fieldDescripcion;
+    private javax.swing.JTextField fieldEmpleado;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel lblBuscar;
-    private javax.swing.JLabel lblBuscar1;
+    private javax.swing.JLabel jLabelMenu;
+    private javax.swing.JLabel labelDescripcion;
+    private javax.swing.JLabel labelEmpleado;
+    private javax.swing.JLabel labelTipo;
     // End of variables declaration//GEN-END:variables
 }
