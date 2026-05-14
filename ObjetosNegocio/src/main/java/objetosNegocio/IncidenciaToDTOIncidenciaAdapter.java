@@ -4,6 +4,7 @@
  */
 package objetosNegocio;
 
+import dto.DTOEmpleado;
 import dto.DTOIncidencia;
 import itson.accesodatos.EmpleadosDAO;
 import itson.entidades.Empleado;
@@ -17,17 +18,15 @@ import itson.accesodatos.IAccesoEmpleados;
  * @author jesus
  */
 public class IncidenciaToDTOIncidenciaAdapter {
-
+    
     private static final Logger LOGGER = Logger.getLogger(IncidenciaToDTOIncidenciaAdapter.class.getName());
-
-    private static final IAccesoEmpleados<Empleado> daoEmpleado = EmpleadosDAO.getInstance();
-
+    
     public static Incidencia adaptar(DTOIncidencia DTOIncidencia) {
-
+        
         if (DTOIncidencia == null) {
             return null;
         }
-
+        
         Incidencia incidencia = new Incidencia(
                 DTOIncidencia.getIdIncidencia(),
                 DTOIncidencia.getTipo(),
@@ -35,26 +34,28 @@ public class IncidenciaToDTOIncidenciaAdapter {
                 DTOIncidencia.getDescripcion(),
                 DTOIncidencia.getFecha(),
                 Incidencia.Estado.valueOf(DTOIncidencia.getEstado().name()));
-
+        
         return incidencia;
-
+        
     }
-
+    
     public static DTOIncidencia adaptar(Incidencia incidencia) {
-
+        
         Empleado empleadoObtener = new Empleado();
         empleadoObtener.setId(incidencia.getIdEmpleado());
-
+        
         DTOIncidencia dTOincidencia = new DTOIncidencia(
                 incidencia.getIdIncidencia(),
                 incidencia.getTipo(),
-                EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(daoEmpleado.obtener(empleadoObtener)),
+                new DTOEmpleado(),
                 incidencia.getDescripcion(),
                 incidencia.getFecha(),
                 DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()));
-
+        
+        dTOincidencia.getEmpleado().setId(incidencia.getIdEmpleado());
+        
         return dTOincidencia;
-
+        
     }
-
+    
 }
