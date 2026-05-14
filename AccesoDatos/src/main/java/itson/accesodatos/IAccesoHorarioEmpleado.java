@@ -22,7 +22,6 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
      */
     public abstract HorarioEmpleado crear(HorarioEmpleado horario) throws PersistenciaException;
     
-   
     /**
      * Método para obtener un horario de la base de datos.
      * @param horario horario a obtener.

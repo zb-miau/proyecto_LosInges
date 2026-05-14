@@ -7,14 +7,10 @@ package itson.accesodatos;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Updates;
-import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
@@ -24,7 +20,8 @@ import org.bson.types.ObjectId;
 public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmpleado>, IAccesoMongo {
 
     private static final String COLECCION_HISTORIAL = "historial";
-    private static final String CAMPO_ID_EMPLEADO = "_id";
+    private static final String CAMPO_ID_EMPLEADO = "id_empleado";
+    private static final String CAMPO_ID = "_id";
     
     private static HorarioEmpleadosDAO horarioEmpleadosDAO;
 
@@ -68,7 +65,7 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
-            Document filtro = new Document(CAMPO_ID_EMPLEADO, new ObjectId(horario.getEmpleado().getId()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(horario.getIdHorarioEmpleado()));
             
             return coleccionHorarioEmpleados.find(filtro).first();
         }
@@ -82,10 +79,10 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
-            Document filtro = new Document(CAMPO_ID_EMPLEADO, new ObjectId(horario.getEmpleado().getId()));
+            Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getEmpleado().getId());
             
             coleccionHorarioEmpleados.find(filtro).into(listaHorarioEmpleados);
-
+           
             return listaHorarioEmpleados;
         }
     }

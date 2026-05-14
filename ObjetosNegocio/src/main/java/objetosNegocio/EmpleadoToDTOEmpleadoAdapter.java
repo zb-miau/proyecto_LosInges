@@ -46,10 +46,9 @@ public class EmpleadoToDTOEmpleadoAdapter {
             LinkedList<HorarioEmpleado> historialEntidad = dto.getHistorial().stream()
                 .map(dtoH -> {
                     // Mapeamos el DTOTurno de vuelta a la Entidad Turno
-                    Turno turnoEntidad = null;
-                    if (dtoH.getTurno() != null) {
-                        DTOTurno dt = TurnoToDTOTurnoAdapter.adaptar(turnoEntidad);
-                    }
+                    Turno turnoEntidad = (dtoH.getTurno() != null) 
+                    ? TurnoToDTOTurnoAdapter.adaptar(dtoH.getTurno())
+                    : null;
                     
                     // Creamos el objeto de negocio HorarioEmpleadoBO
                     return new HorarioEmpleado(
@@ -90,10 +89,9 @@ public class EmpleadoToDTOEmpleadoAdapter {
             // Se especifica el tipo en el colector para evitar "cannot find symbol"
             LinkedList<DTOHorarioEmpleado> historialDTO = empleado.getHistorial().stream()
                 .map(horario -> {
-                    DTOTurno turnoDTO = null;
-                    if (horario.getTurno() != null) {
-                        Turno t = TurnoToDTOTurnoAdapter.adaptar(turnoDTO);
-                    }
+                    DTOTurno turnoDTO = (horario.getTurno() != null) 
+                    ? TurnoToDTOTurnoAdapter.adaptar(horario.getTurno()) 
+                    : null;
 
                     return new DTOHorarioEmpleado(
                             empleadoDTO,

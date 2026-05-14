@@ -118,4 +118,11 @@ public class FacadeAsignarHorario implements IAsignarHorario {
         return controlHorario.consultarTurno(turnoConsultar);
     }
 
+    @Override
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado) throws NegocioException {
+        return controlHorario.listaHistorial(empleado);
+    }
+    
+    
+
 }

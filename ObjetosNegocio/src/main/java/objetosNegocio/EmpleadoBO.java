@@ -10,6 +10,8 @@ import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 import itson.accesodatos.IAccesoEmpleados;
+import itson.accesodatos.PersistenciaException;
+import java.util.logging.Logger;
 
 
 /**
@@ -17,6 +19,8 @@ import itson.accesodatos.IAccesoEmpleados;
  * @author RAMSES
  */
 public class EmpleadoBO {
+
+    private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
     
     private final IAccesoEmpleados<Empleado> dao;
     private static EmpleadoBO empleadosBO;
@@ -98,10 +102,20 @@ public class EmpleadoBO {
 
     }
     
-    public DTOEmpleado modificarHorarioActual(DTOEmpleado empleado){
-        Empleado empleadoModificar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
-        empleadoModificar = dao.modificarHorarioActual(empleadoModificar);
-        DTOEmpleado empleadoModificado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoModificar);
-        return empleadoModificado;
+    public DTOEmpleado modificarHorarioActual(DTOEmpleado empleado) throws NegocioException{
+        if (empleado.getHorarioActual() == null ){
+            throw new NegocioException("Error al modificar el horario del empleado: no se puede asignar un horario vacío");
+        }
+        
+        try {
+            Empleado empleadoModificar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
+            empleadoModificar = dao.modificarHorarioActual(empleadoModificar);
+            DTOEmpleado empleadoModificado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoModificar);
+            return empleadoModificado;
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al modificar el horario del empleado: " + ex.getMessage());
+        }
+        
     }
 }

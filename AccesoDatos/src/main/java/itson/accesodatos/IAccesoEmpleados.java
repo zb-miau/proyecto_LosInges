@@ -56,5 +56,5 @@ public interface IAccesoEmpleados<Empleado> {
      * para reemplazar el horario actual.
      * @return regresa la entidad empleado con el horario actual actualizado.
      */
-    public Empleado modificarHorarioActual(Empleado empleado);
+    public Empleado modificarHorarioActual(Empleado empleado) throws PersistenciaException;
 }

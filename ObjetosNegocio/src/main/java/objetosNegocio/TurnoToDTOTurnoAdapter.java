@@ -51,9 +51,10 @@ public class TurnoToDTOTurnoAdapter {
                 turno.getNombre(),
                 turno.getHoraInicio(),
                 turno.getHoraFin(),
-                diasTrabajo,
-                color
+                diasTrabajo
         );
+        
+        turnoCrear.setColorEvento(color);
         
         return turnoCrear;
     }

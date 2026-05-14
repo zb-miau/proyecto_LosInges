@@ -30,39 +30,39 @@ public class TurnosDAOTest {
     public TurnosDAOTest() {
     }
     
-//    @Test
-//    public void testCrear(){
-//        Set<DayOfWeek> dias = new HashSet();
-//        dias.add(DayOfWeek.MONDAY);
-//        
-//        Turno turno1 = new Turno (
-//                "Turno 1",
-//                LocalTime.of(12,15),
-//                LocalTime.of(20,30),
-//                dias,
-//                "#e69dfb"
-//        );
-//        
-//        dias.add(DayOfWeek.TUESDAY);
-//        Turno turno2 = new Turno (
-//                "Turno 2",
-//                LocalTime.of(7,15),
-//                LocalTime.of(13,30),
-//                dias,
-//                "#ff6633"
-//        );
-//        
-//        assertDoesNotThrow( () -> {
-//            Turno turnoAgregado1 = dao.crear(turno1);
-//            assertNotNull(turnoAgregado1.getIdTurno());
-//            assertEquals(turnoAgregado1.getNombre(), turno1.getNombre());
-//
-//            Turno turnoAgregado2 = dao.crear(turno2);
-//            assertNotNull(turnoAgregado2.getIdTurno());
-//            assertEquals(turnoAgregado2.getNombre(), turno2.getNombre());
-//        });
-//        
-//    }
+    @Test
+    public void testCrear(){
+        Set<DayOfWeek> dias = new HashSet();
+        dias.add(DayOfWeek.MONDAY);
+        
+        Turno turno1 = new Turno (
+                "Turno 1",
+                LocalTime.of(12,15),
+                LocalTime.of(20,30),
+                dias,
+                "#e69dfb"
+        );
+        
+        dias.add(DayOfWeek.TUESDAY);
+        Turno turno2 = new Turno (
+                "Turno 2",
+                LocalTime.of(7,15),
+                LocalTime.of(13,30),
+                dias,
+                "#ff6633"
+        );
+        
+        assertDoesNotThrow( () -> {
+            Turno turnoAgregado1 = dao.crear(turno1);
+            assertNotNull(turnoAgregado1.getIdTurno());
+            assertEquals(turnoAgregado1.getNombre(), turno1.getNombre());
+
+            Turno turnoAgregado2 = dao.crear(turno2);
+            assertNotNull(turnoAgregado2.getIdTurno());
+            assertEquals(turnoAgregado2.getNombre(), turno2.getNombre());
+        });
+        
+    }
    
     
 }

@@ -76,26 +76,17 @@ public class ControlAsignarHorario {
      * @param fechaFin
      */
     protected void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
-        DTOHorarioEmpleado horarioDTO = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
-
         // Intentamos modificar primero
-        DTOEmpleado emp = empleadoBO.obtener(empleado);
-        DTOHorarioEmpleado resultado = emp.getHorarioActual();
-
+        DTOHorarioEmpleado resultado = empleado.getHorarioActual();
+        DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
         if (resultado != null) {
-            
-                DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
-                empleado.setHorarioActual(nuevo);
-                empleadoBO.modificarHorarioActual(empleado);
-            
-        } else {
-            // Si modificar devolvió null lo creamos
-            resultado = horarioEmpleadoBO.crear(horarioDTO);
-
-            if (resultado != null) {
-            } else {
+            if ((resultado.getFechaFin() != null && resultado.getFechaFin().isAfter(nuevo.getFechaInicio())) || resultado.getFechaFin() == null ){
+                resultado.setFechaFin(nuevo.getFechaInicio().minusDays(1));
             }
+            horarioEmpleadoBO.crear(resultado);
         }
+        empleado.setHorarioActual(nuevo);
+        empleadoBO.modificarHorarioActual(empleado);
     }
 
     /**
@@ -152,6 +143,17 @@ public class ControlAsignarHorario {
         for (DTOEmpleado emp : listaActualizada) {
             empleadoBO.modificar(emp);
         }
+    }
+    
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado) throws NegocioException{
+        DTOHorarioEmpleado horario;
+        if (empleado.getHorarioActual() != null){
+            horario = empleado.getHorarioActual();
+        } else {
+            horario = new DTOHorarioEmpleado();
+            horario.setEmpleado(empleado);
+        }
+        return horarioEmpleadoBO.obtenerLista(horario);
     }
 
 }

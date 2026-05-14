@@ -23,12 +23,9 @@ public class Coordinador {
      * Abre la vantana de GestionHorariosMenu
      * 
      */
-    public void abrirVentanaGestionHorariosMenu(){
-        
-        if (gestionDeHorariosMenu == null) {
-            gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
-        }
-
+    public void abrirVentanaGestionHorariosMenu(JFrame forma){
+        forma.dispose();
+        gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
         gestionDeHorariosMenu.setVisible(true);
         
     }
@@ -38,17 +35,8 @@ public class Coordinador {
      * 
      * @param ventana 
      */
-    public void regresarAGestionHorariosMenuDeGestionHorarios(){
-        
-        gestionDeHorarios.dispose();
-        gestionDeHorarios = null;
-        
-        if (gestionDeHorariosMenu == null) {
-            gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
-        }
-        
-        gestionDeHorariosMenu.setVisible(true);
-        
+    public void regresarAGestionHorariosMenuDeGestionHorarios(Presentacion_gestionDeHorarios gestionHorarios){
+        gestionHorarios.dispose();
     }
     
     /**
@@ -57,11 +45,7 @@ public class Coordinador {
      * @param idEmpleado 
      */
     public void abrirVentanaTurnoDeMenu(String idEmpleado){
-        
-        if (gestionDeTurnos == null) {
-            gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
-        }
-        
+        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
         gestionDeHorariosMenu.setVisible(false);
         gestionDeTurnos.setVisible(true);
         
@@ -73,10 +57,7 @@ public class Coordinador {
      * @param idEmpleado 
      */
     public void abrirVentanaTurnoDeGestionHorario(String idEmpleado){
-        
-        if (gestionDeTurnos == null) {
-            gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
-        }
+        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
         
         gestionDeHorarios.setVisible(false);
         gestionDeTurnos.setVisible(true);
@@ -106,9 +87,6 @@ public class Coordinador {
      * @param idEmpleado 
      */
     public void abrirVentanaGestionHorariosDeMenu(String idEmpleado){
-        
-        gestionDeHorariosMenu.setVisible(false);
-        
         gestionDeHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
         gestionDeHorarios.setVisible(true);
         

@@ -165,11 +165,12 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
             MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
             
             Document filtro = new Document(CAMPO_ID, new ObjectId(empleado.getId()));
+            Bson operacion = Updates.set(CAMPO_HORARIO_ACTUAL, empleado.getHorarioActual());
+
+            coleccionEmpleados.updateOne(filtro, operacion);
+            Empleado empleadoModificado = coleccionEmpleados.find(filtro).first();
             
-            coleccionEmpleados.updateOne(filtro, Updates.set(CAMPO_HORARIO_ACTUAL, empleado.getHorarioActual()));
-            Empleado resultado = coleccionEmpleados.find(filtro).first();
-            
-            return resultado;
+            return empleadoModificado;
         }
     }
    

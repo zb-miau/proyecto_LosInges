@@ -41,7 +41,7 @@ public class HorarioEmpleadoBO {
         if (horarioEmpleado == null){
             throw new NegocioException("Error al insertar el horario: no es posible insertar un horario vacío." );
         }
-        if (horarioEmpleado.getIdHorarioEmpleado() == null){
+        if (horarioEmpleado.getEmpleado().getId() == null){
             throw new NegocioException("Error al insertar el horario: empleado vacío." );
         }
         
@@ -55,6 +55,8 @@ public class HorarioEmpleadoBO {
                 
         try {
             HorarioEmpleado horarioEmpleadoCrear = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleado);
+            horarioEmpleadoCrear.setIdEmpleado(horarioEmpleado.getEmpleado().getId());
+            horarioEmpleadoCrear.getTurno().setColorHexadecimal(horarioEmpleado.getTurno().getColorHexadecimal());
             horarioEmpleadoCrear = dao.crear(horarioEmpleadoCrear);
             DTOHorarioEmpleado horario =  HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleadoCrear);
         
@@ -82,12 +84,12 @@ public class HorarioEmpleadoBO {
         }
     }
 
-    public List<DTOHorarioEmpleado> obtenerLista(HorarioEmpleado empleado) throws NegocioException {
+    public List<DTOHorarioEmpleado> obtenerLista(DTOHorarioEmpleado empleado) throws NegocioException {
         if (empleado.getEmpleado().getId() == null){
             throw new NegocioException("Error al obtener los horarios: no se puede obtener un horario sin el identificador del empleado.");
         }
         try {
-            List<HorarioEmpleado> horarioEmpleados = dao.obtenerLista(empleado);
+            List<HorarioEmpleado> horarioEmpleados = dao.obtenerLista(HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(empleado));
             List<DTOHorarioEmpleado> listaTurnos = new ArrayList();
             for (HorarioEmpleado h : horarioEmpleados) {
                 DTOHorarioEmpleado horarioEmpleadoNuevo = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(h);

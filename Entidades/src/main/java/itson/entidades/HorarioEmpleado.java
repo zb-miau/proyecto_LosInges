@@ -24,6 +24,9 @@ public class HorarioEmpleado {
     @BsonIgnore
     private Empleado empleado;
     
+    @BsonProperty("id_empleado") 
+    private String idEmpleado;
+    
     private Turno turno;
     @BsonProperty("fecha_inicio") 
     private LocalDate fechaInicio;
@@ -89,6 +92,15 @@ public class HorarioEmpleado {
 
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
+        this.idEmpleado = empleado.getId();
+    }
+
+    public String getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(String idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     

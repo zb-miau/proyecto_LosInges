@@ -8,18 +8,14 @@ import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
-import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -68,6 +64,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         }
         
         tablaEmpleados.setModel(modelo);
+        tablaEmpleados.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaEmpleados.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaEmpleados.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaEmpleados.getColumnModel().getColumn(0).setResizable(false);
         TableRowSorter<TableModel> buscador = new TableRowSorter<>(modelo);
         tablaEmpleados.setRowSorter(buscador);
         
