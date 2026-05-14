@@ -25,7 +25,7 @@ public interface IAsignarHorario {
     
     public List<DTOTurno> recuperarTurno() throws NegocioException;
     
-    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin);
+    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) throws NegocioException;
     
     public void agregarTurno(DTOTurno turnoNuevo)throws NegocioException;
     

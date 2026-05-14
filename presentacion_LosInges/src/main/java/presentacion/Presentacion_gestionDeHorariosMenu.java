@@ -6,6 +6,7 @@ package presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import coordinador.Coordinador;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
@@ -14,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
@@ -30,6 +32,7 @@ import objetosNegocio.NegocioException;
 public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     private static final Logger LOGGER = Logger.getLogger(Presentacion_gestionDeHorariosMenu.class.getName());
+    Coordinador coordinador;
     
     /**
      * Creates new form GestionDeHorariosMain
@@ -38,6 +41,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         initComponents();
         generarTabla();
         setVisible(true);
+        coordinador = new Coordinador();
     }
 
     /**
@@ -130,12 +134,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
             if (turnos.isEmpty()){
-                Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(id);
-                gT.setVisible(true);
+                coordinador.abrirVentanaTurnoDeMenu(id);
 
             } else {
-                Presentacion_gestionDeHorarios gH = new Presentacion_gestionDeHorarios(id);
-                gH.setVisible(true);
+                coordinador.abrirVentanaGestionHorariosDeMenu(id);
             }
         } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(

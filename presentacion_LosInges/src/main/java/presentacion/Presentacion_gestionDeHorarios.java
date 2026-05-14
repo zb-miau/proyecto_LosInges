@@ -36,7 +36,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
+import coordinador.Coordinador;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import objetosNegocio.NegocioException;
 
 /**
@@ -49,12 +53,18 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     String idEmpleado;
     JButton btnDia;
+    
+    Coordinador coordinador;
+    
     /**
      * Creates new form GestionDeHorarios
      */
     public Presentacion_gestionDeHorarios(String id) {
         initComponents();
         this.idEmpleado = id;
+        
+        coordinador = new Coordinador();
+        
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
         configurarEtiquetas();
         rdbtnMensual.setSelected(true);
@@ -63,9 +73,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
-                main.setVisible(true);
-                dispose();
+                coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
             }
         });
         configurarTabla();
@@ -987,7 +995,15 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                             );
 
                     if (opcion == JOptionPane.YES_OPTION) {
-                        control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                        try {
+                            control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                        } catch (NegocioException ex) {
+                            JOptionPane.showMessageDialog(
+                                this, 
+                                "Error al sobreescribir el horario del empleado: " + ex.getMessage(), 
+                                "Error al sobreescribir.", 
+                                JOptionPane.ERROR_MESSAGE);
+                        }
                         configurarCalendario();
                     } else {
                         JOptionPane.showMessageDialog(
@@ -998,7 +1014,15 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                 );
                     }
                 } else {
+                    try {
                         control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                    } catch (NegocioException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, 
+                                "Error al actualizar el horario del empleado: " + ex.getMessage(), 
+                                "Error al actualizar.", 
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                         configurarCalendario();
                 }
             }
@@ -1013,9 +1037,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
-        main.setVisible(true);
-        this.dispose();
+        coordinador.abrirVentanaGestionHorariosMenu();
     }//GEN-LAST:event_btnRegresarActionPerformed
     
 

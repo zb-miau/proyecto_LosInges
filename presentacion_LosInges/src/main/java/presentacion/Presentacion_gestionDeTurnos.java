@@ -6,6 +6,7 @@ package presentacion;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import coordinador.Coordinador;
 import dto.DTOTurno;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,6 +50,9 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
     String idEmpleado;
+    
+    Coordinador coordinador;
+    
     /**
      * Creates new form GestionDeTurnos
      */
@@ -58,14 +62,13 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         configurarDias();
         configurarTabla();
         this.idEmpleado = id;
+        coordinador = new Coordinador(); 
         
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
-                main.setVisible(true);
-                dispose();
+                coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
             }
         });
         
@@ -449,9 +452,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        Presentacion_gestionDeHorarios calendario = new Presentacion_gestionDeHorarios(idEmpleado);
-        calendario.setVisible(true);
-        this.dispose();
+        coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed

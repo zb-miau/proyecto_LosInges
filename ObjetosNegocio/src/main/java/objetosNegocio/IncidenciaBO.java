@@ -9,6 +9,7 @@ import itson.accesodatos.IncidenciasDAO;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
+import itson.accesodatos.IAccesoEmpleados;
 import itson.accesodatos.IAccesoIncidencias;
 
 /**
