@@ -9,7 +9,7 @@ import itson.accesodatos.IncidenciasDAO;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
-import itson.accesodatos.IAccesoEmpleados;
+import itson.accesodatos.IAccesoIncidencias;
 
 /**
  *
@@ -17,7 +17,7 @@ import itson.accesodatos.IAccesoEmpleados;
  */
 public class IncidenciaBO {
 
-    private final IAccesoEmpleados<Incidencia> dao;
+    private final IAccesoIncidencias<Incidencia> dao;
     private static IncidenciaBO incidenciaBO;
 
     public static synchronized IncidenciaBO getInstance() {
