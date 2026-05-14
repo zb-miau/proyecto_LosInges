@@ -80,9 +80,11 @@ public class ControlAsignarHorario {
         DTOHorarioEmpleado resultado = empleado.getHorarioActual();
         DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
         if (resultado != null) {
-            if ((resultado.getFechaFin() != null && resultado.getFechaFin().isAfter(nuevo.getFechaInicio())) || resultado.getFechaFin() == null ){
+           
+            if ((resultado.getFechaFin() != null && resultado.getFechaFin().isAfter(nuevo.getFechaInicio()))
+                    || resultado.getFechaFin() == null && nuevo.getFechaInicio().isAfter(resultado.getFechaInicio())){
                 resultado.setFechaFin(nuevo.getFechaInicio().minusDays(1));
-            }
+            } 
             horarioEmpleadoBO.crear(resultado);
         }
         empleado.setHorarioActual(nuevo);
