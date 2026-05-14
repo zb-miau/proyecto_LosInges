@@ -12,6 +12,7 @@
         <module>AccesoDatos</module>
         <module>ObjetosNegocio</module>
         <module>Entidades</module>
+        <module>negocios_GestionIncidencias</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
