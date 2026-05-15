@@ -47,19 +47,22 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-    String idEmpleado;
+    DTOEmpleado idEmpleado;
     JButton btnDia;
     
     Coordinador coordinador;
     
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
+    
     /**
      * Creates new form GestionDeHorarios
      */
-    public Presentacion_gestionDeHorarios(String id) {
+    public Presentacion_gestionDeHorarios(DTOEmpleado empleado) {
         initComponents();
-        this.idEmpleado = id;
-        
-        coordinador = new Coordinador();
+        this.idEmpleado = empleado;
+
         
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
         configurarEtiquetas();
@@ -69,7 +72,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                coordinador.regresarAGestionHorariosMenuDeGestionHorarios(Presentacion_gestionDeHorarios.this);
+                coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
             }
         });
         configurarTabla();
@@ -203,7 +206,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void llenarDias(){
         pnlCalendario.removeAll();
         DTOEmpleado empleadoId = new DTOEmpleado();
-        empleadoId.setId(idEmpleado);
+        empleadoId.setId(idEmpleado.getId());
         try {
             DTOEmpleado empleado = control.recuperarEmpleado(empleadoId);
             List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(empleado);
@@ -307,7 +310,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void llenarDias(LocalDate inicio){
         pnlCalendario.removeAll();
         DTOEmpleado empleadoId = new DTOEmpleado();
-        empleadoId.setId(idEmpleado);
+        empleadoId.setId(idEmpleado.getId());
         try {
             DTOEmpleado empleado = control.recuperarEmpleado(empleadoId);
             List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(empleado);
@@ -830,7 +833,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     private boolean existeConflicto(LocalDate inicio, LocalDate fin){
         DTOEmpleado idEmp = new DTOEmpleado();
-        idEmp.setId(idEmpleado);
+        idEmp.setId(idEmpleado.getId());
         try {
             DTOEmpleado empCompleto = control.recuperarEmpleado(idEmp);
             List<DTOHorarioEmpleado> todos = control.listaHistorial(empCompleto);
@@ -941,7 +944,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         if (filaSeleccionada != -1) {
 
             DTOEmpleado empleadoBusqueda = new DTOEmpleado();
-            empleadoBusqueda.setId(idEmpleado); 
+            empleadoBusqueda.setId(idEmpleado.getId()); 
 
             DTOEmpleado empCompleto = control.recuperarEmpleado(empleadoBusqueda);
 
@@ -1058,7 +1061,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.abrirVentanaGestionHorariosMenu(this);
+        coordinador.abrirVentanaGestionHorariosMenu();
     }//GEN-LAST:event_btnRegresarActionPerformed
     
 

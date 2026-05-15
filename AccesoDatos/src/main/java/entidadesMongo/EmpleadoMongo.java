@@ -34,7 +34,7 @@ public class EmpleadoMongo {
     @BsonProperty("fecha_nacimiento") 
     private LocalDate fechaNacimiento;
     
-    private Direccion direccion;
+    private DireccionMongo direccion;
     
     private String curp;
     private String rfc;
@@ -43,14 +43,12 @@ public class EmpleadoMongo {
     @BsonProperty("horario_actual") 
     private HorarioEmpleadoMongo horarioActual;
     
-    @BsonIgnore
-    private LinkedList<HorarioEmpleadoMongo> historial;
     
 
     public EmpleadoMongo() {
     }
 
-    public EmpleadoMongo(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleadoMongo horarioActual, LinkedList<HorarioEmpleadoMongo> historial) {
+    public EmpleadoMongo(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, DireccionMongo direccion, String curp, String rfc, String nss, HorarioEmpleadoMongo horarioActual) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -61,10 +59,9 @@ public class EmpleadoMongo {
         this.rfc = rfc;
         this.nss = nss;
         this.horarioActual = horarioActual;
-        this.historial = new LinkedList();
     }
 
-    public EmpleadoMongo(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleadoMongo horarioActual, LinkedList<HorarioEmpleadoMongo> historial) {
+    public EmpleadoMongo(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, DireccionMongo direccion, String curp, String rfc, String nss, HorarioEmpleadoMongo horarioActual) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -74,7 +71,6 @@ public class EmpleadoMongo {
         this.rfc = rfc;
         this.nss = nss;
         this.horarioActual = horarioActual;
-        this.historial = new LinkedList();
     }
 
     public EmpleadoMongo(String nombre, String apellidoPaterno, String apellidoMaterno) {
@@ -89,7 +85,6 @@ public class EmpleadoMongo {
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.horarioActual = null;
-        this.historial = new LinkedList();
     }
     
     public HorarioEmpleadoMongo getHorarioActual() {
@@ -140,11 +135,11 @@ public class EmpleadoMongo {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Direccion getDireccion() {
+    public DireccionMongo getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(Direccion direccion) {
+    public void setDireccion(DireccionMongo direccion) {
         this.direccion = direccion;
     }
 
@@ -170,14 +165,6 @@ public class EmpleadoMongo {
 
     public void setNss(String nss) {
         this.nss = nss;
-    }
-
-    public LinkedList<HorarioEmpleadoMongo> getHistorial() {
-        return historial;
-    }
-
-    public void setHistorial(LinkedList<HorarioEmpleadoMongo> historial) {
-        this.historial = historial;
     }
 
     @Override

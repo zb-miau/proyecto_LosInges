@@ -16,7 +16,6 @@ public class DTOEmpleado {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private DTOHorarioEmpleado horarioActual;
-    LinkedList<DTOHorarioEmpleado> historial;
     LinkedList<DTOIncidencia> incidencias;
     
 
@@ -28,14 +27,12 @@ public class DTOEmpleado {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
-        this.historial = new LinkedList();
     }
 
     public DTOEmpleado(String nombre, String apellidoPaterno, String apellidoMaterno) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
-        this.historial = new LinkedList();
     }
 
     public String getId() {
@@ -68,14 +65,6 @@ public class DTOEmpleado {
 
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
-    }
-
-    public LinkedList<DTOHorarioEmpleado> getHistorial() {
-        return historial;
-    }
-
-    public void setHistorial(LinkedList<DTOHorarioEmpleado> historial) {
-        this.historial = historial;
     }
 
     public DTOHorarioEmpleado getHorarioActual() {

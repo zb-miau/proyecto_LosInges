@@ -4,11 +4,13 @@
  */
 package itson.accesodatos;
 
+import adapters.EmpleadoMongoAEmpleadoAdapter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import entidadesMongo.EmpleadoMongo;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,132 +48,115 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
 
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
-        return baseDatos.getCollection(COLECCION_EMPLEADOS, Empleado.class);
+        return baseDatos.getCollection(COLECCION_EMPLEADOS, EmpleadoMongo.class);
     }
     
 
-    /**
-     * Crea un empleado y lo guarda en la base de datos.
-     * 
-     * @param entidad
-     * @return Empleado DTO
-     */
-    @Override
-    public Empleado crear(Empleado entidad) {
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
 
-            coleccionEmpleados.insertOne(entidad);
-            return entidad;
-        }
-    }
+   @Override
+   public Empleado crear(Empleado entidad) {
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           // La colección ahora es de EmpleadoMongo
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-    /**
-     * Elimina un empleado de la base de datos
-     * 
-     * @param entidad
-     * @return Empleado DTO 
-     */
-    @Override
-    public Empleado eliminar(Empleado entidad) {
-        if (entidad == null || entidad.getId() == null) return null;
-        
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
+           EmpleadoMongo empleadoMongo = EmpleadoMongoAEmpleadoAdapter.toMongo(entidad);
+           coleccion.insertOne(empleadoMongo);
 
-            // IMPORTANTE: Siempre usar new ObjectId para buscar por ID en Mongo
-            return coleccionEmpleados.findOneAndDelete(Filters.eq("_id", new ObjectId(entidad.getId())));
-        }
-    }
+           // Actualizamos el ID generado por Mongo en el DTO original y lo regresamos
+           entidad.setId(empleadoMongo.getId());
+           return entidad;
+       }
+   }
 
-    /**
-     * Modifica a un empleado
-     * 
-     * @param entidad
-     * @return 
-     */
-    @Override
-    public Empleado modificar(Empleado entidad) {
-        if (entidad == null || entidad.getId() == null) return null;
 
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
+   @Override
+   public Empleado eliminar(Empleado entidad) {
+       if (entidad == null || entidad.getId() == null) return null;
 
-            Bson filtro = Filters.eq("_id", new ObjectId(entidad.getId()));
-            List<Bson> actualizaciones = new ArrayList<>();
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-            // Agrupamos todas las actualizaciones en una sola lista
-            if (entidad.getNombre() != null) actualizaciones.add(Updates.set("nombre", entidad.getNombre()));
-            if (entidad.getApellidoPaterno() != null) actualizaciones.add(Updates.set("apellido_paterno", entidad.getApellidoPaterno()));
-            if (entidad.getFechaNacimiento() != null) actualizaciones.add(Updates.set("fecha_nacimiento", entidad.getFechaNacimiento()));
-            if (entidad.getDireccion().getCalle() != null) actualizaciones.add(Updates.set("calle", entidad.getDireccion().getCalle()));
-            if (entidad.getDireccion().getColonia() != null) actualizaciones.add(Updates.set("colonia", entidad.getDireccion().getColonia()));
-            if (entidad.getDireccion().getNumeroCasa() != null) actualizaciones.add(Updates.set("numero_casa", entidad.getDireccion().getNumeroCasa()));
-            if (entidad.getDireccion().getCodigoPostal() != null) actualizaciones.add(Updates.set("codigo_postal", entidad.getDireccion().getCodigoPostal()));
-            if (entidad.getCurp() != null) actualizaciones.add(Updates.set("curp", entidad.getCurp()));
-            if (entidad.getRfc() != null) actualizaciones.add(Updates.set("rfc", entidad.getRfc()));
-            if (entidad.getNss() != null) actualizaciones.add(Updates.set("nss", entidad.getNss()));
-            
-            
+           EmpleadoMongo eliminado = coleccion.findOneAndDelete(Filters.eq("_id", new ObjectId(entidad.getId())));
+           return EmpleadoMongoAEmpleadoAdapter.toDomain(eliminado);
+       }
+   }
 
-            if (!actualizaciones.isEmpty()) {
-                coleccionEmpleados.updateOne(filtro, Updates.combine(actualizaciones));
-            }
 
-            return coleccionEmpleados.find(filtro).first();
-        }
-    }
+   @Override
+   public Empleado modificar(Empleado entidad) {
+       if (entidad == null || entidad.getId() == null) return null;
 
-    @Override
-    public Empleado obtener(Empleado entidad) {
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
+           ObjectId id = new ObjectId(entidad.getId());
+           EmpleadoMongo mongoData = EmpleadoMongoAEmpleadoAdapter.toMongo(entidad);
 
-            // Quitamos posibles espacios o caracteres extraños del ID
-            String idLimpio = entidad.getId().trim();
-            Document filtro = new Document("_id", new ObjectId(idLimpio));
+           // Usamos replaceOne para actualizar todo el documento basándonos en el objeto mapeado
+           coleccion.replaceOne(Filters.eq("_id", id), mongoData);
 
-            return coleccionEmpleados.find(filtro).first();
-            
-        } catch (IllegalArgumentException e) {
-            //todo
-            System.err.println("Error: El ID no tiene formato hexadecimal válido: " + entidad.getId());
-            return null;
-        }
-    }
+           return obtener(entidad);
+       }
+   }
 
-    @Override
-    public List<Empleado> obtenerLista() {
-        List<Empleado> listaEmpleados = new ArrayList<>();
+   @Override
+   public Empleado obtener(Empleado entidad) {
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
+           String idLimpio = entidad.getId().trim();
+           EmpleadoMongo resultado = coleccion.find(Filters.eq("_id", new ObjectId(idLimpio))).first();
 
-            coleccionEmpleados.find().into(listaEmpleados);
+           return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
+       } catch (IllegalArgumentException e) {
+           System.err.println("Error: ID inválido: " + entidad.getId());
+           return null;
+       }
+   }
 
-            return listaEmpleados;
-        }
-    }
+   @Override
+   public List<Empleado> obtenerLista() {
+       List<Empleado> listaFinal = new ArrayList<>();
 
-    public Empleado modificarHorarioActual(Empleado empleado){
-        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-            MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Empleado> coleccionEmpleados = recuperarColeccion(bd);
-            
-            Document filtro = new Document(CAMPO_ID, new ObjectId(empleado.getId()));
-            Bson operacion = Updates.set(CAMPO_HORARIO_ACTUAL, empleado.getHorarioActual());
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-            coleccionEmpleados.updateOne(filtro, operacion);
-            Empleado empleadoModificado = coleccionEmpleados.find(filtro).first();
-            
-            return empleadoModificado;
-        }
-    }
+           // Recuperamos los de mongo
+           List<EmpleadoMongo> listaMongo = new ArrayList<>();
+           coleccion.find().into(listaMongo);
+
+           // Convertimos cada uno a dominio
+           for (EmpleadoMongo em : listaMongo) {
+               listaFinal.add(EmpleadoMongoAEmpleadoAdapter.toDomain(em));
+           }
+
+           return listaFinal;
+       }
+   }
+
+   public Empleado modificarHorarioActual(Empleado empleado) {
+       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+           MongoDatabase bd = recuperarBaseDatos(cliente);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
+
+           ObjectId id = new ObjectId(empleado.getId());
+
+           // Convertimos el horario de dominio a horario mongo usando el adapter
+           // (Asumiendo que agregaste el método toHorarioMongo al adapter)
+           var horarioMongo = EmpleadoMongoAEmpleadoAdapter.toMongo(empleado).getHorarioActual();
+
+           coleccion.updateOne(
+               Filters.eq("_id", id), 
+               Updates.set("horario_actual", horarioMongo)
+           );
+
+           return obtener(empleado);
+       }
+   }
    
 }

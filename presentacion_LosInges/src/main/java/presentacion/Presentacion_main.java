@@ -4,6 +4,8 @@
 
 package presentacion;
 
+import coordinador.Coordinador;
+
 
 /**
  *
@@ -12,7 +14,8 @@ package presentacion;
 public class Presentacion_main {
 
     public static void main(String[] args) {
-            Presentacion_gestionDeHorariosMenu main = new Presentacion_gestionDeHorariosMenu();
+            Coordinador coor = new Coordinador();
+            coor.abrirVentanaGestionHorariosMenu();
 //          Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos("69fc574637e1a5b2ce44152e");
     }
 }

@@ -30,6 +30,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     private static final Logger LOGGER = Logger.getLogger(Presentacion_gestionDeHorariosMenu.class.getName());
     Coordinador coordinador;
     
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
+    
     /**
      * Creates new form GestionDeHorariosMain
      */
@@ -37,7 +41,6 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         initComponents();
         generarTabla();
         setVisible(true);
-        coordinador = new Coordinador();
     }
 
     /**
@@ -138,7 +141,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                 coordinador.abrirVentanaTurnoDeMenu(empleadoId);
 
             } else {
-                coordinador.abrirVentanaGestionHorariosDeMenu(empleado.getId());
+                coordinador.abrirVentanaGestionHorariosDeMenu(empleado);
             }
         } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(

@@ -64,7 +64,7 @@ public class TurnosDAO implements IAccesoTurnos<TurnoMongo>, IAccesoMongo{
      */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
-        return baseDatos.getCollection(COLECCION_TURNOS, Turno.class);
+        return baseDatos.getCollection(COLECCION_TURNOS, TurnoMongo.class);
     }
 
     

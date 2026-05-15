@@ -5,12 +5,6 @@
 package itson.entidades;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
@@ -18,38 +12,24 @@ import org.bson.codecs.pojo.annotations.BsonRepresentation;
  */
 public class Empleado {
     
-    @BsonId
-    @BsonRepresentation(BsonType.OBJECT_ID)
     private String id; 
-    
     private String nombre;
-    
-    @BsonProperty("apellido_paterno") 
     private String apellidoPaterno;
-    
-    @BsonProperty("apellido_materno") 
     private String apellidoMaterno;
-    
-    @BsonProperty("fecha_nacimiento") 
     private LocalDate fechaNacimiento;
-    
     private Direccion direccion;
     
     private String curp;
     private String rfc;
     private String nss;
     
-    @BsonProperty("horario_actual") 
     private HorarioEmpleado horarioActual;
-    
-    @BsonIgnore
-    private LinkedList<HorarioEmpleado> historial;
     
 
     public Empleado() {
     }
 
-    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
+    public Empleado(String id, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -60,10 +40,9 @@ public class Empleado {
         this.rfc = rfc;
         this.nss = nss;
         this.horarioActual = horarioActual;
-        this.historial = new LinkedList();
     }
 
-    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual, LinkedList<HorarioEmpleado> historial) {
+    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss, HorarioEmpleado horarioActual) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -73,7 +52,6 @@ public class Empleado {
         this.rfc = rfc;
         this.nss = nss;
         this.horarioActual = horarioActual;
-        this.historial = new LinkedList();
     }
 
     public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno) {
@@ -88,7 +66,6 @@ public class Empleado {
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.horarioActual = null;
-        this.historial = new LinkedList();
     }
     
     
@@ -173,14 +150,6 @@ public class Empleado {
 
     public void setNss(String nss) {
         this.nss = nss;
-    }
-
-    public LinkedList<HorarioEmpleado> getHistorial() {
-        return historial;
-    }
-
-    public void setHistorial(LinkedList<HorarioEmpleado> historial) {
-        this.historial = historial;
     }
 
     @Override

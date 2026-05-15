@@ -24,10 +24,16 @@ public class Coordinador {
      * Abre la vantana de GestionHorariosMenu
      * 
      */
-    public void abrirVentanaGestionHorariosMenu(JFrame forma){
-        forma.dispose();
-        gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
+    public void abrirVentanaGestionHorariosMenu(){
+        
+        // Si ya existe la ventana, la traemos al frente, si no, la creamos
+        if (gestionDeHorariosMenu == null) {
+            gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
+            gestionDeHorariosMenu.setCoordinador(this);
+        }
+        
         gestionDeHorariosMenu.setVisible(true);
+        gestionDeHorariosMenu.setLocationRelativeTo(null);
         
     }
     
@@ -36,8 +42,11 @@ public class Coordinador {
      * 
      * @param ventana 
      */
-    public void regresarAGestionHorariosMenuDeGestionHorarios(Presentacion_gestionDeHorarios gestionHorarios){
-        gestionHorarios.dispose();
+    public void regresarAGestionHorariosMenuDeGestionHorarios(){
+        if (gestionDeHorarios != null) {
+            gestionDeHorarios.dispose();
+        }
+        abrirVentanaGestionHorariosMenu();
     }
     
     /**
@@ -46,9 +55,13 @@ public class Coordinador {
      * @param idEmpleado 
      */
     public void abrirVentanaTurnoDeMenu(DTOEmpleado idEmpleado){
-        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado.getId());
-        gestionDeHorariosMenu.setVisible(false);
-        gestionDeTurnos.setVisible(true);
+        // Creamos la pantalla pasándole el empleado que requiere su constructor
+        Presentacion_gestionDeTurnos ventanaTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
+        
+        ventanaTurnos.setCoordinador(this); 
+        
+        ventanaTurnos.setVisible(true);
+        ventanaTurnos.setLocationRelativeTo(null);
         
     }
     
@@ -58,10 +71,15 @@ public class Coordinador {
      * @param idEmpleado 
      */
     public void abrirVentanaTurnoDeGestionHorario(DTOEmpleado idEmpleado){
-        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado.getId());
-        gestionDeHorarios.setVisible(false);
-        gestionDeTurnos.setVisible(true);
+        // Cerramos la de horarios si está abierta para evitar duplicidad
+        if (gestionDeHorarios != null) {
+            gestionDeHorarios.setVisible(false);
+        }
         
+        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
+        gestionDeTurnos.setCoordinador(this);
+        gestionDeTurnos.setVisible(true);
+        gestionDeTurnos.setLocationRelativeTo(null);
     }
     
     /**
@@ -69,14 +87,11 @@ public class Coordinador {
      * 
      */
     public void regresarDeVentanaTurnoAGestionHorario(DTOEmpleado idEmpleado){
-        gestionDeTurnos.dispose();
-        gestionDeTurnos = null;
         
-        if (gestionDeHorarios == null) {
-            gestionDeHorarios = new Presentacion_gestionDeHorarios(idEmpleado.getId());
+        if (gestionDeTurnos != null) {
+            gestionDeTurnos.dispose();
         }
-        
-        gestionDeHorarios.setVisible(false);
+        abrirVentanaTurnoDeGestionHorario(idEmpleado);
     
     }
     
@@ -85,9 +100,11 @@ public class Coordinador {
      * 
      * @param idEmpleado 
      */
-    public void abrirVentanaGestionHorariosDeMenu(String idEmpleado){
-        gestionDeHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
-        gestionDeHorarios.setVisible(true);
+    public void abrirVentanaGestionHorariosDeMenu(DTOEmpleado idEmpleado){
+        Presentacion_gestionDeHorarios ventanaHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
+        ventanaHorarios.setCoordinador(this);
+        ventanaHorarios.setVisible(true);
+        ventanaHorarios.setLocationRelativeTo(null);
         
     }
     

@@ -50,22 +50,27 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
-    String idEmpleado;
+    DTOEmpleado idEmpleado;
     DTOEmpleado empleado = new DTOEmpleado();
     
     Coordinador coordinador;
     
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
+    
     /**
      * Creates new form GestionDeTurnos
      */
-    public Presentacion_gestionDeTurnos(String id) {
+    public Presentacion_gestionDeTurnos(DTOEmpleado empleado) {
         initComponents();
         configurarSpinners();
         configurarDias();
         configurarTabla();
-        this.idEmpleado = id;
-        empleado.setId(id);
-        coordinador = new Coordinador(); 
+        this.idEmpleado = empleado;
+        empleado.setId(empleado.getId());
+        
+        
         
         
         addWindowListener(new WindowAdapter() {
