@@ -7,6 +7,7 @@ package presentacion;
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
 import coordinador.Coordinador;
+import dto.DTOEmpleado;
 import dto.DTOTurno;
 import java.awt.Color;
 import java.awt.Component;
@@ -50,6 +51,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
     String idEmpleado;
+    DTOEmpleado empleado = new DTOEmpleado();
     
     Coordinador coordinador;
     
@@ -62,13 +64,14 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         configurarDias();
         configurarTabla();
         this.idEmpleado = id;
+        empleado.setId(id);
         coordinador = new Coordinador(); 
         
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
+                coordinador.regresarDeVentanaTurnoAGestionHorario(empleado);
             }
         });
         
@@ -452,13 +455,12 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
+        coordinador.regresarDeVentanaTurnoAGestionHorario(empleado);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
         List<DTOTurno> turnos = control.recuperarTurno();
-        
         
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);

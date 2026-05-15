@@ -55,6 +55,8 @@ public interface IAccesoEmpleados<Empleado> {
      * @param empleado entidad empleado que contiene la entidad horarioEmpleado
      * para reemplazar el horario actual.
      * @return regresa la entidad empleado con el horario actual actualizado.
+     * @throws PersistenciaException Lanza un error al existir un problema al acceder
+     * a la base de datos
      */
     public Empleado modificarHorarioActual(Empleado empleado) throws PersistenciaException;
 }

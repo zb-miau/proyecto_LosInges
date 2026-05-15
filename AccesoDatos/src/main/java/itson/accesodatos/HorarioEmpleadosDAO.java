@@ -87,4 +87,9 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         }
     }
 
+    @Override
+    public HorarioEmpleado modificar(HorarioEmpleado horario) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -24,7 +24,6 @@ import java.time.Month;
 import java.time.Year;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -38,9 +37,6 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import coordinador.Coordinador;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
 import objetosNegocio.NegocioException;
 
 /**

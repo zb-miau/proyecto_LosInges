@@ -12,19 +12,12 @@ import java.util.Objects;
  * @author jesus
  */
 public class DTOIncidencia {
-
     private String idIncidencia;
-
     private TiposIncidencia tipo;
-
     private DTOEmpleado empleado;
-
     private String descripcion;
-
     private LocalDate fecha;
-
     private Estado estado;
-
     private String observaciones;
 
     public enum Estado {

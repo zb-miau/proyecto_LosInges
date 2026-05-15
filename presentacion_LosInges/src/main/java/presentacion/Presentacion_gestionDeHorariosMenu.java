@@ -105,7 +105,9 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
                     try {
                         int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
                         String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
-                        abrirVentana(valorId);
+                        DTOEmpleado empleado = new DTOEmpleado();
+                        empleado.setId(valorId);
+                        abrirVentana(empleado);
                     } catch (Exception ex) {
                         LOGGER.severe(ex.getMessage());
                         JOptionPane.showMessageDialog(
@@ -125,19 +127,18 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
      * Método que determina qué ventana debe abrir de acuerdo a si existen turnos registrados
      * Si existe al menos un turno, abre el gestor de horarios, en caso contrario, abre el
      * gestor de turnos.
-     * @param id el id del empleado seleccionado
+     * @param empleado el id del empleado seleccionado
      */
-    private void abrirVentana(String  id){
+    private void abrirVentana(DTOEmpleado  empleado){
         DTOEmpleado empleadoId = new DTOEmpleado();
-        System.out.println("ID seleccionado en tabla: [" + id + "]");
-        empleadoId.setId(id);
+        empleadoId.setId(empleado.getId());
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
             if (turnos.isEmpty()){
-                coordinador.abrirVentanaTurnoDeMenu(id);
+                coordinador.abrirVentanaTurnoDeMenu(empleadoId);
 
             } else {
-                coordinador.abrirVentanaGestionHorariosDeMenu(id);
+                coordinador.abrirVentanaGestionHorariosDeMenu(empleado.getId());
             }
         } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(

@@ -2,29 +2,39 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package itson.entidades;
+package entidadesMongo;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
  * @author Zaira
  */
-public class Turno {
+public class TurnoMongo {
+    @BsonId
+    @BsonRepresentation(BsonType.OBJECT_ID)
     private String idTurno;
     private String nombre;
+    @BsonProperty("hora_inicio") 
     private LocalTime horaInicio;
+    @BsonProperty("hora_fin") 
     private LocalTime horaFin;
+    @BsonProperty("dias_trabajo") 
     private Set<DayOfWeek> diasTrabajo;
+    @BsonProperty("color_hexadecimal") 
     private String colorHexadecimal;
 
-    public Turno() {
+    public TurnoMongo() {
     }
 
-    public Turno(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
+    public TurnoMongo(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
         this.idTurno = idTurno;
         this.nombre = nombre;
         this.horaInicio = horaInicio;
@@ -32,7 +42,7 @@ public class Turno {
         this.diasTrabajo = diasTrabajo;
     }
 
-    public Turno(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo,  String colorHex) {
+    public TurnoMongo(String idTurno, String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo,  String colorHex) {
         this.idTurno = idTurno;
         this.nombre = nombre;
         this.horaInicio = horaInicio;
@@ -41,14 +51,14 @@ public class Turno {
         this.colorHexadecimal = colorHex;
     }
 
-    public Turno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
+    public TurnoMongo(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo) {
         this.nombre = nombre;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.diasTrabajo = diasTrabajo;
     }
 
-    public Turno(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, String colorHex) {
+    public TurnoMongo(String nombre, LocalTime horaInicio, LocalTime horaFin, Set<DayOfWeek> diasTrabajo, String colorHex) {
         this.nombre = nombre;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
@@ -108,11 +118,11 @@ public class Turno {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.idTurno);
-        hash = 89 * hash + Objects.hashCode(this.horaInicio);
-        hash = 89 * hash + Objects.hashCode(this.horaFin);
-        hash = 89 * hash + Objects.hashCode(this.diasTrabajo);
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.idTurno);
+        hash = 17 * hash + Objects.hashCode(this.horaInicio);
+        hash = 17 * hash + Objects.hashCode(this.horaFin);
+        hash = 17 * hash + Objects.hashCode(this.diasTrabajo);
         return hash;
     }
 
@@ -127,7 +137,7 @@ public class Turno {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Turno other = (Turno) obj;
+        final TurnoMongo other = (TurnoMongo) obj;
         if (!Objects.equals(this.idTurno, other.idTurno)) {
             return false;
         }
@@ -139,7 +149,6 @@ public class Turno {
         }
         return Objects.equals(this.diasTrabajo, other.diasTrabajo);
     }
-    
-    
+
     
 }

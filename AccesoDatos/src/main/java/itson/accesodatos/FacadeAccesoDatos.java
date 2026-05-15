@@ -4,8 +4,11 @@
  */
 package itson.accesodatos;
 
+import adapters.TurnoMongoATurnoAdapter;
 import com.mongodb.MongoException;
+import entidadesMongo.TurnoMongo;
 import itson.entidades.Turno;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,7 +18,7 @@ import java.util.logging.Logger;
  * @author Zaira
  */
 public class FacadeAccesoDatos {
-    private static IAccesoTurnos<Turno> turnosDAO;
+    private static IAccesoTurnos<TurnoMongo> turnosDAO;
     private static FacadeAccesoDatos fachadaDAO;
     private static final Logger LOGGER = Logger.getLogger(FacadeAccesoDatos.class.getName());
     
@@ -41,8 +44,8 @@ public class FacadeAccesoDatos {
      */
     public Turno crearTurno(Turno turno) throws PersistenciaException {
         try{
-            
-            return this.turnosDAO.crear(turno);
+            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
+            return TurnoMongoATurnoAdapter.adaptar(this.turnosDAO.crear(turnoMongo));
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -59,8 +62,8 @@ public class FacadeAccesoDatos {
      */
     public Turno eliminarTurno(Turno turno) throws PersistenciaException{
         try{
-            
-            return turnosDAO.eliminar(turno);
+            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
+            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.eliminar(turnoMongo));
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -72,14 +75,14 @@ public class FacadeAccesoDatos {
      * Método para modificar un turno en la base de datos.
      * @param turno turno a modificar.
      * @return regresa el turno modificado en la base de datos.
-     * @param cambios mapa que contiene los cambios a realizar en el turno.
      * @throws PersistenciaException Lanza una excepción si hay
      * un problema al acceder a la base de datos.
      */
-    public Turno modificarTurno(Turno turno, Map<String,Object> cambios) throws PersistenciaException{
+    public Turno modificarTurno(Turno turno) throws PersistenciaException{
         try{
             
-            return turnosDAO.modificar(turno, cambios);
+            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
+            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.modificar(turnoMongo));
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -96,8 +99,8 @@ public class FacadeAccesoDatos {
      */
     public Turno obtenerTurno(Turno turno) throws PersistenciaException{
         try{
-            
-            return turnosDAO.obtener(turno);
+            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
+            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.obtener(turnoMongo));
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -113,8 +116,13 @@ public class FacadeAccesoDatos {
      */
     public List<Turno> obtenerListaTurnos() throws PersistenciaException{
         try{
+            List<Turno> turnosLimpios = new ArrayList();
+            List<TurnoMongo> turnosMongo = turnosDAO.obtenerLista();
+            for (TurnoMongo turnos: turnosMongo) {
+                turnosLimpios.add(TurnoMongoATurnoAdapter.adaptar(turnos));
+            }
             
-            return turnosDAO.obtenerLista();
+            return turnosLimpios;
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());

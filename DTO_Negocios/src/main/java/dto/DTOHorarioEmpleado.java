@@ -18,6 +18,7 @@ public class DTOHorarioEmpleado {
     private DTOTurno turno;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private LocalDate fechaCambio;
 
     public DTOHorarioEmpleado() {
     }
@@ -66,6 +67,14 @@ public class DTOHorarioEmpleado {
 
     public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public LocalDate getFechaCambio() {
+        return fechaCambio;
+    }
+
+    public void setFechaCambio(LocalDate fechaCambio) {
+        this.fechaCambio = fechaCambio;
     }
 
     @Override

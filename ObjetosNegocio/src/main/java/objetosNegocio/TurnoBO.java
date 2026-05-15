@@ -7,7 +7,6 @@ package objetosNegocio;
 import dto.DTOTurno;
 import itson.accesodatos.FacadeAccesoDatos;
 import itson.accesodatos.PersistenciaException;
-import itson.accesodatos.TurnosDAO;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,30 +112,9 @@ public class TurnoBO{
     public DTOTurno modificar(DTOTurno turno)throws NegocioException{
         Turno turnoModificar = TurnoToDTOTurnoAdapter.adaptar(turno);
         try {
-            Map<String, Object> cambios = new HashMap();
-            if (!turno.getNombre().isBlank()){
-                cambios.put(TurnosDAO.CAMPO_NOMBRE, turno.getNombre());
-            } 
+            //validaciones
             
-            if (turno.getHoraFin() != null){
-                cambios.put(TurnosDAO.CAMPO_HORA_FIN, turno.getHoraFin());
-            }
-            
-            if (turno.getHoraInicio() != null){
-                if (turno.getHoraInicio().isBefore(turno.getHoraFin())){
-                    cambios.put(TurnosDAO.CAMPO_HORA_INICIO, turno.getHoraInicio());
-                }
-            }
-            
-            if (turno.getDiasTrabajo() != null){
-                cambios.put(TurnosDAO.CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo());
-            }
-            
-            if (turno.getColorHexadecimal() != null){
-                cambios.put(TurnosDAO.CAMPO_COLOR_HEXADECIMAL, turno.getColorHexadecimal());
-            }
-            
-            turnoModificar = fachadaDAO.modificarTurno(turnoModificar, cambios);
+            turnoModificar = fachadaDAO.modificarTurno(turnoModificar);
             DTOTurno turnoModificado = TurnoToDTOTurnoAdapter.adaptar(turnoModificar);
             return turnoModificado;
         } catch (PersistenciaException ex){

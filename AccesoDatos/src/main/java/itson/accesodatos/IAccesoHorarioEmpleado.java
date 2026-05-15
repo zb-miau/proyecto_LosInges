@@ -23,6 +23,15 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
     public abstract HorarioEmpleado crear(HorarioEmpleado horario) throws PersistenciaException;
     
     /**
+     * Método para modificar un horario y lo agrega a la base de datos.
+     * @param horario el horario a agregar.
+     * @return regresa el horario modificado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
+    public abstract HorarioEmpleado modificar(HorarioEmpleado horario) throws PersistenciaException;
+    
+    /**
      * Método para obtener un horario de la base de datos.
      * @param horario horario a obtener.
      * @return regresa el horario que se busca en la base de datos.

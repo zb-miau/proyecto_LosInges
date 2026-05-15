@@ -19,8 +19,6 @@ import java.util.logging.Logger;
  */
 public class TurnoToDTOTurnoAdapter {
 
-    private static final Logger LOGGER = Logger.getLogger(TurnoToDTOTurnoAdapter.class.getName());
-    
     public static Turno adaptar(DTOTurno turno){
         if (turno == null) {
             return null;

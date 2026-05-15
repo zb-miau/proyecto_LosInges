@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Zaira
  */
-public interface IAccesoTurnos<Turno> {
+public interface IAccesoTurnos<TurnoMongo> {
     
     /**
      * Método para crear un turno y lo agrega a la base de datos.
@@ -20,7 +20,7 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract Turno crear(Turno turno) throws PersistenciaException;
+    public abstract TurnoMongo crear(TurnoMongo turno) throws PersistenciaException;
     
     /**
      * Método para eliminar un turno de la base de datos.
@@ -29,7 +29,7 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract Turno eliminar(Turno turno) throws PersistenciaException;
+    public abstract TurnoMongo eliminar(TurnoMongo turno) throws PersistenciaException;
     
     /**
      * Método para modificar un turno en la base de datos.
@@ -38,7 +38,7 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract Turno modificar(Turno turno, Map<String, Object> cambios) throws PersistenciaException;
+    public abstract TurnoMongo modificar(TurnoMongo turno) throws PersistenciaException;
     
     /**
      * Método para obtener un turno de la base de datos.
@@ -47,7 +47,7 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract Turno obtener(Turno turno) throws PersistenciaException;
+    public abstract TurnoMongo obtener(TurnoMongo turno) throws PersistenciaException;
     
     /**
      * Método para obtener una lista de turnos.
@@ -55,5 +55,5 @@ public interface IAccesoTurnos<Turno> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract List<Turno> obtenerLista() throws PersistenciaException;
+    public abstract List<TurnoMongo> obtenerLista() throws PersistenciaException;
 }

@@ -4,6 +4,7 @@
  */
 package coordinador;
 
+import dto.DTOEmpleado;
 import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_gestionDeHorariosMenu;
@@ -44,8 +45,8 @@ public class Coordinador {
      * 
      * @param idEmpleado 
      */
-    public void abrirVentanaTurnoDeMenu(String idEmpleado){
-        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
+    public void abrirVentanaTurnoDeMenu(DTOEmpleado idEmpleado){
+        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado.getId());
         gestionDeHorariosMenu.setVisible(false);
         gestionDeTurnos.setVisible(true);
         
@@ -56,9 +57,8 @@ public class Coordinador {
      * 
      * @param idEmpleado 
      */
-    public void abrirVentanaTurnoDeGestionHorario(String idEmpleado){
-        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
-        
+    public void abrirVentanaTurnoDeGestionHorario(DTOEmpleado idEmpleado){
+        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado.getId());
         gestionDeHorarios.setVisible(false);
         gestionDeTurnos.setVisible(true);
         
@@ -68,13 +68,12 @@ public class Coordinador {
      * Regresa de la ventana turno a la ventana de GestionHorario
      * 
      */
-    public void regresarDeVentanaTurnoAGestionHorario(String idEmpleado){
-        
+    public void regresarDeVentanaTurnoAGestionHorario(DTOEmpleado idEmpleado){
         gestionDeTurnos.dispose();
         gestionDeTurnos = null;
         
         if (gestionDeHorarios == null) {
-            gestionDeHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
+            gestionDeHorarios = new Presentacion_gestionDeHorarios(idEmpleado.getId());
         }
         
         gestionDeHorarios.setVisible(false);

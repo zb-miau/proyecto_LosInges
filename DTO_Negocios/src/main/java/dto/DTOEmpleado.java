@@ -12,7 +12,6 @@ import java.util.LinkedList;
  */
 public class DTOEmpleado {
     private String id; 
-    
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;

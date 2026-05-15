@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+import entidadesMongo.TurnoMongo;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
+public class TurnosDAO implements IAccesoTurnos<TurnoMongo>, IAccesoMongo{
     private static final String COLECCION_TURNOS = "turnos";
     private static final String CAMPO_ID = "_id";
     public static final String CAMPO_NOMBRE = "nombre";
@@ -73,10 +74,10 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa el turno creado en la base de datos.
      */
     @Override
-    public Turno crear(Turno turno) {
+    public TurnoMongo crear(TurnoMongo turno) {
          try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
             
             InsertOneResult resultado = coleccionTurnos.insertOne(turno);
             
@@ -90,14 +91,14 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa el turno eliminado en la base de datos.
      */
     @Override
-    public Turno eliminar(Turno turno) {
+    public TurnoMongo eliminar(TurnoMongo turno) {
         try(MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
 
             Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
             
-            Turno eliminado = coleccionTurnos.findOneAndDelete(filtro);
+            TurnoMongo eliminado = coleccionTurnos.findOneAndDelete(filtro);
             
             return eliminado;
         }
@@ -109,17 +110,15 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa el turno modificado en la base de datos.
      */
     @Override
-    public Turno modificar(Turno turno, Map<String, Object> cambios) {
+    public TurnoMongo modificar(TurnoMongo turno) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
             
             Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
-            
-            Document actualizaciones = new Document();
-            cambios.forEach(actualizaciones::append);
            
-            return coleccionTurnos.findOneAndUpdate(filtro, new Document("$set", actualizaciones));
+           
+            return coleccionTurnos.findOneAndUpdate(filtro, new Document());
         }
     }
 
@@ -129,10 +128,10 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa el turno que se busca en la base de datos.
      */
     @Override
-    public Turno obtener(Turno turno) {
+    public TurnoMongo obtener(TurnoMongo turno) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
             
             Document filtro = new Document(CAMPO_ID, new ObjectId(turno.getIdTurno()));
 
@@ -145,12 +144,12 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
      * @return regresa la lista de turnos registrados en la base de datos.
      */
     @Override
-    public List<Turno> obtenerLista() {
-        List<Turno> listaTurnos = new ArrayList();
+    public List<TurnoMongo> obtenerLista() {
+        List<TurnoMongo> listaTurnos = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Turno> coleccionTurnos = recuperarColeccion(bd);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
 
             coleccionTurnos.find().into(listaTurnos);
             

@@ -6,37 +6,18 @@ package itson.entidades;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 /**
  *
  * @author jesus
  */
 public class Incidencia {
-
-    @BsonId
-    @BsonRepresentation(BsonType.OBJECT_ID)
     private String idIncidencia;
-
-    @BsonProperty("tipo")
     private TiposIncidencia tipo;
-
-    @BsonProperty("id_empleado")
     private String idEmpleado;
-
-    @BsonProperty("descripcion")
     private String descripcion;
-
-    @BsonProperty("fecha")
     private LocalDate fecha;
-
-    @BsonProperty("estado")
     private Estado estado;
-
-    @BsonProperty("observaciones")
     private String observaciones;
 
     public enum Estado {
