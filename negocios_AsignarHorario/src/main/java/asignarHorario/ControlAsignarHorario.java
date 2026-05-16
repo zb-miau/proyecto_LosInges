@@ -24,12 +24,12 @@ import objetosNegocio.NegocioException;
 public class ControlAsignarHorario {
     private EmpleadoBO empleadoBO;
     private HorarioEmpleadoBO horarioEmpleadoBO;
-    private TurnoBO turno;
+    private TurnoBO turnoBO;
 
     protected ControlAsignarHorario() {
         this.empleadoBO = EmpleadoBO.getInstance();
         this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstance();
-        turno = TurnoBO.getInstance();
+        turnoBO = TurnoBO.getInstance();
     }
 
     /**
@@ -64,7 +64,7 @@ public class ControlAsignarHorario {
      * @return lista con los turnos registrados en la base de datos
      */
     protected List<DTOTurno> recuperarTurnos() throws NegocioException {
-        return turno.obtenerLista();
+        return turnoBO.obtenerLista();
     }
 
     /**
@@ -115,11 +115,15 @@ public class ControlAsignarHorario {
      * @param dtoTurno
      */
     protected void agregarTurno(DTOTurno dtoTurno) throws NegocioException{
-        turno.crear(dtoTurno);
+        if (!turnoBO.turnoDuplicado(dtoTurno)){
+            turnoBO.crear(dtoTurno);
+        } else {
+            throw new NegocioException("Ya existe un horario con los datos ingresados.");
+        }
     }
     
     protected DTOTurno consultarTurno(DTOTurno dtoTurno) throws NegocioException{
-        return turno.obtener(dtoTurno);
+        return turnoBO.obtener(dtoTurno);
     }
 
     /**
@@ -129,7 +133,7 @@ public class ControlAsignarHorario {
      * @param dtoTurno
      */
     protected void eliminarTurno(DTOTurno dtoTurno) throws NegocioException{
-        turno.eliminar(dtoTurno);
+        turnoBO.eliminar(dtoTurno);
     }
 
     /**
@@ -139,7 +143,7 @@ public class ControlAsignarHorario {
      * @param dtoTurno el turno que va a recibir el metodo para modificar
      */
     protected void modificarTurno(DTOTurno dtoTurno) throws NegocioException{
-        turno.modificar(dtoTurno);
+        turnoBO.modificar(dtoTurno);
     }
 
     /**
@@ -180,4 +184,8 @@ public class ControlAsignarHorario {
         return horarioEmpleadoBO.obtenerLista(horario, fechaInicio, fechaFin);
     }
 
+    
+    public boolean turnoDuplicado(DTOTurno turno) throws NegocioException{
+        return turnoBO.turnoDuplicado(turno);
+    }
 }

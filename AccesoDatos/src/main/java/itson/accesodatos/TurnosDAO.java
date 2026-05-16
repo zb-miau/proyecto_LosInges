@@ -13,6 +13,7 @@ import com.mongodb.client.result.InsertOneResult;
 import entidadesMongo.TurnoMongo;
 import itson.entidades.Turno;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.bson.Document;
@@ -163,6 +164,28 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
             
             return listaLimpia;
         }
+    }
+
+    @Override
+    public boolean turnoDuplicado(Turno turno) throws PersistenciaException {
+         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
+            
+            Document filtroOr =  new Document("$or", Arrays.asList(
+                new Document(CAMPO_NOMBRE, turno.getNombre())
+            ));
+        
+     
+            Document filtroAnd = new Document("$and", Arrays.asList(
+                    new Document(CAMPO_HORA_INICIO, turno.getHoraInicio()),
+                    new Document(CAMPO_HORA_FIN, turno.getHoraFin()), 
+                    new Document(CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo())));
+            
+            Document filtroFinal = new Document("$and", Arrays.asList(filtroOr, filtroAnd));
+            
+            return coleccionTurnos.find(filtroFinal).first() != null;
+         }
     }
 
 }

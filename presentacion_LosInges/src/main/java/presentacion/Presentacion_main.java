@@ -5,6 +5,7 @@
 package presentacion;
 
 import coordinador.Coordinador;
+import dto.DTOEmpleado;
 
 
 /**
@@ -14,8 +15,10 @@ import coordinador.Coordinador;
 public class Presentacion_main {
 
     public static void main(String[] args) {
-            Coordinador coor = new Coordinador();
-            coor.abrirVentanaGestionHorariosMenu();
-//          Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos("69fc574637e1a5b2ce44152e");
+//            Coordinador coor = new Coordinador();
+//            coor.abrirVentanaGestionHorariosMenu();
+        DTOEmpleado empleado = new DTOEmpleado();
+        empleado.setId("69fc574637e1a5b2ce44152e");
+        Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos(empleado);
     }
 }

@@ -4,19 +4,13 @@
  */
 package itson.accesodatos;
 
-import adapters.EmpleadoMongoAEmpleadoAdapter;
-import adapters.TurnoMongoATurnoAdapter;
 import com.mongodb.MongoException;
-import entidadesMongo.EmpleadoMongo;
-import entidadesMongo.TurnoMongo;
 import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import itson.entidades.Incidencia;
 import itson.entidades.Turno;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 import org.bson.types.ObjectId;
 
@@ -138,6 +132,16 @@ public class FacadeAccesoDatos {
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al recuperar la lista de turnos de la base de datos. ");
+        }
+    }
+    
+    public boolean turnoDuplicado(Turno turno) throws PersistenciaException {
+        try {
+            return turnosDAO.turnoDuplicado(turno);
+            
+        } catch (MongoException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al verificar los turnos de la base de datos. ");
         }
     }
 

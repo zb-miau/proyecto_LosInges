@@ -67,12 +67,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         rdbtnMensual.setSelected(true);
         rdbtnMensual.setEnabled(true);
         configurarCalendario();
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
-            }
-        });
+        
         configurarTabla();
         txtMes.addKeyListener(new KeyAdapter(){
             @Override
@@ -99,7 +94,14 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         modeloTabla.setColumnIdentifiers(columnas);
         try {
         List<DTOTurno> turnos = control.recuperarTurno();
+        
         for (DTOTurno t: turnos){
+            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+            Set<String> diasDisplay = new HashSet();
+            for(DayOfWeek d: diasTrabajo){
+                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                diasDisplay.add(dia);
+            }
             Object[] fila = {
                 t.getIdTurno(),
                 t.getNombre(),
@@ -107,6 +109,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 t.getHoraFin(),
                 t.getDiasTrabajo(),
                 t.getColorEvento(),
+                diasDisplay
              };
             modeloTabla.addRow(fila);
         }
@@ -528,7 +531,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void initComponents() {
 
         pnlGestionHorario = new javax.swing.JPanel();
-        jScrollPane = new javax.swing.JScrollPane();
+        scrollTablaTurnos = new javax.swing.JScrollPane();
         tablaTurnosDisponibles = new javax.swing.JTable();
         pnlCalendario = new javax.swing.JPanel();
         lblVista = new javax.swing.JLabel();
@@ -553,7 +556,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         btnAgregarHorario = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión De Horarios");
         setResizable(false);
 
@@ -589,9 +592,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane.setViewportView(tablaTurnosDisponibles);
+        scrollTablaTurnos.setViewportView(tablaTurnosDisponibles);
 
-        pnlGestionHorario.add(jScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 260));
+        pnlGestionHorario.add(scrollTablaTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 260));
 
         pnlCalendario.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -727,14 +730,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
         pnlGestionHorario.add(pnlTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 290, 160));
 
-        txtMes.setBackground(new java.awt.Color(255, 255, 255));
         txtMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtMes.setForeground(new java.awt.Color(39, 71, 125));
         txtMes.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMes.setBorder(null);
         pnlGestionHorario.add(txtMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 100, 130, -1));
 
-        txtAnio.setBackground(new java.awt.Color(255, 255, 255));
         txtAnio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtAnio.setForeground(new java.awt.Color(39, 71, 125));
         txtAnio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1069,7 +1070,8 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.abrirVentanaGestionHorariosMenu();
+        coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
+        this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
     
 
@@ -1080,7 +1082,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JButton btnMesSiguiente;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnTurno;
-    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JLabel lblDiasDetalle;
     private javax.swing.JLabel lblDomingo;
     private javax.swing.JLabel lblHorarioDetalle;
@@ -1097,6 +1098,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JPanel pnlTurno;
     private javax.swing.JRadioButton rdbtnMensual;
     private javax.swing.JRadioButton rdbtnSemanal;
+    private javax.swing.JScrollPane scrollTablaTurnos;
     private javax.swing.JTable tablaTurnosDisponibles;
     private javax.swing.JTextField txtAnio;
     private javax.swing.JTextField txtMes;

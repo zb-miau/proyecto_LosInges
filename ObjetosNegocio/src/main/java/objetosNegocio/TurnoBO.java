@@ -171,5 +171,14 @@ public class TurnoBO{
             throw new NegocioException("Error al recuperar la lista de turnos: " + ex.getMessage());
         }
     }
+    
+    public boolean turnoDuplicado(DTOTurno turno) throws NegocioException{
+        try {
+            return fachadaDAO.turnoDuplicado(TurnoToDTOTurnoAdapter.adaptar(turno));
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al verificar los turnos: " + ex.getMessage());
+        }
+    }
    
 }

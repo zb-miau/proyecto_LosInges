@@ -69,17 +69,6 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         configurarTabla();
         this.idEmpleado = empleado;
         empleado.setId(empleado.getId());
-        
-        
-        
-        
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                coordinador.regresarDeVentanaTurnoAGestionHorario(empleado);
-            }
-        });
-        
         setVisible(true);
     }
 
@@ -117,7 +106,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión De Turno");
         setResizable(false);
 
@@ -422,20 +411,22 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
             turno.setColorEvento(colorTurno);
             try {
                 control.agregarTurno(turno);
+                
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Se agregó el turno", 
+                    "Turno Agregado", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                
             } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(
                     this, 
                     "Error al agregar el turno: " + ex.getMessage(), 
                     "Error al agregar.", 
                     JOptionPane.ERROR_MESSAGE);
+                
             }
             
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Se agregó el turno", 
-                    "Turno Agregado", 
-                    JOptionPane.INFORMATION_MESSAGE);
-
         } 
         
         configurarTabla();
@@ -460,7 +451,8 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.regresarDeVentanaTurnoAGestionHorario(empleado);
+        coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
+        this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -656,7 +648,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
      * Método que genera la tabla de turnos disponibles.
      */
     public void configurarTabla(){
-        String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
+        String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color", "Días"};
         modeloTabla.setRowCount(0);
         modeloTabla.setColumnIdentifiers(columnas);
         

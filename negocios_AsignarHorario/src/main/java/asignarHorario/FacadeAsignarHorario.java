@@ -122,6 +122,11 @@ public class FacadeAsignarHorario implements IAsignarHorario {
     public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado,  LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
         return controlHorario.listaHistorial(empleado, fechaInicio, fechaFin);
     }
+
+    @Override
+    public boolean turnoDuplicado(DTOTurno turnoVerificar) throws NegocioException {
+        return controlHorario.turnoDuplicado(turnoVerificar);
+    }
     
     
 

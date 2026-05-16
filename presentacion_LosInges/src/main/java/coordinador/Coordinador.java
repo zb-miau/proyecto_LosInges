@@ -73,7 +73,7 @@ public class Coordinador {
     public void abrirVentanaTurnoDeGestionHorario(DTOEmpleado idEmpleado){
         // Cerramos la de horarios si está abierta para evitar duplicidad
         if (gestionDeHorarios != null) {
-            gestionDeHorarios.setVisible(false);
+            gestionDeHorarios.dispose();
         }
         
         gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);

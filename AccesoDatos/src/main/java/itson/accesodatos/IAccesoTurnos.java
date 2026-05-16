@@ -55,4 +55,13 @@ public interface IAccesoTurnos<Turno> {
      * errores al acceder a la base de datos.
      */
     public abstract List<Turno> obtenerLista() throws PersistenciaException;
+    
+    /**
+     * Método para verificar que el turno no se está duplicando en la base de datos.
+     * @param turno el turno a agregar.
+     * @return true si existe otro turno igual, false en caso contrario
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
+    public abstract boolean turnoDuplicado(Turno turno) throws PersistenciaException;
 }
