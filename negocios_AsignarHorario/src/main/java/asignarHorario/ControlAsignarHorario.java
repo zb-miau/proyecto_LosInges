@@ -79,7 +79,8 @@ public class ControlAsignarHorario {
         DTOHorarioEmpleado resultado = empleado.getHorarioActual();
         DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
         
-        if (fechaInicio.isAfter(fechaFin) || fechaFin.isBefore(fechaInicio)){
+        
+        if (fechaFin != null && (fechaInicio.isAfter(fechaFin) || fechaFin.isBefore(fechaInicio))){
             throw new NegocioException("La fecha de inicio no puede ser anterior a la fecha de fin.");
         }
         
@@ -168,7 +169,7 @@ public class ControlAsignarHorario {
         }
     }
     
-    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado) throws NegocioException{
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado,  LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException{
         DTOHorarioEmpleado horario;
         if (empleado.getHorarioActual() != null){
             horario = empleado.getHorarioActual();
@@ -176,7 +177,7 @@ public class ControlAsignarHorario {
             horario = new DTOHorarioEmpleado();
             horario.setEmpleado(empleado);
         }
-        return horarioEmpleadoBO.obtenerLista(horario);
+        return horarioEmpleadoBO.obtenerLista(horario, fechaInicio, fechaFin);
     }
 
 }

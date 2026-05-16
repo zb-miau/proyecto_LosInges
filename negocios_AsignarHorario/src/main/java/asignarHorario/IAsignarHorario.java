@@ -35,6 +35,6 @@ public interface IAsignarHorario {
     
     public void modificarTurno(DTOTurno turnoModificar)throws NegocioException;
     
-    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado)throws NegocioException;
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado,LocalDate fechaInicio, LocalDate fechaFin)throws NegocioException;
     
 }

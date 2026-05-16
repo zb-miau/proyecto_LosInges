@@ -196,6 +196,18 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         return primerDia.getDayOfWeek().getValue();
     }
     
+    public LocalDate[] paginaCalendarioActual(){
+        int anio = getAnio().getValue();
+        int mes = getMes().getValue();
+        LocalDate fechaInicio = LocalDate.of(anio, mes, 1);
+        int ultimoDia = java.time.YearMonth.of(anio, mes).lengthOfMonth(); 
+        LocalDate fechaFin = LocalDate.of(anio, mes, ultimoDia);
+        
+        LocalDate[] rangoFechasActual = {fechaInicio, fechaFin};
+        
+        return rangoFechasActual;
+    }
+    
     /**
      * Este método privado es auxiliar para configurar el horario mensual.
      * Calcula cuántas casillas debe crear según el año y mes de las etiquetas
@@ -206,7 +218,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         try {
             
             idEmpleado = control.recuperarEmpleado(idEmpleado);
-            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado);
+            
+            LocalDate[] rangoFechasActual = paginaCalendarioActual();
+            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
                 if (idEmpleado.getHorarioActual() != null) todosLosHorarios.add(idEmpleado.getHorarioActual());
             }
@@ -308,7 +322,8 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         pnlCalendario.removeAll();
         try {
             this.idEmpleado = control.recuperarEmpleado(idEmpleado);
-            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado);
+            LocalDate[] rangoFechasActual = paginaCalendarioActual();
+            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
                 if (idEmpleado.getHorarioActual() != null) todosLosHorarios.add(idEmpleado.getHorarioActual());
             }
@@ -831,10 +846,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         idEmp.setId(idEmpleado.getId());
         try {
             DTOEmpleado empCompleto = control.recuperarEmpleado(idEmp);
-            List<DTOHorarioEmpleado> todos = control.listaHistorial(empCompleto);
-            if (empCompleto.getHorarioActual() != null) todos.add(empCompleto.getHorarioActual());
+            LocalDate[] rangoFechasActual = paginaCalendarioActual();
+            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+            if (empCompleto.getHorarioActual() != null) todosLosHorarios.add(empCompleto.getHorarioActual());
 
-            for (DTOHorarioEmpleado h : todos) {
+            for (DTOHorarioEmpleado h : todosLosHorarios) {
                 LocalDate hInicio = h.getFechaInicio();
                 LocalDate hFin = h.getFechaFin();
 

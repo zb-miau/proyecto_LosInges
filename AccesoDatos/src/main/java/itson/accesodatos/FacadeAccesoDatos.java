@@ -13,6 +13,7 @@ import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import itson.entidades.Incidencia;
 import itson.entidades.Turno;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,9 +174,9 @@ public class FacadeAccesoDatos {
         }
     }
 
-    public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario) throws PersistenciaException {
+    public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario,LocalDate fechaInicio, LocalDate fechaFin) throws PersistenciaException {
         try {
-            return horarioEmpleadosDAO.obtenerLista(horario);
+            return horarioEmpleadosDAO.obtenerListaPorFecha(horario, fechaInicio, fechaFin);
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al obtener el historial. ");

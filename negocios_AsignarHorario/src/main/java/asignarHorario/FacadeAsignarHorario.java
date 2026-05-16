@@ -119,8 +119,8 @@ public class FacadeAsignarHorario implements IAsignarHorario {
     }
 
     @Override
-    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado) throws NegocioException {
-        return controlHorario.listaHistorial(empleado);
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado,  LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
+        return controlHorario.listaHistorial(empleado, fechaInicio, fechaFin);
     }
     
     

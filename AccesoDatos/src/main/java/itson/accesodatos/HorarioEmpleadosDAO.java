@@ -12,7 +12,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.InsertOneResult;
 import entidadesMongo.HorarioEmpleadoMongo;
 import itson.entidades.HorarioEmpleado;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -27,6 +29,7 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
     private static final String CAMPO_ID_EMPLEADO = "id_empleado";
     private static final String CAMPO_ID = "_id";
     private static final String CAMPO_FECHA_FIN = "fecha_fin";
+    private static final String CAMPO_FECHA_INICIO = "fecha_inicio";
     
     private static HorarioEmpleadosDAO horarioEmpleadosDAO;
 
@@ -81,15 +84,23 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
     
 
     @Override
-    public List<HorarioEmpleado> obtenerLista(HorarioEmpleado horario) {
+    public List<HorarioEmpleado> obtenerListaPorFecha(HorarioEmpleado horario, LocalDate fechaInicio, LocalDate fechaFin) {
          List<HorarioEmpleadoMongo> listaHistorial = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
             Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getEmpleado().getId());
+            filtro.append(CAMPO_FECHA_INICIO, new Document("$lte", fechaFin));
+        
+            Document condicionFin = new Document("$or", Arrays.asList(
+                new Document(CAMPO_FECHA_FIN, new Document("$gte", fechaInicio)),
+                new Document(CAMPO_FECHA_FIN, new Document("$exists", false))
+            ));
+
+            Document filtroFinal = new Document("$and", Arrays.asList(filtro, condicionFin));
             
-            coleccionHistorial.find().into(listaHistorial);
+            coleccionHistorial.find(filtroFinal).into(listaHistorial);
             List<HorarioEmpleado> listaLimpia = new ArrayList();
             for (HorarioEmpleadoMongo horarioMongo: listaHistorial) {
                 listaLimpia.add(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(horarioMongo));

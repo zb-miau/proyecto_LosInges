@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,6 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract List<HorarioEmpleado> obtenerLista(HorarioEmpleado horario) throws PersistenciaException;
+    public abstract List<HorarioEmpleado> obtenerListaPorFecha(HorarioEmpleado horario, LocalDate fechaInicio, LocalDate fechaFin) throws PersistenciaException;
     
 }
