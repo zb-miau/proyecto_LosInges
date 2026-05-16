@@ -5,6 +5,7 @@
 package objetosNegocio;
 
 import dto.DTOHorarioEmpleado;
+import itson.accesodatos.FacadeAccesoDatos;
 import itson.accesodatos.HorarioEmpleadosDAO;
 import itson.accesodatos.IAccesoHorarioEmpleado;
 import itson.accesodatos.PersistenciaException;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  * @author josma
  */
 public class HorarioEmpleadoBO {
-    private final IAccesoHorarioEmpleado<HorarioEmpleado> dao;
+    private final FacadeAccesoDatos fachada;
     private static HorarioEmpleadoBO horarioEmpleadosBO;
     private static final Logger LOGGER = Logger.getLogger(HorarioEmpleadoBO.class.getName());
     
@@ -32,7 +33,7 @@ public class HorarioEmpleadoBO {
     }
     
     private HorarioEmpleadoBO(){
-        this.dao = HorarioEmpleadosDAO.getInstance();
+        this.fachada = FacadeAccesoDatos.getInstance();
 
     }
 
@@ -57,7 +58,8 @@ public class HorarioEmpleadoBO {
             HorarioEmpleado horarioEmpleadoCrear = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleado);
             horarioEmpleadoCrear.setIdEmpleado(horarioEmpleado.getEmpleado().getId());
             horarioEmpleadoCrear.getTurno().setColorHexadecimal(horarioEmpleado.getTurno().getColorHexadecimal());
-            horarioEmpleadoCrear = dao.crear(horarioEmpleadoCrear);
+            
+            horarioEmpleadoCrear = fachada.crearHorarioHistorial(horarioEmpleadoCrear);
             DTOHorarioEmpleado horario =  HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleadoCrear);
         
         return horario;
@@ -68,15 +70,22 @@ public class HorarioEmpleadoBO {
     }
 
    
-    public DTOHorarioEmpleado obtener(DTOHorarioEmpleado horarioEmpleado) throws NegocioException {
-        if (horarioEmpleado.getEmpleado().getId() == null){
+    public DTOHorarioEmpleado obtenerActivo(DTOHorarioEmpleado horarioEmpleado) throws NegocioException {
+        if (horarioEmpleado == null){
+            throw new NegocioException("Error al recuperar el horario: horario vacío.");
+        }
+        if (horarioEmpleado.getEmpleado().getId() == null || horarioEmpleado.getEmpleado() == null){
             throw new NegocioException("Error al obtener el horario: no se puede obtener un horario sin el identificador del empleado.");
         }
         
         try {
             HorarioEmpleado horarioEmpleadoObtener = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleado);
-            horarioEmpleadoObtener = dao.obtener(horarioEmpleadoObtener);
-            DTOHorarioEmpleado horarioEmpleadoRecuperado = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleadoObtener);
+            horarioEmpleadoObtener = fachada.obtenerHorarioActivo(horarioEmpleadoObtener);
+            DTOHorarioEmpleado horarioEmpleadoRecuperado = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptarConEmpleado(
+                    horarioEmpleadoObtener, 
+                    horarioEmpleado.getEmpleado());
+           
+            
             return horarioEmpleadoRecuperado;
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
@@ -89,7 +98,7 @@ public class HorarioEmpleadoBO {
             throw new NegocioException("Error al obtener los horarios: no se puede obtener un horario sin el identificador del empleado.");
         }
         try {
-            List<HorarioEmpleado> horarioEmpleados = dao.obtenerLista(HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(empleado));
+            List<HorarioEmpleado> horarioEmpleados = fachada.obtenerHistorial(HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(empleado));
             List<DTOHorarioEmpleado> listaTurnos = new ArrayList();
             for (HorarioEmpleado h : horarioEmpleados) {
                 DTOHorarioEmpleado horarioEmpleadoNuevo = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(h);
@@ -103,4 +112,15 @@ public class HorarioEmpleadoBO {
         }
     }
 
+    public DTOHorarioEmpleado modificarHorarioInfinito(DTOHorarioEmpleado horario) throws NegocioException {
+        try {
+            HorarioEmpleado horarioModificar = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horario);
+            
+            return HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(fachada.modificarHistorial(horarioModificar));
+        
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al modificar el historial: " + ex.getMessage());
+        }
+    }
 }

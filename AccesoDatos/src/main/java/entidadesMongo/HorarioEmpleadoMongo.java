@@ -4,8 +4,6 @@
  */
 package entidadesMongo;
 
-import itson.entidades.Empleado;
-import itson.entidades.Turno;
 import java.time.LocalDate;
 import java.util.Objects;
 import org.bson.BsonType;
@@ -24,12 +22,12 @@ public class HorarioEmpleadoMongo {
     private String idHorarioEmpleado;
     
     @BsonIgnore
-    private Empleado empleado;
+    private EmpleadoMongo empleado;
     
     @BsonProperty("id_empleado") 
     private String idEmpleado;
     
-    private Turno turno;
+    private TurnoMongo turno;
     
     @BsonProperty("fecha_inicio") 
     private LocalDate fechaInicio;
@@ -37,13 +35,13 @@ public class HorarioEmpleadoMongo {
     @BsonProperty("fecha_fin") 
     private LocalDate fechaFin;
     
-    @BsonProperty("fecha_fin") 
+    @BsonProperty("fecha_cambio") 
     private LocalDate fechaCambio;
 
     public HorarioEmpleadoMongo() {
     }
 
-    public HorarioEmpleadoMongo(String idHorarioEmpleado, Empleado empleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin) {
+    public HorarioEmpleadoMongo(String idHorarioEmpleado, EmpleadoMongo empleado, TurnoMongo turno, LocalDate fechaInicio, LocalDate fechaFin) {
         this.idHorarioEmpleado = idHorarioEmpleado;
         this.empleado = empleado;
         this.turno = turno;
@@ -52,7 +50,7 @@ public class HorarioEmpleadoMongo {
     }
 
 
-    public HorarioEmpleadoMongo(Empleado empleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin) {
+    public HorarioEmpleadoMongo(EmpleadoMongo empleado, TurnoMongo turno, LocalDate fechaInicio, LocalDate fechaFin) {
         this.empleado = empleado;
         this.turno = turno;
         this.fechaInicio = fechaInicio;
@@ -61,7 +59,7 @@ public class HorarioEmpleadoMongo {
     
   
 
-    public Turno getTurno() {
+    public TurnoMongo getTurno() {
         return turno;
     }
 
@@ -73,7 +71,7 @@ public class HorarioEmpleadoMongo {
         return fechaFin;
     }
 
-    public void setTurno(Turno turno) {
+    public void setTurno(TurnoMongo turno) {
         this.turno = turno;
     }
 
@@ -93,11 +91,11 @@ public class HorarioEmpleadoMongo {
         this.idHorarioEmpleado = idHorarioEmpleado;
     }
 
-    public Empleado getEmpleado() {
+    public EmpleadoMongo getEmpleado() {
         return empleado;
     }
 
-    public void setEmpleado(Empleado empleado) {
+    public void setEmpleado(EmpleadoMongo empleado) {
         this.empleado = empleado;
         this.idEmpleado = empleado.getId();
     }

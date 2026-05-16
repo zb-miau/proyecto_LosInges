@@ -5,13 +5,12 @@
 package itson.accesodatos;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author Zaira
  */
-public interface IAccesoTurnos<TurnoMongo> {
+public interface IAccesoTurnos<Turno> {
     
     /**
      * Método para crear un turno y lo agrega a la base de datos.
@@ -20,7 +19,7 @@ public interface IAccesoTurnos<TurnoMongo> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract TurnoMongo crear(TurnoMongo turno) throws PersistenciaException;
+    public abstract Turno crear(Turno turno) throws PersistenciaException;
     
     /**
      * Método para eliminar un turno de la base de datos.
@@ -29,7 +28,7 @@ public interface IAccesoTurnos<TurnoMongo> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract TurnoMongo eliminar(TurnoMongo turno) throws PersistenciaException;
+    public abstract Turno eliminar(Turno turno) throws PersistenciaException;
     
     /**
      * Método para modificar un turno en la base de datos.
@@ -38,7 +37,7 @@ public interface IAccesoTurnos<TurnoMongo> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract TurnoMongo modificar(TurnoMongo turno) throws PersistenciaException;
+    public abstract Turno modificar(Turno turno) throws PersistenciaException;
     
     /**
      * Método para obtener un turno de la base de datos.
@@ -47,7 +46,7 @@ public interface IAccesoTurnos<TurnoMongo> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract TurnoMongo obtener(TurnoMongo turno) throws PersistenciaException;
+    public abstract Turno obtener(Turno turno) throws PersistenciaException;
     
     /**
      * Método para obtener una lista de turnos.
@@ -55,5 +54,5 @@ public interface IAccesoTurnos<TurnoMongo> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract List<TurnoMongo> obtenerLista() throws PersistenciaException;
+    public abstract List<Turno> obtenerLista() throws PersistenciaException;
 }

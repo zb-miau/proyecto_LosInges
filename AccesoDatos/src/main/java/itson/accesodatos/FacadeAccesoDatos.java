@@ -4,21 +4,28 @@
  */
 package itson.accesodatos;
 
+import adapters.EmpleadoMongoAEmpleadoAdapter;
 import adapters.TurnoMongoATurnoAdapter;
 import com.mongodb.MongoException;
+import entidadesMongo.EmpleadoMongo;
 import entidadesMongo.TurnoMongo;
+import itson.entidades.Empleado;
+import itson.entidades.HorarioEmpleado;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import org.bson.types.ObjectId;
 
 /**
  * Clase Fachada que sirve como puente entre la capa de negocios y la de persistencia.
  * @author Zaira
  */
 public class FacadeAccesoDatos {
-    private static IAccesoTurnos<TurnoMongo> turnosDAO;
+    private static IAccesoTurnos<Turno> turnosDAO;
+    private static IAccesoEmpleados<Empleado> empleadosDAO;
+    private static IAccesoHorarioEmpleado<HorarioEmpleado> horarioEmpleadosDAO;
     private static FacadeAccesoDatos fachadaDAO;
     private static final Logger LOGGER = Logger.getLogger(FacadeAccesoDatos.class.getName());
     
@@ -31,7 +38,9 @@ public class FacadeAccesoDatos {
     }
     
     private FacadeAccesoDatos(){
+        this.empleadosDAO = EmpleadosDAO.getInstance();
         this.turnosDAO = TurnosDAO.getInstance();
+        this.horarioEmpleadosDAO = HorarioEmpleadosDAO.getInstance();
     }
 
     /**
@@ -44,8 +53,7 @@ public class FacadeAccesoDatos {
      */
     public Turno crearTurno(Turno turno) throws PersistenciaException {
         try{
-            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
-            return TurnoMongoATurnoAdapter.adaptar(this.turnosDAO.crear(turnoMongo));
+            return turnosDAO.crear(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -62,8 +70,7 @@ public class FacadeAccesoDatos {
      */
     public Turno eliminarTurno(Turno turno) throws PersistenciaException{
         try{
-            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
-            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.eliminar(turnoMongo));
+            return turnosDAO.eliminar(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -81,8 +88,7 @@ public class FacadeAccesoDatos {
     public Turno modificarTurno(Turno turno) throws PersistenciaException{
         try{
             
-            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
-            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.modificar(turnoMongo));
+            return turnosDAO.modificar(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -99,8 +105,7 @@ public class FacadeAccesoDatos {
      */
     public Turno obtenerTurno(Turno turno) throws PersistenciaException{
         try{
-            TurnoMongo turnoMongo = TurnoMongoATurnoAdapter.adaptar(turno);
-            return TurnoMongoATurnoAdapter.adaptar(turnosDAO.obtener(turnoMongo));
+            return turnosDAO.obtener(turno);
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
@@ -116,17 +121,63 @@ public class FacadeAccesoDatos {
      */
     public List<Turno> obtenerListaTurnos() throws PersistenciaException{
         try{
-            List<Turno> turnosLimpios = new ArrayList();
-            List<TurnoMongo> turnosMongo = turnosDAO.obtenerLista();
-            for (TurnoMongo turnos: turnosMongo) {
-                turnosLimpios.add(TurnoMongoATurnoAdapter.adaptar(turnos));
-            }
             
-            return turnosLimpios;
+            return turnosDAO.obtenerLista();
             
         } catch (MongoException ex){
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al recuperar la lista de turnos de la base de datos. ");
+        }
+    }
+    
+    public Empleado modificarHorarioActual(Empleado empleado) throws PersistenciaException{
+        try {
+            if (empleado.getHorarioActual().getIdHorarioEmpleado() == null){
+                empleado.getHorarioActual().setIdHorarioEmpleado(new ObjectId().toString());
+            }
+
+            return empleadosDAO.modificarHorarioActual(empleado);
+            
+        }catch (MongoException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al modificar el horario actual del empleado. ");
+        }
+    }
+    
+    public HorarioEmpleado crearHorarioHistorial(HorarioEmpleado horario) throws PersistenciaException{
+        try {
+            
+            return horarioEmpleadosDAO.crear(horario);
+        } catch (MongoException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error crear el historial. ");
+        }
+    }
+    
+    public HorarioEmpleado obtenerHorarioActivo(HorarioEmpleado horario) throws PersistenciaException{
+        try {
+            return horarioEmpleadosDAO.obtenerActivo(horario);
+        } catch (MongoException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error obtener horario del historial. ");
+        }
+    }
+    
+    public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario) throws PersistenciaException{
+        try {
+            return horarioEmpleadosDAO.obtenerLista(horario);
+        } catch (MongoException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al obtener el historial. ");
+        }
+    }
+    
+    public HorarioEmpleado modificarHistorial(HorarioEmpleado horario) throws PersistenciaException{
+        try {
+            return horarioEmpleadosDAO.modificar(horario);
+        } catch (MongoException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al modificar el historial. ");
         }
     }
 }

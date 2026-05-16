@@ -40,6 +40,23 @@ public class HorarioEmpleado {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
+
+    public HorarioEmpleado(String idEmpleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.idEmpleado = idEmpleado;
+        this.turno = turno;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
+
+    public HorarioEmpleado(String idHorarioEmpleado, String idEmpleado, Turno turno, LocalDate fechaInicio, LocalDate fechaFin, LocalDate fechaCambio) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
+        this.idEmpleado = idEmpleado;
+        this.turno = turno;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.fechaCambio = fechaCambio;
+    }
+    
     
   
 

@@ -8,6 +8,7 @@ import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
+import java.time.LocalDate;
 import java.util.logging.Logger;
 
 /**
@@ -34,30 +35,62 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
                 horarioEmpleado.getFechaInicio(),
                 horarioEmpleado.getFechaFin()
         );
+        
+        if (horarioEmpleado.getEmpleado() != null) {
+            horarioEmpleadoCrear.setIdEmpleado(horarioEmpleado.getEmpleado().getId());
+        }
+        
+        if(horarioEmpleado.getIdHorarioEmpleado()!= null){
+            horarioEmpleadoCrear.setIdHorarioEmpleado(horarioEmpleado.getIdHorarioEmpleado());
+        }
+        
+        if(horarioEmpleado.getFechaCambio() != null){
+            horarioEmpleadoCrear.setFechaCambio(horarioEmpleado.getFechaCambio());
+        }
 
         return horarioEmpleadoCrear;
     }
     
-    public static DTOHorarioEmpleado adaptarConEmpleado(HorarioEmpleado entidad, DTOEmpleado dtoEmpleado) {
-        if (entidad == null) return null;
+    public static DTOHorarioEmpleado adaptarConEmpleado(HorarioEmpleado horarioEmpleado, DTOEmpleado dtoEmpleado) {
+        if (horarioEmpleado == null) return null;
 
-        return new DTOHorarioEmpleado(
+         DTOHorarioEmpleado dtoHorarioEmpleado = new DTOHorarioEmpleado(
                 dtoEmpleado, 
-                TurnoToDTOTurnoAdapter.adaptar(entidad.getTurno()), 
-                entidad.getFechaInicio(),
-                entidad.getFechaFin()
+                TurnoToDTOTurnoAdapter.adaptar(horarioEmpleado.getTurno()), 
+                horarioEmpleado.getFechaInicio(),
+                horarioEmpleado.getFechaFin()
         );
+         
+        if(horarioEmpleado.getIdHorarioEmpleado()!= null){
+            dtoHorarioEmpleado.setIdHorarioEmpleado(horarioEmpleado.getIdHorarioEmpleado());
+        }
+        
+        if(horarioEmpleado.getFechaCambio() != null){
+            dtoHorarioEmpleado.setFechaCambio(horarioEmpleado.getFechaCambio());
+        }
+        
+        return dtoHorarioEmpleado;
     }
     
-        public static HorarioEmpleado adaptarConEmpleado(DTOHorarioEmpleado entidad, Empleado empleado) {
-        if (entidad == null) return null;
+        public static HorarioEmpleado adaptarConEmpleado(DTOHorarioEmpleado horarioEmpleado, Empleado empleado) {
+        if (horarioEmpleado == null) return null;
 
-        return new HorarioEmpleado(
+        HorarioEmpleado nuevoHorarioEmpleado = new HorarioEmpleado(
                 empleado, 
-                TurnoToDTOTurnoAdapter.adaptar(entidad.getTurno()), 
-                entidad.getFechaInicio(),
-                entidad.getFechaFin()
+                TurnoToDTOTurnoAdapter.adaptar(horarioEmpleado.getTurno()), 
+                horarioEmpleado.getFechaInicio(),
+                horarioEmpleado.getFechaFin()
         );
+        
+        if(horarioEmpleado.getIdHorarioEmpleado()!= null){
+            nuevoHorarioEmpleado.setIdHorarioEmpleado(horarioEmpleado.getIdHorarioEmpleado());
+        }
+        
+        if(horarioEmpleado.getFechaCambio() != null){
+            nuevoHorarioEmpleado.setFechaCambio(horarioEmpleado.getFechaCambio());
+        }
+        
+        return nuevoHorarioEmpleado;
     }
 
     public static DTOHorarioEmpleado adaptar(HorarioEmpleado horarioEmpleado) {
@@ -73,7 +106,19 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
                 horarioEmpleado.getFechaFin()
                 
         );
+        
+        if(horarioEmpleado.getIdHorarioEmpleado()!= null){
+            horarioEmpleadoCrear.setIdHorarioEmpleado(horarioEmpleado.getIdHorarioEmpleado());
+        }
+        
+        
+        if(horarioEmpleado.getFechaCambio() != null){
+            horarioEmpleadoCrear.setFechaCambio(horarioEmpleado.getFechaCambio());
+        }
 
         return horarioEmpleadoCrear;
+
     }
+    
+   
 }

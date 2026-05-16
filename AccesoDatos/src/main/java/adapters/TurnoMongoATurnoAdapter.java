@@ -12,7 +12,7 @@ import itson.entidades.Turno;
  * @author Zaira
  */
 public class TurnoMongoATurnoAdapter {
-    public static Turno adaptar(TurnoMongo turnoMongo){
+    public static Turno adaptarATurno(TurnoMongo turnoMongo){
         Turno turno = new Turno(
                 turnoMongo.getIdTurno(),
                 turnoMongo.getNombre(),
@@ -25,9 +25,8 @@ public class TurnoMongoATurnoAdapter {
         return turno;
     }
     
-    public static TurnoMongo adaptar(Turno turno){
+    public static TurnoMongo adaptarATurnoMongo(Turno turno){
         TurnoMongo turnoMongo = new TurnoMongo(
-                turno.getIdTurno(),
                 turno.getNombre(),
                 turno.getHoraInicio(),
                 turno.getHoraFin(),

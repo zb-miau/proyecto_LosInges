@@ -6,6 +6,7 @@ package objetosNegocio;
 
 import dto.DTOEmpleado;
 import itson.accesodatos.EmpleadosDAO;
+import itson.accesodatos.FacadeAccesoDatos;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class EmpleadoBO {
     private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
     
     private final IAccesoEmpleados<Empleado> dao;
+    FacadeAccesoDatos fachadaDAO;
     private static EmpleadoBO empleadosBO;
 
     public static synchronized EmpleadoBO getInstance() {
@@ -33,6 +35,7 @@ public class EmpleadoBO {
     }
     
     private EmpleadoBO(){
+        this.fachadaDAO = FacadeAccesoDatos.getInstance();
         this.dao = EmpleadosDAO.getInstance();
 
     }
@@ -80,6 +83,7 @@ public class EmpleadoBO {
 
     public DTOEmpleado obtener(DTOEmpleado turno){
 
+        
         Empleado empleadoObtener = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(turno);
         empleadoObtener = dao.obtener(empleadoObtener);
         DTOEmpleado turnoRecuperado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoObtener);
@@ -109,8 +113,10 @@ public class EmpleadoBO {
         
         try {
             Empleado empleadoModificar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
-            empleadoModificar = dao.modificarHorarioActual(empleadoModificar);
+            
+            empleadoModificar = fachadaDAO.modificarHorarioActual(empleadoModificar);
             DTOEmpleado empleadoModificado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoModificar);
+           
             return empleadoModificado;
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());

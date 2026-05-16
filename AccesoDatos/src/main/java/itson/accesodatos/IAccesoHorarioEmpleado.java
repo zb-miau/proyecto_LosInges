@@ -38,7 +38,7 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract HorarioEmpleado obtener(HorarioEmpleado horario) throws PersistenciaException;
+    public abstract HorarioEmpleado obtenerActivo(HorarioEmpleado horario) throws PersistenciaException;
     
     /**
      * Método para obtener una lista de horarios.

@@ -29,6 +29,10 @@ public class EmpleadoMongoAEmpleadoAdapter {
         mongo.setRfc(domain.getRfc());
         mongo.setNss(domain.getNss());
         
+        if (domain.getId()!= null){
+            mongo.setId(domain.getId());
+        }
+        
         // Conversión de Dirección
         if (domain.getDireccion() != null) {
             mongo.setDireccion(toDireccionMongo(domain.getDireccion()));
@@ -37,6 +41,7 @@ public class EmpleadoMongoAEmpleadoAdapter {
         // Conversión de Horario
         if (domain.getHorarioActual() != null) {
             // AQUI DEBE DE IR EL ADPATER DEL HORARIO DEL EMPLEADO
+            mongo.setHorarioActual(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(domain.getHorarioActual(), mongo));
             // mongo.setHorarioActual(toHorarioMongo(domain.getHorarioActual()));
         }
 
@@ -61,7 +66,7 @@ public class EmpleadoMongoAEmpleadoAdapter {
         }
 
         if (mongo.getHorarioActual() != null) {
-            
+            domain.setHorarioActual(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(mongo.getHorarioActual(), domain));
             //AQUI DEBE DE IR EL ADPATER DEL HORARIO DEL EMPLEADO
             // domain.setHorarioActual(toHorarioDomain(mongo.getHorarioActual()));
         }

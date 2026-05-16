@@ -33,7 +33,10 @@ public class EmpleadoToDTOEmpleadoAdapter {
                 dto.getApellidoPaterno(),
                 dto.getApellidoMaterno()
         );
-
+        
+        if (dto.getId()!=null){
+            empleado.setId(dto.getId());
+        }
                 
         if (dto.getHorarioActual()!= null){
             HorarioEmpleado horarioActual = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptarConEmpleado(dto.getHorarioActual(), empleado);

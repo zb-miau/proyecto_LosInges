@@ -37,6 +37,16 @@ public class DTOHorarioEmpleado {
         this.fechaFin = fechaFin;
     }
 
+    public DTOHorarioEmpleado(String idHorarioEmpleado, DTOTurno turno, LocalDate fechaInicio, LocalDate fechaFin, LocalDate fechaCambio) {
+        this.idHorarioEmpleado = idHorarioEmpleado;
+        this.turno = turno;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.fechaCambio = fechaCambio;
+    }
+    
+    
+
     public DTOEmpleado getEmpleado() {
         return empleado;
     }
@@ -107,4 +117,10 @@ public class DTOHorarioEmpleado {
         this.idHorarioEmpleado = idHorarioEmpleado;
     }
 
+    @Override
+    public String toString() {
+        return "DTOHorarioEmpleado{" + "idHorarioEmpleado=" + idHorarioEmpleado + ", empleado=" + empleado + ", turno=" + turno + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", fechaCambio=" + fechaCambio + '}';
+    }
+
+    
 }

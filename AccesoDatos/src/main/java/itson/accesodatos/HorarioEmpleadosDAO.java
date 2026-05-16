@@ -4,9 +4,13 @@
  */
 package itson.accesodatos;
 
+import adapters.HorarioEmpleadoMongoAHorarioEmpleadoAdapter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.InsertOneResult;
+import entidadesMongo.HorarioEmpleadoMongo;
 import itson.entidades.HorarioEmpleado;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
     private static final String COLECCION_HISTORIAL = "historial";
     private static final String CAMPO_ID_EMPLEADO = "id_empleado";
     private static final String CAMPO_ID = "_id";
+    private static final String CAMPO_FECHA_FIN = "fecha_fin";
     
     private static HorarioEmpleadosDAO horarioEmpleadosDAO;
 
@@ -44,52 +49,70 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
 
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
-        return baseDatos.getCollection(COLECCION_HISTORIAL, HorarioEmpleado.class);
+        return baseDatos.getCollection(COLECCION_HISTORIAL, HorarioEmpleadoMongo.class);
     }
     
     @Override
     public HorarioEmpleado crear(HorarioEmpleado horario) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<HorarioEmpleado> coleccionHistorial = recuperarColeccion(bd);
+            MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
 
-            coleccionHistorial.insertOne(horario);
-        
-
-            return horario;
+            HorarioEmpleadoMongo horarioMongo = HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAMongo(horario);
+            
+            InsertOneResult resultado = coleccionHistorial.insertOne(horarioMongo);
+            horarioMongo = coleccionHistorial.find(new Document(CAMPO_ID, resultado.getInsertedId())).first();
+            return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(horarioMongo);
         }
     }
 
     @Override
-    public HorarioEmpleado obtener(HorarioEmpleado horario) {
+    public HorarioEmpleado obtenerActivo(HorarioEmpleado horario) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<HorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
-            Document filtro = new Document(CAMPO_ID, new ObjectId(horario.getIdHorarioEmpleado()));
+            MongoCollection<HorarioEmpleadoMongo> coleccionHorarioEmpleados = recuperarColeccion(bd);
+            Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getIdEmpleado());
+            filtro.append(CAMPO_FECHA_FIN, new Document("$exists", false));
             
-            return coleccionHorarioEmpleados.find(filtro).first();
+            HorarioEmpleadoMongo horarioMongo = coleccionHorarioEmpleados.find(filtro).first();
+            return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(horarioMongo, horario.getEmpleado());
         }
     }
     
 
     @Override
     public List<HorarioEmpleado> obtenerLista(HorarioEmpleado horario) {
-         List<HorarioEmpleado> listaHorarioEmpleados = new ArrayList();
+         List<HorarioEmpleadoMongo> listaHistorial = new ArrayList();
         
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<HorarioEmpleado> coleccionHorarioEmpleados = recuperarColeccion(bd);
+            MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
             Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getEmpleado().getId());
             
-            coleccionHorarioEmpleados.find(filtro).into(listaHorarioEmpleados);
-           
-            return listaHorarioEmpleados;
+            coleccionHistorial.find().into(listaHistorial);
+            List<HorarioEmpleado> listaLimpia = new ArrayList();
+            for (HorarioEmpleadoMongo horarioMongo: listaHistorial) {
+                listaLimpia.add(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(horarioMongo));
+            }
+            
+            return listaLimpia;
         }
     }
 
     @Override
     public HorarioEmpleado modificar(HorarioEmpleado horario) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
+            Document filtro = new Document(CAMPO_ID, new ObjectId(horario.getIdHorarioEmpleado()));
+            
+           
+            HorarioEmpleadoMongo mongo = coleccionHistorial.findOneAndReplace(
+                    filtro, 
+                    HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAMongo(horario));
+            
+            return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(mongo);
+        }
     }
 
 }

@@ -69,7 +69,6 @@ public class ControlAsignarHorario {
 
     /**
      * Este memtodo permite la modificación de un horario
-     *
      * @param turno
      * @param idEmpleado
      * @param fechaInicio
@@ -79,14 +78,33 @@ public class ControlAsignarHorario {
         // Intentamos modificar primero
         DTOHorarioEmpleado resultado = empleado.getHorarioActual();
         DTOHorarioEmpleado nuevo = new DTOHorarioEmpleado(empleado, turno, fechaInicio, fechaFin);
+        
+        if (fechaInicio.isAfter(fechaFin) || fechaFin.isBefore(fechaInicio)){
+            throw new NegocioException("La fecha de inicio no puede ser anterior a la fecha de fin.");
+        }
+        
         if (resultado != null) {
-            if (((resultado.getFechaFin() == null && nuevo.getFechaInicio().isAfter(resultado.getFechaInicio())) 
-                    || resultado.getFechaFin() != null && resultado.getFechaInicio().isBefore(nuevo.getFechaInicio()))){
-                resultado.setFechaFin(nuevo.getFechaInicio().minusDays(1));
+            if (nuevo.getFechaInicio().isAfter(resultado.getFechaInicio())) {
+                if ((resultado.getFechaFin() != null && (nuevo.getFechaFin() != null && nuevo.getFechaFin().isBefore(resultado.getFechaFin())))
+                    || resultado.getFechaFin() == null){
+                    resultado.setFechaFin(nuevo.getFechaInicio().minusDays(1));
+                }
+            }   
+            
+            DTOHorarioEmpleado infinito = horarioEmpleadoBO.obtenerActivo(resultado);
+            
+            if (infinito != null && nuevo.getFechaInicio().isAfter(infinito.getFechaInicio())){
+                infinito.setFechaFin(nuevo.getFechaInicio().minusDays(1));
+                horarioEmpleadoBO.modificarHorarioInfinito(infinito);
+            }
+            resultado.setFechaCambio(LocalDate.now());  
+            if (resultado.getEmpleado() == null) {
+                resultado.setEmpleado(empleado);
             }
             horarioEmpleadoBO.crear(resultado);
         }
         empleado.setHorarioActual(nuevo);
+        System.out.println(nuevo);
         empleadoBO.modificarHorarioActual(empleado);
     }
 
@@ -131,6 +149,10 @@ public class ControlAsignarHorario {
      */
     protected DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
 
+        if (empleado.getId() == null){
+            System.out.println("Control asignar horario");
+            return null;
+        }
         return empleadoBO.obtener(empleado);
 
     }

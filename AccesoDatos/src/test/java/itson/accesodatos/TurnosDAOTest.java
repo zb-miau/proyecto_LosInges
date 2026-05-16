@@ -4,7 +4,7 @@
  */
 package itson.accesodatos;
 
-import entidadesMongo.TurnoMongo;
+import itson.entidades.Turno;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Zaira
  */
 public class TurnosDAOTest {
-    IAccesoTurnos<TurnoMongo> dao = TurnosDAO.getInstance();
+    IAccesoTurnos<Turno> dao = TurnosDAO.getInstance();
     
     public TurnosDAOTest() {
     }
@@ -27,7 +27,7 @@ public class TurnosDAOTest {
         Set<DayOfWeek> dias = new HashSet();
         dias.add(DayOfWeek.MONDAY);
         
-        TurnoMongo turno1 = new TurnoMongo (
+        Turno turno1 = new Turno (
                 "Turno 1",
                 LocalTime.of(12,15),
                 LocalTime.of(20,30),
@@ -36,7 +36,7 @@ public class TurnosDAOTest {
         );
         
         dias.add(DayOfWeek.TUESDAY);
-        TurnoMongo turno2 = new TurnoMongo (
+        Turno turno2 = new Turno(
                 "Turno 2",
                 LocalTime.of(7,15),
                 LocalTime.of(13,30),
@@ -45,11 +45,11 @@ public class TurnosDAOTest {
         );
         
         assertDoesNotThrow( () -> {
-            TurnoMongo turnoAgregado1 = dao.crear(turno1);
+            Turno turnoAgregado1 = dao.crear(turno1);
             assertNotNull(turnoAgregado1.getIdTurno());
             assertEquals(turnoAgregado1.getNombre(), turno1.getNombre());
 
-            TurnoMongo turnoAgregado2 = dao.crear(turno2);
+            Turno turnoAgregado2 = dao.crear(turno2);
             assertNotNull(turnoAgregado2.getIdTurno());
             assertEquals(turnoAgregado2.getNombre(), turno2.getNombre());
         });

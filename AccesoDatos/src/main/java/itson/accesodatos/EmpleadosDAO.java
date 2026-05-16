@@ -107,15 +107,11 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
            MongoDatabase bd = recuperarBaseDatos(cliente);
            MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
-
-           String idLimpio = entidad.getId().trim();
-           EmpleadoMongo resultado = coleccion.find(Filters.eq("_id", new ObjectId(idLimpio))).first();
+           
+           EmpleadoMongo resultado = coleccion.find(Filters.eq("_id", new ObjectId(entidad.getId()))).first();
 
            return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
-       } catch (IllegalArgumentException e) {
-           System.err.println("Error: ID inválido: " + entidad.getId());
-           return null;
-       }
+       } 
    }
 
    @Override
@@ -142,20 +138,13 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
    public Empleado modificarHorarioActual(Empleado empleado) {
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
            MongoDatabase bd = recuperarBaseDatos(cliente);
-           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
-
-           ObjectId id = new ObjectId(empleado.getId());
-
-           // Convertimos el horario de dominio a horario mongo usando el adapter
-           // (Asumiendo que agregaste el método toHorarioMongo al adapter)
-           var horarioMongo = EmpleadoMongoAEmpleadoAdapter.toMongo(empleado).getHorarioActual();
-
-           coleccion.updateOne(
-               Filters.eq("_id", id), 
-               Updates.set("horario_actual", horarioMongo)
-           );
-
-           return obtener(empleado);
+           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection(COLECCION_EMPLEADOS, EmpleadoMongo.class);
+           Document filtro = new Document(CAMPO_ID, new ObjectId(empleado.getId()));
+           
+           EmpleadoMongo mongo = EmpleadoMongoAEmpleadoAdapter.toMongo(empleado);
+           mongo = coleccion.findOneAndUpdate(filtro, Updates.set(CAMPO_HORARIO_ACTUAL, mongo.getHorarioActual()));
+           
+           return EmpleadoMongoAEmpleadoAdapter.toDomain(mongo);
        }
    }
    

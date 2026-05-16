@@ -133,12 +133,10 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
      * @param empleado el id del empleado seleccionado
      */
     private void abrirVentana(DTOEmpleado  empleado){
-        DTOEmpleado empleadoId = new DTOEmpleado();
-        empleadoId.setId(empleado.getId());
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
             if (turnos.isEmpty()){
-                coordinador.abrirVentanaTurnoDeMenu(empleadoId);
+                coordinador.abrirVentanaTurnoDeMenu(empleado);
 
             } else {
                 coordinador.abrirVentanaGestionHorariosDeMenu(empleado);
