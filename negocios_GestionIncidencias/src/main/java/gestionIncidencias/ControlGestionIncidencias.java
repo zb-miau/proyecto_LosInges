@@ -9,6 +9,7 @@ import dto.DTOIncidencia;
 import java.util.List;
 import objetosNegocio.EmpleadoBO;
 import objetosNegocio.IncidenciaBO;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -31,19 +32,19 @@ public class ControlGestionIncidencias {
 
     }
 
-    public void crearIncidencia(DTOIncidencia dTOIncidencia) {
+    public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
         incidenciaBO.crear(dTOIncidencia);
 
     }
 
-    public List<DTOIncidencia> obtenerIncidencias() {
+    public List<DTOIncidencia> obtenerIncidencias() throws NegocioException {
 
         return incidenciaBO.obtenerLista();
 
     }
 
-    public void validarIncidencia(DTOIncidencia dTOIncidencia) {
+    public void validarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
         dTOIncidencia.setEstado(DTOIncidencia.Estado.VALIDADA);
 
@@ -51,7 +52,7 @@ public class ControlGestionIncidencias {
 
     }
 
-    public void rechazarIncidencia(DTOIncidencia dTOIncidencia) {
+    public void rechazarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
         dTOIncidencia.setEstado(DTOIncidencia.Estado.RECHAZADA);
 

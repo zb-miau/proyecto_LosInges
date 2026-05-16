@@ -5,12 +5,15 @@
 package objetosNegocio;
 
 import dto.DTOIncidencia;
+import itson.accesodatos.FacadeAccesoDatos;
 import itson.accesodatos.IncidenciasDAO;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
 import itson.accesodatos.IAccesoEmpleados;
 import itson.accesodatos.IAccesoIncidencias;
+import itson.accesodatos.PersistenciaException;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,8 +21,9 @@ import itson.accesodatos.IAccesoIncidencias;
  */
 public class IncidenciaBO {
 
-    private final IAccesoIncidencias<Incidencia> dao;
+    private static FacadeAccesoDatos fachadaDAO;
     private static IncidenciaBO incidenciaBO;
+    private static final Logger LOGGER = Logger.getLogger(IncidenciaBO.class.getName());
 
     public static synchronized IncidenciaBO getInstance() {
         if (incidenciaBO == null) {
@@ -29,51 +33,128 @@ public class IncidenciaBO {
     }
 
     private IncidenciaBO() {
-        this.dao = IncidenciasDAO.getInstance();
+        this.fachadaDAO = FacadeAccesoDatos.getInstance();
 
     }
 
-    public DTOIncidencia crear(DTOIncidencia incidencia) {
-        Incidencia incidenciaCrear = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
-        incidenciaCrear = dao.crear(incidenciaCrear);
-        incidencia.setIdIncidencia(incidenciaCrear.getIdIncidencia());
+    public DTOIncidencia crear(DTOIncidencia incidencia) throws NegocioException {
 
-        return incidencia;
-    }
+        try {
 
-    public DTOIncidencia eliminar(DTOIncidencia incidencia) {
-        Incidencia incidenciaEliminar = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
-        incidenciaEliminar = dao.eliminar(incidenciaEliminar);
+            if (incidencia == null) {
 
-        return incidencia;
-    }
+                throw new NegocioException("Error al insertar incidencia: no es posible guardar una incidencia nula");
 
-    public DTOIncidencia modificar(DTOIncidencia incidencia) {
-        Incidencia incidenciaModificar = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
-        incidenciaModificar = dao.modificar(incidenciaModificar);
-        DTOIncidencia incidenciaModificada = IncidenciaToDTOIncidenciaAdapter.adaptar(incidenciaModificar);
-
-        return incidenciaModificada;
-    }
-
-    public DTOIncidencia obtener(DTOIncidencia incidencia) {
-        Incidencia incidenciaObtener = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
-        incidenciaObtener = dao.obtener(incidenciaObtener);
-        DTOIncidencia incidenciaRecuperada = IncidenciaToDTOIncidenciaAdapter.adaptar(incidenciaObtener);
-        return incidenciaRecuperada;
-    }
-
-    public List<DTOIncidencia> obtenerLista() {
-        List<Incidencia> incidencias = dao.obtenerLista();
-        List<DTOIncidencia> listaIncidencias = new ArrayList();
-
-        if (!incidencias.isEmpty()) {
-            for (Incidencia i : incidencias) {
-                DTOIncidencia incidencia = IncidenciaToDTOIncidenciaAdapter.adaptar(i);
-                listaIncidencias.add(incidencia);
             }
+
+            Incidencia incidenciaCrear = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
+
+            incidenciaCrear = fachadaDAO.crearIncidencia(incidenciaCrear);
+            incidencia.setIdIncidencia(incidenciaCrear.getIdIncidencia());
+
+            return incidencia;
+
+        } catch (PersistenciaException e) {
+
+            LOGGER.severe(e.getMessage());
+            throw new NegocioException("Error al insertal la incidencia: " + e.getMessage());
+
         }
-        return listaIncidencias;
+
+    }
+
+    public DTOIncidencia eliminar(DTOIncidencia incidencia) throws NegocioException {
+
+        try {
+
+            if (incidencia == null) {
+
+                throw new NegocioException("Error al eliminar incidencia: no es posible elimianr una incidencia nula");
+
+            }
+
+            Incidencia incidenciaEliminar = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
+            fachadaDAO.eliminarIncidencia(incidenciaEliminar);
+
+            return incidencia;
+
+        } catch (PersistenciaException e) {
+
+            LOGGER.severe(e.getMessage());
+            throw new NegocioException("Error al eliminar la incidencia: " + e.getMessage());
+
+        }
+    }
+
+    public DTOIncidencia modificar(DTOIncidencia incidencia) throws NegocioException {
+        try {
+
+            if (incidencia == null) {
+
+                throw new NegocioException("Error al modificar la incidencia: incidencia nula.");
+
+            }
+
+            Incidencia incidenciaModificar = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
+
+            incidenciaModificar = fachadaDAO.modificarIncidencia(incidenciaModificar);
+
+            DTOIncidencia incidenciaModificada = IncidenciaToDTOIncidenciaAdapter.adaptar(incidenciaModificar);
+
+            return incidenciaModificada;
+        } catch (PersistenciaException e) {
+
+            LOGGER.severe(e.getMessage());
+            throw new NegocioException("Error al modificar la incidencia: " + e.getMessage());
+
+        }
+    }
+
+    public DTOIncidencia obtener(DTOIncidencia incidencia) throws NegocioException {
+
+        try {
+
+            if (incidencia == null) {
+
+                throw new NegocioException("Error al recuperar la incidencia: incidencia nula.");
+
+            }
+
+            Incidencia incidenciaObtener = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
+            incidenciaObtener = fachadaDAO.obtenerIncidencia(incidenciaObtener);
+            DTOIncidencia incidenciaRecuperada = IncidenciaToDTOIncidenciaAdapter.adaptar(incidenciaObtener);
+            return incidenciaRecuperada;
+
+        } catch (PersistenciaException e) {
+
+            LOGGER.severe(e.getMessage());
+            throw new NegocioException("Error al obtener la incidencia: " + e.getMessage());
+
+        }
+
+    }
+
+    public List<DTOIncidencia> obtenerLista() throws NegocioException {
+
+        try {
+
+            List<Incidencia> incidencias = fachadaDAO.obtenerListaIncidencia();
+            List<DTOIncidencia> listaIncidencias = new ArrayList();
+
+            if (!incidencias.isEmpty()) {
+                for (Incidencia i : incidencias) {
+                    DTOIncidencia incidencia = IncidenciaToDTOIncidenciaAdapter.adaptar(i);
+                    listaIncidencias.add(incidencia);
+                }
+            }
+            return listaIncidencias;
+
+        } catch (PersistenciaException e) {
+
+            LOGGER.severe(e.getMessage());
+            throw new NegocioException("Error al obtener las incidencia: " + e.getMessage());
+
+        }
     }
 
 }

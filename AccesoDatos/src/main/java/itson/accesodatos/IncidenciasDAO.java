@@ -4,11 +4,13 @@
  */
 package itson.accesodatos;
 
+import adapters.IncidenciaMongoAIncidenciaAdapter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+import entidadesMongo.IncidenciaMongo;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,83 +43,80 @@ public class IncidenciasDAO implements IAccesoIncidencias<Incidencia>, IAccesoMo
     }
 
     @Override
-    public Incidencia crear(Incidencia entidad) {
+    public Incidencia crear(Incidencia incidencia) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
+            MongoCollection<IncidenciaMongo> coleccionIncidencias = recuperarColeccion(bd);
 
-            coleccionIncidencias.insertOne(entidad);
+            IncidenciaMongo incidenciaMongo = IncidenciaMongoAIncidenciaAdapter.adaptarAIncidenciaMongo(incidencia);
 
-            return entidad;
+            InsertOneResult result = coleccionIncidencias.insertOne(incidenciaMongo);
+            incidenciaMongo = coleccionIncidencias.find(new Document(CAMPO_ID, result.getInsertedId())).first();
+
+            return IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(incidenciaMongo);
         }
     }
 
     @Override
-    public Incidencia eliminar(Incidencia entidad) {
+    public Incidencia eliminar(Incidencia incidencia) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
+            MongoCollection<IncidenciaMongo> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(incidencia.getIdIncidencia()));
 
-            Incidencia eliminado = coleccionIncidencias.findOneAndDelete(filtro);
+            IncidenciaMongo eliminado = coleccionIncidencias.findOneAndDelete(filtro);
 
-            return eliminado;
+            return IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(eliminado);
         }
     }
 
     @Override
-    public Incidencia modificar(Incidencia entidad) {
+    public Incidencia modificar(Incidencia incidencia) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
+            MongoCollection<IncidenciaMongo> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(incidencia.getIdIncidencia()));
 
-            if (entidad.getTipo() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("tipo", entidad.getTipo()));
-            }
-            if (entidad.getIdEmpleado() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("id_empleado", entidad.getIdEmpleado()));
-            }
-            if (entidad.getDescripcion() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("descripcion", entidad.getDescripcion()));
-            }
-            if (entidad.getFecha() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("fecha", entidad.getFecha()));
-            }
-            if (entidad.getEstado() != null) {
-                coleccionIncidencias.updateOne(filtro, Updates.set("estado", entidad.getEstado()));
-            }
+            IncidenciaMongo incidenciaMongo = coleccionIncidencias.findOneAndReplace(filtro, IncidenciaMongoAIncidenciaAdapter.adaptarAIncidenciaMongo(incidencia));
 
-            return coleccionIncidencias.find(filtro).first();
+            return IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(incidenciaMongo);
 
         }
     }
 
     @Override
-    public Incidencia obtener(Incidencia entidad) {
+    public Incidencia obtener(Incidencia incidencia) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
+            MongoCollection<IncidenciaMongo> coleccionIncidencias = recuperarColeccion(bd);
 
-            Document filtro = new Document(CAMPO_ID, new ObjectId(entidad.getIdIncidencia()));
+            Document filtro = new Document(CAMPO_ID, new ObjectId(incidencia.getIdIncidencia()));
 
-            return coleccionIncidencias.find(filtro).first();
+            return IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(coleccionIncidencias.findOneAndUpdate(filtro, new Document()));
         }
     }
 
     @Override
     public List<Incidencia> obtenerLista() {
-        List<Incidencia> listaIncidencias = new ArrayList();
+        List<IncidenciaMongo> listaIncidencias = new ArrayList();
 
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
-            MongoCollection<Incidencia> coleccionIncidencias = recuperarColeccion(bd);
+            MongoCollection<IncidenciaMongo> coleccionIncidencias = recuperarColeccion(bd);
 
             coleccionIncidencias.find().into(listaIncidencias);
 
-            return listaIncidencias;
+            List<Incidencia> incidenciasLimpias = new ArrayList<>();
+
+            for (IncidenciaMongo incidenciaMongo : listaIncidencias) {
+
+                incidenciasLimpias.add(IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(incidenciaMongo));
+
+            }
+
+            return incidenciasLimpias;
         }
     }
 

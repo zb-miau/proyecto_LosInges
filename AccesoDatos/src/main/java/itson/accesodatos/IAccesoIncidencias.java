@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import entidadesMongo.IncidenciaMongo;
 import java.util.List;
 
 /**

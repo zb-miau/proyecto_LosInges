@@ -8,6 +8,7 @@ import dto.DTOEmpleado;
 import dto.DTOIncidencia;
 import java.util.ArrayList;
 import java.util.List;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -17,13 +18,13 @@ public interface IGestionIncidencias {
 
     public List<DTOEmpleado> obtenerEmpleados();
 
-    public void crearIncidencia(DTOIncidencia dTOIncidencia);
+    public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException;
 
-    public List<DTOIncidencia> obtenerIncidencias();
+    public List<DTOIncidencia> obtenerIncidencias()throws NegocioException;
 
-    public void validarIncidencia(DTOIncidencia incidencia);
+    public void validarIncidencia(DTOIncidencia incidencia)throws NegocioException;
 
-    public void RechazarIncidencia(DTOIncidencia incidencia);
+    public void RechazarIncidencia(DTOIncidencia incidencia)throws NegocioException;
 
     public void enviarSupervisor();
 
