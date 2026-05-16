@@ -83,6 +83,7 @@ public class IncidenciaMongo {
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
+        this.estado = Estado.PENDIENTE;
     }
 
     public String getIdIncidencia() {

@@ -6,29 +6,44 @@ package presentacion;
 
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
-import java.util.HashMap;
+import gestionIncidencias.FacadeGestionIncidencias;
+import gestionIncidencias.IGestionIncidencias;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
+import java.util.Set;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import objetosNegocio.NegocioException;
 
 /**
  *
  * @author Zaira
  */
-public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.JFrame {
+public class Presentacion_validacionIncidencias extends javax.swing.JFrame {
     DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
-//    IGestionIncidencias control = new FacadeGestionIncidencias();
+    IGestionIncidencias control = new FacadeGestionIncidencias();
 
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
      */
-    public Presentacion_gestionDeIncidenciasMenuPrincipal() {
+    public Presentacion_validacionIncidencias() {
         initComponents();
+        configuracionBotones();
+        crearTabla();
     }
 
     /**
@@ -43,7 +58,6 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         pnlIncidencias = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
-        btnRegistrar = new javax.swing.JButton();
         pnlScroll = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
         cmbTipoIncidencia = new javax.swing.JComboBox<>();
@@ -65,11 +79,6 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
 
-        btnRegistrar.setBackground(new java.awt.Color(255, 166, 43));
-        btnRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(39, 71, 125));
-        btnRegistrar.setText("Registrar incidencia");
-
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
         panelEncabezadoLayout.setHorizontalGroup(
@@ -77,17 +86,13 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
             .addGroup(panelEncabezadoLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
-                .addComponent(btnRegistrar)
-                .addGap(63, 63, 63))
+                .addContainerGap(545, Short.MAX_VALUE))
         );
         panelEncabezadoLayout.setVerticalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap(40, Short.MAX_VALUE)
-                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegresar)
-                    .addComponent(btnRegistrar))
+                .addComponent(btnRegresar)
                 .addGap(37, 37, 37))
         );
 
@@ -195,42 +200,151 @@ public class Presentacion_gestionDeIncidenciasMenuPrincipal extends javax.swing.
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
 
-//    public void crearTabla(){
-//        String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
-//        modeloTablaIncidencias.setRowCount(0);
-//        modeloTablaIncidencias.setColumnIdentifiers(columnas);
-//        
-//        List<DTOIncidencia> incidencias = control.getIncidencias();
-//        for (DTOIncidencia i: incidencias){
-//            DTOEmpleado empleado = i.getEmpleado();
-//            Object[] fila = {
-//                i.getIdIncidencia(),
-//                empleado.getNombre(),
-//                empleado.getApellidoPaterno(),
-//                empleado.getApellidoMaterno(),
-//                i.getTipo(),
-//                i.getFecha(),
-//                i.getEstado()
-//             };
-//            modeloTablaIncidencias.addRow(fila);
-//        }
-//        
-//        tablaIncidencias.setModel(modeloTablaIncidencias);
-//            
-//     
-//        
-//    }
-//    
-//    public void configuracionFiltros(){
-//        rdbtnPendiente.setSelected(true);
-//        rdbtnAceptada.setSelected(false);
-//        rdbtnRechazada.setSelected(false);
-//        
-//        
-//    }
+    public void crearTabla(){
+        String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
+        modeloTablaIncidencias.setRowCount(0);
+        modeloTablaIncidencias.setColumnIdentifiers(columnas);
+        
+        try {
+            Set<String> tipos = new HashSet<>();
+            List<DTOIncidencia> incidencias = control.obtenerIncidencias();
+            for (DTOIncidencia i: incidencias){
+                DTOEmpleado empleado = i.getEmpleado();
+                tipos.add(i.getTipo().toString());
+                Object[] fila = {
+                    i.getIdIncidencia(),
+                    empleado.getNombre(),
+                    empleado.getApellidoPaterno(),
+                    empleado.getApellidoMaterno(),
+                    i.getTipo(),
+                    i.getFecha(),
+                    i.getEstado().name()
+                 };
+                modeloTablaIncidencias.addRow(fila);
+            }
+            
+            configurarComboBox(tipos);
+        
+            tablaIncidencias.setModel(modeloTablaIncidencias);
+            tablaIncidencias.getColumnModel().getColumn(0).setMinWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(0).setMaxWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(0).setResizable(false);
+            TableRowSorter<TableModel> buscador = new TableRowSorter<>(modeloTablaIncidencias);
+            tablaIncidencias.setRowSorter(buscador);
+
+            txtBuscarEmpleado.addKeyListener(new KeyAdapter(){
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    busquedaPorFiltros(buscador);
+                }
+            });
+
+            cmbTipoIncidencia.addActionListener(e -> busquedaPorFiltros(buscador));
+            rdbtnPendiente.addActionListener(e -> busquedaPorFiltros(buscador));
+            rdbtnAceptada.addActionListener(e -> busquedaPorFiltros(buscador));
+            rdbtnRechazada.addActionListener(e -> busquedaPorFiltros(buscador));
+            busquedaPorFiltros(buscador);
+
+            tablaIncidencias.getColumnModel().getColumn(6).setCellRenderer(new RenderizadorEstado());
+        
+        } catch (NegocioException ex){
+            
+        }
+            
+     
+        
+    }
+    
+    public void configuracionBotones(){
+        ButtonGroup grupoTurnos = new ButtonGroup();
+        
+        grupoTurnos.add(rdbtnPendiente);
+        grupoTurnos.add(rdbtnAceptada);
+        grupoTurnos.add(rdbtnRechazada);
+        
+        rdbtnPendiente.setSelected(true);
+    }
+    
+    public void configurarComboBox(Set<String> tipos){
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement("Todos"); 
+        modelo.addAll(tipos);
+        cmbTipoIncidencia.setModel(modelo);
+    }
+    
+    public void busquedaPorFiltros(TableRowSorter<TableModel> buscador){
+        List<RowFilter<Object, Object>> filtrosConjuntos = new ArrayList<>();
+        String busqueda = txtBuscarEmpleado.getText().trim();
+        
+        if (!busqueda.isEmpty()) {
+            List<RowFilter<Object, Object>> filtroPorEmpleado = new ArrayList<>();
+            filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 1));
+            filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 2)); 
+            filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 3));
+            filtrosConjuntos.add(RowFilter.orFilter(filtroPorEmpleado));
+        }
+        
+        String tipoSeleccionado = (String) cmbTipoIncidencia.getSelectedItem();
+        if (tipoSeleccionado != null && !tipoSeleccionado.equals("Todos")) {
+            filtrosConjuntos.add(RowFilter.regexFilter("^" + tipoSeleccionado + "$", 4));
+        }
+        
+        String estadoSeleccionado = "";
+        if (rdbtnPendiente.isSelected()) estadoSeleccionado = rdbtnPendiente.getText().toUpperCase(); 
+        else if (rdbtnAceptada.isSelected()) estadoSeleccionado = rdbtnAceptada.getText().toUpperCase();
+        else if (rdbtnRechazada.isSelected()) estadoSeleccionado = rdbtnRechazada.getText().toUpperCase();
+
+        if (!estadoSeleccionado.isEmpty()) {
+            filtrosConjuntos.add(RowFilter.regexFilter("^" + estadoSeleccionado + "$", 6));
+        }
+
+        if (filtrosConjuntos.isEmpty()) {
+            buscador.setRowFilter(null);
+        } else {
+            buscador.setRowFilter(RowFilter.andFilter(filtrosConjuntos));
+        }
+    }
+    
+    private class RenderizadorEstado extends JPanel implements TableCellRenderer {
+
+        private final JButton btnEstado;
+
+        public RenderizadorEstado() {
+            this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
+            this.setOpaque(true);
+
+            this.btnEstado = new JButton();
+            this.add(btnEstado);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            if (value != null) {
+                btnEstado.setText(value.toString());
+
+                if (value.toString().equals("PENDIENTE")) {
+                    btnEstado.setBackground(Color.YELLOW);
+                } else if (value.toString().equals("ACEPTADA")) {
+                    btnEstado.setBackground(Color.GREEN);
+                }
+            } else {
+                btnEstado.setBackground(Color.RED);
+            }
+
+            if (isSelected) {
+                this.setBackground(table.getSelectionBackground());
+            } else {
+                this.setBackground(table.getBackground());
+            }
+
+            return this;
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbTipoIncidencia;
     private javax.swing.JLabel lblEmpleado;
