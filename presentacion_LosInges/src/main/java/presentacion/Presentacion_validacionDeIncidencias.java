@@ -4,6 +4,8 @@
  */
 package presentacion;
 
+import coordinador.Coordinador;
+
 /**
  *
  * @author Zaira
@@ -15,6 +17,12 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JFrame {
      */
     public Presentacion_validacionDeIncidencias() {
         initComponents();
+    }
+
+    Coordinador coordinador;
+
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
     }
 
     /**

@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import coordinador.Coordinador;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
 import gestionIncidencias.FacadeGestionIncidencias;
@@ -34,8 +35,15 @@ import objetosNegocio.NegocioException;
  * @author Zaira
  */
 public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame {
+
     DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
     IGestionIncidencias control = new FacadeGestionIncidencias();
+
+    Coordinador coordinador;
+
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
 
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
@@ -200,15 +208,15 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
 
-    public void crearTabla(){
+    public void crearTabla() {
         String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
         modeloTablaIncidencias.setRowCount(0);
         modeloTablaIncidencias.setColumnIdentifiers(columnas);
-        
+
         try {
             Set<String> tipos = new HashSet<>();
             List<DTOIncidencia> incidencias = control.obtenerIncidencias();
-            for (DTOIncidencia i: incidencias){
+            for (DTOIncidencia i : incidencias) {
                 DTOEmpleado empleado = i.getEmpleado();
                 tipos.add(i.getTipo().toString());
                 Object[] fila = {
@@ -219,12 +227,12 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                     i.getTipo(),
                     i.getFecha(),
                     i.getEstado().name()
-                 };
+                };
                 modeloTablaIncidencias.addRow(fila);
             }
-            
+
             configurarComboBox(tipos);
-        
+
             tablaIncidencias.setModel(modeloTablaIncidencias);
             tablaIncidencias.getColumnModel().getColumn(0).setMinWidth(0);
             tablaIncidencias.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -233,7 +241,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             TableRowSorter<TableModel> buscador = new TableRowSorter<>(modeloTablaIncidencias);
             tablaIncidencias.setRowSorter(buscador);
 
-            txtBuscarEmpleado.addKeyListener(new KeyAdapter(){
+            txtBuscarEmpleado.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
                     busquedaPorFiltros(buscador);
@@ -247,53 +255,55 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             busquedaPorFiltros(buscador);
 
             tablaIncidencias.getColumnModel().getColumn(6).setCellRenderer(new RenderizadorEstado());
-        
-        } catch (NegocioException ex){
-            
+
+        } catch (NegocioException ex) {
+
         }
-            
-     
-        
+
     }
-    
-    public void configuracionBotones(){
+
+    public void configuracionBotones() {
         ButtonGroup grupoTurnos = new ButtonGroup();
-        
+
         grupoTurnos.add(rdbtnPendiente);
         grupoTurnos.add(rdbtnAceptada);
         grupoTurnos.add(rdbtnRechazada);
-        
+
         rdbtnPendiente.setSelected(true);
     }
-    
-    public void configurarComboBox(Set<String> tipos){
+
+    public void configurarComboBox(Set<String> tipos) {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
-        modelo.addElement("Todos"); 
+        modelo.addElement("Todos");
         modelo.addAll(tipos);
         cmbTipoIncidencia.setModel(modelo);
     }
-    
-    public void busquedaPorFiltros(TableRowSorter<TableModel> buscador){
+
+    public void busquedaPorFiltros(TableRowSorter<TableModel> buscador) {
         List<RowFilter<Object, Object>> filtrosConjuntos = new ArrayList<>();
         String busqueda = txtBuscarEmpleado.getText().trim();
-        
+
         if (!busqueda.isEmpty()) {
             List<RowFilter<Object, Object>> filtroPorEmpleado = new ArrayList<>();
             filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 1));
-            filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 2)); 
+            filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 2));
             filtroPorEmpleado.add(RowFilter.regexFilter("(?i)" + busqueda, 3));
             filtrosConjuntos.add(RowFilter.orFilter(filtroPorEmpleado));
         }
-        
+
         String tipoSeleccionado = (String) cmbTipoIncidencia.getSelectedItem();
         if (tipoSeleccionado != null && !tipoSeleccionado.equals("Todos")) {
             filtrosConjuntos.add(RowFilter.regexFilter("^" + tipoSeleccionado + "$", 4));
         }
-        
+
         String estadoSeleccionado = "";
-        if (rdbtnPendiente.isSelected()) estadoSeleccionado = rdbtnPendiente.getText().toUpperCase(); 
-        else if (rdbtnAceptada.isSelected()) estadoSeleccionado = rdbtnAceptada.getText().toUpperCase();
-        else if (rdbtnRechazada.isSelected()) estadoSeleccionado = rdbtnRechazada.getText().toUpperCase();
+        if (rdbtnPendiente.isSelected()) {
+            estadoSeleccionado = rdbtnPendiente.getText().toUpperCase();
+        } else if (rdbtnAceptada.isSelected()) {
+            estadoSeleccionado = rdbtnAceptada.getText().toUpperCase();
+        } else if (rdbtnRechazada.isSelected()) {
+            estadoSeleccionado = rdbtnRechazada.getText().toUpperCase();
+        }
 
         if (!estadoSeleccionado.isEmpty()) {
             filtrosConjuntos.add(RowFilter.regexFilter("^" + estadoSeleccionado + "$", 6));
@@ -305,7 +315,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             buscador.setRowFilter(RowFilter.andFilter(filtrosConjuntos));
         }
     }
-    
+
     private class RenderizadorEstado extends JPanel implements TableCellRenderer {
 
         private final JButton btnEstado;
@@ -319,7 +329,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
+        public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
 
             if (value != null) {

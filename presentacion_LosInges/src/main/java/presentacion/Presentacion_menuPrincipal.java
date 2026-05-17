@@ -4,11 +4,19 @@
  */
 package presentacion;
 
+import coordinador.Coordinador;
+
 /**
  *
  * @author Zaira
  */
 public class Presentacion_menuPrincipal extends javax.swing.JFrame {
+
+    Coordinador coordinador;
+
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
 
     /**
      * Creates new form Presentacion_menuPrincipal
@@ -99,11 +107,11 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGerenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenteActionPerformed
-        
+
     }//GEN-LAST:event_btnGerenteActionPerformed
 
     private void btnEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadoActionPerformed
-        
+
     }//GEN-LAST:event_btnEmpleadoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
