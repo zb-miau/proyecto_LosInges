@@ -33,14 +33,14 @@ import objetosNegocio.NegocioException;
  *
  * @author Zaira
  */
-public class Presentacion_validacionIncidencias extends javax.swing.JFrame {
+public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame {
     DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
     IGestionIncidencias control = new FacadeGestionIncidencias();
 
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
      */
-    public Presentacion_validacionIncidencias() {
+    public Presentacion_validacionIncidenciasTabla() {
         initComponents();
         configuracionBotones();
         crearTabla();

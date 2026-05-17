@@ -20,7 +20,7 @@ import objetosNegocio.NegocioException;
  *
  * @author jesus
  */
-public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JFrame {
+public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
     private IGestionIncidencias control = new FacadeGestionIncidencias();
 
@@ -36,7 +36,7 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JFrame {
     /**
      * Creates new customizer Presentacion_gestionDeIncidenciasMenu
      */
-    public Presentacion_registroDeIncidenciasMenu(DTOEmpleado empleado) {
+    public Presentacion_registroDeIncidencias(DTOEmpleado empleado) {
 
         initComponents();
         comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
@@ -67,12 +67,13 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JFrame {
         comboTipos = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro de incidencias");
 
         jPanel1.setBackground(new java.awt.Color(39, 71, 125));
 
         jLabelMenu.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabelMenu.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelMenu.setText("Menu Incidencias");
+        jLabelMenu.setText("Registro de Incidencias");
 
         labelEmpleado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelEmpleado.setForeground(new java.awt.Color(255, 255, 255));
@@ -135,29 +136,29 @@ public class Presentacion_registroDeIncidenciasMenu extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fieldEmpleado)
+                    .addComponent(comboTipos, 0, 273, Short.MAX_VALUE)
+                    .addComponent(fieldDescripcion))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(135, Short.MAX_VALUE)
-                .addComponent(botonRegistrarIncidencia)
-                .addGap(18, 18, 18)
-                .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(134, 134, 134))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(labelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(fieldEmpleado)
-                            .addComponent(comboTipos, 0, 273, Short.MAX_VALUE)
-                            .addComponent(fieldDescripcion)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(botonRegistrarIncidencia)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(134, 134, 134))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(117, 117, 117))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

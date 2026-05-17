@@ -21,9 +21,9 @@ public class Presentacion_main {
 
 //        Presentacion_validacionIncidencias validarIncidencias = new Presentacion_validacionIncidencias();
 //        validarIncidencias.setVisible(true);
-//        DTOEmpleado empleado = new DTOEmpleado("6a0949d1a64f46f64b549aeb", "Hector", "Flores", "Montoya");
-//
-//         Presentacion_registroDeIncidenciasMenu presentacion_registroDeIncidenciasMenu = new Presentacion_registroDeIncidenciasMenu(empleado);
-//         presentacion_registroDeIncidenciasMenu.setVisible(true);
+        DTOEmpleado empleado = new DTOEmpleado("6a0949d1a64f46f64b549aeb", "Hector", "Flores", "Montoya");
+
+         Presentacion_registroDeIncidencias presentacion_registroDeIncidenciasMenu = new Presentacion_registroDeIncidencias(empleado);
+         presentacion_registroDeIncidenciasMenu.setVisible(true);
     }
 }

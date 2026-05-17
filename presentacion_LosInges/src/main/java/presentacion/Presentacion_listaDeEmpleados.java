@@ -25,9 +25,9 @@ import objetosNegocio.NegocioException;
  *
  * @author Zaira
  */
-public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
+public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
-    private static final Logger LOGGER = Logger.getLogger(Presentacion_gestionDeHorariosMenu.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Presentacion_listaDeEmpleados.class.getName());
     Coordinador coordinador;
     
     public void setCoordinador(Coordinador coordinador) {
@@ -37,7 +37,7 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
     /**
      * Creates new form GestionDeHorariosMain
      */
-    public Presentacion_gestionDeHorariosMenu() {
+    public Presentacion_listaDeEmpleados() {
         initComponents();
         generarTabla();
         setVisible(true);
@@ -172,7 +172,6 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
 
         pnlFondo.setBackground(new java.awt.Color(39, 71, 125));
 
-        txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscar.setForeground(new java.awt.Color(51, 51, 51));
         txtBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,7 +183,6 @@ public class Presentacion_gestionDeHorariosMenu extends javax.swing.JFrame {
         lblBuscar.setForeground(new java.awt.Color(255, 255, 255));
         lblBuscar.setText("Buscar empleado:");
 
-        tablaEmpleados.setBackground(new java.awt.Color(255, 255, 255));
         tablaEmpleados.setForeground(new java.awt.Color(39, 71, 125));
         tablaEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

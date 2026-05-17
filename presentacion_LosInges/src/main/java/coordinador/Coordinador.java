@@ -7,7 +7,7 @@ package coordinador;
 import dto.DTOEmpleado;
 import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
-import presentacion.Presentacion_gestionDeHorariosMenu;
+import presentacion.Presentacion_listaDeEmpleados;
 import presentacion.Presentacion_gestionDeTurnos;
 
 /**
@@ -16,7 +16,7 @@ import presentacion.Presentacion_gestionDeTurnos;
  */
 public class Coordinador {
     
-    private Presentacion_gestionDeHorariosMenu gestionDeHorariosMenu;
+    private Presentacion_listaDeEmpleados gestionDeHorariosMenu;
     private Presentacion_gestionDeTurnos gestionDeTurnos;
     private Presentacion_gestionDeHorarios gestionDeHorarios;
     
@@ -28,7 +28,7 @@ public class Coordinador {
         
         // Si ya existe la ventana, la traemos al frente, si no, la creamos
         if (gestionDeHorariosMenu == null) {
-            gestionDeHorariosMenu = new Presentacion_gestionDeHorariosMenu();
+            gestionDeHorariosMenu = new Presentacion_listaDeEmpleados();
             gestionDeHorariosMenu.setCoordinador(this);
         }
         
