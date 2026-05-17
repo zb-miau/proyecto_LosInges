@@ -1,12 +1,10 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package presentacion;
 
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
-
 
 /**
  *
@@ -21,7 +19,11 @@ public class Presentacion_main {
 //        empleado.setId("69fc574637e1a5b2ce44152e");
 //        Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos(empleado);
 
-        Presentacion_validacionIncidencias validarIncidencias = new Presentacion_validacionIncidencias();
-        validarIncidencias.setVisible(true);
+//        Presentacion_validacionIncidencias validarIncidencias = new Presentacion_validacionIncidencias();
+//        validarIncidencias.setVisible(true);
+//        DTOEmpleado empleado = new DTOEmpleado("6a0949d1a64f46f64b549aeb", "Hector", "Flores", "Montoya");
+//
+//         Presentacion_registroDeIncidenciasMenu presentacion_registroDeIncidenciasMenu = new Presentacion_registroDeIncidenciasMenu(empleado);
+//         presentacion_registroDeIncidenciasMenu.setVisible(true);
     }
 }

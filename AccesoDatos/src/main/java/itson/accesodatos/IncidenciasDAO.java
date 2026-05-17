@@ -51,7 +51,9 @@ public class IncidenciasDAO implements IAccesoIncidencias<Incidencia>, IAccesoMo
             IncidenciaMongo incidenciaMongo = IncidenciaMongoAIncidenciaAdapter.adaptarAIncidenciaMongo(incidencia);
 
             InsertOneResult result = coleccionIncidencias.insertOne(incidenciaMongo);
-            incidenciaMongo = coleccionIncidencias.find(new Document(CAMPO_ID, result.getInsertedId())).first();
+            if (result.getInsertedId() != null) {
+                incidenciaMongo.setIdIncidencia(result.getInsertedId().asObjectId().getValue().toString());
+            }
 
             return IncidenciaMongoAIncidenciaAdapter.adaptarAIncidencia(incidenciaMongo);
         }
@@ -126,8 +128,8 @@ public class IncidenciasDAO implements IAccesoIncidencias<Incidencia>, IAccesoMo
     }
 
     @Override
-    public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
-        return baseDatos.getCollection(COLECCION_INCIDENCIAS, Incidencia.class);
+    public MongoCollection<IncidenciaMongo> recuperarColeccion(MongoDatabase baseDatos) {
+        return baseDatos.getCollection(COLECCION_INCIDENCIAS, IncidenciaMongo.class);
     }
 
 }
