@@ -134,11 +134,11 @@ public class IncidenciaBO {
 
     }
 
-    public List<DTOIncidencia> obtenerLista() throws NegocioException {
+    public List<DTOIncidencia> obtenerLista(String estado) throws NegocioException {
 
         try {
 
-            List<Incidencia> incidencias = fachadaDAO.obtenerListaIncidencia();
+            List<Incidencia> incidencias = fachadaDAO.obtenerListaIncidencia(estado);
             List<DTOIncidencia> listaIncidencias = new ArrayList();
 
             if (!incidencias.isEmpty()) {

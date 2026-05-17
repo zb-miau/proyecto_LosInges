@@ -44,9 +44,13 @@ public class IncidenciaToDTOIncidenciaAdapter {
     public static DTOIncidencia adaptar(Incidencia incidencia) {
 
         DTOEmpleado empleado = new DTOEmpleado();
-        empleado.setId(incidencia.getIdEmpleado());
+        if (incidencia.getEmpleado() != null){
+            empleado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(incidencia.getEmpleado()); 
+        } else {
+            System.out.println("EMPLEADO NULL EN EL ADAPTER DTO");
+        }
 
-        DTOIncidencia dTOincidencia = new DTOIncidencia(
+        DTOIncidencia dtoIncidencia = new DTOIncidencia(
                 incidencia.getIdIncidencia(),
                 DTOIncidencia.TiposIncidencia.valueOf(incidencia.getTipo().name()),
                 empleado,
@@ -55,9 +59,10 @@ public class IncidenciaToDTOIncidenciaAdapter {
                 DTOIncidencia.Estado.valueOf(incidencia.getEstado().name()),
                 incidencia.getObservaciones());
 
-        dTOincidencia.getEmpleado().setId(incidencia.getIdEmpleado());
+        dtoIncidencia.getEmpleado().setId(incidencia.getIdEmpleado());
+        
 
-        return dTOincidencia;
+        return dtoIncidencia;
 
     }
 

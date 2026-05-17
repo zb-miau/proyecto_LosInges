@@ -277,10 +277,10 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
-    public List<Incidencia> obtenerListaIncidencia() throws PersistenciaException {
+    public List<Incidencia> obtenerListaIncidencia(String estado) throws PersistenciaException {
         try {
 
-            return incidenciasDAO.obtenerLista();
+            return incidenciasDAO.obtenerLista(estado);
 
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());

@@ -4,12 +4,14 @@
  */
 package entidadesMongo;
 
+import itson.entidades.Empleado;
 import java.time.LocalDate;
 import java.util.Objects;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -20,11 +22,13 @@ public class IncidenciaMongo {
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String idIncidencia;
     private TiposIncidencia tipo;
-    private String idEmpleado;
+    @BsonProperty("id_empleado") 
+    private ObjectId idEmpleado;
     private String descripcion;
     private LocalDate fecha;
     private Estado estado;
     private String observaciones;
+    private EmpleadoMongo empleado;
 
     public enum Estado {
         VALIDADA, RECHAZADA, PENDIENTE
@@ -33,7 +37,7 @@ public class IncidenciaMongo {
     public enum TiposIncidencia {
         AUSENTISMO("Ausentismo"),
         RETARDO("Retardo"),
-        INDISCIPLINA("Falta de Indisciplina"),
+        INDISCIPLINA("Indisciplina"),
         INCUMPLIMIENTO_SEGURIDAD("Incumplimiento de Seguridad"),
         BAJO_RENDIMIENTO("Bajo Rendimiento"),
         SANCION_ADMINISTRATIVA("Sanción Administrativa"),
@@ -60,7 +64,7 @@ public class IncidenciaMongo {
     public IncidenciaMongo() {
     }
 
-    public IncidenciaMongo(String idIncidencia, TiposIncidencia tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
+    public IncidenciaMongo(String idIncidencia, TiposIncidencia tipo, ObjectId idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
         this.idIncidencia = idIncidencia;
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
@@ -70,7 +74,7 @@ public class IncidenciaMongo {
         this.observaciones = observaciones;
     }
 
-    public IncidenciaMongo(TiposIncidencia tipo, String idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
+    public IncidenciaMongo(TiposIncidencia tipo, ObjectId idEmpleado, String descripcion, LocalDate fecha, Estado estado, String observaciones) {
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
@@ -79,7 +83,7 @@ public class IncidenciaMongo {
         this.observaciones = observaciones;
     }
 
-    public IncidenciaMongo(TiposIncidencia tipo, String idEmpleado, String descripcion) {
+    public IncidenciaMongo(TiposIncidencia tipo, ObjectId idEmpleado, String descripcion) {
         this.tipo = tipo;
         this.idEmpleado = idEmpleado;
         this.descripcion = descripcion;
@@ -94,7 +98,7 @@ public class IncidenciaMongo {
         return tipo;
     }
 
-    public String getIdEmpleado() {
+    public ObjectId getIdEmpleado() {
         return idEmpleado;
     }
 
@@ -122,7 +126,7 @@ public class IncidenciaMongo {
         this.tipo = tipo;
     }
 
-    public void setIdEmpleado(String idEmpleado) {
+    public void setIdEmpleado(ObjectId idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
@@ -141,6 +145,16 @@ public class IncidenciaMongo {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public EmpleadoMongo getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(EmpleadoMongo empleado) {
+        this.empleado = empleado;
+    }
+    
+    
 
     @Override
     public int hashCode() {

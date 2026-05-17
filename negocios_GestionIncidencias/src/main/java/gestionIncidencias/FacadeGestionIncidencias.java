@@ -36,9 +36,9 @@ public class FacadeGestionIncidencias implements IGestionIncidencias {
     }
 
     @Override
-    public List<DTOIncidencia> obtenerIncidencias() throws NegocioException {
+    public List<DTOIncidencia> obtenerIncidencias(String estado) throws NegocioException {
 
-        return control.obtenerIncidencias();
+        return control.obtenerIncidencias(estado);
 
     }
 

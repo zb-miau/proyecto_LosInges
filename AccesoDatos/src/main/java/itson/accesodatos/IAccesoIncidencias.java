@@ -49,7 +49,7 @@ public interface IAccesoIncidencias<Incidencia> {
      * Método para obtener una lista de objetos de la incidencia que lo llama 
      * @return regresa la lista de incidenciaes que se busca en la base de datos.
      */
-    public abstract List<Incidencia> obtenerLista();
+    public abstract List<Incidencia> obtenerLista(String estado);
     
     
 }

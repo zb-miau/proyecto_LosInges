@@ -13,16 +13,15 @@ import dto.DTOEmpleado;
 public class Presentacion_main {
 
     public static void main(String[] args) {
-        Coordinador coor = new Coordinador();
-        coor.abrirVentanaGestionHorariosMenu();
+//        Coordinador coor = new Coordinador();
+//        coor.abrirVentanaGestionHorariosMenu();
 //        DTOEmpleado empleado = new DTOEmpleado();
 //        empleado.setId("69fc574637e1a5b2ce44152e");
 //        Presentacion_gestionDeTurnos main = new Presentacion_gestionDeTurnos(empleado);
 
-//        Presentacion_validacionIncidencias validarIncidencias = new Presentacion_validacionIncidencias();
-//        validarIncidencias.setVisible(true);
-//        DTOEmpleado empleado = new DTOEmpleado("6a0949d1a64f46f64b549aeb", "Hector", "Flores", "Montoya");
-//
+        Presentacion_validacionIncidenciasTabla validarIncidencias = new Presentacion_validacionIncidenciasTabla();
+        validarIncidencias.setVisible(true);
+//        DTOEmpleado empleado = new DTOEmpleado("6a0a2bf19169ab12da42ec29", "Hector", "Flores", "Montoya");
 //        Presentacion_registroDeIncidencias presentacion_registroDeIncidenciasMenu = new Presentacion_registroDeIncidencias(empleado);
 //        presentacion_registroDeIncidenciasMenu.setVisible(true);
     }

@@ -38,6 +38,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
 
     DefaultTableModel modeloTablaIncidencias;
     IGestionIncidencias control = new FacadeGestionIncidencias();
+    String rdbtnSeleccionado;
 
     Coordinador coordinador;
 
@@ -220,15 +221,19 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         
         try {
             Set<String> tipos = new HashSet<>();
-            List<DTOIncidencia> incidencias = control.obtenerIncidencias();
+            String filtro = (rdbtnSeleccionado != null)? rdbtnSeleccionado : "PENDIENTE";
+            List<DTOIncidencia> incidencias = control.obtenerIncidencias(filtro);
             for (DTOIncidencia i : incidencias) {
                 DTOEmpleado empleado = i.getEmpleado();
                 tipos.add(i.getTipo().toString());
+                String nombre = (empleado != null && empleado.getNombre() != null) ? empleado.getNombre() : "N/A";
+                String apePaterno = (empleado != null && empleado.getApellidoPaterno() != null) ? empleado.getApellidoPaterno() : "";
+                String apeMaterno = (empleado != null && empleado.getApellidoMaterno() != null) ? empleado.getApellidoMaterno() : "";
                 Object[] fila = {
                     i.getIdIncidencia(),
-                    empleado.getNombre(),
-                    empleado.getApellidoPaterno(),
-                    empleado.getApellidoMaterno(),
+                    nombre,
+                    apePaterno,
+                    apeMaterno,
                     i.getTipo(),
                     i.getFecha(),
                     i.getEstado().name()
@@ -284,6 +289,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         cmbTipoIncidencia.setModel(modelo);
     }
 
+ 
     public void busquedaPorFiltros(TableRowSorter<TableModel> buscador) {
         List<RowFilter<Object, Object>> filtrosConjuntos = new ArrayList<>();
         String busqueda = txtBuscarEmpleado.getText().trim();
@@ -310,6 +316,8 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             estadoSeleccionado = rdbtnRechazada.getText().toUpperCase();
         }
 
+        this.rdbtnSeleccionado = estadoSeleccionado;
+        
         if (!estadoSeleccionado.isEmpty()) {
             filtrosConjuntos.add(RowFilter.regexFilter("^" + estadoSeleccionado + "$", 6));
         }

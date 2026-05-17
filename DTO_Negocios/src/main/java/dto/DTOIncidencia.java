@@ -27,7 +27,7 @@ public class DTOIncidencia {
     public enum TiposIncidencia {
         AUSENTISMO("Ausentismo"),
         RETARDO("Retardo"),
-        INDISCIPLINA("Falta de Indisciplina"),
+        INDISCIPLINA("Indisciplina"),
         INCUMPLIMIENTO_SEGURIDAD("Incumplimiento de Seguridad"),
         BAJO_RENDIMIENTO("Bajo Rendimiento"),
         SANCION_ADMINISTRATIVA("Sanción Administrativa"),

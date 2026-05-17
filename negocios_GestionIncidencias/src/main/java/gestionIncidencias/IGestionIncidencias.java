@@ -20,7 +20,7 @@ public interface IGestionIncidencias {
 
     public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException;
 
-    public List<DTOIncidencia> obtenerIncidencias()throws NegocioException;
+    public List<DTOIncidencia> obtenerIncidencias(String estado)throws NegocioException;
 
     public void validarIncidencia(DTOIncidencia incidencia)throws NegocioException;
 

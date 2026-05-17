@@ -6,7 +6,7 @@ package adapters;
 
 import entidadesMongo.IncidenciaMongo;
 import itson.entidades.Incidencia;
-import java.time.LocalDate;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -16,15 +16,21 @@ public class IncidenciaMongoAIncidenciaAdapter {
 
     public static Incidencia adaptarAIncidencia(IncidenciaMongo incidenciaMongo) {
 
+        String idEmpleado = incidenciaMongo.getIdEmpleado().toHexString();
+        
         Incidencia incidencia = new Incidencia(
                 incidenciaMongo.getIdIncidencia(),
                 Incidencia.TiposIncidencia.valueOf(incidenciaMongo.getTipo().name()),
-                incidenciaMongo.getIdEmpleado(),
+                idEmpleado,
                 incidenciaMongo.getDescripcion(),
                 incidenciaMongo.getFecha(),
                 Incidencia.Estado.valueOf(incidenciaMongo.getEstado().name()),
                 incidenciaMongo.getObservaciones());
 
+        if (incidenciaMongo.getEmpleado() != null){
+            incidencia.setEmpleado(EmpleadoMongoAEmpleadoAdapter.toDomain(incidenciaMongo.getEmpleado()));
+        }
+        
         return incidencia;
 
     }
@@ -34,7 +40,7 @@ public class IncidenciaMongoAIncidenciaAdapter {
         IncidenciaMongo incidenciaMongo = new IncidenciaMongo(
                 incidencia.getIdIncidencia(),
                 IncidenciaMongo.TiposIncidencia.valueOf(incidencia.getTipo().name()),
-                incidencia.getIdEmpleado(),
+                new ObjectId(incidencia.getIdEmpleado()),
                 incidencia.getDescripcion(),
                 incidencia.getFecha(),
                 IncidenciaMongo.Estado.valueOf(incidencia.getEstado().name()),

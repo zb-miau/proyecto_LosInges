@@ -19,6 +19,7 @@ public class Incidencia {
     private LocalDate fecha;
     private Estado estado;
     private String observaciones;
+    private Empleado empleado;
 
     public enum Estado {
         VALIDADA, RECHAZADA, PENDIENTE
@@ -27,7 +28,7 @@ public class Incidencia {
     public enum TiposIncidencia {
         AUSENTISMO("Ausentismo"),
         RETARDO("Retardo"),
-        INDISCIPLINA("Falta de Indisciplina"),
+        INDISCIPLINA("Indisciplina"),
         INCUMPLIMIENTO_SEGURIDAD("Incumplimiento de Seguridad"),
         BAJO_RENDIMIENTO("Bajo Rendimiento"),
         SANCION_ADMINISTRATIVA("Sanción Administrativa"),
@@ -135,6 +136,16 @@ public class Incidencia {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+    
+    
 
     @Override
     public int hashCode() {

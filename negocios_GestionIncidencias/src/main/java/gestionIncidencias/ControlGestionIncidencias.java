@@ -38,9 +38,9 @@ public class ControlGestionIncidencias {
 
     }
 
-    public List<DTOIncidencia> obtenerIncidencias() throws NegocioException {
+    public List<DTOIncidencia> obtenerIncidencias(String estado) throws NegocioException {
 
-        return incidenciaBO.obtenerLista();
+        return incidenciaBO.obtenerLista(estado);
 
     }
 
