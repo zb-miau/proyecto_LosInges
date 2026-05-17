@@ -46,6 +46,10 @@ public class Coordinador {
         this.ventanaSiguiente = ventanaSiguiente;
     }
 
+    public int getVentanaSiguiente() {
+        return ventanaSiguiente;
+    }
+
     /**
      * Abre la vantana de GestionHorariosMenu
      *
@@ -128,14 +132,13 @@ public class Coordinador {
      *
      * @param idEmpleado
      */
-    public void abrirVentanaGestionHorariosDeMenu(DTOEmpleado idEmpleado) {
-        Presentacion_gestionDeHorarios ventanaHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
-        ventanaHorarios.setCoordinador(this);
-        ventanaHorarios.setVisible(true);
-        ventanaHorarios.setLocationRelativeTo(null);
-
-    }
-
+//    public void abrirVentanaGestionHorariosDeMenu(DTOEmpleado idEmpleado) {
+//        Presentacion_gestionDeHorarios ventanaHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
+//        ventanaHorarios.setCoordinador(this);
+//        ventanaHorarios.setVisible(true);
+//        ventanaHorarios.setLocationRelativeTo(null);
+//
+//    }
     public void cambioDeVentana(int ventana) {
 
         switch (ventana) {
@@ -186,10 +189,11 @@ public class Coordinador {
         switch (ventana) {
             case 0 -> {
                 if (gestionDeHorarios == null) {
-                    gestionDeHorarios = new Presentacion_gestionDeHorarios(empleado);
+                    gestionDeHorarios = new Presentacion_gestionDeHorarios();
                     gestionDeHorarios.setCoordinador(this);
                 }
 
+                gestionDeHorarios.cargardatos(empleado);
                 gestionDeHorarios.setVisible(true);
                 gestionDeHorarios.setLocationRelativeTo(null);
             }
@@ -204,10 +208,11 @@ public class Coordinador {
             }
             case 4 -> {
                 if (registroDeIncidencias == null) {
-                    registroDeIncidencias = new Presentacion_registroDeIncidencias(empleado);
+                    registroDeIncidencias = new Presentacion_registroDeIncidencias();
                     registroDeIncidencias.setCoordinador(this);
                 }
 
+                registroDeIncidencias.cargarTexto(empleado);
                 registroDeIncidencias.setVisible(true);
                 registroDeIncidencias.setLocationRelativeTo(null);
             }

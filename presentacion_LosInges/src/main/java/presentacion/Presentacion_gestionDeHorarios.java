@@ -42,66 +42,73 @@ import objetosNegocio.NegocioException;
  * @author Zaira
  */
 public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
+
     IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla;
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     DTOEmpleado idEmpleado;
     JButton btnDia;
-    
+
     Coordinador coordinador;
-    
+
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-    
+
     /**
      * Creates new form GestionDeHorarios
      */
-    public Presentacion_gestionDeHorarios(DTOEmpleado empleado) {
+    public Presentacion_gestionDeHorarios() {
         initComponents();
+
+    }
+
+    public void cargardatos(DTOEmpleado empleado) {
+
         this.idEmpleado = empleado;
         pnlCalendario.setMinimumSize(new Dimension(627, 421));
         configurarEtiquetas();
         rdbtnMensual.setSelected(true);
         rdbtnMensual.setEnabled(true);
         configurarCalendario();
-        
+
         configurarTabla();
-        txtMes.addKeyListener(new KeyAdapter(){
+        txtMes.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     convertirEtiquetaMes();
                 }
             }
         });
-        
-        txtAnio.addKeyListener(new KeyAdapter(){
+
+        txtAnio.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     convertirEtiquetaAnio();
                 }
             }
         });
+
     }
-    
-    public void configurarTabla(){
+
+    public void configurarTabla() {
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
-        modeloTabla = new DefaultTableModel(columnas, 0){
-          @Override
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }  
+            }
         };
-        
+
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
 
-            for (DTOTurno t: turnos){
+            for (DTOTurno t : turnos) {
                 Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
                 Set<String> diasDisplay = new HashSet();
-                for(DayOfWeek d: diasTrabajo){
+                for (DayOfWeek d : diasTrabajo) {
                     String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
                     diasDisplay.add(dia);
                 }
@@ -113,7 +120,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     t.getDiasTrabajo(),
                     t.getColorEvento(),
                     diasDisplay
-                 };
+                };
                 modeloTabla.addRow(fila);
             }
 
@@ -129,38 +136,38 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
 
             tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, 
-                boolean isSelected, boolean hasFocus, int row, int column) {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                        boolean isSelected, boolean hasFocus, int row, int column) {
 
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-                if (value instanceof Color) {
-                    Color colorEvento = (Color) value;
-                    ((JLabel)c).setOpaque(true);
+                    if (value instanceof Color) {
+                        Color colorEvento = (Color) value;
+                        ((JLabel) c).setOpaque(true);
 
-                    if (!isSelected) {
-                        c.setBackground(colorEvento);
-                        c.setForeground(colorEvento);
+                        if (!isSelected) {
+                            c.setBackground(colorEvento);
+                            c.setForeground(colorEvento);
+                        } else {
+                            c.setBackground(table.getSelectionBackground());
+                            c.setForeground(table.getSelectionForeground());
+                        }
+
+                        ((JLabel) c).setText("");
                     } else {
-                        c.setBackground(table.getSelectionBackground());
-                        c.setForeground(table.getSelectionForeground());
+                        c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                     }
 
-                    ((JLabel)c).setText("");
-                } else {
-                     c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-                }
-
-                return c;
+                    return c;
                 }
             });
-        
-        } catch (NegocioException ex){
-                JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al recuperar los turnos: " + ex.getMessage(), 
-                    "Error al recuperar.", 
+
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al recuperar los turnos: " + ex.getMessage(),
+                    "Error al recuperar.",
                     JOptionPane.ERROR_MESSAGE);
         }
 
@@ -170,73 +177,74 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      * Este método crea el calendario utilizando GridLayout para crear los días
      * según la preferencia establecida por el usuario.
      */
-    public void configurarCalendario(){
+    public void configurarCalendario() {
         pnlCalendario.removeAll();
-        
-         
-        if (rdbtnSemanal.isSelected()){
-            pnlCalendario.setLayout(new GridLayout(1, 7, 5, 5)); 
+
+        if (rdbtnSemanal.isSelected()) {
+            pnlCalendario.setLayout(new GridLayout(1, 7, 5, 5));
             LocalDate inicio = this.lunes;
             llenarDias(inicio);
 
-        } else if (rdbtnMensual.isSelected()){
-            pnlCalendario.setLayout(new GridLayout(0, 7, 5, 5)); 
+        } else if (rdbtnMensual.isSelected()) {
+            pnlCalendario.setLayout(new GridLayout(0, 7, 5, 5));
             llenarDias();
         }
-        
+
         pnlCalendario.revalidate();
         pnlCalendario.repaint();
         txtMes.setText(traducirMesAEspanol(getMes()).toUpperCase());
     }
-    
+
     /**
      * Calcula que día de la semana cae el primer día del mes
-     * @return Valor entero que representa el día de la semana del
-     * primer día del mes
+     *
+     * @return Valor entero que representa el día de la semana del primer día
+     * del mes
      */
-    public int primerDiaMes(){
+    public int primerDiaMes() {
         int anio = getAnio().getValue();
         Month mes = getMes();
-        
+
         LocalDate primerDia = LocalDate.of(anio, mes, 1);
         return primerDia.getDayOfWeek().getValue();
     }
-    
-    public LocalDate[] paginaCalendarioActual(){
+
+    public LocalDate[] paginaCalendarioActual() {
         int anio = getAnio().getValue();
         int mes = getMes().getValue();
         LocalDate fechaInicio = LocalDate.of(anio, mes, 1);
-        int ultimoDia = java.time.YearMonth.of(anio, mes).lengthOfMonth(); 
+        int ultimoDia = java.time.YearMonth.of(anio, mes).lengthOfMonth();
         LocalDate fechaFin = LocalDate.of(anio, mes, ultimoDia);
-        
+
         LocalDate[] rangoFechasActual = {fechaInicio, fechaFin};
-        
+
         return rangoFechasActual;
     }
-    
+
     /**
      * Este método privado es auxiliar para configurar el horario mensual.
-     * Calcula cuántas casillas debe crear según el año y mes de las etiquetas
-     * y las llena de color en caso de existir un Turno.
+     * Calcula cuántas casillas debe crear según el año y mes de las etiquetas y
+     * las llena de color en caso de existir un Turno.
      */
-    private void llenarDias(){
+    private void llenarDias() {
         pnlCalendario.removeAll();
         try {
-            
+
             idEmpleado = control.recuperarEmpleado(idEmpleado);
-            
+
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
             List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
-                if (idEmpleado.getHorarioActual() != null) todosLosHorarios.add(idEmpleado.getHorarioActual());
+                if (idEmpleado.getHorarioActual() != null) {
+                    todosLosHorarios.add(idEmpleado.getHorarioActual());
+                }
             }
-
 
             int primerDia = primerDiaMes();
             int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
 
             for (int i = 1; i < primerDia; i++) {
-            pnlCalendario.add(new JLabel(""));
+                pnlCalendario.add(new JLabel(""));
             }
 
             for (int i = 1; i <= totalDias; i++) {
@@ -249,7 +257,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
                 for (DTOHorarioEmpleado h : todosLosHorarios) {
                     LocalDate fechaInicio = h.getFechaInicio();
-                    LocalDate fin = h.getFechaFin(); 
+                    LocalDate fin = h.getFechaFin();
 
                     if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
                         horarioParaEsteDia = h;
@@ -274,8 +282,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     restablecerBotonDefecto(btnDia);
                 }
 
-
-                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia; 
+                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
 
                 btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
@@ -286,7 +293,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                             lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
                             Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
                             Set<String> diasDisplay = new HashSet();
-                            for(DayOfWeek d: diasTrabajo){
+                            for (DayOfWeek d : diasTrabajo) {
                                 String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
                                 diasDisplay.add(dia);
                             }
@@ -301,55 +308,55 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     }
                 });
 
-
                 pnlCalendario.add(btnDia);
             }
-        } catch (NegocioException ex){
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al acceder al historial: " + ex.getMessage(), 
-                    "Error al obtener el historial.", 
+                    this,
+                    "Error al acceder al historial: " + ex.getMessage(),
+                    "Error al obtener el historial.",
                     JOptionPane.ERROR_MESSAGE);
         }
-       
+
         pnlCalendario.revalidate();
         pnlCalendario.repaint();
     }
-    
-    
+
     /**
-     * Este método privado es auxiliar para configurar el horario.
-     * En este caso el número de días a llenar es personalizable. Utilizado
-     * en este caso para caclular las casillas a llenar en una semana.
+     * Este método privado es auxiliar para configurar el horario. En este caso
+     * el número de días a llenar es personalizable. Utilizado en este caso para
+     * caclular las casillas a llenar en una semana.
+     *
      * @param inicio dia de inicio del rango
      * @param fin dia final del rango
      */
-    private void llenarDias(LocalDate inicio){
+    private void llenarDias(LocalDate inicio) {
         pnlCalendario.removeAll();
         try {
             this.idEmpleado = control.recuperarEmpleado(idEmpleado);
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
             List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
-                if (idEmpleado.getHorarioActual() != null) todosLosHorarios.add(idEmpleado.getHorarioActual());
+                if (idEmpleado.getHorarioActual() != null) {
+                    todosLosHorarios.add(idEmpleado.getHorarioActual());
+                }
             }
 
             for (int i = 0; i < 7; i++) {
-             LocalDate diaActual = inicio.plusDays(i);
+                LocalDate diaActual = inicio.plusDays(i);
 
-             String textoBoton = String.valueOf(diaActual.getDayOfMonth());
+                String textoBoton = String.valueOf(diaActual.getDayOfMonth());
 
-             JButton btnDia = new JButton(textoBoton);
-             btnDia.setPreferredSize(new Dimension(80, 400));
+                JButton btnDia = new JButton(textoBoton);
+                btnDia.setPreferredSize(new Dimension(80, 400));
 
                 LocalDate fechaActual = diaActual;
-
 
                 DTOHorarioEmpleado horarioParaEsteDia = null;
 
                 for (DTOHorarioEmpleado h : todosLosHorarios) {
                     LocalDate fechaInicio = h.getFechaInicio();
-                    LocalDate fin = h.getFechaFin(); 
+                    LocalDate fin = h.getFechaFin();
 
                     if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
                         horarioParaEsteDia = h;
@@ -371,7 +378,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     btnDia.setBackground(Color.WHITE);
                 }
 
-                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia; 
+                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
 
                 btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
@@ -392,70 +399,70 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 });
                 pnlCalendario.add(btnDia);
             }
-        } catch (NegocioException ex){
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al acceder al historial: " + ex.getMessage(), 
-                    "Error al obtener el historial.", 
+                    this,
+                    "Error al acceder al historial: " + ex.getMessage(),
+                    "Error al obtener el historial.",
                     JOptionPane.ERROR_MESSAGE);
         }
-        
+
         pnlCalendario.revalidate();
         pnlCalendario.repaint();
     }
-    
+
     /**
-     * Método para cambiar los botones del calendario a su color por
-     * defecto.
+     * Método para cambiar los botones del calendario a su color por defecto.
+     *
      * @param btn botón que representa el día del calendario.
      */
     private void restablecerBotonDefecto(JButton btn) {
-        btn.setBackground(Color.WHITE);      
-        btn.setForeground(Color.BLACK);     
+        btn.setBackground(Color.WHITE);
+        btn.setForeground(Color.BLACK);
         btn.setOpaque(true);
         btn.setContentAreaFilled(true);
-        btn.setBorderPainted(true);          
+        btn.setBorderPainted(true);
     }
-    
+
     /**
      * Ajusta las etiquetas al iniciar el sistema.
      */
-    public void configurarEtiquetas(){
+    public void configurarEtiquetas() {
         txtAnio.setText(String.valueOf(LocalDate.now().getYear()));
         txtMes.setText(String.valueOf(LocalDate.now().getMonth()));
     }
-    
+
     /**
-     * Método que convierte lo escrito en el textField de Año al año
-     * establecido por el usuario.
+     * Método que convierte lo escrito en el textField de Año al año establecido
+     * por el usuario.
      */
-    public void convertirEtiquetaAnio(){
+    public void convertirEtiquetaAnio() {
         String anioTxt = txtAnio.getText();
-        
+
         try {
             Year anio = Year.parse(anioTxt);
             txtAnio.setText(String.valueOf(anio));
-            
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Formato de año inválido. El año sólo acepta números.", 
-                    "Error de Formato", 
+                    this,
+                    "Formato de año inválido. El año sólo acepta números.",
+                    "Error de Formato",
                     JOptionPane.ERROR_MESSAGE);
         }
-            
+
         configurarCalendario();
     }
-    
+
     /**
-     * Método que convierte lo escrito en el textField de Mes al mes
-     * establecido por el usuario.
+     * Método que convierte lo escrito en el textField de Mes al mes establecido
+     * por el usuario.
      */
-    public void convertirEtiquetaMes(){
+    public void convertirEtiquetaMes() {
         String mesTxt = txtMes.getText().trim().toLowerCase();
         Month mes = null;
-        
-        switch (mesTxt){
+
+        switch (mesTxt) {
             case "enero":
                 mes = Month.JANUARY;
                 break;
@@ -466,70 +473,72 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 mes = Month.MARCH;
                 break;
             case "abril":
-                 mes = Month.APRIL;
+                mes = Month.APRIL;
                 break;
             case "mayo":
-                 mes = Month.MAY;
+                mes = Month.MAY;
                 break;
             case "junio":
-                 mes = Month.JUNE;
+                mes = Month.JUNE;
                 break;
             case "julio":
-                 mes = Month.JULY;
+                mes = Month.JULY;
                 break;
             case "agosto":
-                 mes = Month.AUGUST;
+                mes = Month.AUGUST;
                 break;
             case "septiembre":
-                 mes = Month.SEPTEMBER;
+                mes = Month.SEPTEMBER;
                 break;
             case "octubre":
-                 mes = Month.OCTOBER;
+                mes = Month.OCTOBER;
                 break;
             case "noviembre":
-                 mes = Month.NOVEMBER;
+                mes = Month.NOVEMBER;
                 break;
             case "diciembre":
-                 mes = Month.DECEMBER;
+                mes = Month.DECEMBER;
                 break;
             default:
                 JOptionPane.showMessageDialog(
-                    this, 
-                    "Formato de mes inválido. No se reconoció el mes introducido.", 
-                    "Error de Formato", 
-                    JOptionPane.ERROR_MESSAGE);
+                        this,
+                        "Formato de mes inválido. No se reconoció el mes introducido.",
+                        "Error de Formato",
+                        JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txtMes.setText(mes.name());
         configurarCalendario();
     }
-    
+
     /**
      * Obtiene el año que está presentado en la etiqueta de año
+     *
      * @return objeto tipo Year con el año de la etiqueta
      */
-    public Year getAnio(){
+    public Year getAnio() {
         String anio = txtAnio.getText();
         return Year.parse(anio);
     }
-    
+
     /**
      * Obtiene el mes que está presentado en la etiqueta de mes
+     *
      * @return objeto tipo Month con el mes de la etiqueta
      */
-    public Month getMes(){
+    public Month getMes() {
         String mes = txtMes.getText();
         Month mesRecuperado;
         try {
             mesRecuperado = Month.valueOf(mes.toUpperCase());
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             mesRecuperado = traducirMesAIngles();
             return mesRecuperado;
         }
         return mesRecuperado;
     }
-   
-  
+
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -790,42 +799,44 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Permite actualizar el calendario al mes siguiente al que se esta visualizando en
-     * ese momento.
+     * Permite actualizar el calendario al mes siguiente al que se esta
+     * visualizando en ese momento.
+     *
      * @param evt click en el botón siguiente
      */
     private void btnMesSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesSiguienteActionPerformed
-        if (rdbtnSemanal.isSelected()){
+        if (rdbtnSemanal.isSelected()) {
             this.lunes = this.lunes.plusWeeks(1);
             Month mesActual = getMes();
-            
-            if (this.lunes.getMonth() != mesActual){
+
+            if (this.lunes.getMonth() != mesActual) {
                 mesActual = this.lunes.getMonth();
                 txtMes.setText(mesActual.name());
             }
-            
+
             int anioActual = getAnio().getValue();
-            if (this.lunes.getYear() != anioActual){
+            if (this.lunes.getYear() != anioActual) {
                 anioActual = this.lunes.getYear();
                 txtAnio.setText(String.valueOf(anioActual));
             }
-        } else if (rdbtnMensual.isSelected()){
+        } else if (rdbtnMensual.isSelected()) {
             Month mesActual = getMes();
             Month mesSiguiente = mesActual.plus(1);
             txtMes.setText(mesSiguiente.name());
-            if (mesSiguiente.equals(Month.JANUARY)){
+            if (mesSiguiente.equals(Month.JANUARY)) {
                 Year anioActual = getAnio();
                 Year anioSiguiente = anioActual.plusYears(1);
                 txtAnio.setText(String.valueOf(anioSiguiente));
             }
         }
-        
+
         configurarCalendario();
     }//GEN-LAST:event_btnMesSiguienteActionPerformed
 
     /**
-     * Método que le da acción al radio button de la vista Semanal.
-     * Al activarlo, desactiva la vista mensual y configura el calendario.
+     * Método que le da acción al radio button de la vista Semanal. Al
+     * activarlo, desactiva la vista mensual y configura el calendario.
+     *
      * @param evt click al radio button semanal
      */
     private void rdbtnSemanalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnSemanalActionPerformed
@@ -835,8 +846,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_rdbtnSemanalActionPerformed
 
     /**
-     * Método que le da acción al radio button de la vista mensual.
-     * Al activarlo, desactiva la vista semanal y configura el calendario.
+     * Método que le da acción al radio button de la vista mensual. Al
+     * activarlo, desactiva la vista semanal y configura el calendario.
+     *
      * @param evt click al radio button mensual
      */
     private void rdbtnMensualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnMensualActionPerformed
@@ -845,14 +857,16 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         configurarCalendario();
     }//GEN-LAST:event_rdbtnMensualActionPerformed
 
-    private boolean existeConflicto(LocalDate inicio, LocalDate fin){
+    private boolean existeConflicto(LocalDate inicio, LocalDate fin) {
         DTOEmpleado idEmp = new DTOEmpleado();
         idEmp.setId(idEmpleado.getId());
         try {
             DTOEmpleado empCompleto = control.recuperarEmpleado(idEmp);
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
             List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
-            if (empCompleto.getHorarioActual() != null) todosLosHorarios.add(empCompleto.getHorarioActual());
+            if (empCompleto.getHorarioActual() != null) {
+                todosLosHorarios.add(empCompleto.getHorarioActual());
+            }
 
             for (DTOHorarioEmpleado h : todosLosHorarios) {
                 LocalDate hInicio = h.getFechaInicio();
@@ -862,47 +876,48 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 boolean terminaDespuesDeQueEmpiece = (fin == null) || !fin.isBefore(hInicio);
 
                 if (comienzaAntesDeQueTermine && terminaDespuesDeQueEmpiece) {
-                    return true; 
+                    return true;
                 }
             }
-            
-        } catch (NegocioException ex){
+
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al obtener el historial: " + ex.getMessage(), 
-                    "Error al recuperar el historial.", 
+                    this,
+                    "Error al obtener el historial: " + ex.getMessage(),
+                    "Error al recuperar el historial.",
                     JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return false;
 
     }
-    
+
     /**
-     * Permite actualizar el calendario al mes anterior al que se esta visualizando en
-     * ese momento.
+     * Permite actualizar el calendario al mes anterior al que se esta
+     * visualizando en ese momento.
+     *
      * @param evt click en el botón anterior
      */
     private void btnMesAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesAnteriorActionPerformed
-        if (rdbtnSemanal.isSelected()){
+        if (rdbtnSemanal.isSelected()) {
             this.lunes = this.lunes.minusWeeks(1);
             Month mesActual = getMes();
-            
-            if (this.lunes.getMonth() != mesActual){
+
+            if (this.lunes.getMonth() != mesActual) {
                 mesActual = this.lunes.getMonth();
                 txtMes.setText(mesActual.name());
             }
-            
+
             int anioActual = getAnio().getValue();
-            if (this.lunes.getYear() != anioActual){
+            if (this.lunes.getYear() != anioActual) {
                 anioActual = this.lunes.getYear();
                 txtAnio.setText(String.valueOf(anioActual));
             }
-        } else if (rdbtnMensual.isSelected()){
+        } else if (rdbtnMensual.isSelected()) {
             Month mesActual = getMes();
             Month mesAnterior = mesActual.minus(1);
             txtMes.setText(mesAnterior.name());
-            if (mesAnterior.equals(Month.DECEMBER)){
+            if (mesAnterior.equals(Month.DECEMBER)) {
                 Year anioActual = getAnio();
                 Year anioAnterior = anioActual.minusYears(1);
                 txtAnio.setText(String.valueOf(anioAnterior));
@@ -913,7 +928,8 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     /**
      * Permite abrir la ventana de Gestión de Turnos
-     * @param evt 
+     *
+     * @param evt
      */
     private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
         Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(idEmpleado);
@@ -923,36 +939,51 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     /**
      * Método que traduce el mes a español
+     *
      * @param mes el mes a traducir
      * @return el mes del parámetro traducido al español
      */
-    private String traducirMesAEspanol(Month mes){
+    private String traducirMesAEspanol(Month mes) {
         return mes.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
     }
-    
+
     /**
      * Convierte la etiqueta del mes a a un Month
+     *
      * @return el Month equivalente a la etiqueta del mes.
      */
-    private Month traducirMesAIngles(){
+    private Month traducirMesAIngles() {
         String mes = txtMes.getText().toLowerCase();
-        switch (mes){
-            case "enero":       return Month.JANUARY;
-            case "febrero":     return Month.FEBRUARY;
-            case "marzo":       return Month.MARCH;
-            case "abril":       return Month.APRIL;
-            case "mayo":        return Month.MAY;
-            case "junio":       return Month.JUNE;
-            case "julio":       return Month.JULY;
-            case "agosto":      return Month.AUGUST;
-            case "septiembre":  return Month.SEPTEMBER;
-            case "octubre":     return Month.OCTOBER;
-            case "noviembre":   return Month.NOVEMBER;
-            case "diciembre":   return Month.DECEMBER;
-            default: return null;
+        switch (mes) {
+            case "enero":
+                return Month.JANUARY;
+            case "febrero":
+                return Month.FEBRUARY;
+            case "marzo":
+                return Month.MARCH;
+            case "abril":
+                return Month.APRIL;
+            case "mayo":
+                return Month.MAY;
+            case "junio":
+                return Month.JUNE;
+            case "julio":
+                return Month.JULY;
+            case "agosto":
+                return Month.AUGUST;
+            case "septiembre":
+                return Month.SEPTEMBER;
+            case "octubre":
+                return Month.OCTOBER;
+            case "noviembre":
+                return Month.NOVEMBER;
+            case "diciembre":
+                return Month.DECEMBER;
+            default:
+                return null;
         }
     }
-    
+
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 
@@ -961,17 +992,17 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             DTOEmpleado empCompleto = control.recuperarEmpleado(idEmpleado);
 
             if (empCompleto == null) {
-                JOptionPane.showMessageDialog(this, 
-                    "No se encontró el empleado en la base de datos. Verifique el ID.", 
-                    "Error de datos", 
-                    JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el empleado en la base de datos. Verifique el ID.",
+                        "Error de datos",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             DTOHorarioEmpleado horarioEmpleado = empCompleto.getHorarioActual();
-            DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null) 
-                                                  ? horarioEmpleado 
-                                                  : new DTOHorarioEmpleado();
+            DTOHorarioEmpleado horarioAProcesar = (horarioEmpleado != null)
+                    ? horarioEmpleado
+                    : new DTOHorarioEmpleado();
 
             horarioAProcesar.setEmpleado(empCompleto);
 
@@ -991,7 +1022,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             );
 
             turno.setColorEvento(color);
-            
+
             DatePicker datePickerInicio = new DatePicker();
             DatePicker datePickerFin = new DatePicker();
 
@@ -1005,9 +1036,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             confirmarFechas.add(datePickerFin);
 
             int result = JOptionPane.showConfirmDialog(
-                    this, 
-                    confirmarFechas, 
-                    "Seleccione el rango de fechas", 
+                    this,
+                    confirmarFechas,
+                    "Seleccione el rango de fechas",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
 
@@ -1026,19 +1057,19 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                             "El empleado ya tiene un horario en la fecha indicada. ¿Desea sobreescribirlo?",
                             "Horario existente",
                             JOptionPane.YES_NO_OPTION
-                            );
+                    );
 
                     if (opcion == JOptionPane.YES_OPTION) {
                         try {
-                            
+
                             control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
-                            
+
                         } catch (NegocioException ex) {
                             JOptionPane.showMessageDialog(
-                                this, 
-                                "Error al sobreescribir el horario del empleado: " + ex.getMessage(), 
-                                "Error al sobreescribir.", 
-                                JOptionPane.ERROR_MESSAGE);
+                                    this,
+                                    "Error al sobreescribir el horario del empleado: " + ex.getMessage(),
+                                    "Error al sobreescribir.",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                         configurarCalendario();
                     } else {
@@ -1047,26 +1078,26 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                                 "No se agregó el nuevo horario",
                                 "Operación cancelada",
                                 JOptionPane.INFORMATION_MESSAGE
-                                );
+                        );
                     }
                 } else {
                     try {
                         control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                     } catch (NegocioException ex) {
                         JOptionPane.showMessageDialog(
-                                this, 
-                                "Error al actualizar el horario del empleado: " + ex.getMessage(), 
-                                "Error al actualizar.", 
+                                this,
+                                "Error al actualizar el horario del empleado: " + ex.getMessage(),
+                                "Error al actualizar.",
                                 JOptionPane.ERROR_MESSAGE);
                     }
-                        configurarCalendario();
+                    configurarCalendario();
                 }
             }
         } else {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Seleccione el turno que desea agregar.", 
-                    "Sin turno seleccionado", 
+                    this,
+                    "Seleccione el turno que desea agregar.",
+                    "Sin turno seleccionado",
                     JOptionPane.WARNING_MESSAGE);
         }
 
@@ -1076,7 +1107,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
-    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

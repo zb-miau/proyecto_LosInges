@@ -111,7 +111,19 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                             String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
                             DTOEmpleado empleado = new DTOEmpleado();
                             empleado.setId(valorId);
-                            abrirVentana(empleado);
+                            empleado = control.recuperarEmpleado(empleado);
+
+                            if (coordinador.getVentanaSiguiente() == Coordinador.GESTION_DE_HORARIOS) {
+
+                                abrirVentana(empleado);
+
+                            }
+                            if (coordinador.getVentanaSiguiente() == Coordinador.REGISTRO_DE_INCIDENCIAS) {
+
+                                abrirVentanaRegistroIncidenicias(empleado);
+
+                            }
+
                         } catch (Exception ex) {
                             LOGGER.severe(ex.getMessage());
                             JOptionPane.showMessageDialog(
@@ -127,6 +139,13 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
     }
 
+    private void abrirVentanaRegistroIncidenicias(DTOEmpleado empleado) {
+
+        coordinador.cambioDeVentana(Coordinador.REGISTRO_DE_INCIDENCIAS, empleado);
+        this.dispose();
+
+    }
+
     /**
      * Método que determina qué ventana debe abrir de acuerdo a si existen
      * turnos registrados Si existe al menos un turno, abre el gestor de
@@ -138,10 +157,10 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
             if (turnos.isEmpty()) {
-                coordinador.abrirVentanaTurnoDeMenu(empleado);
+                coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS, empleado);
 
             } else {
-                coordinador.abrirVentanaGestionHorariosDeMenu(empleado);
+                coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS, empleado);
             }
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(

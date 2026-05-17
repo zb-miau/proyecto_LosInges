@@ -36,15 +36,21 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
     /**
      * Creates new customizer Presentacion_gestionDeIncidenciasMenu
      */
-    public Presentacion_registroDeIncidencias(DTOEmpleado empleado) {
+    public Presentacion_registroDeIncidencias() {
 
         initComponents();
         comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
+
+    }
+
+    public void cargarTexto(DTOEmpleado empleado) {
+
         this.empleado = empleado;
 
         fieldEmpleado.setText(empleado.getNombre() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno());
-
     }
+
+    ;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -237,10 +243,10 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
                     control.crearIncidencia(incidencia);
                     JOptionPane.showMessageDialog(this, "Incidencia Registrada");
 
-                }else{
-                
+                } else {
+
                     JOptionPane.showMessageDialog(this, "La incidencia no ha sido registrada");
-                    
+
                 }
 
             } catch (NegocioException ex) {
@@ -262,7 +268,10 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
     }//GEN-LAST:event_comboTiposActionPerformed
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
-        // TODO add your handling code here:
+
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        this.dispose();
+
     }//GEN-LAST:event_botonCancelarActionPerformed
 
 

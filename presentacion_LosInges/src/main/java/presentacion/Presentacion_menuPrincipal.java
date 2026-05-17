@@ -108,6 +108,9 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
 
     private void btnGerenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenteActionPerformed
 
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        this.dispose();
+
     }//GEN-LAST:event_btnGerenteActionPerformed
 
     private void btnEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadoActionPerformed
