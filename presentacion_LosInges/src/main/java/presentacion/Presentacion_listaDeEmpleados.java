@@ -26,14 +26,15 @@ import objetosNegocio.NegocioException;
  * @author Zaira
  */
 public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
+
     IAsignarHorario control = new FacadeAsignarHorario();
     private static final Logger LOGGER = Logger.getLogger(Presentacion_listaDeEmpleados.class.getName());
     Coordinador coordinador;
-    
+
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-    
+
     /**
      * Creates new form GestionDeHorariosMain
      */
@@ -46,26 +47,26 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
     /**
      * Método que llena la tabla con los empleados registrados.
      */
-    public void generarTabla(){
+    public void generarTabla() {
         String[] columnas = {"Id de empleado", "Nombre", "Apellido Paterno", "Apellido Materno"};
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
-          @Override
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }  
+            }
         };
-        
+
         List<DTOEmpleado> empleados = control.recuperarEmpleados();
-        for (DTOEmpleado e: empleados){
-             Object[] fila = {
-                 e.getId(),
-                 e.getNombre(),
-                 e.getApellidoPaterno(),
-                 e.getApellidoMaterno()
-             };
+        for (DTOEmpleado e : empleados) {
+            Object[] fila = {
+                e.getId(),
+                e.getNombre(),
+                e.getApellidoPaterno(),
+                e.getApellidoMaterno()
+            };
             modelo.addRow(fila);
         }
-        
+
         tablaEmpleados.setModel(modelo);
         tablaEmpleados.getColumnModel().getColumn(0).setMinWidth(0);
         tablaEmpleados.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -73,84 +74,85 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         tablaEmpleados.getColumnModel().getColumn(0).setResizable(false);
         TableRowSorter<TableModel> buscador = new TableRowSorter<>(modelo);
         tablaEmpleados.setRowSorter(buscador);
-        
-        txtBuscar.addKeyListener(new KeyAdapter(){
+
+        txtBuscar.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String busqueda = txtBuscar.getText();
                 if (busqueda.isEmpty()) {
-                    buscador.setRowFilter(null); 
+                    buscador.setRowFilter(null);
                 } else {
-                    List<RowFilter<Object,Object>> filtros = new ArrayList<>(2);
+                    List<RowFilter<Object, Object>> filtros = new ArrayList<>(2);
                     filtros.add(RowFilter.regexFilter("(?i)" + busqueda, 1));
                     filtros.add(RowFilter.regexFilter("(?i)" + busqueda, 2));
-                    
+
                     buscador.setRowFilter(RowFilter.orFilter(filtros));
                 }
             }
         });
-        
+
         accionAlSeleccionar();
     }
 
-    
     /**
-     * Método que obtiene al empleado que se desea editar y luego llama al método abrirVentana.
+     * Método que obtiene al empleado que se desea editar y luego llama al
+     * método abrirVentana.
      */
-    public void accionAlSeleccionar(){
+    public void accionAlSeleccionar() {
         tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-            if (e.getClickCount() == 2) {
-                int fila = tablaEmpleados.getSelectedRow();
-                
-                if (fila != -1) {
-                    try {
-                        int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
-                        String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
-                        DTOEmpleado empleado = new DTOEmpleado();
-                        empleado.setId(valorId);
-                        abrirVentana(empleado);
-                    } catch (Exception ex) {
-                        LOGGER.severe(ex.getMessage());
-                        JOptionPane.showMessageDialog(
-                            null, 
-                            "Error al obtener el empleado: " + ex.getMessage(), 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                            }
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int fila = tablaEmpleados.getSelectedRow();
+
+                    if (fila != -1) {
+                        try {
+                            int filaModelo = tablaEmpleados.convertRowIndexToModel(fila);
+                            String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
+                            DTOEmpleado empleado = new DTOEmpleado();
+                            empleado.setId(valorId);
+                            abrirVentana(empleado);
+                        } catch (Exception ex) {
+                            LOGGER.severe(ex.getMessage());
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Error al obtener el empleado: " + ex.getMessage(),
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 }
             }
-        }
-    });
-       
+        });
+
     }
-    
+
     /**
-     * Método que determina qué ventana debe abrir de acuerdo a si existen turnos registrados
-     * Si existe al menos un turno, abre el gestor de horarios, en caso contrario, abre el
-     * gestor de turnos.
+     * Método que determina qué ventana debe abrir de acuerdo a si existen
+     * turnos registrados Si existe al menos un turno, abre el gestor de
+     * horarios, en caso contrario, abre el gestor de turnos.
+     *
      * @param empleado el id del empleado seleccionado
      */
-    private void abrirVentana(DTOEmpleado  empleado){
+    private void abrirVentana(DTOEmpleado empleado) {
         try {
             List<DTOTurno> turnos = control.recuperarTurno();
-            if (turnos.isEmpty()){
+            if (turnos.isEmpty()) {
                 coordinador.abrirVentanaTurnoDeMenu(empleado);
 
             } else {
                 coordinador.abrirVentanaGestionHorariosDeMenu(empleado);
             }
-        } catch (NegocioException ex){
-                JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al recuperar los turnos: " + ex.getMessage(), 
-                    "Error al recuperar.", 
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al recuperar los turnos: " + ex.getMessage(),
+                    "Error al recuperar.",
                     JOptionPane.ERROR_MESSAGE);
         }
         this.dispose();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -165,6 +167,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         lblBuscar = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEmpleados = new javax.swing.JTable();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Seleccion De Empleado");
@@ -197,6 +200,15 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaEmpleados);
 
+        btnRegresar.setBackground(new java.awt.Color(255, 51, 0));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFondoLayout = new javax.swing.GroupLayout(pnlFondo);
         pnlFondo.setLayout(pnlFondoLayout);
         pnlFondoLayout.setHorizontalGroup(
@@ -204,6 +216,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
             .addGroup(pnlFondoLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegresar)
                     .addGroup(pnlFondoLayout.createSequentialGroup()
                         .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -214,7 +227,9 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         pnlFondoLayout.setVerticalGroup(
             pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFondoLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addGap(21, 21, 21)
+                .addComponent(btnRegresar)
+                .addGap(18, 18, 18)
                 .addGroup(pnlFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblBuscar))
@@ -241,7 +256,16 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarActionPerformed
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        this.dispose();
+
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JPanel pnlFondo;

@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_listaDeEmpleados;
 import presentacion.Presentacion_gestionDeTurnos;
+import presentacion.Presentacion_menuGerente;
 import presentacion.Presentacion_menuPrincipal;
 import presentacion.Presentacion_registroDeIncidencias;
 import presentacion.Presentacion_validacionDeIncidencias;
@@ -28,6 +29,7 @@ public class Coordinador {
     private Presentacion_registroDeIncidencias registroDeIncidencias;
     private Presentacion_validacionDeIncidencias validacionDeIncidencias;
     private Presentacion_validacionIncidenciasTabla validacionIncidenciasTabla;
+    private Presentacion_menuGerente menuGerente;
 
     public static final int GESTION_DE_HORARIOS = 0;
     public static final int GESTION_DE_TURNOS = 1;
@@ -36,11 +38,12 @@ public class Coordinador {
     public static final int REGISTRO_DE_INCIDENCIAS = 4;
     public static final int VALIDACION_DE_INCIDENCIAS = 5;
     public static final int VALIDACION_INCIDECIAS_TABLA = 6;
+    public static final int MENU_GERENTE = 7;
 
-    private int ventanaAnterior = -1;
+    private int ventanaSiguiente = -1;
 
-    public void setVentanaAnterior(int ventanaAnterior) {
-        this.ventanaAnterior = ventanaAnterior;
+    public void setVentanaSiguiente(int ventanaSiguiente) {
+        this.ventanaSiguiente = ventanaSiguiente;
     }
 
     /**
@@ -162,6 +165,15 @@ public class Coordinador {
 
                 validacionIncidenciasTabla.setVisible(true);
                 validacionIncidenciasTabla.setLocationRelativeTo(null);
+            }
+            case 7 -> {
+                if (menuGerente == null) {
+                    menuGerente = new Presentacion_menuGerente();
+                    menuGerente.setCoordinador(this);
+                }
+
+                menuGerente.setVisible(true);
+                menuGerente.setLocationRelativeTo(null);
             }
             default ->
                 throw new AssertionError();
