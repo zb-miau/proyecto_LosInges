@@ -11,8 +11,6 @@ import dto.DTOEmpleado;
 import dto.DTOTurno;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -47,7 +45,7 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
-    DefaultTableModel modeloTabla = new DefaultTableModel();
+    DefaultTableModel modeloTabla;
     Map<JCheckBox, DayOfWeek> mapaDias = new HashMap<>();
     Color colorTurno;
     DTOEmpleado idEmpleado;
@@ -649,8 +647,12 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
      */
     public void configurarTabla(){
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color", "Días"};
-        modeloTabla.setRowCount(0);
-        modeloTabla.setColumnIdentifiers(columnas);
+        modeloTabla = new DefaultTableModel(columnas, 0){
+          @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }  
+        };
         
         try {
         List<DTOTurno> turnos = control.recuperarTurno();

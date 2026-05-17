@@ -43,7 +43,7 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     IAsignarHorario control = new FacadeAsignarHorario();
-    DefaultTableModel modeloTabla = new DefaultTableModel();
+    DefaultTableModel modeloTabla;
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     DTOEmpleado idEmpleado;
     JButton btnDia;
@@ -88,68 +88,73 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     
     public void configurarTabla(){
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
-        modeloTabla.setRowCount(0);
-        modeloTabla.setColumnIdentifiers(columnas);
+        modeloTabla = new DefaultTableModel(columnas, 0){
+          @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }  
+        };
+        
         try {
-        List<DTOTurno> turnos = control.recuperarTurno();
-        
-        for (DTOTurno t: turnos){
-            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
-            Set<String> diasDisplay = new HashSet();
-            for(DayOfWeek d: diasTrabajo){
-                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                diasDisplay.add(dia);
-            }
-            Object[] fila = {
-                t.getIdTurno(),
-                t.getNombre(),
-                t.getHoraInicio(),
-                t.getHoraFin(),
-                t.getDiasTrabajo(),
-                t.getColorEvento(),
-                diasDisplay
-             };
-            modeloTabla.addRow(fila);
-        }
-        
-        tablaTurnosDisponibles.setModel(modeloTabla);
-        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
-        
-        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
-        tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
-        
-        tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
-            boolean isSelected, boolean hasFocus, int row, int column) {
+            List<DTOTurno> turnos = control.recuperarTurno();
 
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            if (value instanceof Color) {
-                Color colorEvento = (Color) value;
-                ((JLabel)c).setOpaque(true);
-            
-                if (!isSelected) {
-                    c.setBackground(colorEvento);
-                    c.setForeground(colorEvento);
-                } else {
-                    c.setBackground(table.getSelectionBackground());
-                    c.setForeground(table.getSelectionForeground());
+            for (DTOTurno t: turnos){
+                Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+                Set<String> diasDisplay = new HashSet();
+                for(DayOfWeek d: diasTrabajo){
+                    String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                    diasDisplay.add(dia);
                 }
-                
-                ((JLabel)c).setText("");
-            } else {
-                 c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                Object[] fila = {
+                    t.getIdTurno(),
+                    t.getNombre(),
+                    t.getHoraInicio(),
+                    t.getHoraFin(),
+                    t.getDiasTrabajo(),
+                    t.getColorEvento(),
+                    diasDisplay
+                 };
+                modeloTabla.addRow(fila);
             }
 
-            return c;
-            }
-        });
+            tablaTurnosDisponibles.setModel(modeloTabla);
+            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
+
+            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
+            tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
+
+            tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, 
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (value instanceof Color) {
+                    Color colorEvento = (Color) value;
+                    ((JLabel)c).setOpaque(true);
+
+                    if (!isSelected) {
+                        c.setBackground(colorEvento);
+                        c.setForeground(colorEvento);
+                    } else {
+                        c.setBackground(table.getSelectionBackground());
+                        c.setForeground(table.getSelectionForeground());
+                    }
+
+                    ((JLabel)c).setText("");
+                } else {
+                     c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                }
+
+                return c;
+                }
+            });
         
         } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(
