@@ -35,12 +35,8 @@ import objetosNegocio.NegocioException;
  * @author Zaira
  */
 public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame {
-<<<<<<< Updated upstream
 
-    DefaultTableModel modeloTablaIncidencias = new DefaultTableModel();
-=======
     DefaultTableModel modeloTablaIncidencias;
->>>>>>> Stashed changes
     IGestionIncidencias control = new FacadeGestionIncidencias();
 
     Coordinador coordinador;
@@ -214,11 +210,6 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
 
     public void crearTabla() {
         String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
-<<<<<<< Updated upstream
-        modeloTablaIncidencias.setRowCount(0);
-        modeloTablaIncidencias.setColumnIdentifiers(columnas);
-
-=======
         modeloTablaIncidencias = new DefaultTableModel(columnas, 0){
           @Override
             public boolean isCellEditable(int row, int column) {
@@ -227,7 +218,6 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         };
         
         
->>>>>>> Stashed changes
         try {
             Set<String> tipos = new HashSet<>();
             List<DTOIncidencia> incidencias = control.obtenerIncidencias();
