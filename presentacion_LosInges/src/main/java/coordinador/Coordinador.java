@@ -4,8 +4,17 @@
  */
 package coordinador;
 
+import asignarHorario.FacadeAsignarHorario;
+import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
+import gestionAsistencias.IGestionAsistencias;
+import gestionIncidencias.FacadeGestionIncidencias;
+import gestionIncidencias.IGestionIncidencias;
+import gestionarEmpleados.FachadaGestionarEmpleados;
+import gestionarEmpleados.IGestionarEmpleados;
+import gestionarTurnos.FachadaGestionarTurnos;
+import gestionarTurnos.IGestionarTurnos;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
@@ -22,6 +31,12 @@ import presentacion.Presentacion_validacionIncidenciasTabla;
  * @author RAMSES
  */
 public class Coordinador {
+
+    public final IAsignarHorario asignarHorario = new FacadeAsignarHorario();
+    public final IGestionIncidencias gestionIncidencias = new FacadeGestionIncidencias();
+//    private final IGestionAsistencias gestionAsistencias;
+    public final IGestionarEmpleados gestionarEmpleados = new FachadaGestionarEmpleados();
+    public final IGestionarTurnos gestionarTurnos = new FachadaGestionarTurnos();
 
     private Presentacion_gestionDeHorarios gestionDeHorarios;
     private Presentacion_gestionDeTurnos gestionDeTurnos;

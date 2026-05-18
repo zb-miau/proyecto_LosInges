@@ -43,7 +43,6 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
-    IAsignarHorario control = new FacadeAsignarHorario();
     DefaultTableModel modeloTabla;
     LocalDate lunes = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     DTOEmpleado idEmpleado;
@@ -103,7 +102,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         };
 
         try {
-            List<DTOTurno> turnos = control.recuperarTurno();
+            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
 
             for (DTOTurno t : turnos) {
                 Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
@@ -230,10 +229,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         pnlCalendario.removeAll();
         try {
 
-            idEmpleado = control.recuperarEmpleado(idEmpleado);
+            idEmpleado = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
 
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
                 if (idEmpleado.getHorarioActual() != null) {
                     todosLosHorarios.add(idEmpleado.getHorarioActual());
@@ -333,9 +332,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private void llenarDias(LocalDate inicio) {
         pnlCalendario.removeAll();
         try {
-            this.idEmpleado = control.recuperarEmpleado(idEmpleado);
+            this.idEmpleado = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (idEmpleado != null) {
                 if (idEmpleado.getHorarioActual() != null) {
                     todosLosHorarios.add(idEmpleado.getHorarioActual());
@@ -849,9 +848,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         DTOEmpleado idEmp = new DTOEmpleado();
         idEmp.setId(idEmpleado.getId());
         try {
-            DTOEmpleado empCompleto = control.recuperarEmpleado(idEmp);
+            DTOEmpleado empCompleto = coordinador.gestionarEmpleados.recuperarEmpleado(idEmp);
             LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = control.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
             if (empCompleto.getHorarioActual() != null) {
                 todosLosHorarios.add(empCompleto.getHorarioActual());
             }
@@ -966,7 +965,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
         if (filaSeleccionada != -1) {
 
-            DTOEmpleado empCompleto = control.recuperarEmpleado(idEmpleado);
+            DTOEmpleado empCompleto = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
 
             if (empCompleto == null) {
                 JOptionPane.showMessageDialog(this,
@@ -1028,7 +1027,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 if (inicioEvento == null) {
                     JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
-                } 
+                }
 
                 if (existeConflicto(inicioEvento, fin)) {
                     int opcion = JOptionPane.showConfirmDialog(
@@ -1041,7 +1040,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     if (opcion == JOptionPane.YES_OPTION) {
                         try {
 
-                            control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                            coordinador.gestionarEmpleados.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
 
                         } catch (NegocioException ex) {
                             JOptionPane.showMessageDialog(
@@ -1061,7 +1060,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     }
                 } else {
                     try {
-                        control.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
+                        coordinador.gestionarEmpleados.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
                     } catch (NegocioException ex) {
                         JOptionPane.showMessageDialog(
                                 this,

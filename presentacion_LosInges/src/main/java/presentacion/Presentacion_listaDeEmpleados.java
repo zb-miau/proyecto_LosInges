@@ -56,7 +56,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
             }
         };
 
-        List<DTOEmpleado> empleados = control.recuperarEmpleados();
+        List<DTOEmpleado> empleados = coordinador.gestionarEmpleados.obtenerEmpleados();
         for (DTOEmpleado e : empleados) {
             Object[] fila = {
                 e.getId(),
@@ -111,7 +111,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                             String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
                             DTOEmpleado empleado = new DTOEmpleado();
                             empleado.setId(valorId);
-                            empleado = control.recuperarEmpleado(empleado);
+                            empleado = coordinador.gestionarEmpleados.recuperarEmpleado(empleado);
 
                             if (coordinador.getVentanaSiguiente() == Coordinador.GESTION_DE_HORARIOS) {
 
@@ -155,7 +155,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      */
     private void abrirVentana(DTOEmpleado empleado) {
         try {
-            List<DTOTurno> turnos = control.recuperarTurno();
+            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
             if (turnos.isEmpty()) {
                 coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS, empleado);
 

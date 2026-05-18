@@ -21,6 +21,8 @@ public interface IGestionarEmpleados {
     public DTOEmpleado registrarEmpleado(DTOEmpleado empleado);
 
     public List<DTOEmpleado> obtenerEmpleados();
+    
+    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado);
 
     public DTOIncidencia registrarIncidencia(DTOIncidencia incidencia);
 
