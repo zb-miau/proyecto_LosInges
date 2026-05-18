@@ -50,14 +50,11 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     Coordinador coordinador;
 
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
-
     /**
      * Creates new form GestionDeHorarios
      */
-    public Presentacion_gestionDeHorarios() {
+    public Presentacion_gestionDeHorarios(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
 
     }
@@ -1082,7 +1079,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.regresarAGestionHorariosMenuDeGestionHorarios();
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

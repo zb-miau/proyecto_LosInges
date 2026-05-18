@@ -24,18 +24,13 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
     private DTOEmpleado empleado;
 
-    private Coordinador coordinador;
-
-    public void setCoordinador(Coordinador coordinador) {
-
-        this.coordinador = coordinador;
-    }
+    private final Coordinador coordinador;
 
     /**
      * Creates new customizer Presentacion_gestionDeIncidenciasMenu
      */
-    public Presentacion_registroDeIncidencias() {
-
+    public Presentacion_registroDeIncidencias(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
         comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
 

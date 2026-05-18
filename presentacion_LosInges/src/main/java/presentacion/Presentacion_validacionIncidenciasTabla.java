@@ -47,14 +47,11 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
 
     Coordinador coordinador;
 
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
-
     /**
      * Creates new form Presentacion_gestionDeIncidenciasMenuPrincipal
      */
-    public Presentacion_validacionIncidenciasTabla() {
+    public Presentacion_validacionIncidenciasTabla(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
         configuracionBotones();
         crearTabla();
@@ -216,17 +213,16 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
 
     public void crearTabla() {
         String[] columnas = {"Id", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
-        modeloTablaIncidencias = new DefaultTableModel(columnas, 0){
-          @Override
+        modeloTablaIncidencias = new DefaultTableModel(columnas, 0) {
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }  
+            }
         };
-        
-        
+
         try {
             Set<String> tipos = new HashSet<>();
-            String filtro = (rdbtnSeleccionado != null)? rdbtnSeleccionado : "PENDIENTE";
+            String filtro = (rdbtnSeleccionado != null) ? rdbtnSeleccionado : "PENDIENTE";
             List<DTOIncidencia> incidencias = control.obtenerIncidencias(filtro);
             for (DTOIncidencia i : incidencias) {
                 DTOEmpleado empleado = i.getEmpleado();
@@ -296,7 +292,6 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         cmbTipoIncidencia.setModel(modelo);
     }
 
- 
     public void busquedaPorFiltros(TableRowSorter<TableModel> buscador) {
         List<RowFilter<Object, Object>> filtrosConjuntos = new ArrayList<>();
         String busqueda = txtBuscarEmpleado.getText().trim();
@@ -324,7 +319,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         }
 
         this.rdbtnSeleccionado = estadoSeleccionado;
-        
+
         if (!estadoSeleccionado.isEmpty()) {
             filtrosConjuntos.add(RowFilter.regexFilter("^" + estadoSeleccionado + "$", 6));
         }
@@ -373,7 +368,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             return this;
         }
     }
-    
+
     private class EditorEstado extends AbstractCellEditor implements TableCellEditor, ActionListener {
 
         private final JPanel panel;
@@ -387,7 +382,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             this.panel.setOpaque(true);
 
             this.btnEstado = new JButton();
-            this.btnEstado.addActionListener(this); 
+            this.btnEstado.addActionListener(this);
             this.panel.add(btnEstado);
         }
 
@@ -421,13 +416,13 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             int columnaSeleccionada = tablaRef.getEditingColumn();
 
             if (filaSeleccionada != -1) {
-                
+
                 String id = tablaRef.getValueAt(filaSeleccionada, 0).toString();
                 String nombre = tablaRef.getValueAt(filaSeleccionada, 1).toString();
                 String apellidoP = tablaRef.getValueAt(filaSeleccionada, 2).toString();
                 String apellidoM = tablaRef.getValueAt(filaSeleccionada, 3).toString();
                 String tipo = tablaRef.getValueAt(filaSeleccionada, 4).toString();
-                
+
                 DTOIncidencia incidenciaValidar = new DTOIncidencia();
                 DTOEmpleado empleado = new DTOEmpleado();
                 empleado.setNombre(nombre);
@@ -438,9 +433,6 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                 incidenciaValidar.setTipo(DTOIncidencia.TiposIncidencia.valueOf(tipo));
 
                 incidenciaValidar = coordinador.cambioDeVentana(Coordinador.VALIDACION_DE_INCIDENCIAS, incidenciaValidar);
-                
-                
-                
 
             }
 

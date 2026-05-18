@@ -52,14 +52,11 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
     Coordinador coordinador;
 
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
-
     /**
      * Creates new form GestionDeTurnos
      */
-    public Presentacion_gestionDeTurnos(DTOEmpleado empleado) {
+    public Presentacion_gestionDeTurnos(DTOEmpleado empleado, Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
         configurarSpinners();
         configurarDias();

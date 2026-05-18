@@ -27,21 +27,19 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
-    IAsignarHorario control = new FacadeAsignarHorario();
     private static final Logger LOGGER = Logger.getLogger(Presentacion_listaDeEmpleados.class.getName());
     Coordinador coordinador;
-
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
 
     /**
      * Creates new form GestionDeHorariosMain
      */
-    public Presentacion_listaDeEmpleados() {
+    public Presentacion_listaDeEmpleados(Coordinador coordinador) {
+
+        this.coordinador = coordinador;
         initComponents();
         generarTabla();
         setVisible(true);
+
     }
 
     /**
