@@ -6,6 +6,7 @@ package coordinador;
 
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_listaDeEmpleados;
@@ -231,22 +232,23 @@ public class Coordinador {
 
     }
 
-    public void cambioDeVentana(int ventana, DTOIncidencia incidencia) {
+    public DTOIncidencia cambioDeVentana(int ventana, DTOIncidencia incidencia) {
 
-//        switch (ventana) {
-//            case 5 -> {
-//                if (validacionDeIncidencias == null) {
-//                    validacionDeIncidencias = new Presentacion_validacionDeIncidencias(incidencia);
-//                    validacionDeIncidencias.setCoordinador(this);
-//                }
-//
-//                validacionDeIncidencias.setVisible(true);
-//                validacionDeIncidencias.setLocationRelativeTo(null);
-//            }
-//
-//            default ->
-//                throw new AssertionError();
-//        }
+        switch (ventana) {
+            case 5 -> {
+                if (validacionDeIncidencias == null) {
+                    validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia);
+                    validacionDeIncidencias.setCoordinador(this);
+                }
+
+                validacionDeIncidencias.setVisible(true);
+                validacionDeIncidencias.setLocationRelativeTo(null);
+                return validacionDeIncidencias.getIncidencia();
+            }
+
+            default ->
+                throw new AssertionError();
+        }
     }
 
 }

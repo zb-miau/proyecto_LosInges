@@ -5,18 +5,25 @@
 package presentacion;
 
 import coordinador.Coordinador;
+import dto.DTOEmpleado;
+import dto.DTOIncidencia;
 
 /**
  *
  * @author Zaira
  */
-public class Presentacion_validacionDeIncidencias extends javax.swing.JFrame {
-
+public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
+    DTOIncidencia incidencia;
+    DTOEmpleado empleado;
     /**
      * Creates new form Presentacion_validacionDeIncidencias
      */
-    public Presentacion_validacionDeIncidencias() {
+    public Presentacion_validacionDeIncidencias(java.awt.Frame parent, DTOIncidencia incidencia) {
+        super (parent, "Validacion de Incidencias", true);
         initComponents();
+        this.incidencia = incidencia;
+        this.empleado = incidencia.getEmpleado();
+        llenarCampos();
     }
 
     Coordinador coordinador;
@@ -24,7 +31,31 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JFrame {
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
+    
+    public void llenarCampos(){
+        lblNombreIncidencia.setText(incidencia.getTipo().name());
+        
+        String nombreCompleto = 
+                empleado.getNombre() + " " +
+                empleado.getApellidoPaterno() + " " +
+                empleado.getApellidoMaterno();
+        
+        lblNombreEmpleado.setText(nombreCompleto);
+    }
+    
+    private boolean verificarObservaciones(){
+        if (txtObservaciones.getText().trim().isEmpty()){
+            return false;
+        }
+        return true;
+    }
 
+    public DTOIncidencia getIncidencia() {
+        return incidencia;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,11 +114,21 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JFrame {
         btnRechazar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRechazar.setForeground(new java.awt.Color(255, 255, 255));
         btnRechazar.setText("Rechazar");
+        btnRechazar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRechazarActionPerformed(evt);
+            }
+        });
 
         btnValidar.setBackground(new java.awt.Color(255, 166, 43));
         btnValidar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnValidar.setForeground(new java.awt.Color(39, 71, 125));
         btnValidar.setText("Validar");
+        btnValidar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValidarActionPerformed(evt);
+            }
+        });
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
@@ -160,6 +201,18 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
+        if (verificarObservaciones()){
+            incidencia.setEstado(DTOIncidencia.Estado.VALIDADA);
+        }
+    }//GEN-LAST:event_btnValidarActionPerformed
+
+    private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
+        if (verificarObservaciones()){
+            incidencia.setEstado(DTOIncidencia.Estado.RECHAZADA);
+        }
+    }//GEN-LAST:event_btnRechazarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

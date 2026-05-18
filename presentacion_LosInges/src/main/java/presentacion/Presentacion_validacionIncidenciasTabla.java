@@ -12,19 +12,24 @@ import gestionIncidencias.IGestionIncidencias;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -265,6 +270,8 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             busquedaPorFiltros(buscador);
 
             tablaIncidencias.getColumnModel().getColumn(6).setCellRenderer(new RenderizadorEstado());
+            tablaIncidencias.getColumnModel().getColumn(6).setCellEditor(new EditorEstado(tablaIncidencias));
+            tablaIncidencias.setRowHeight(60);
 
         } catch (NegocioException ex) {
 
@@ -364,6 +371,80 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             }
 
             return this;
+        }
+    }
+    
+    private class EditorEstado extends AbstractCellEditor implements TableCellEditor, ActionListener {
+
+        private final JPanel panel;
+        private final JButton btnEstado;
+        private Object valorActual;
+        private final JTable tablaRef;
+
+        public EditorEstado(JTable table) {
+            this.tablaRef = table;
+            this.panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
+            this.panel.setOpaque(true);
+
+            this.btnEstado = new JButton();
+            this.btnEstado.addActionListener(this); 
+            this.panel.add(btnEstado);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            this.valorActual = value;
+
+            if (value != null) {
+                btnEstado.setText(value.toString());
+                if (value.toString().equals("PENDIENTE")) {
+                    btnEstado.setBackground(Color.YELLOW);
+                } else if (value.toString().equals("ACEPTADA")) {
+                    btnEstado.setBackground(Color.GREEN);
+                }
+            } else {
+                btnEstado.setBackground(Color.RED);
+            }
+
+            this.panel.setBackground(table.getSelectionBackground());
+            return this.panel;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return this.valorActual;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int filaSeleccionada = tablaRef.getEditingRow();
+            int columnaSeleccionada = tablaRef.getEditingColumn();
+
+            if (filaSeleccionada != -1) {
+                
+                String id = tablaRef.getValueAt(filaSeleccionada, 0).toString();
+                String nombre = tablaRef.getValueAt(filaSeleccionada, 1).toString();
+                String apellidoP = tablaRef.getValueAt(filaSeleccionada, 2).toString();
+                String apellidoM = tablaRef.getValueAt(filaSeleccionada, 3).toString();
+                String tipo = tablaRef.getValueAt(filaSeleccionada, 4).toString();
+                
+                DTOIncidencia incidenciaValidar = new DTOIncidencia();
+                DTOEmpleado empleado = new DTOEmpleado();
+                empleado.setNombre(nombre);
+                empleado.setApellidoMaterno(apellidoM);
+                empleado.setApellidoPaterno(apellidoP);
+                incidenciaValidar.setIdIncidencia(id);
+                incidenciaValidar.setEmpleado(empleado);
+                incidenciaValidar.setTipo(DTOIncidencia.TiposIncidencia.valueOf(tipo));
+
+                incidenciaValidar = coordinador.cambioDeVentana(Coordinador.VALIDACION_DE_INCIDENCIAS, incidenciaValidar);
+                
+                
+                
+
+            }
+
+            fireEditingStopped();
         }
     }
 

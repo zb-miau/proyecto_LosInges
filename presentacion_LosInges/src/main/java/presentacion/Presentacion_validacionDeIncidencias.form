@@ -206,6 +206,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Rechazar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRechazarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnValidar">
           <Properties>
@@ -220,6 +223,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Validar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnValidarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblTitulo">
           <Properties>
