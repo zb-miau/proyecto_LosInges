@@ -48,6 +48,11 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
         btnGerenteGeneral.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnGerenteGeneral.setForeground(new java.awt.Color(39, 71, 125));
         btnGerenteGeneral.setText("Gerente General");
+        btnGerenteGeneral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenteGeneralActionPerformed(evt);
+            }
+        });
 
         btnEmpleado.setBackground(new java.awt.Color(255, 166, 43));
         btnEmpleado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -117,6 +122,14 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
     private void btnEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadoActionPerformed
 
     }//GEN-LAST:event_btnEmpleadoActionPerformed
+
+    private void btnGerenteGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenteGeneralActionPerformed
+
+        coordinador.cambioDeVentana(Coordinador.VALIDACION_INCIDECIAS_TABLA);
+        this.dispose();
+
+
+    }//GEN-LAST:event_btnGerenteGeneralActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEmpleado;

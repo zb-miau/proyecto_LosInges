@@ -144,14 +144,14 @@ public class Coordinador {
 
         switch (ventana) {
             case 1 -> {
-                if (gestionDeTurnos == null){
+                if (gestionDeTurnos == null) {
                     gestionDeTurnos = new Presentacion_gestionDeTurnos(null);
                     gestionDeTurnos.setCoordinador(this);
                 }
                 gestionDeTurnos.setVisible(true);
                 gestionDeTurnos.setLocationRelativeTo(null);
-                }
-                
+            }
+
             case 2 -> {
                 if (listaDeEmpleados == null) {
                     listaDeEmpleados = new Presentacion_listaDeEmpleados();
