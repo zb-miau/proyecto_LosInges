@@ -74,6 +74,7 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de incidencias");
+        setResizable(false);
 
         pnlRegistorIncidencias.setBackground(new java.awt.Color(39, 71, 125));
 

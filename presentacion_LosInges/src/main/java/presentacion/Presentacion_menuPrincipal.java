@@ -40,6 +40,7 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
         btnGerente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlMenuPrincipal.setBackground(new java.awt.Color(39, 71, 125));
 
