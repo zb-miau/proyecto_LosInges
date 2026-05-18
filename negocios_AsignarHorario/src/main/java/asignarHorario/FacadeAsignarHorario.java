@@ -18,20 +18,11 @@ import objetosNegocio.NegocioException;
  * @author RAMSES
  */
 public class FacadeAsignarHorario implements IAsignarHorario {
+
     private ControlAsignarHorario controlHorario;
-    
+
     public FacadeAsignarHorario() {
         this.controlHorario = new ControlAsignarHorario();
-    }
-
-    /**
-     * Por medio de controlHorario recupera una lista de empleados
-     *
-     * @return DTOEmpleado
-     */
-    @Override
-    public List<DTOEmpleado> recuperarEmpleados() {
-        return controlHorario.recuperarEmpleados();
     }
 
     /**
@@ -47,16 +38,6 @@ public class FacadeAsignarHorario implements IAsignarHorario {
     }
 
     /**
-     * Por medio de controlHorario recupera una lista de los turnos
-     *
-     * @return DTOTurno
-     */
-    @Override
-    public List<DTOTurno> recuperarTurno() throws NegocioException{
-        return controlHorario.recuperarTurnos();
-    }
-
-    /**
      * Por medio de controlHorario actualiza el horario del empleado
      *
      * @param turno
@@ -65,69 +46,13 @@ public class FacadeAsignarHorario implements IAsignarHorario {
      * @param fecha_fin
      */
     @Override
-    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) throws NegocioException{
+    public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) throws NegocioException {
         controlHorario.actualizarHorarioEmpleado(turno, empleado, fecha_inicio, fecha_fin);
     }
 
-    /**
-     * Por medio de controlHorario agrega un turno nuevo
-     *
-     * @param turnoNuevo
-     */
     @Override
-    public void agregarTurno(DTOTurno turnoNuevo) throws NegocioException{
-        controlHorario.agregarTurno(turnoNuevo);
-    }
-
-    
-  
-    /**
-     * Por medio de controlHorarui elimina el turno que se desea eliminar
-     *
-     * @param turnoEliminar
-     */
-    @Override
-    public void eliminarTurno(DTOTurno turnoEliminar) throws NegocioException{
-        controlHorario.eliminarTurno(turnoEliminar);
-    }
-
-    /**
-     * Por medio de controlHorario podemos recuperar un empleado en especifico
-     * con su id
-     *
-     * @param id
-     * @return DTOEmpleado
-     */
-    @Override
-    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
-        return controlHorario.recuperarEmpleado(empleado);
-    }
-
-    /**
-     * Por medio de controlHorario se modifica el turno deseado
-     *
-     * @param turnoModificar
-     */
-    @Override
-    public void modificarTurno(DTOTurno turnoModificar) throws NegocioException{
-        controlHorario.modificarTurno(turnoModificar);
-    }
-
-    @Override
-    public DTOTurno consultarTurno(DTOTurno turnoConsultar) throws NegocioException{
-        return controlHorario.consultarTurno(turnoConsultar);
-    }
-
-    @Override
-    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado,  LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
+    public List<DTOHorarioEmpleado> listaHistorial(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
         return controlHorario.listaHistorial(empleado, fechaInicio, fechaFin);
     }
-
-    @Override
-    public boolean turnoDuplicado(DTOTurno turnoVerificar) throws NegocioException {
-        return controlHorario.turnoDuplicado(turnoVerificar);
-    }
-    
-    
 
 }
