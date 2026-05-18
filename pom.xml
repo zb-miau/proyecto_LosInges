@@ -14,6 +14,8 @@
         <module>Entidades</module>
         <module>negocios_GestionIncidencias</module>
         <module>negocios_GestionAsistencia</module>
+        <module>infraestructura_Mensajeria</module>
+        <module>negocios_GestionarEmpleados</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -6,7 +6,7 @@
         <artifactId>proyecto_LosInges</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>negocios_GestionIncidencias</artifactId>
+    <artifactId>infraestructura_Mensajeria</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -15,23 +15,20 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>AccesoDatos</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ObjetosNegocio</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>infraestructura_Mensajeria</artifactId>
-            <version>${project.version}</version>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.3</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
+    
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
-        <exec.mainClass>itson.negocios_gestionincidencias.Negocios_GestionIncidencias</exec.mainClass>
+        <exec.mainClass>itson.infraestructura_mensajeria.Infraestructura_Mensajeria</exec.mainClass>
     </properties>
 </project>

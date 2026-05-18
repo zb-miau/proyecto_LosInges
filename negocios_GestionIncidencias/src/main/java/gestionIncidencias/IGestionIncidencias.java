@@ -6,7 +6,6 @@ package gestionIncidencias;
 
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
-import java.util.ArrayList;
 import java.util.List;
 import objetosNegocio.NegocioException;
 
@@ -16,16 +15,14 @@ import objetosNegocio.NegocioException;
  */
 public interface IGestionIncidencias {
 
-    public List<DTOEmpleado> obtenerEmpleados();
+    public DTOIncidencia crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException;
 
-    public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException;
+    public List<DTOIncidencia> obtenerIncidencias(String estado) throws NegocioException;
 
-    public List<DTOIncidencia> obtenerIncidencias(String estado)throws NegocioException;
+    public DTOIncidencia validarIncidencia(DTOIncidencia incidencia) throws NegocioException;
 
-    public void validarIncidencia(DTOIncidencia incidencia)throws NegocioException;
+    public DTOIncidencia rechazarIncidencia(DTOIncidencia incidencia) throws NegocioException;
 
-    public void RechazarIncidencia(DTOIncidencia incidencia)throws NegocioException;
-
-    public void enviarSupervisor();
+    public void enviarSupervisor(DTOIncidencia incidencia);
 
 }

@@ -6,15 +6,10 @@ package gestionIncidencias;
 
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.Properties;
+import mensajeria.ControlMensajeria;
+import mensajeria.FacadeMensajeria;
+import mensajeria.IMensajeria;
 import objetosNegocio.EmpleadoBO;
 import objetosNegocio.IncidenciaBO;
 import objetosNegocio.NegocioException;
@@ -25,24 +20,19 @@ import objetosNegocio.NegocioException;
  */
 public class ControlGestionIncidencias {
 
-    private EmpleadoBO empleadoBO;
-
     private IncidenciaBO incidenciaBO;
 
+    private IMensajeria mensajeria;
+
     public ControlGestionIncidencias() {
-        this.empleadoBO = EmpleadoBO.getInstance();
+        mensajeria = new FacadeMensajeria(new ControlMensajeria());
+
         this.incidenciaBO = IncidenciaBO.getInstance();
     }
 
-    public List<DTOEmpleado> obtenerEmpleados() {
+    public DTOIncidencia crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
-        return empleadoBO.obtenerLista();
-
-    }
-
-    public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
-
-        incidenciaBO.crear(dTOIncidencia);
+        return incidenciaBO.crear(dTOIncidencia);
 
     }
 
@@ -52,71 +42,25 @@ public class ControlGestionIncidencias {
 
     }
 
-    public void validarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
+    public DTOIncidencia validarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
         dTOIncidencia.setEstado(DTOIncidencia.Estado.VALIDADA);
 
-        incidenciaBO.modificar(dTOIncidencia);
+        return incidenciaBO.modificar(dTOIncidencia);
 
     }
 
-    public void rechazarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
+    public DTOIncidencia rechazarIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
         dTOIncidencia.setEstado(DTOIncidencia.Estado.RECHAZADA);
 
-        incidenciaBO.modificar(dTOIncidencia);
+        return incidenciaBO.modificar(dTOIncidencia);
 
     }
 
-    public void enviarSupervisor() {
+    public void enviarSupervisor(DTOIncidencia incidencia) {
 
-        // 1. Configuración del servidor SMTP (Ejemplo con Gmail)
-        String servidorSmtp = "smtp.gmail.com";
-        String puerto = "587"; // Puerto estándar para TLS
-
-        // Datos de autenticación
-        final String usuario = "remboy121@gmail.com";
-        final String contrasenia = "deyt nnci vcnc ycmq";
-
-        // Correo del destinatario
-        String destinatario = "jesus.flores262713@potros.itson.edu.mx";
-
-        // 2. Establecer las propiedades del sistema
-        Properties propiedades = new Properties();
-        propiedades.put("mail.smtp.auth", "true");
-        propiedades.put("mail.smtp.starttls.enable", "true");
-        propiedades.put("mail.smtp.host", servidorSmtp);
-        propiedades.put("mail.smtp.port", puerto);
-
-        // 3. Crear la sesión con autenticación
-        Session sesion = Session.getInstance(propiedades, new jakarta.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(usuario, contrasenia);
-            }
-        });
-
-        try {
-            // 4. Crear el mensaje de correo
-            Message mensaje = new MimeMessage(sesion);
-
-            // Remitente
-            mensaje.setFrom(new InternetAddress(usuario));
-
-            // Destinatario
-            mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-
-            // Asunto y cuerpo del mensaje
-            mensaje.setSubject("Correo de prueba desde Java");
-            mensaje.setText("¡Hola! Este es un correo automático enviado usando Jakarta Mail.");
-
-            // 5. Enviar el correo
-            Transport.send(mensaje);
-
-        } catch (MessagingException e) {
-            System.err.println("Error al enviar el correo: " + e.getMessage());
-            e.printStackTrace();
-        }
+        mensajeria.enviarGmailSupervisor(incidencia);
 
     }
 

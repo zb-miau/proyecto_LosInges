@@ -22,16 +22,9 @@ public class FacadeGestionIncidencias implements IGestionIncidencias {
     }
 
     @Override
-    public List<DTOEmpleado> obtenerEmpleados() {
+    public DTOIncidencia crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
 
-        return control.obtenerEmpleados();
-
-    }
-
-    @Override
-    public void crearIncidencia(DTOIncidencia dTOIncidencia) throws NegocioException {
-
-        control.crearIncidencia(dTOIncidencia);
+        return control.crearIncidencia(dTOIncidencia);
 
     }
 
@@ -43,24 +36,23 @@ public class FacadeGestionIncidencias implements IGestionIncidencias {
     }
 
     @Override
-    public void validarIncidencia(DTOIncidencia incidencia) throws NegocioException {
+    public DTOIncidencia validarIncidencia(DTOIncidencia incidencia) throws NegocioException {
 
-        control.validarIncidencia(incidencia);
-
-    }
-
-    @Override
-    public void RechazarIncidencia(DTOIncidencia incidencia) throws NegocioException {
-
-        control.rechazarIncidencia(incidencia);
+        return control.validarIncidencia(incidencia);
 
     }
 
     @Override
-    public void enviarSupervisor() {
+    public DTOIncidencia rechazarIncidencia(DTOIncidencia incidencia) throws NegocioException {
 
-        control.enviarSupervisor();
+        return control.rechazarIncidencia(incidencia);
 
+    }
+
+    @Override
+    public void enviarSupervisor(DTOIncidencia incidencia) {
+
+        control.enviarSupervisor(incidencia);
     }
 
 }
