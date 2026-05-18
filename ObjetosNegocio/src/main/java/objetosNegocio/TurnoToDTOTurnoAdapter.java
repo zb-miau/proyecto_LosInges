@@ -23,6 +23,7 @@ public class TurnoToDTOTurnoAdapter {
         if (turno == null) {
             return null;
         }
+        
         Turno turnoCrear = new Turno(
                 turno.getNombre(),
                 turno.getHoraInicio(),
@@ -30,6 +31,10 @@ public class TurnoToDTOTurnoAdapter {
                 turno.getDiasTrabajo(),
                 turno.getColorHexadecimal()
         );
+        
+        if (turno.getIdTurno() != null){
+            turnoCrear.setIdTurno(turno.getIdTurno());
+        }
         
         return turnoCrear;
     }

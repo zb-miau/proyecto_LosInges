@@ -172,19 +172,13 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<TurnoMongo> coleccionTurnos = recuperarColeccion(bd);
             
-            Document filtroOr =  new Document("$or", Arrays.asList(
-                new Document(CAMPO_NOMBRE, turno.getNombre())
-            ));
-        
-     
             Document filtroAnd = new Document("$and", Arrays.asList(
                     new Document(CAMPO_HORA_INICIO, turno.getHoraInicio()),
                     new Document(CAMPO_HORA_FIN, turno.getHoraFin()), 
                     new Document(CAMPO_DIAS_TRABAJO, turno.getDiasTrabajo())));
             
-            Document filtroFinal = new Document("$and", Arrays.asList(filtroOr, filtroAnd));
             
-            return coleccionTurnos.find(filtroFinal).first() != null;
+            return coleccionTurnos.find(filtroAnd).first() != null;
          }
     }
 

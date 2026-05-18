@@ -66,7 +66,6 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         configurarDias();
         configurarTabla();
         this.idEmpleado = empleado;
-        empleado.setId(empleado.getId());
         setVisible(true);
     }
 
@@ -449,21 +448,21 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.regresarDeVentanaTurnoAGestionHorario(idEmpleado);
+        if (idEmpleado == null || idEmpleado.getId() == null) {
+            coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        } else {
+            coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS, idEmpleado);
+        }
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
-        List<DTOTurno> turnos = control.recuperarTurno();
         
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
         String idEliminar = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-               
-        
-        for (DTOTurno t: turnos){
-            if (t.getIdTurno().equals(idEliminar)){
+    
                 int opcion = JOptionPane.showConfirmDialog(
                         this, 
                         "¿Eliminar este turno?", 
@@ -471,34 +470,26 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
                         JOptionPane.YES_NO_OPTION);
                 if (opcion == JOptionPane.YES_OPTION){
                     
-                    try {
-                    control.eliminarTurno(t);
-                    } catch (NegocioException ex){
-                        JOptionPane.showMessageDialog(
-                        this, 
-                        "Error al eliminar el turno: " + ex.getMessage(), 
-                        "Error al eliminar.", 
-                        JOptionPane.ERROR_MESSAGE);
-                    }
+                    DTOTurno turno = new DTOTurno();   
+                    turno.setIdTurno(idEliminar);
+                    control.eliminarTurno(turno);
+                
                     JOptionPane.showMessageDialog(
                             this, 
                             "Se eliminó el turno.");
                     tablaTurnosDisponibles.removeAll();
                     configurarTabla();
-                    break;
                 } else {
                     JOptionPane.showMessageDialog(
                             this, 
                             "No se eliminó el turno.");
-                    break;
                 }
-            }
-        }
+     
         } catch (NegocioException ex){
-                JOptionPane.showMessageDialog(
+                    JOptionPane.showMessageDialog(
                     this, 
-                    "Error al recuperar los turnos: " + ex.getMessage(), 
-                    "Error al recuperar.", 
+                    "Error al eliminar el turno: " + ex.getMessage(), 
+                    "Error al eliminar.", 
                     JOptionPane.ERROR_MESSAGE);
         }
         
@@ -509,72 +500,52 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         if (filaSeleccionada != -1){
         String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
         try {
-        List<DTOTurno> turnos = control.recuperarTurno();
-        DTOTurno turnoModificar = null;
-        for (DTOTurno t: turnos){
-            if (t.getIdTurno().equals(id)){
-                turnoModificar = t;
+        
+            boolean validacion = validarFormulario();
+            Color colorTurno = this.colorTurno;
+
+            if (this.colorTurno == null) {
+                colorTurno = Color.RED;
             }
-        }
-        
-        boolean validacion = validarFormulario();
-        Color colorTurno = this.colorTurno;
-        
-        if (this.colorTurno == null) {
-            colorTurno = Color.RED;
-        }
-        
-        if (validacion && turnoModificar != null){
-            turnoModificar.setNombre(txtNombre.getText());
-            
-            LocalTime[] horas = getHoras();
-            turnoModificar.setHoraInicio(horas[0]);
-            turnoModificar.setHoraFin(horas[1]);
-            
-            Set<DayOfWeek> dias = getDias();
-            turnoModificar.setDiasTrabajo(dias);
-            
-            turnoModificar.setColorEvento(colorTurno);
-            try {
+
+            if (validacion){
+                DTOTurno turnoModificar = new DTOTurno();
+                turnoModificar.setIdTurno(id);
+                turnoModificar.setNombre(txtNombre.getText());
+
+                LocalTime[] horas = getHoras();
+                turnoModificar.setHoraInicio(horas[0]);
+                turnoModificar.setHoraFin(horas[1]);
+
+                Set<DayOfWeek> dias = getDias();
+                turnoModificar.setDiasTrabajo(dias);
+
+                turnoModificar.setColorEvento(colorTurno);
                 control.modificarTurno(turnoModificar);
-            } catch (NegocioException ex){
+                configurarTabla();
+
+
+
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "Se modificó el turno", 
+                        "Turno modificado", 
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "Campos inválidos", 
+                        "Error al modificar", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
+         
+        } catch (NegocioException ex){
                 JOptionPane.showMessageDialog(
                     this, 
                     "Error al modificar el turno: " + ex.getMessage(), 
                     "Error al modificar.", 
                     JOptionPane.ERROR_MESSAGE);
             }
-            configurarTabla();
-            
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Se modificó el turno", 
-                    "Turno modificado", 
-                    JOptionPane.INFORMATION_MESSAGE);
-            
-            
-        } else if (turnoModificar == null){
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al obtener el turno a modificar", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            
-        } else {
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Campo incorrecto. Por favor, verifique la información.", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        
-        } catch (NegocioException ex){
-                JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al recuperar la información del turno seleccionado: " + ex.getMessage(), 
-                    "Error al recuperar.", 
-                    JOptionPane.ERROR_MESSAGE);
-        }
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -596,22 +567,11 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         
         LocalTime[] horas = getHoras();
         
-        if (horas == null || horas[0] == null || horas[1] == null){
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Las horas no pueden ser nulas o vacías", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
-            
-        } else if (horas[0].isAfter(horas[1]) || horas[0].equals(horas[1])){
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "La hora de fin debe ser mayor a la de inicio", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+        if (horas == null){
             return false;
         }
+        
+       
         
         Set<DayOfWeek> dias = getDias();
         if (dias == null || dias.isEmpty()){
@@ -782,6 +742,15 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         Date fechaHoraFin = (Date) spnHoraFin.getValue();
         LocalTime horaInicio = fechaHoraInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalTime().withSecond(0).withNano(0);
         LocalTime horaFin = fechaHoraFin.toInstant().atZone(ZoneId.systemDefault()).toLocalTime().withSecond(0).withNano(0);
+         if (horaInicio == null || horaFin == null){
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "Las horas no pueden ser nulas o vacías", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+            
+        } 
         if (!horaInicio.isBefore(horaFin) || horaInicio.equals(horaFin)) {
             JOptionPane.showMessageDialog(
                     this, 

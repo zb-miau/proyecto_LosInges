@@ -169,7 +169,7 @@ public class FacadeAccesoDatos {
         }
     }
 
-    public HorarioEmpleado obtenerHorarioActivo(HorarioEmpleado horario) throws PersistenciaException {
+    public List<HorarioEmpleado> obtenerHorarioActivo(HorarioEmpleado horario) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.obtenerActivo(horario);
         } catch (MongoException ex) {
@@ -285,6 +285,17 @@ public class FacadeAccesoDatos {
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al recuperar la lista de incidencias de la base de datos. ");
+        }
+    }
+    
+    public HorarioEmpleado eliminarHistorial(HorarioEmpleado horario)throws PersistenciaException{
+        try {
+
+            return horarioEmpleadosDAO.eliminar(horario);
+
+        } catch (MongoException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al eliminar el horario del historial. ");
         }
     }
 

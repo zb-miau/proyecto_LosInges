@@ -70,15 +70,38 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
     }
 
     @Override
-    public HorarioEmpleado obtenerActivo(HorarioEmpleado horario) {
+    public List<HorarioEmpleado> obtenerActivo(HorarioEmpleado horario) {
+        List<HorarioEmpleadoMongo> traslapes = new ArrayList<>();
+        List<HorarioEmpleado> traslapesLimpios = new ArrayList<>();
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleadoMongo> coleccionHorarioEmpleados = recuperarColeccion(bd);
-            Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getIdEmpleado());
-            filtro.append(CAMPO_FECHA_FIN, new Document("$exists", false));
             
-            HorarioEmpleadoMongo horarioMongo = coleccionHorarioEmpleados.find(filtro).first();
-            return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(horarioMongo, horario.getEmpleado());
+            Document filtroEmpleado =  new Document(CAMPO_ID_EMPLEADO, horario.getIdEmpleado());
+            
+            Document filtroInicio;
+            if (horario.getFechaFin() != null) {
+                filtroInicio = new Document(CAMPO_FECHA_INICIO, new Document("$lt", horario.getFechaFin()));
+            } else {
+                filtroInicio = new Document(CAMPO_ID_EMPLEADO, horario.getIdEmpleado());
+            }
+            
+            Document filtroFin = new Document("$or", Arrays.asList(
+                    new Document(CAMPO_FECHA_FIN, new Document("$gt", horario.getFechaInicio())),
+                    new Document(CAMPO_FECHA_FIN, null),
+                    new Document(CAMPO_FECHA_FIN, new Document("$exists", false))
+                ));
+            
+            Document filtroFinal = new Document("$and", Arrays.asList(filtroEmpleado, filtroInicio, filtroFin));
+            
+            coleccionHorarioEmpleados.find(filtroFinal).into(traslapes);
+            
+            for (HorarioEmpleadoMongo horarioMongo: traslapes) {
+                traslapesLimpios.add(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(horarioMongo));
+            }
+            
+            
+            return traslapesLimpios;
         }
     }
     
@@ -90,15 +113,16 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
-            Document filtro = new Document(CAMPO_ID_EMPLEADO, horario.getEmpleado().getId());
-            filtro.append(CAMPO_FECHA_INICIO, new Document("$lte", fechaFin));
-        
-            Document condicionFin = new Document("$or", Arrays.asList(
+            Document filtroEmpleado = new Document(CAMPO_ID_EMPLEADO, horario.getEmpleado().getId());
+            
+            Document filtroInicio = new Document(CAMPO_FECHA_INICIO, new Document("$lte", fechaFin));
+            Document filtroFin = new Document("$or", Arrays.asList(
                 new Document(CAMPO_FECHA_FIN, new Document("$gte", fechaInicio)),
+                new Document(CAMPO_FECHA_FIN, null),   
                 new Document(CAMPO_FECHA_FIN, new Document("$exists", false))
             ));
 
-            Document filtroFinal = new Document("$and", Arrays.asList(filtro, condicionFin));
+            Document filtroFinal = new Document("$and", Arrays.asList(filtroEmpleado, filtroInicio, filtroFin));
             
             coleccionHistorial.find(filtroFinal).into(listaHistorial);
             List<HorarioEmpleado> listaLimpia = new ArrayList();
@@ -125,5 +149,20 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
             return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(mongo);
         }
     }
+
+    @Override
+    public HorarioEmpleado eliminar(HorarioEmpleado horario) throws PersistenciaException {
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()){
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
+            Document filtro = new Document(CAMPO_ID, new ObjectId(horario.getIdHorarioEmpleado()));
+            
+             HorarioEmpleadoMongo mongo = coleccionHistorial.findOneAndDelete(filtro);
+            
+            return HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarAHorario(mongo);
+        }
+    }
+    
+    
 
 }

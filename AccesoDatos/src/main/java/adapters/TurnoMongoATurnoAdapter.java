@@ -34,6 +34,10 @@ public class TurnoMongoATurnoAdapter {
                 turno.getColorHexadecimal()
         );
         
+        if (turno.getIdTurno() != null){
+            turnoMongo.setIdTurno(turno.getIdTurno());
+        }
+        
         return turnoMongo;
     }
 }

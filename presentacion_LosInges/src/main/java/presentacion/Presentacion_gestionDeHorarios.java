@@ -564,7 +564,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         lblDiasDetalle = new javax.swing.JLabel();
         txtMes = new javax.swing.JTextField();
         txtAnio = new javax.swing.JTextField();
-        btnTurno = new javax.swing.JButton();
         btnAgregarHorario = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
@@ -606,7 +605,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         });
         scrollTablaTurnos.setViewportView(tablaTurnosDisponibles);
 
-        pnlGestionHorario.add(scrollTablaTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 260));
+        pnlGestionHorario.add(scrollTablaTurnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 288, 296, 290));
 
         pnlCalendario.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -753,17 +752,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         txtAnio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAnio.setBorder(null);
         pnlGestionHorario.add(txtAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 130, -1));
-
-        btnTurno.setBackground(new java.awt.Color(255, 166, 43));
-        btnTurno.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnTurno.setForeground(new java.awt.Color(39, 71, 125));
-        btnTurno.setText("Agregar Turno");
-        btnTurno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTurnoActionPerformed(evt);
-            }
-        });
-        pnlGestionHorario.add(btnTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 560, -1, -1));
 
         btnAgregarHorario.setText("Agregar Horario");
         btnAgregarHorario.addActionListener(new java.awt.event.ActionListener() {
@@ -927,17 +915,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMesAnteriorActionPerformed
 
     /**
-     * Permite abrir la ventana de Gestión de Turnos
-     *
-     * @param evt
-     */
-    private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
-        Presentacion_gestionDeTurnos gT = new Presentacion_gestionDeTurnos(idEmpleado);
-        gT.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnTurnoActionPerformed
-
-    /**
      * Método que traduce el mes a español
      *
      * @param mes el mes a traducir
@@ -1025,6 +1002,8 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
             DatePicker datePickerInicio = new DatePicker();
             DatePicker datePickerFin = new DatePicker();
+            datePickerInicio.getSettings().setAllowKeyboardEditing(false);
+            datePickerFin.getSettings().setAllowKeyboardEditing(false);
 
             datePickerInicio.setDateToToday();
 
@@ -1049,7 +1028,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                 if (inicioEvento == null) {
                     JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
-                }
+                } 
 
                 if (existeConflicto(inicioEvento, fin)) {
                     int opcion = JOptionPane.showConfirmDialog(
@@ -1114,7 +1093,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private javax.swing.JButton btnMesAnterior;
     private javax.swing.JButton btnMesSiguiente;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton btnTurno;
     private javax.swing.JLabel lblDiasDetalle;
     private javax.swing.JLabel lblDomingo;
     private javax.swing.JLabel lblHorarioDetalle;

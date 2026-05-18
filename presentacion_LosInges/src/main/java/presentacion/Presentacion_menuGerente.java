@@ -40,7 +40,7 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
         btnRegistrarEmpleado = new javax.swing.JButton();
         btnGestionarHorarios = new javax.swing.JButton();
         btnGestionarTurno = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         btnGestionarTurno1.setBackground(new java.awt.Color(255, 166, 43));
         btnGestionarTurno1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -97,12 +97,12 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(255, 51, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setText("Regresar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegresar.setBackground(new java.awt.Color(255, 51, 0));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegresarActionPerformed(evt);
             }
         });
 
@@ -121,14 +121,14 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
                 .addGap(101, 101, 101))
             .addGroup(pnlMenuGerenteLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jButton1)
+                .addComponent(btnRegresar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMenuGerenteLayout.setVerticalGroup(
             pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuGerenteLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(btnRegresar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
@@ -171,7 +171,8 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGestionarTurno1ActionPerformed
 
     private void btnGestionarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarTurnoActionPerformed
-
+        coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS);
+        this.dispose();
     }//GEN-LAST:event_btnGestionarTurnoActionPerformed
 
     private void btnRegistrarIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarIncidenciaActionPerformed
@@ -182,13 +183,13 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegistrarIncidenciaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
 
         coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
         this.dispose();
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,7 +201,7 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     private javax.swing.JButton btnGestionarTurno1;
     private javax.swing.JButton btnRegistrarEmpleado;
     private javax.swing.JButton btnRegistrarIncidencia;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel pnlMenuGerente;
     // End of variables declaration//GEN-END:variables
 }

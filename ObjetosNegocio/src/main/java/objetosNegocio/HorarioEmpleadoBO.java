@@ -71,7 +71,7 @@ public class HorarioEmpleadoBO {
     }
 
    
-    public DTOHorarioEmpleado obtenerActivo(DTOHorarioEmpleado horarioEmpleado) throws NegocioException {
+    public List<DTOHorarioEmpleado> obtenerActivo(DTOHorarioEmpleado horarioEmpleado) throws NegocioException {
         if (horarioEmpleado == null){
             throw new NegocioException("Error al recuperar el horario: horario vacío.");
         }
@@ -81,13 +81,14 @@ public class HorarioEmpleadoBO {
         
         try {
             HorarioEmpleado horarioEmpleadoObtener = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horarioEmpleado);
-            horarioEmpleadoObtener = fachada.obtenerHorarioActivo(horarioEmpleadoObtener);
-            DTOHorarioEmpleado horarioEmpleadoRecuperado = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptarConEmpleado(
-                    horarioEmpleadoObtener, 
-                    horarioEmpleado.getEmpleado());
-           
+            List<HorarioEmpleado> horariosTraslape = fachada.obtenerHorarioActivo(horarioEmpleadoObtener);
+            List<DTOHorarioEmpleado> horariosTraslapeLimpios = new ArrayList();
+            for (HorarioEmpleado h : horariosTraslape) {
+                DTOHorarioEmpleado horarioEmpleadoEmpalmado = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(h);
+                horariosTraslapeLimpios.add(horarioEmpleadoEmpalmado);
+            }
             
-            return horarioEmpleadoRecuperado;
+            return horariosTraslapeLimpios;
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al obtener el horario: " + ex.getMessage());
@@ -120,6 +121,18 @@ public class HorarioEmpleadoBO {
             HorarioEmpleado horarioModificar = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horario);
             
             return HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(fachada.modificarHistorial(horarioModificar));
+        
+        } catch (PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al modificar el historial: " + ex.getMessage());
+        }
+    }
+    
+    public DTOHorarioEmpleado eliminarHistorial(DTOHorarioEmpleado horario)throws NegocioException {
+        try {
+            HorarioEmpleado horarioEliminar = HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(horario);
+            
+            return HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(fachada.eliminarHistorial(horarioEliminar));
         
         } catch (PersistenciaException ex){
             LOGGER.severe(ex.getMessage());

@@ -92,20 +92,55 @@ public class ControlAsignarHorario {
                 }
             }   
             
-            DTOHorarioEmpleado infinito = horarioEmpleadoBO.obtenerActivo(resultado);
-            
-            if (infinito != null && nuevo.getFechaInicio().isAfter(infinito.getFechaInicio())){
-                infinito.setFechaFin(nuevo.getFechaInicio().minusDays(1));
-                horarioEmpleadoBO.modificarHorarioInfinito(infinito);
-            }
             resultado.setFechaCambio(LocalDate.now());  
             if (resultado.getEmpleado() == null) {
                 resultado.setEmpleado(empleado);
             }
             horarioEmpleadoBO.crear(resultado);
+            
+            List<DTOHorarioEmpleado> traslapeHistorial = horarioEmpleadoBO.obtenerActivo(nuevo);
+            
+            if (traslapeHistorial != null  && !traslapeHistorial.isEmpty()){
+                for (DTOHorarioEmpleado t: traslapeHistorial){
+                    //si el horario registrado empieza antes que el nuevo
+                    if (t.getFechaInicio().isBefore(nuevo.getFechaInicio())) {
+                        //y si la fecha de fin del horario registrado es nula o termina despues de que
+                        // el horario nuevo inicie
+                        if (t.getFechaFin() == null || t.getFechaFin().isAfter(nuevo.getFechaInicio().minusDays(1))) {
+                            //el horario registrado se modifica para que termine un dia antes que el horario nuevo
+                            t.setFechaFin(nuevo.getFechaInicio().minusDays(1));
+                            if (t.getEmpleado() == null) { 
+                                t.setEmpleado(empleado); 
+                            }
+                            t.getEmpleado().setId(empleado.getId());
+                            horarioEmpleadoBO.modificarHorarioInfinito(t);
+                        }
+                    }
+                    
+                    //si el horario registrado inicia antes de que termine el nuevo
+                    else if (!t.getFechaInicio().isAfter(nuevo.getFechaFin())) {
+                        //se cambia su fecha de inicio a un dia de la fecha fin del nuevo
+                        t.setFechaInicio(nuevo.getFechaFin().plusDays(1));
+                        //pero si el horario registrado tiene fecha de fin
+                        //y ahora la fecha de fin es mayor a la de inicio
+                        if (t.getEmpleado() == null) { 
+                                t.setEmpleado(empleado); 
+                            }
+                            t.getEmpleado().setId(empleado.getId());
+                            
+                        if (t.getFechaFin() != null && t.getFechaInicio().isAfter(t.getFechaFin())) {
+                            //se borra por completo del historial porque otros horarios se lo comieron
+                            horarioEmpleadoBO.eliminarHistorial(t);
+                        } else {
+                            
+                            horarioEmpleadoBO.modificarHorarioInfinito(t);
+                        }
+                    }
+                }
+            }
+           
         }
         empleado.setHorarioActual(nuevo);
-        System.out.println(nuevo);
         empleadoBO.modificarHorarioActual(empleado);
     }
 

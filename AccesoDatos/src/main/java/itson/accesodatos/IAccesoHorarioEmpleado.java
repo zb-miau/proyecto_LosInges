@@ -24,6 +24,15 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
     public abstract HorarioEmpleado crear(HorarioEmpleado horario) throws PersistenciaException;
     
     /**
+     * Método para eliminar un horario de la base de datos.
+     * @param horario el horario a eliminar.
+     * @return regresa el horario eliminado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
+    public abstract HorarioEmpleado eliminar(HorarioEmpleado horario) throws PersistenciaException;
+    
+    /**
      * Método para modificar un horario y lo agrega a la base de datos.
      * @param horario el horario a agregar.
      * @return regresa el horario modificado en la base de datos.
@@ -39,7 +48,7 @@ public interface IAccesoHorarioEmpleado<HorarioEmpleado> {
      * @throws PersistenciaException Lanza una excepción al presentar
      * errores al acceder a la base de datos.
      */
-    public abstract HorarioEmpleado obtenerActivo(HorarioEmpleado horario) throws PersistenciaException;
+    public abstract List<HorarioEmpleado> obtenerActivo(HorarioEmpleado horario) throws PersistenciaException;
     
     /**
      * Método para obtener una lista de horarios.
