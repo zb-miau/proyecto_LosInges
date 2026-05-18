@@ -56,5 +56,6 @@ public class ControlGestionarEmpleados {
         return gestionIncidencias.rechazarIncidencia(incidencia);
 
     }
+    
 
 }
