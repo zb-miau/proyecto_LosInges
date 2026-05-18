@@ -242,6 +242,7 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
                 if (opcion == 0) {
 
                     control.crearIncidencia(incidencia);
+                    control.enviarSupervisor();
                     JOptionPane.showMessageDialog(this, "Incidencia Registrada");
 
                 } else {
