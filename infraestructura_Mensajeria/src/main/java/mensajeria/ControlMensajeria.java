@@ -15,11 +15,32 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
+ * Servicio encargado de la gestión y envío de notificaciones por correo
+ * electrónico dentro del sistema.
+ *
+ * Utiliza la API de jakarta.mail para conectarse a un servidor SMTP externo
+ * (por defecto Gmail) y alertar a los involucrados o supervisores sobre los
+ * eventos y cambios de estado en las incidencias.
  *
  * @author jesus
  */
 public class ControlMensajeria {
 
+    /**
+     * Envía una notificación por correo electrónico al supervisor informando
+     * que se ha registrado una nueva incidencia para un empleado específico.
+     *
+     * El método inicializa la sesión SMTP con TLS estructurando dinámicamente
+     * el asunto y el cuerpo del mensaje a partir de los datos contenidos en el
+     * DTO de la incidencia.
+     *
+     *
+     * @param incidencia Objeto DTOIncidencia que contiene la información
+     * detallada de la incidencia y del empleado afectado. No debe ser nulo y
+     * debe contar con la relación de un DTOEmpleado válida.
+     * @throws NullPointerException si incidencia o los datos del empleado son
+     * nulos al estructurar el mensaje.
+     */
     public void enviarSupervisor(DTOIncidencia incidencia) {
 
         // 1. Configuración del servidor SMTP (Ejemplo con Gmail)
@@ -59,8 +80,12 @@ public class ControlMensajeria {
             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
 
             // Asunto y cuerpo del mensaje
-            mensaje.setSubject("Correo de prueba desde Java");
-            mensaje.setText("¡Hola! Este es un correo automático enviado usando Jakarta Mail.");
+            mensaje.setSubject("Se le ha registrado una incidencia a " + incidencia.getEmpleado().getNombre() + " " + incidencia.getEmpleado().getApellidoPaterno() + " " + incidencia.getEmpleado().getApellidoMaterno());
+            mensaje.setText("Se le ha registrado una incidencia a " + incidencia.getEmpleado().getNombre() + " " + incidencia.getEmpleado().getApellidoPaterno() + " " + incidencia.getEmpleado().getApellidoMaterno() + "\n"
+                    + "ID incidencia: " + incidencia.getIdIncidencia() + "\n"
+                    + "ID empleado: " + incidencia.getEmpleado().getId() + "\n"
+                    + "Descripción\n"
+                    + incidencia.getDescripcion());
 
             // 5. Enviar el correo
             Transport.send(mensaje);

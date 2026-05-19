@@ -70,6 +70,15 @@ public class DTOContratacion {
         this.nss = nss;
     }
 
+    public DTOContratacion(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    
+    
+
     public String getId() {
         return id;
     }

@@ -4,6 +4,7 @@
  */
 package objetosNegocio;
 
+import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import itson.accesodatos.EmpleadosDAO;
 import itson.accesodatos.FacadeAccesoDatos;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import itson.accesodatos.IAccesoEmpleados;
 import itson.accesodatos.PersistenciaException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -41,12 +43,60 @@ public class EmpleadoBO {
     }
     
 
-    public DTOEmpleado crear(DTOEmpleado empleado){
+    public DTOContratacion crear(DTOContratacion empleado) throws NegocioException{
+        
+        if (empleado.getNombre() == null) {
+            throw new NegocioException("El nombre esta vacio.");
+        }
+        
+        if (empleado.getApellidoPaterno()== null) {
+            throw new NegocioException("El apellido paterno esta vacio.");
+        }
+        
+        if (empleado.getCalle()== null) {
+            throw new NegocioException("El nombre de la calle esta vacio.");
+        }
+        
+        if (empleado.getCodigoPostal()== null) {
+            throw new NegocioException("El codigo postal esta vacio.");
+        }
+        
+        if (empleado.getColonia()== null) {
+            throw new NegocioException("El nombre de la colonia esta vacio.");
+        }
+        
+        if (empleado.getCurp()== null) {
+            throw new NegocioException("La CURP esta vacia.");
+        }
+        
+        if (empleado.getFechaNacimiento()== null) {
+            throw new NegocioException("La fecha de nacimiento esta vacia.");
+        }
+        
+        if (empleado.getNss()== null) {
+            throw new NegocioException("El NSS esta vacio.");
+        }
+        
+        if (empleado.getNumeroCasa()== null) {
+            throw new NegocioException("El numero de casa esta vacio.");
+        }
+        
+        if (empleado.getRfc()== null) {
+            throw new NegocioException("El RFC esta vacio.");
+        }
 
-        Empleado empleadoCrear = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
-        empleadoCrear = dao.crear(empleadoCrear);
-        DTOEmpleado empleadoCreado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoCrear);
-                
+        Empleado empleadoCrear = EmpleadoToDTOEmpleadoAdapter.adaptarDTOContratacionAEntidad(empleado);
+        try {
+            
+            empleadoCrear = dao.crear(empleadoCrear);
+            
+        } catch (PersistenciaException ex) {
+            
+            throw new NegocioException("Persistencia fallo al ingresar el empleado.");
+            
+        }
+        
+        DTOContratacion empleadoCreado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidadADTOContratacion(empleadoCrear);   
 
         return empleadoCreado;
 

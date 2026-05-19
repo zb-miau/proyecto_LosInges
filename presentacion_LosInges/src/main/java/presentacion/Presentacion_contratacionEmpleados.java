@@ -5,10 +5,10 @@
 package presentacion;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import contratacionEmpleado.FacadeContratacionEmpleado;
-import contratacionEmpleado.IContratacionEmpleado;
 import coordinador.Coordinador;
 import dto.DTOContratacion;
+import gestionarEmpleados.FachadaGestionarEmpleados;
+import gestionarEmpleados.IGestionarEmpleados;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import objetosNegocio.NegocioException;
@@ -23,7 +23,6 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
     
     private LocalDate fechaNacimiento;
     
-    IContratacionEmpleado control = new FacadeContratacionEmpleado();
 
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
@@ -365,7 +364,7 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
             }
 
             // Enviar el DTO al coordinador
-            control.validacionDelSAT(dto);
+            coordinador.gestionarEmpleados.registrarEmpleado(dto);
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, "Por favor, introduce valores numericos validos en Codigo Postal y Número de Casa.", "Error de formato", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -391,7 +390,25 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
     private void btnFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechaActionPerformed
         DatePicker datePickerInicio = new DatePicker();
-        this.fechaNacimiento = datePickerInicio.getDate();
+        
+        int opcion = JOptionPane.showConfirmDialog(
+            this, 
+            datePickerInicio, 
+            "Seleccione su Fecha de Nacimiento", 
+            JOptionPane.OK_CANCEL_OPTION, 
+            JOptionPane.PLAIN_MESSAGE
+        );
+
+        // Si el usuario presiono "Aceptar", recuperamos la fecha seleccionada
+        if (opcion == JOptionPane.OK_OPTION) {
+            if (datePickerInicio.getDate() != null) {
+                this.fechaNacimiento = datePickerInicio.getDate();
+
+                btnFecha.setText(this.fechaNacimiento.toString()); 
+            } else {
+                JOptionPane.showMessageDialog(this, "No seleccionó ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnFechaActionPerformed
 
     /**

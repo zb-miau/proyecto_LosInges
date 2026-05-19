@@ -6,6 +6,7 @@ package gestionarEmpleados;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import objetosNegocio.EmpleadoBO;
 import objetosNegocio.NegocioException;
+import validaciones.Validaciones;
 
 /**
  *
@@ -30,16 +32,61 @@ public class ControlGestionarEmpleados {
     private IGestionIncidencias gestionIncidencias;
 
     private IAsignarHorario asignarHorario;
+    
+    private Validaciones validacion;
 
     public ControlGestionarEmpleados() {
         this.empleadoBO = EmpleadoBO.getInstance();
         this.gestionIncidencias = new FacadeGestionIncidencias();
         this.asignarHorario = new FacadeAsignarHorario();
+        this.validacion = new Validaciones();
     }
 
-    public DTOEmpleado registrarEmpleado(DTOEmpleado empleado) {
-
+    public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
+        
+        if (empleado.getNombre() == null && !validacion.validarNombre(empleado.getNombre())) {
+            throw new NegocioException("El nombre no cumple con lo requerido.");
+        }
+        
+        if (empleado.getApellidoPaterno() == null && !validacion.validarApellidoPaterno(empleado.getApellidoPaterno())) {
+            throw new NegocioException("El apellido paterno no cumple con lo requerido.");
+        }
+        
+        if (empleado.getCalle() == null && !validacion.validarCalle(empleado.getCalle())) {
+            throw new NegocioException("El nombre de la calle no cumple con lo requerido.");
+        }
+        
+        if (empleado.getCodigoPostal() == null && !validacion.validarCodigoPostal(empleado.getCodigoPostal())) {
+            throw new NegocioException("El codigo postal no cumple con lo requerido.");
+        }
+        
+        if (empleado.getColonia() == null && !validacion.validarColonia(empleado.getColonia())) {
+            throw new NegocioException("El nombre de la colonia no cumple con lo requerido.");
+        }
+        
+        if (empleado.getCurp() == null && !validacion.validarCurp(empleado.getCurp())) {
+            throw new NegocioException("La CURP no cumple con lo requerido.");
+        }
+        
+        if (empleado.getFechaNacimiento() == null && !validacion.validarMayoríaEdad(empleado.getFechaNacimiento())) {
+            throw new NegocioException("La fecha de nacimiento no cumple con lo requerido.");
+        }
+        
+        if (empleado.getNss() == null && !validacion.validarNss(empleado.getNss())) {
+            throw new NegocioException("El NSS no cumple con lo requerido.");
+        }
+        
+        if (empleado.getNumeroCasa() == null && !validacion.validarNumeroCasa(empleado.getNumeroCasa())) {
+            throw new NegocioException("El numero de casa no cumple con lo requerido.");
+        }
+        
+        if (empleado.getRfc() == null && !validacion.validarRfc(empleado.getRfc())) {
+            throw new NegocioException("El RFC no cumple con lo requerido.");
+        }
+        
+            
         return empleadoBO.crear(empleado);
+            
 
     }
 

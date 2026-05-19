@@ -152,7 +152,8 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadoActionPerformed
-
+        coordinador.cambioDeVentana(Coordinador.CONTRATACION_EMPLEADO);
+        this.dispose();
     }//GEN-LAST:event_btnRegistrarEmpleadoActionPerformed
 
     private void btnGestionarHorariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarHorariosActionPerformed
