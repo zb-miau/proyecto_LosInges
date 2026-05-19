@@ -36,6 +36,8 @@ public class ControlGestionarEmpleados {
     private EmpleadoBO empleadoBO;
 
     private IGestionIncidencias gestionIncidencias;
+    
+    private IGestionAsistencias gestionRegistroMarca;
 
     private IAsignarHorario asignarHorario;
     

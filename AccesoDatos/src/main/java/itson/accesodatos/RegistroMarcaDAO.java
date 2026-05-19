@@ -23,48 +23,67 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
- *DAO para la gestión de asistencias del empleado, podemos crear y consultar nada más, no hay
- * métodos de eliminación porque no son necearios para mi caso de uso invidual.
+ * DAO para la gestión de asistencias del empleado, podemos crear y consultar
+ * nada más, no hay métodos de eliminación porque no son necearios para mi caso
+ * de uso invidual.
+ *
  * @author josma
  */
 public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IAccesoMongo {
+
     private static final String COLECCION_ASISTENCIA = "registro_asistencia";
     private static final String CAMPO_ID_EMPLEADO = "id_empleado";
     private static final String CAMPO_FECHA = "fecha";
     private static final String CAMPO_ID = "_id";
-    
+
     private static RegistroMarcaDAO registroMarcaDAO; //Instancia de la DAO
+
     /**
      * Método singleton
-     * @return 
+     *
+     * @return
      */
-    public static synchronized RegistroMarcaDAO getInstance(){
+    public static synchronized RegistroMarcaDAO getInstance() {
         if (registroMarcaDAO == null) {
             registroMarcaDAO = new RegistroMarcaDAO();
         }
         return registroMarcaDAO;
     }
+
     /**
-     * Constructor privado por defecto. 
+     * Constructor privado por defecto.
      */
-    private RegistroMarcaDAO(){
-        
+    private RegistroMarcaDAO() {
+
     }
-    
+
+    /**
+     * Obtiene la referencia a la base de datos de MongoDB configurada en el
+     * manejador.
+     *
+     * @param cliente Instancia activa de MongoClient.
+     * @return El objeto MongoDatabase correspondiente.
+     */
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
     }
-
+    /**
+     * Obtiene la colección de registro de marca tipada explícitamente para trabajar
+     * con mapeo de POJOs de tipo RegistroMarcaMongo.
+     *
+     * @param baseDatos Conexión activa a la base de datos.
+     * @return La MongoCollection configurada para la entidad RegistroMarcaMongo.
+     */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return baseDatos.getCollection(COLECCION_ASISTENCIA, RegistroMarcaMongo.class);
     }
 
     @Override
-    public RegistroMarca crear(RegistroMarca marca) throws PersistenciaException{
+    public RegistroMarca crear(RegistroMarca marca) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
-        try(MongoClient cliente = ManejadorConexiones.crearConexion()){
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             //2. Recuperamos la colección de nuestra bd
             MongoCollection<RegistroMarcaMongo> coleccion = recuperarColeccion(bd);
@@ -79,7 +98,7 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             }
             //Regresamos una entidad limpia
             return RegistroMarcaMongoARegistroMarcaAdapter.toPersistencia(registroMongo);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             throw new PersistenciaException("Algo fallo al intentar insertar el registro marca: " + e.getMessage());
         }
     }
@@ -89,7 +108,7 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
         //1. Creamos la lista de RegistroMarcaMongo 
         List<RegistroMarcaMongo> registrosMongo = new ArrayList<>();
         //2. Establecemos conexion con la base de datos
-        try(MongoClient cliente = ManejadorConexiones.crearConexion()){
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             //3. Recuperamos la colección de nuestra bd
             MongoCollection<RegistroMarcaMongo> coleccion = recuperarColeccion(bd);
@@ -98,29 +117,28 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             coleccion.aggregate(Arrays.asList(
                     match(Filters.and(
                             Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(idEmpleado)),
-                            Filters.eq(CAMPO_FECHA, inicio),
-                            Filters.eq(CAMPO_FECHA, fin)
-                    
+                            Filters.gte(CAMPO_FECHA, inicio), //Mayor o igual
+                            Filters.lte(CAMPO_FECHA, fin) //Menos o igual
                     ))
             )).into(registrosMongo);
-            
+
             //5. Creamos una lista de entidades limpia 
             List<RegistroMarca> listaEntidadLimpia = new ArrayList<>();
-            for(RegistroMarcaMongo regisMongo: registrosMongo){
+            for (RegistroMarcaMongo regisMongo : registrosMongo) {
                 listaEntidadLimpia.add(RegistroMarcaMongoARegistroMarcaAdapter.toPersistencia(regisMongo));
             }
             return listaEntidadLimpia;
-            
-        }catch(MongoException e){
+
+        } catch (MongoException e) {
             throw new PersistenciaException("Algo fallo al intentar obtener los registros: " + e.getMessage());
         }
 
     }
 
     @Override
-    public RegistroMarca modificar(RegistroMarca marca) throws PersistenciaException{
+    public RegistroMarca modificar(RegistroMarca marca) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
-        try(MongoClient cliente = ManejadorConexiones.crearConexion()){
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             //2. Recuperamos la colección de nuestra bd
             MongoCollection<RegistroMarcaMongo> coleccion = recuperarColeccion(bd);
@@ -131,9 +149,9 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             RegistroMarcaMongo registroMongo = RegistroMarcaMongoARegistroMarcaAdapter.toMongo(marca); //<-- OJO JOS, estamos pasando de entidad limpia A mongo
             //5. Hacemos que se actualice
             coleccion.findOneAndReplace(filtro, registroMongo);
-            
-            return marca; 
-        }catch(MongoException e){
+
+            return marca;
+        } catch (MongoException e) {
             throw new PersistenciaException("Algo fallo al intentar modificar el registro marca: " + e.getMessage());
         }
     }
@@ -141,19 +159,18 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
     @Override
     public RegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
-        try(MongoClient cliente = ManejadorConexiones.crearConexion()){
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
             //2. Recuperamos la colección de nuestra bd
             MongoCollection<RegistroMarcaMongo> coleccion = recuperarColeccion(bd);
             //3. Aplicamos el filtro con Bson, usamos este porque es de cierta manera
             //más seguro (no es propenso a errores de dedo) 
-            
+
             //Este filtro lo que hace es que busca un registro de asistencia que conincida con la fecha
             //y el empleado para asi poder actualizar, practimanete se esta usando como un método auxiliar
             //para cuando llegue la hora de registrar o una entrada  o una salida
-            
             Bson filtro = Filters.and(
-                    Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(idEmpleado)), 
+                    Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(idEmpleado)),
                     Filters.eq(CAMPO_FECHA, fecha)
             );
             //4. Obtenemos el resultado
@@ -162,12 +179,12 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             if (registroMongo != null) {
                 //OJO JOS -> PASA DE *MONGO* A *ENTIDAD LIMPIA*
                 return RegistroMarcaMongoARegistroMarcaAdapter.toPersistencia(registroMongo);
-            }else{
+            } else {
                 return null;
-            }            
-        }catch(MongoException e){
+            }
+        } catch (MongoException e) {
             throw new PersistenciaException("Algo fallo al intentar obtener el registro marca: " + e.getMessage());
         }
     }
-    
+
 }

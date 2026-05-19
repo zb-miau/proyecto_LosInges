@@ -8,6 +8,7 @@ import com.mongodb.MongoException;
 import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
 import itson.entidades.Incidencia;
+import itson.entidades.RegistroMarca;
 import itson.entidades.Turno;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class FacadeAccesoDatos {
     private static IAccesoEmpleados<Empleado> empleadosDAO;
     private static IAccesoHorarioEmpleado<HorarioEmpleado> horarioEmpleadosDAO;
     private static IAccesoIncidencias<Incidencia> incidenciasDAO;
+    private static IAccesoRegistroMarca<RegistroMarca> registroMarcaDAO;
     private static FacadeAccesoDatos fachadaDAO;
     private static final Logger LOGGER = Logger.getLogger(FacadeAccesoDatos.class.getName());
 
@@ -42,6 +44,7 @@ public class FacadeAccesoDatos {
         this.turnosDAO = TurnosDAO.getInstance();
         this.horarioEmpleadosDAO = HorarioEmpleadosDAO.getInstance();
         this.incidenciasDAO = IncidenciasDAO.getInstance();
+        this.registroMarcaDAO = RegistroMarcaDAO.getInstance();
     }
 
     /**
@@ -439,5 +442,60 @@ public class FacadeAccesoDatos {
             throw new PersistenciaException("Error al eliminar el horario del historial. ");
         }
     }
+    /**
+     * Método para crear un registro al empleado
+     * @param registroMarca la entidad que se va a crear.
+     * @return 
+     * @throws PersistenciaException 
+     */
+    public RegistroMarca crearMarca(RegistroMarca registroMarca) throws PersistenciaException{
+        
+        try{
+            return registroMarcaDAO.crear(registroMarca);           
+        }catch(MongoException e){
+            LOGGER.severe(e.getMessage());
+            throw new PersistenciaException("Error al insertar la indencia a la base de datos:");
+        }
+    }
+    /**
+     * Método que permite modificar el registro de la marca para poderb insertar la salida
+     * @param registroMarca es la entidad que se va a modificar
+     * @return
+     * @throws PersistenciaException 
+     */
+    public RegistroMarca modificarMarca(RegistroMarca registroMarca) throws PersistenciaException{
+        try{
+        return registroMarcaDAO.modificar(registroMarca);
+        }catch(MongoException e){
+            LOGGER.severe(e.getMessage());
+            throw new PersistenciaException("Error al intentar acutalizar el registro");
+        }
+    }
+    /**
+     * Método para poder recuperar un registro en concreto, es auxiliar para poder modificar la marca
+     * @param idEmpleado atributo del empleado asociado a la marca
+     * @param fecha atributo de la fecha del registro
+     * @return
+     * @throws PersistenciaException 
+     */
+    public RegistroMarca obtenerPorEmpleadoYFechaMarca(String idEmpleado, LocalDate fecha) throws PersistenciaException{
+        try{
+            return registroMarcaDAO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
+        }catch(MongoException e){
+            LOGGER.severe(e.getMessage());
+            throw new PersistenciaException("Error al intentar recuperar el registro");
+        }
+            
+    }
+    
+    public List<RegistroMarca> obtenerListaRegistroMarca(String idEmpleado, LocalDate inicio, LocalDate fin) throws PersistenciaException{
+        try{
+            return registroMarcaDAO.obtenerLista(idEmpleado, inicio, fin);
+        }catch(MongoException e){
+            LOGGER.severe(e.getMessage());
+            throw new PersistenciaException("Error al intentar recuperar la lista");
+        }
+    }
+            
 
 }
