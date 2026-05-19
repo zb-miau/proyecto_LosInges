@@ -53,6 +53,17 @@ public class Empleado {
         this.nss = nss;
         this.horarioActual = horarioActual;
     }
+    
+    public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, Direccion direccion, String curp, String rfc, String nss) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.fechaNacimiento = fechaNacimiento;
+        this.direccion = direccion;
+        this.curp = curp;
+        this.rfc = rfc;
+        this.nss = nss;
+    }
 
     public Empleado(String nombre, String apellidoPaterno, String apellidoMaterno) {
         this.nombre = nombre;

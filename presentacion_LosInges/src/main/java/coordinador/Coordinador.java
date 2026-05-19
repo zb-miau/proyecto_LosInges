@@ -17,6 +17,7 @@ import gestionarTurnos.FachadaGestionarTurnos;
 import gestionarTurnos.IGestionarTurnos;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import presentacion.Presentacion_contratacionEmpleados;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_listaDeEmpleados;
 import presentacion.Presentacion_gestionDeTurnos;
@@ -46,6 +47,7 @@ public class Coordinador {
     private Presentacion_validacionDeIncidencias validacionDeIncidencias;
     private Presentacion_validacionIncidenciasTabla validacionIncidenciasTabla;
     private Presentacion_menuGerente menuGerente;
+    private Presentacion_contratacionEmpleados contratacionEmpleado;
 
     public static final int GESTION_DE_HORARIOS = 0;
     public static final int GESTION_DE_TURNOS = 1;
@@ -55,6 +57,7 @@ public class Coordinador {
     public static final int VALIDACION_DE_INCIDENCIAS = 5;
     public static final int VALIDACION_INCIDECIAS_TABLA = 6;
     public static final int MENU_GERENTE = 7;
+    public static final int CONTRATACION_EMPLEADO = 8;
 
     private int ventanaSiguiente = -1;
 
@@ -109,6 +112,15 @@ public class Coordinador {
 
                 menuGerente.setVisible(true);
                 menuGerente.setLocationRelativeTo(null);
+            }
+            case 8 -> {
+                if (contratacionEmpleado == null) {
+                    contratacionEmpleado = new Presentacion_contratacionEmpleados();
+                    contratacionEmpleado.setCoordinador(this);
+                }
+
+                contratacionEmpleado.setVisible(true);
+                contratacionEmpleado.setLocationRelativeTo(null);
             }
             default ->
                 throw new AssertionError();

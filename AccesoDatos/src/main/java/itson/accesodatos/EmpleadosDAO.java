@@ -5,6 +5,7 @@
 package itson.accesodatos;
 
 import adapters.EmpleadoMongoAEmpleadoAdapter;
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -54,18 +55,18 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
 
 
    @Override
-   public Empleado crear(Empleado entidad) {
+   public Empleado crear(Empleado entidad) throws PersistenciaException{
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
            MongoDatabase bd = recuperarBaseDatos(cliente);
-           // La colección ahora es de EmpleadoMongo
            MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
            EmpleadoMongo empleadoMongo = EmpleadoMongoAEmpleadoAdapter.toMongo(entidad);
            coleccion.insertOne(empleadoMongo);
 
-           // Actualizamos el ID generado por Mongo en el DTO original y lo regresamos
            entidad.setId(empleadoMongo.getId());
            return entidad;
+       }catch(MongoException ex){
+           throw new PersistenciaException("No fue posible persistir el empleado en la base de datos.");
        }
    }
 

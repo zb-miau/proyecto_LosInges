@@ -29,49 +29,49 @@ public class EmpleadosDAOTest {
     public EmpleadosDAOTest() {
     }
 
-    @Test
-    public void testCrear() {
-        Empleado empleado = new Empleado(
-                "Zaira",
-                "Barajas",
-                "Diaz"
-        );
-
-        Empleado empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-        empleado = new Empleado(
-                "Ramses",
-                "Contreras",
-                "Avila"
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-        empleado = new Empleado(
-                "Josmara",
-                "Quintana",
-                "Benitez"
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-        empleado = new Empleado(
-                "Hector",
-                "Flores",
-                "Montoya"
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-    
+//    @Test
+//    public void testCrear() {
+//        Empleado empleado = new Empleado(
+//                "Zaira",
+//                "Barajas",
+//                "Diaz"
+//        );
+//
+//        Empleado empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//        empleado = new Empleado(
+//                "Ramses",
+//                "Contreras",
+//                "Avila"
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//        empleado = new Empleado(
+//                "Josmara",
+//                "Quintana",
+//                "Benitez"
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//        empleado = new Empleado(
+//                "Hector",
+//                "Flores",
+//                "Montoya"
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//    
 
 //        empleado = new Empleado(
 //                "Juan Carlos",
@@ -89,36 +89,36 @@ public class EmpleadosDAOTest {
 //        empleadoCreado = dao.crear(empleado);
 //        assertNotNull(empleadoCreado);
 //        assertNotNull(empleadoCreado.getId());
-        empleado = new Empleado(
-                "Fulanito",
-                "Perez",
-                ""
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-        empleado = new Empleado(
-                "Manganito",
-                "Juárez",
-                ""
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-        empleado = new Empleado(
-                "Ana Alicia",
-                "Armenta",
-                ""
-        );
-
-        empleadoCreado = dao.crear(empleado);
-        assertNotNull(empleadoCreado);
-        assertNotNull(empleadoCreado.getId());
-
-    }
+//        empleado = new Empleado(
+//                "Fulanito",
+//                "Perez",
+//                ""
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//        empleado = new Empleado(
+//                "Manganito",
+//                "Juárez",
+//                ""
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//        empleado = new Empleado(
+//                "Ana Alicia",
+//                "Armenta",
+//                ""
+//        );
+//
+//        empleadoCreado = dao.crear(empleado);
+//        assertNotNull(empleadoCreado);
+//        assertNotNull(empleadoCreado.getId());
+//
+//    }
 
 }

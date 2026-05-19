@@ -4,6 +4,7 @@
  */
 package gestionarEmpleados;
 
+import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
@@ -18,7 +19,7 @@ import objetosNegocio.NegocioException;
  */
 public interface IGestionarEmpleados {
 
-    public DTOEmpleado registrarEmpleado(DTOEmpleado empleado);
+    public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException;
 
     public List<DTOEmpleado> obtenerEmpleados();
     

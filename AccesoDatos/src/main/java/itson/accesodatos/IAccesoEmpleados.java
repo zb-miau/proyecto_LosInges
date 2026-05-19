@@ -18,7 +18,7 @@ public interface IAccesoEmpleados<Empleado> {
      * @param entidad entidad que llama al método, entidad a agregar.
      * @return regresa la entidad creada en la base de datos.
      */
-    public abstract Empleado crear(Empleado entidad);
+    public abstract Empleado crear(Empleado entidad) throws PersistenciaException;
     
     /**
      * Método para eliminar un objeto de la entidad que lo llama de

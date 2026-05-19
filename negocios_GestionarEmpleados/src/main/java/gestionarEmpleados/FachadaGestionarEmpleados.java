@@ -4,6 +4,7 @@
  */
 package gestionarEmpleados;
 
+import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
@@ -25,8 +26,8 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
     }
 
     @Override
-    public DTOEmpleado registrarEmpleado(DTOEmpleado empleado) {
-
+    public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
+        
         return control.registrarEmpleado(empleado);
 
     }
