@@ -103,6 +103,11 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
        }
    }
 
+   /**
+     * Método que recupera el empleado y modifica su atributo de horario actual.
+     * @param empleado empleado al que se le va a modificar su horario.
+     * @return el empleado con su horario modificado.
+     */
    public Empleado modificarHorarioActual(Empleado empleado) {
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
            MongoDatabase bd = recuperarBaseDatos(cliente);

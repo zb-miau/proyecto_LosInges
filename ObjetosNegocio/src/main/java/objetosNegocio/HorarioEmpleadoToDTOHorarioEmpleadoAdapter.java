@@ -8,8 +8,6 @@ import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import itson.entidades.Empleado;
 import itson.entidades.HorarioEmpleado;
-import java.time.LocalDate;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +16,11 @@ import java.util.logging.Logger;
 public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
 
 
+    /**
+     * Adaptador de DTO a Entidad
+     * @param horarioEmpleado DTO del horario.
+     * @return regresa la Entidad equivalente al DTO recibido en el parámetro.
+     */
     public static HorarioEmpleado adaptar(DTOHorarioEmpleado horarioEmpleado) {
 
         if (horarioEmpleado == null) {
@@ -51,6 +54,14 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
         return horarioEmpleadoCrear;
     }
     
+    /**
+     * Adaptador de Entidad a DTO cuando ya se cuenta con el empleado
+     * como DTO. Esto evita un StackOverflow ya que los métodos se llamarían entre sí.
+     * @param horarioEmpleado Entidad del horario.
+     * @param dtoEmpleado DTO del empleado.
+     * @return regresa el DTO con la información del horario del parámetro y se le asigna a su
+     * atributo empleado el DTOEmpleado del parámetro.
+     */
     public static DTOHorarioEmpleado adaptarConEmpleado(HorarioEmpleado horarioEmpleado, DTOEmpleado dtoEmpleado) {
         if (horarioEmpleado == null) return null;
 
@@ -72,7 +83,15 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
         return dtoHorarioEmpleado;
     }
     
-        public static HorarioEmpleado adaptarConEmpleado(DTOHorarioEmpleado horarioEmpleado, Empleado empleado) {
+    /**
+     * Adaptador de DTO a Entidad cuando ya se cuenta con el empleado
+     * como Entidad. Esto evita un StackOverflow ya que los métodos se llamarían entre sí.
+     * @param horarioEmpleado DTO del Horario.
+     * @param empleado Entidad Empleado.
+     * @return regresa la Entidad equivalente al DTO del parámetro y se le asigna a su
+     * atributo empleado la Entidad Empleado del parámetro.
+     */
+    public static HorarioEmpleado adaptarConEmpleado(DTOHorarioEmpleado horarioEmpleado, Empleado empleado) {
         if (horarioEmpleado == null) return null;
 
         HorarioEmpleado nuevoHorarioEmpleado = new HorarioEmpleado(
@@ -93,6 +112,11 @@ public class HorarioEmpleadoToDTOHorarioEmpleadoAdapter {
         return nuevoHorarioEmpleado;
     }
 
+    /**
+     * Adaptador de Entidad a DTO
+     * @param horarioEmpleado Entidad del horario.
+     * @return regresa el DTO con la informacion de la entidad recibida en el parámetro.
+     */
     public static DTOHorarioEmpleado adaptar(HorarioEmpleado horarioEmpleado) {
 
         if (horarioEmpleado == null) {

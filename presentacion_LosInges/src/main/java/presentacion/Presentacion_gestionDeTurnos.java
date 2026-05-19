@@ -4,8 +4,6 @@
  */
 package presentacion;
 
-import asignarHorario.FacadeAsignarHorario;
-import asignarHorario.IAsignarHorario;
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
 import dto.DTOTurno;
@@ -445,15 +443,19 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnColorActionPerformed
 
+    /**
+     * Permite regresar al menú del gerente.
+     * @param evt click en el boton regresar.
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        if (idEmpleado == null || idEmpleado.getId() == null) {
-            coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
-        } else {
-            coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS, idEmpleado);
-        }
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    /**
+     * Elimina el turno seleccionado de la tabla de turnos.
+     * @param evt click en el boton eliminar.
+     */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
 
@@ -493,6 +495,10 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    /**
+     * Permite cambiar los datos del turno seleccionado de la tabla
+     * @param evt click en el boton modificar.
+     */
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         if (filaSeleccionada != -1) {
@@ -693,6 +699,11 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Método que llena el formulario con los datos del turno seleccionado de la 
+     * tabla de turnos.
+     * @param fila el numero de fila seleccionado.
+     */
     public void llenarFormulario(int fila) {
         txtNombre.setText(tablaTurnosDisponibles.getValueAt(fila, 1).toString());
         LocalTime inicio = (LocalTime) tablaTurnosDisponibles.getValueAt(fila, 2);

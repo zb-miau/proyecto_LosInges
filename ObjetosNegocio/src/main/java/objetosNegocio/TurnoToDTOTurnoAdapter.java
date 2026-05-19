@@ -8,10 +8,7 @@ import dto.DTOTurno;
 import itson.entidades.Turno;
 import java.awt.Color;
 import java.time.DayOfWeek;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +16,11 @@ import java.util.logging.Logger;
  */
 public class TurnoToDTOTurnoAdapter {
 
+    /**
+     * Adaptador de DTO a Entidad.
+     * @param turno DTO del turno.
+     * @return regresa un Turno equivalente al DTO Turno recibido.
+     */
     public static Turno adaptar(DTOTurno turno){
         if (turno == null) {
             return null;
@@ -39,6 +41,11 @@ public class TurnoToDTOTurnoAdapter {
         return turnoCrear;
     }
     
+    /**
+     * Adaptador de Entidad a DTO-
+     * @param turno Entidad Turno.
+     * @return regresa el DTO con la información de la entidad recibida.
+     */
     public static DTOTurno adaptar(Turno turno){
         String colorString = turno.getColorHexadecimal().trim();
         int r = Integer.parseInt(colorString.substring(1, 3), 16);

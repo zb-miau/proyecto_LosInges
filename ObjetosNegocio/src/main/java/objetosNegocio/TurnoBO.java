@@ -9,9 +9,7 @@ import itson.accesodatos.FacadeAccesoDatos;
 import itson.accesodatos.PersistenciaException;
 import itson.entidades.Turno;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -31,6 +29,9 @@ public class TurnoBO{
         return turnoBO;
     }
     
+    /**
+     * constructor
+     */
     private TurnoBO(){
         this.fachadaDAO = FacadeAccesoDatos.getInstance();
 
@@ -172,6 +173,14 @@ public class TurnoBO{
         }
     }
     
+    /**
+     * Método que verifica si no existe un turno igual ya registrado en la base
+     * de datos.
+     * @param turno el turno a registrar.
+     * @return regresa true si esta duplicado, false en caso contrario.
+     * @throws NegocioException Lanza una excepcion si hay un error en el
+     * acceso a la base de datos.
+     */
     public boolean turnoDuplicado(DTOTurno turno) throws NegocioException{
         try {
             return fachadaDAO.turnoDuplicado(TurnoToDTOTurnoAdapter.adaptar(turno));

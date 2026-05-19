@@ -40,21 +40,39 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         return horarioEmpleadosDAO;
     }
     
+    /**
+     * Constructor
+     */
     private HorarioEmpleadosDAO(){
         
     }
 
-    
+     /**
+     * Obtiene la referencia a la base de datos de MongoDB configurada en el
+     * manejador.
+     * @param cliente Instancia activa de MongoClient.
+     * @return El objeto MongoDatabase correspondiente.
+     */
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
         return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
     }
 
+    /**
+     * Obtiene la colección del historial configurada específicamente para trabajar
+     * con mapeo de POJOs de tipo HorarioEmpleadoMongo.
+     * @param baseDatos Conexión activa a la base de datos.
+     * @return La MongoCollection configurada para la entidad HorarioEmpleadoMongo.
+     */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
         return baseDatos.getCollection(COLECCION_HISTORIAL, HorarioEmpleadoMongo.class);
     }
-    
+    /**
+     * Método para crear un horario y lo agrega a la base de datos.
+     * @param horario el horario a agregar.
+     * @return regresa el horario creado en la base de datos.
+     */
     @Override
     public HorarioEmpleado crear(HorarioEmpleado horario) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
@@ -69,6 +87,13 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         }
     }
 
+    /**
+     * Método para obtener una lista de horarios de la base de datos
+     * que se traslapan con el horario del parámetro.
+     * @param horario horario a obtener.
+     * @return regresa la lista de horarios que se traslapan con el horario
+     * del parámetro.
+     */
     @Override
     public List<HorarioEmpleado> obtenerActivo(HorarioEmpleado horario) {
         List<HorarioEmpleadoMongo> traslapes = new ArrayList<>();
@@ -106,6 +131,13 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
     }
     
 
+    /**
+     *  Método para obtener una lista de horarios dentro de una fecha específica.
+     * @param horario horario con el id del empleado a filtrar
+     * @param fechaInicio fecha de inicio del rango
+     * @param fechaFin fecha de fin del rango
+     * @return regresa la lista de horarios dentro del rango de fechas.
+     */
     @Override
     public List<HorarioEmpleado> obtenerListaPorFecha(HorarioEmpleado horario, LocalDate fechaInicio, LocalDate fechaFin) {
          List<HorarioEmpleadoMongo> listaHistorial = new ArrayList();
@@ -134,8 +166,13 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         }
     }
 
+    /**
+     * Método para modificar un horario de la base de datos.
+     * @param horario el horario a modificar.
+     * @return regresa el horario modificado en la base de datos.
+     */
     @Override
-    public HorarioEmpleado modificar(HorarioEmpleado horario) throws PersistenciaException {
+    public HorarioEmpleado modificar(HorarioEmpleado horario) {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<HorarioEmpleadoMongo> coleccionHistorial = recuperarColeccion(bd);
@@ -150,6 +187,11 @@ public class HorarioEmpleadosDAO implements IAccesoHorarioEmpleado<HorarioEmplea
         }
     }
 
+    /**
+     * Método para eliminar un horario de la base de datos.
+     * @param horario el horario a eliminar.
+     * @return regresa el horario eliminado en la base de datos.
+     */
     @Override
     public HorarioEmpleado eliminar(HorarioEmpleado horario) throws PersistenciaException {
         try (MongoClient cliente = ManejadorConexiones.crearConexion()){

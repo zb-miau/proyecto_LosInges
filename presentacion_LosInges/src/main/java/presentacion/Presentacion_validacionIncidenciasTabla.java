@@ -209,6 +209,9 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
 
+    /**
+     * Método que genera la tabla de incidencias.
+     */
     public void crearTabla() {
         String[] columnas = {"Id Incidencia", "Id Empleado", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
         modeloTablaIncidencias = new DefaultTableModel(columnas, 0) {
@@ -289,6 +292,10 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
 
     }
 
+    /**
+     * Método que configura los radio buttons de filtro del
+     * estado de las incidencias.
+     */
     public void configuracionBotones() {
         ButtonGroup grupoTurnos = new ButtonGroup();
 
@@ -301,6 +308,12 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         rdbtnSeleccionado = "PENDIENTE";
     }
 
+    /**
+     * Método que configura el combobox de filtro de los tipos de
+     * incidencia
+     * @param tipos un set con los tipos de incidencias encontrados 
+     * entre los resultados de incidencias.
+     */
     public void configurarComboBox(Set<String> tipos) {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         modelo.addElement("Todos");
@@ -308,6 +321,11 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         cmbTipoIncidencia.setModel(modelo);
     }
 
+    /**
+     * Método que junta la búsqueda del empleado con la del combobox para
+     * filtrar los resultados de las incidencias.
+     * @param buscador sorter de la tabla de incidencias.
+     */
     public void busquedaPorFiltros(TableRowSorter<TableModel> buscador) {
         List<RowFilter<Object, Object>> filtrosConjuntos = new ArrayList<>();
         String busqueda = txtBuscarEmpleado.getText().trim();
@@ -325,21 +343,6 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             filtrosConjuntos.add(RowFilter.regexFilter("^" + tipoSeleccionado + "$", 5));
         }
 
-//        String estadoSeleccionado = "";
-//        if (rdbtnPendiente.isSelected()) {
-//            estadoSeleccionado = "PENDIENTE";
-//        } else if (rdbtnValidada.isSelected()) {
-//            estadoSeleccionado = "VALIDADA";
-//        } else if (rdbtnRechazada.isSelected()) {
-//            estadoSeleccionado = "RECHAZADA";
-//        }
-//
-//        this.rdbtnSeleccionado = estadoSeleccionado;
-//
-//        if (!estadoSeleccionado.isEmpty()) {
-//            filtrosConjuntos.add(RowFilter.regexFilter("^" + estadoSeleccionado + "$", 7));
-//        }
-
         if (filtrosConjuntos.isEmpty()) {
             buscador.setRowFilter(null);
         } else {
@@ -347,6 +350,11 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         }
     }
 
+    
+    /**
+     * Clase privada anidada para renderizar la celda del estado en la tabla.
+     * Toma la celda de Estado y cambia su color de acuerdo a su texto.
+     */
     private class RenderizadorEstado extends JPanel implements TableCellRenderer {
 
         private final JButton btnEstado;
@@ -385,7 +393,13 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         }
     }
 
-   public void accionAlSeleccionar(){
+    /**
+     * Método que especifica la accion que realiza la tabla cuando se selecciona con doble click.
+     * Recibe los datos de la fila seleccionada y los pasa al validador de incidencias. Una vez 
+     * validada la incidencia, ejecuta el método correspondiente segun el estado resultante
+     * de la incidencia.
+     */
+    public void accionAlSeleccionar(){
        tablaIncidencias.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {

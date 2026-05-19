@@ -4,8 +4,6 @@
  */
 package presentacion;
 
-import asignarHorario.FacadeAsignarHorario;
-import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOTurno;
@@ -38,8 +36,9 @@ import java.util.HashSet;
 import objetosNegocio.NegocioException;
 
 /**
- *
- * @author Zaira
+ * Frame que maneja el calendario de los horarios de los empleados. En el es posible
+ * agregar y visualizar los turnos de un empleado determinado.
+ * @author Zaira Paola Barajas Díaz
  */
 public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
@@ -59,6 +58,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Inicializa los datos necesarios para el calendario
+     * @param empleado 
+     */
     public void cargardatos(DTOEmpleado empleado) {
 
         this.idEmpleado = empleado;
@@ -89,6 +92,9 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Configura la tabla de los turnos que pueden agregarse
+     */
     public void configurarTabla() {
         String[] columnas = {"Id", "Nombre", "Inicio", "Fin", "Días", "Color"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
@@ -193,7 +199,6 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     /**
      * Calcula que día de la semana cae el primer día del mes
-     *
      * @return Valor entero que representa el día de la semana del primer día
      * del mes
      */
@@ -205,6 +210,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         return primerDia.getDayOfWeek().getValue();
     }
 
+    /**
+     * Este método regresa el mes que está desplegado en el calendario actualmente.
+     * @return un arreglo de fechas con la fecha de inicio del mes y la fecha del final del mes.
+     */
     public LocalDate[] paginaCalendarioActual() {
         int anio = getAnio().getValue();
         int mes = getMes().getValue();
@@ -841,6 +850,13 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         configurarCalendario();
     }//GEN-LAST:event_rdbtnMensualActionPerformed
 
+    /**
+     * Método que evalua si existe un conflicto o traslape entre el horario nuevo
+     * y los horarios actuales o en el historial.
+     * @param inicio la fecha de inicio del horario nuevo
+     * @param fin la fecha de fin del horario nuevo
+     * @return regresa true si existe un conflicto, false en caso contrario
+     */
     private boolean existeConflicto(LocalDate inicio, LocalDate fin) {
         DTOEmpleado idEmp = new DTOEmpleado();
         idEmp.setId(idEmpleado.getId());
@@ -957,6 +973,12 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Permite agregarle el turno seleccionado de la tabla de turnos como 
+     * horario al empleado.
+     * 
+     * @param evt click en el boton agregar horario.
+     */
     private void btnAgregarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHorarioActionPerformed
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
 
@@ -1078,6 +1100,10 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnAgregarHorarioActionPerformed
 
+    /**
+     * Regresa a la ventana de selección de empleados.
+     * @param evt click en el boton regresar.
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
         this.dispose();

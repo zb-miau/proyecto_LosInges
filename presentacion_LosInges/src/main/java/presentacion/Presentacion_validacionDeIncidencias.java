@@ -34,6 +34,10 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Método que llena los campos de nombres tanto de la incidencia como
+     * del empleado con los datos de la incidencia recibida.
+     */
     public void llenarCampos() {
         lblNombreIncidencia.setText(incidencia.getTipo().name());
 
@@ -45,6 +49,11 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         lblNombreEmpleado.setText(nombreCompleto);
     }
 
+    /**
+     * Método que verifica si se hizo una observacion, o bien, que las
+     * observaciones no esten vacias.
+     * @return true es valido, false en caso contrario.
+     */
     private boolean verificarObservaciones() {
         if (txtObservaciones.getText().trim().isEmpty()) {
             return false;
@@ -52,6 +61,10 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         return true;
     }
 
+    /**
+     * Método getter para la incidencia que se esta validando.
+     * @return el atributo incidencia de esta clase.
+     */
     public DTOIncidencia getIncidencia() {
         return incidencia;
     }
@@ -203,6 +216,11 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Este botón cambia el estado de la incidencia del parámetro a 
+     * VALIDADA en la base de datos.
+     * @param evt click en el botón validar.
+     */
     private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
         if (verificarObservaciones()) {
             incidencia.setEstado(DTOIncidencia.Estado.VALIDADA);
@@ -210,6 +228,11 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btnValidarActionPerformed
 
+    /**
+     * Este botón cambia el estado de la incidencia del parametro a 
+     * RECHAZADA en la base de datos
+     * @param evt 
+     */
     private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
         if (verificarObservaciones()) {
             incidencia.setEstado(DTOIncidencia.Estado.RECHAZADA);

@@ -14,6 +14,12 @@ import itson.entidades.HorarioEmpleado;
  * @author Zaira
  */
 public class HorarioEmpleadoMongoAHorarioEmpleadoAdapter {
+    
+    /**
+     * Adaptador de Entidad a EntidadMongo; HorarioEmpleado a HorarioEmpleadoMongo.
+     * @param horario la entidad a adaptar.
+     * @return regresa el equivalente de HorarioEmpleadoMongo de la entidad del parámetro.
+     */
     public static HorarioEmpleadoMongo adaptarAMongo(HorarioEmpleado horario){
         
         HorarioEmpleadoMongo horarioMongo = new HorarioEmpleadoMongo(
@@ -35,6 +41,14 @@ public class HorarioEmpleadoMongoAHorarioEmpleadoAdapter {
         return horarioMongo;
     }
     
+    /**
+     * Adaptador de Entidad a EntidadMongo cuando ya se cuenta con el empleado
+     * como EmpleadoMongo. Esto evita un StackOverflow ya que los métodos se llamarían entre sí.
+     * @param horario Entidad del horario.
+     * @param empleado EmpleadoMongo del empleado.
+     * @return regresa la entidad Mongo con la información del horario del parámetro y se le asigna a su
+     * atributo empleado el EmpleadoMongo del parámetro.
+     */
     public static HorarioEmpleadoMongo adaptarConEmpleado(HorarioEmpleado horario, EmpleadoMongo empleado) {
         if (horario == null) return null;
 
@@ -57,7 +71,15 @@ public class HorarioEmpleadoMongoAHorarioEmpleadoAdapter {
         return horarioMongo;
     }
     
-        public static HorarioEmpleado adaptarConEmpleado(HorarioEmpleadoMongo horarioMongo, Empleado empleado) {
+    /**
+     * Adaptador de EntidadMongo a Entidad cuando ya se cuenta con el empleado
+     * como Entidad. Esto evita un StackOverflow ya que los métodos se llamarían entre sí.
+     * @param horarioMongo HorarioEmpleadoMongo del horario.
+     * @param empleado Entidad Empleado.
+     * @return regresa la Entidad equivalente al HorarioEmpleadoMongo del parámetro y se le asigna a su
+     * atributo empleado la Entidad Empleado del parámetro.
+     */
+    public static HorarioEmpleado adaptarConEmpleado(HorarioEmpleadoMongo horarioMongo, Empleado empleado) {
         if (horarioMongo == null) return null;
 
         HorarioEmpleado horario = new HorarioEmpleado(
@@ -79,6 +101,11 @@ public class HorarioEmpleadoMongoAHorarioEmpleadoAdapter {
         
         }
     
+    /**
+     * Adaptador de entidadMongo a Entidad.
+     * @param horarioMongo HorarioEmpleadoMongo a adaptar.
+     * @return regresa la entidad equivalente al horarioMongo del parámetro.
+     */
     public static HorarioEmpleado adaptarAHorario(HorarioEmpleadoMongo horarioMongo){
          HorarioEmpleado horario = new HorarioEmpleado(
                 EmpleadoMongoAEmpleadoAdapter.toDomain(horarioMongo.getEmpleado()),

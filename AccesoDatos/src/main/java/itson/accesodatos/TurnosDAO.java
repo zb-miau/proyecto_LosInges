@@ -8,14 +8,12 @@ import adapters.TurnoMongoATurnoAdapter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
 import entidadesMongo.TurnoMongo;
 import itson.entidades.Turno;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -166,6 +164,11 @@ public class TurnosDAO implements IAccesoTurnos<Turno>, IAccesoMongo{
         }
     }
 
+    /**
+     * Método para verificar que el turno no se está duplicando en la base de datos.
+     * @param turno el turno a agregar.
+     * @return true si existe otro turno igual, false en caso contrario
+     */
     @Override
     public boolean turnoDuplicado(Turno turno) throws PersistenciaException {
          try (MongoClient cliente = ManejadorConexiones.crearConexion()){

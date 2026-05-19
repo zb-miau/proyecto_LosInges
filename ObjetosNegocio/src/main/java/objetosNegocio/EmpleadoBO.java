@@ -129,6 +129,13 @@ public class EmpleadoBO {
 
     }
     
+    /**
+     * Método que recupera el empleado y modifica su atributo de horario actual.
+     * @param empleado empleado al que se le va a modificar su horario.
+     * @return el empleado con su horario modificado.
+     * @throws NegocioException Lanza error si el horario se encuentra vacío o si hay un error
+     * al acceder a la base de datos.
+     */
     public DTOEmpleado modificarHorarioActual(DTOEmpleado empleado) throws NegocioException{
         if (empleado.getHorarioActual() == null ){
             throw new NegocioException("Error al modificar el horario del empleado: no se puede asignar un horario vacío");

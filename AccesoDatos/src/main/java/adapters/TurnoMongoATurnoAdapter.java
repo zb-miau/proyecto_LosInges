@@ -12,6 +12,12 @@ import itson.entidades.Turno;
  * @author Zaira
  */
 public class TurnoMongoATurnoAdapter {
+    
+    /**
+     * Adaptador de TurnoMongo a Entidad.
+     * @param turnoMongo TurnoMongo a adaptar.
+     * @return regresa una entidad equivalente al turnoMongo del parámetro.
+     */
     public static Turno adaptarATurno(TurnoMongo turnoMongo){
         Turno turno = new Turno(
                 turnoMongo.getIdTurno(),
@@ -25,6 +31,11 @@ public class TurnoMongoATurnoAdapter {
         return turno;
     }
     
+    /**
+     * Adaptador de Entidad a TurnoMongo
+     * @param turno Entidad a adaptar
+     * @return regresa un TurnoMongo equivalente a la entidad del parámetro.
+     */
     public static TurnoMongo adaptarATurnoMongo(Turno turno){
         TurnoMongo turnoMongo = new TurnoMongo(
                 turno.getNombre(),

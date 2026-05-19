@@ -135,6 +135,13 @@ public class FacadeAccesoDatos {
         }
     }
     
+    /**
+     * Método para verificar que el turno no se está duplicando en la base de datos.
+     * @param turno el turno a agregar.
+     * @return true si existe otro turno igual, false en caso contrario
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public boolean turnoDuplicado(Turno turno) throws PersistenciaException {
         try {
             return turnosDAO.turnoDuplicado(turno);
@@ -145,6 +152,13 @@ public class FacadeAccesoDatos {
         }
     }
 
+    /**
+     * Método que recupera el empleado y modifica su atributo de horario actual.
+     * @param empleado empleado al que se le va a modificar su horario.
+     * @return el empleado con su horario modificado.
+     * @throws PersistenciaException Lanza error si el horario se encuentra vacío o si hay un error
+     * al acceder a la base de datos.
+     */
     public Empleado modificarHorarioActual(Empleado empleado) throws PersistenciaException {
         try {
             if (empleado.getHorarioActual().getIdHorarioEmpleado() == null) {
@@ -159,6 +173,13 @@ public class FacadeAccesoDatos {
         }
     }
 
+    /**
+     * Método para crear un horario y lo agrega a la base de datos.
+     * @param horario el horario a agregar.
+     * @return regresa el horario creado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public HorarioEmpleado crearHorarioHistorial(HorarioEmpleado horario) throws PersistenciaException {
         try {
 
@@ -169,6 +190,15 @@ public class FacadeAccesoDatos {
         }
     }
 
+    /**
+     * Método para obtener una lista de horarios de la base de datos
+     * que se traslapan con el horario del parámetro.
+     * @param horario horario a obtener.
+     * @return regresa la lista de horarios que se traslapan con el horario
+     * del parámetro.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public List<HorarioEmpleado> obtenerHorarioActivo(HorarioEmpleado horario) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.obtenerActivo(horario);
@@ -178,6 +208,12 @@ public class FacadeAccesoDatos {
         }
     }
 
+    /**
+     * Método para obtener una lista de horarios dentro de una fecha específica.
+     * @return regresa la lista de horarios dentro del rango de fechas.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario,LocalDate fechaInicio, LocalDate fechaFin) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.obtenerListaPorFecha(horario, fechaInicio, fechaFin);
@@ -187,6 +223,13 @@ public class FacadeAccesoDatos {
         }
     }
 
+    /**
+     * Método para modificar un horario de la base de datos.
+     * @param horario el horario a modificar.
+     * @return regresa el horario modificado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public HorarioEmpleado modificarHistorial(HorarioEmpleado horario) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.modificar(horario);
@@ -288,6 +331,13 @@ public class FacadeAccesoDatos {
         }
     }
     
+    /**
+     * Método para eliminar un horario de la base de datos.
+     * @param horario el horario a eliminar.
+     * @return regresa el horario eliminado en la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar
+     * errores al acceder a la base de datos.
+     */
     public HorarioEmpleado eliminarHistorial(HorarioEmpleado horario)throws PersistenciaException{
         try {
 
