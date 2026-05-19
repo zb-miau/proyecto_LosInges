@@ -11,6 +11,8 @@ import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
 import dto.DTOTurno;
+import gestionAsistencias.FacadeGestionAsistencias;
+import gestionAsistencias.IGestionAsistencias;
 import gestionIncidencias.FacadeGestionIncidencias;
 import gestionIncidencias.IGestionIncidencias;
 import java.time.LocalDate;
@@ -37,7 +39,7 @@ public class ControlGestionarEmpleados {
 
     private IGestionIncidencias gestionIncidencias;
     
-    private IGestionAsistencias gestionRegistroMarca;
+    private IGestionAsistencias gestionAsistencias;
 
     private IAsignarHorario asignarHorario;
     
@@ -56,6 +58,7 @@ public class ControlGestionarEmpleados {
         this.empleadoBO = EmpleadoBO.getInstance();
         this.gestionIncidencias = new FacadeGestionIncidencias();
         this.asignarHorario = new FacadeAsignarHorario();
+        this.gestionAsistencias = new FacadeGestionAsistencias();
         this.validacion = new Validaciones();
         this.sat = new FacadeSistemaSAT();
         this.seguro = new FacadeSistemaSeguro();
