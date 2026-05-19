@@ -334,29 +334,44 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
         try {
             // Obtener los valores de los campos de texto
-            String nom = txtNombre.getText();
+            String nombre = txtNombre.getText();
             String apePaterno = txtApellidoPaterno.getText();
             String apeMaterno = txtApellidoMaterno.getText();
-            String cll = txtCalle.getText();
+            String calle = txtCalle.getText();
             String col = txtColonia.getText();
-            String numCasaStr = txtNumeroCasa.getText();
-            String cpStrClean = txtCodigoPostal.getText();
-            String cpCurp = txtCurp.getText();
-            String cpRfc = txtRFC.getText();
-            String cpNss = txtNSS.getText();
+            String numCasa = txtNumeroCasa.getText();
+            String codigoPostal = txtCodigoPostal.getText();
+            String curp = txtCurp.getText();
+            String rfc = txtRFC.getText();
+            String nss = txtNSS.getText();
+            
+            if (nombre.trim().isEmpty() && 
+                apePaterno.trim().isEmpty() && 
+                apeMaterno.trim().isEmpty() && 
+                calle.trim().isEmpty() && 
+                col.trim().isEmpty() && 
+                numCasa.trim().isEmpty() && 
+                codigoPostal.trim().isEmpty() && 
+                curp.trim().isEmpty() && 
+                rfc.trim().isEmpty() && 
+                nss.trim().isEmpty()) {
+                
+                JOptionPane.showMessageDialog(this, "Todos los campos estan vacios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             // Crear la instancia del DTO utilizando su constructor
             DTOContratacion dto = new DTOContratacion(
-                nom, 
+                nombre, 
                 apePaterno, 
                 this.fechaNacimiento,
-                cll, 
+                calle, 
                 col, 
-                numCasaStr, 
-                cpStrClean, 
-                cpCurp, 
-                cpRfc, 
-                cpNss
+                numCasa, 
+                codigoPostal, 
+                curp, 
+                rfc, 
+                nss
             );
             
             if ( !apeMaterno.isEmpty() && apeMaterno != "") {
@@ -365,9 +380,11 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
             // Enviar el DTO al coordinador
             coordinador.gestionarEmpleados.registrarEmpleado(dto);
+            
+            JOptionPane.showMessageDialog(null, "Se contrato de manera correcta el empleado", "Contratacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, introduce valores numericos validos en Codigo Postal y Número de Casa.", "Error de formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de formato", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnContratarEmpleadoActionPerformed

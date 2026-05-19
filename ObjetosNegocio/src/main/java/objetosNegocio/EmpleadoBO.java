@@ -104,33 +104,6 @@ public class EmpleadoBO {
 
     
 
-    public DTOEmpleado eliminar(DTOEmpleado empleado){
-
-        Empleado empleadoEliminar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
-        empleadoEliminar = dao.eliminar(empleadoEliminar);
-
-        
-
-        return empleado;
-
-    }
-
-    
-
-    public DTOEmpleado modificar(DTOEmpleado empleado){
-
-        Empleado empleadoModificar = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
-        empleadoModificar = dao.modificar(empleadoModificar);
-        DTOEmpleado empleadoModificado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoModificar);
-
-        
-
-        return empleadoModificado;
-
-    }
-
-    
-
     public DTOEmpleado obtener(DTOEmpleado turno){
 
         

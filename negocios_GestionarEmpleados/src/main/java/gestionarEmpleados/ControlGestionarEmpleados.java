@@ -44,43 +44,49 @@ public class ControlGestionarEmpleados {
 
     public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
         
-        if (empleado.getNombre() == null && !validacion.validarNombre(empleado.getNombre())) {
+        if (empleado.getNombre() == null || !validacion.validarNombre(empleado.getNombre())) {
             throw new NegocioException("El nombre no cumple con lo requerido.");
         }
         
-        if (empleado.getApellidoPaterno() == null && !validacion.validarApellidoPaterno(empleado.getApellidoPaterno())) {
+        if (empleado.getApellidoPaterno() == null || !validacion.validarApellidoPaterno(empleado.getApellidoPaterno())) {
             throw new NegocioException("El apellido paterno no cumple con lo requerido.");
         }
         
-        if (empleado.getCalle() == null && !validacion.validarCalle(empleado.getCalle())) {
+        if (empleado.getApellidoMaterno() != null || empleado.getApellidoMaterno() != "") {
+            if (!validacion.validarApellidoMaterno(empleado.getApellidoMaterno())) {
+                throw new NegocioException("El apellido materno no cumple con lo requerido.");
+            }
+        }
+        
+        if (empleado.getCalle() == null || !validacion.validarCalle(empleado.getCalle())) {
             throw new NegocioException("El nombre de la calle no cumple con lo requerido.");
         }
         
-        if (empleado.getCodigoPostal() == null && !validacion.validarCodigoPostal(empleado.getCodigoPostal())) {
+        if (empleado.getCodigoPostal() == null || !validacion.validarCodigoPostal(empleado.getCodigoPostal())) {
             throw new NegocioException("El codigo postal no cumple con lo requerido.");
         }
         
-        if (empleado.getColonia() == null && !validacion.validarColonia(empleado.getColonia())) {
+        if (empleado.getColonia() == null || !validacion.validarColonia(empleado.getColonia())) {
             throw new NegocioException("El nombre de la colonia no cumple con lo requerido.");
         }
         
-        if (empleado.getCurp() == null && !validacion.validarCurp(empleado.getCurp())) {
+        if (empleado.getCurp() == null || !validacion.validarCurp(empleado.getCurp())) {
             throw new NegocioException("La CURP no cumple con lo requerido.");
         }
         
-        if (empleado.getFechaNacimiento() == null && !validacion.validarMayoríaEdad(empleado.getFechaNacimiento())) {
+        if (empleado.getFechaNacimiento() == null || !validacion.validarMayoríaEdad(empleado.getFechaNacimiento())) {
             throw new NegocioException("La fecha de nacimiento no cumple con lo requerido.");
         }
         
-        if (empleado.getNss() == null && !validacion.validarNss(empleado.getNss())) {
+        if (empleado.getNss() == null || !validacion.validarNss(empleado.getNss())) {
             throw new NegocioException("El NSS no cumple con lo requerido.");
         }
         
-        if (empleado.getNumeroCasa() == null && !validacion.validarNumeroCasa(empleado.getNumeroCasa())) {
+        if (empleado.getNumeroCasa() == null || !validacion.validarNumeroCasa(empleado.getNumeroCasa())) {
             throw new NegocioException("El numero de casa no cumple con lo requerido.");
         }
         
-        if (empleado.getRfc() == null && !validacion.validarRfc(empleado.getRfc())) {
+        if (empleado.getRfc() == null || !validacion.validarRfc(empleado.getRfc())) {
             throw new NegocioException("El RFC no cumple con lo requerido.");
         }
         
