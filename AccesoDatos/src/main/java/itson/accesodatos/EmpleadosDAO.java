@@ -22,6 +22,8 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase de acceso a datos que implementa los contratos de persistencia de empleados.
+ * Se encarga de comunicar la aplicacion con la base de datos NoSQL de MongoDB.
  *
  * @author Zaira y Ramses
  */
@@ -32,6 +34,12 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
     
     private static EmpleadosDAO empleadosDAO;
 
+    /**
+     * Devuelve la instancia unica y global de la clase EmpleadosDAO.
+     * Utiliza un bloque sincronizado para asegurar que no se creen duplicados en entornos multi-hilo.
+     *
+     * @return La instancia unica de EmpleadosDAO para la persistencia de datos.
+     */
     public static synchronized EmpleadosDAO getInstance() {
         if (empleadosDAO == null) {
             empleadosDAO = new EmpleadosDAO();
@@ -39,22 +47,43 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
         return empleadosDAO;
     }
     
+    /**
+     * Constructor privado que restringe la creacion de instancias desde el exterior.
+     * Garantiza que la clase solo pueda ser controlada a traves de su propio metodo de acceso.
+     */
     private EmpleadosDAO(){
         
     }
 
+    /**
+     * Obtiene la instancia de la base de datos de MongoDB.
+     *
+     * @param cliente Instancia del cliente de conexion de MongoDB.
+     * @return Objeto MongoDatabase asociado a la configuracion del sistema.
+     */
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
         return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
     }
 
+    /**
+     * Obtiene la coleccion de empleados desde la base de datos.
+     *
+     * @param baseDatos Instancia activa de la base de datos de MongoDB.
+     * @return Objeto MongoCollection mapeado con la clase EmpleadoMongo.
+     */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
         return baseDatos.getCollection(COLECCION_EMPLEADOS, EmpleadoMongo.class);
     }
     
-
-
+    /**
+     * Registra un nuevo empleado en la base de datos de MongoDB.
+     *
+     * @param entidad Objeto de dominio con los datos del empleado a guardar.
+     * @return El objeto de dominio actualizado con el ID asignado por MongoDB.
+     * @throws PersistenciaException Si ocurre un error al intentar guardar en la base de datos.
+     */
    @Override
    public Empleado crear(Empleado entidad) throws PersistenciaException{
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
@@ -71,6 +100,12 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
        }
    }
    
+   /**
+     * Busca un empleado utilizando su CURP encriptada de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene la CURP en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
    @Override
     public Empleado obtenerPorCurp(Empleado empleado) {
         if (empleado == null || empleado.getCurp() == null || empleado.getCurp().trim().isEmpty()) {
@@ -81,10 +116,9 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-            // Pasamos la CURP limpia por tu metodo estatico para obtener la cadena cifrada exacta
             String curpEncriptada = Encriptador.encriptar(empleado.getCurp().trim());
 
-            // Realizamos el filtro apuntando a la propiedad raiz "curp" de tu documento en Mongo
+            // Realizamos el filtro apuntando al atributo raiz "curp"
             EmpleadoMongo resultado = coleccion.find(Filters.eq("curp", curpEncriptada)).first();
 
             if (resultado == null) {
@@ -95,11 +129,16 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
             return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
             
         } catch (Exception e) {
-            System.err.println("Error al consultar el empleado por CURP en MongoDB: " + e.getMessage());
             return null;
         }
     }
     
+    /**
+     * Busca un empleado utilizando su RFC encriptado de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene el RFC en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
     @Override
     public Empleado obtenerPorRfc(Empleado empleado) {
         if (empleado == null || empleado.getRfc() == null || empleado.getRfc().trim().isEmpty()) {
@@ -110,30 +149,32 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-            // Pasamos el RFC limpio por el metodo estatico para obtener la cadena cifrada exacta
             String rfcEncriptado = Encriptador.encriptar(empleado.getRfc().trim());
 
-            // Busqueda exacta apuntando al atributo raiz "rfc" del documento en MongoDB
+            // Busqueda exacta apuntando al atributo raiz "rfc"
             EmpleadoMongo resultado = coleccion.find(Filters.eq("rfc", rfcEncriptado)).first();
 
-            // Validamos si MongoDB encontro el documento para evitar NullPointerException
             if (resultado == null) {
                 return null;
             }
 
-            // Convertimos el modelo de base de datos al modelo de dominio usando tu adapter
+            // Convertimos el modelo de base de datos al modelo de dominio usando adapter
             return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
             
         } catch (Exception e) {
-            System.err.println("Error al consultar el empleado por RFC en MongoDB: " + e.getMessage());
             return null;
         }
     }
     
+    /**
+     * Busca un empleado utilizando su NSS encriptado de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene el NSS en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
     @Override
     public Empleado obtenerPorNss(Empleado empleado) {
         if (empleado == null || empleado.getNss() == null || empleado.getNss().trim().isEmpty()) {
-            System.out.println("Busqueda abortada: El objeto empleado o su NSS estan vacios.");
             return null;
         }
 
@@ -141,29 +182,29 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
             MongoDatabase bd = recuperarBaseDatos(cliente);
             MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
 
-            // Pasamos el NSS limpio por el metodo estatico para obtener la cadena cifrada exacta
             String nssEncriptado = Encriptador.encriptar(empleado.getNss().trim());
 
-            System.out.println("-> [DEBUG PERSISTENCIA] Buscando empleado con el NSS cifrado: " + nssEncriptado);
-
-            // Busqueda exacta apuntando al atributo raiz "nss" del documento en MongoDB
+            // Busqueda exacta apuntando al atributo raiz "nss"
             EmpleadoMongo resultado = coleccion.find(Filters.eq("nss", nssEncriptado)).first();
 
-            // Validamos si MongoDB encontro el documento para evitar NullPointerException
             if (resultado == null) {
-                System.out.println("-> [DEBUG PERSISTENCIA] No se encontro ningun empleado con el NSS proporcionado.");
                 return null;
             }
 
-            // Convertimos el modelo de base de datos al modelo de dominio usando tu adapter
+            // Convertimos el modelo de base de datos al modelo de dominio usando adapter
             return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
             
         } catch (Exception e) {
-            System.err.println("Error al consultar el empleado por NSS en MongoDB: " + e.getMessage());
             return null;
         }
     }
 
+    /**
+     * Busca un empleado en la base de datos por medio de su identificador unico ID.
+     *
+     * @param entidad Objeto de dominio que contiene el ID del empleado a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no existe.
+     */
    @Override
    public Empleado obtener(Empleado entidad) {
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
@@ -176,6 +217,11 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
        } 
    }
 
+   /**
+     * Recupera todos los registros de empleados almacenados en la base de datos.
+     *
+     * @return Una lista de objetos Empleado convertidos al modelo de dominio.
+     */
    @Override
    public List<Empleado> obtenerLista() {
        List<Empleado> listaFinal = new ArrayList<>();

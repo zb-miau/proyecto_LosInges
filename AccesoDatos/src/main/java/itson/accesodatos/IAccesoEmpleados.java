@@ -8,8 +8,11 @@ import itson.entidades.Empleado;
 import java.util.List;
 
 /**
+ * Interfaz de la capa de acceso a datos que define el contrato de persistencia para la entidad Empleado.
+ * Proporciona los metodos necesarios para realizar operaciones de busqueda y registro en la base de datos.
  *
  * @author Zaira
+ * @param <Empleado> Tipo de entidad que gestiona esta interfaz de acceso a datos.
  */
 public interface IAccesoEmpleados<Empleado> {
     

@@ -374,6 +374,7 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
                 nss
             );
             
+            //Si es que el apellido materno esta no esta vacio se valida
             if ( !apeMaterno.isEmpty() && apeMaterno != "") {
                 dto.setApellidoMaterno(apeMaterno);
             }

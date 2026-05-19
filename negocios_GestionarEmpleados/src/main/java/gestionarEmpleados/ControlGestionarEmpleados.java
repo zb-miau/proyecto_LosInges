@@ -26,6 +26,8 @@ import seguro.ISistemaSeguro;
 import validaciones.Validaciones;
 
 /**
+ * Clase controladora del subsistema encargada de coordinar los flujos de trabajo 
+ * y las pantallas relacionadas con la administracion y gestion integral de empleados.
  *
  * @author jesus
  */
@@ -43,6 +45,11 @@ public class ControlGestionarEmpleados {
     
     private ISistemaSeguro seguro;
 
+    /**
+     * Constructor por defecto que inicializa los componentes necesarios para la gestion.
+     * Vincula las fachadas de servicios externos (SAT, Seguro Social, Horarios, Incidencias)
+     * y las utilidades de validacion de datos basicos.
+     */
     public ControlGestionarEmpleados() {
         this.empleadoBO = EmpleadoBO.getInstance();
         this.gestionIncidencias = new FacadeGestionIncidencias();
@@ -52,6 +59,16 @@ public class ControlGestionarEmpleados {
         this.seguro = new FacadeSistemaSeguro();
     }
 
+    /**
+     * Ejecuta el flujo completo de contratacion para un nuevo empleado.
+     * Realiza validaciones sintacticas de formato, comprueba la vigencia de los datos
+     * fiscales ante el SAT y verifica la existencia del numero de seguridad social.
+     *
+     * @param empleado Objeto DTOContratacion con la informacion del candidato.
+     * @return El DTOContratacion con el registro confirmado por la capa de negocio.
+     * @throws NegocioException Si algun campo no cumple con el formato requerido o si las
+     * validaciones ante los sistemas externos (SAT o Seguro Social) fallan.
+     */
     public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
         
         if (empleado.getNombre() == null || !validacion.validarNombre(empleado.getNombre())) {
@@ -116,6 +133,11 @@ public class ControlGestionarEmpleados {
 
     }
 
+    /**
+     * Recupera la nomina de empleados activos mapeados en estructuras de transferencia.
+     *
+     * @return Una lista de tipo DTOEmpleado con todos los registros del sistema.
+     */
     public List<DTOEmpleado> obtenerEmpleados() {
 
         return empleadoBO.obtenerLista();

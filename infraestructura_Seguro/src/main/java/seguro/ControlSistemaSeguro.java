@@ -10,6 +10,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /**
+ * Clase controladora encargada de gestionar la logica de negocio y el procesamiento
+ * de las peticiones de validacion de datos laborales ante el sistema del seguro social.
  *
  * @author RAMSES
  */

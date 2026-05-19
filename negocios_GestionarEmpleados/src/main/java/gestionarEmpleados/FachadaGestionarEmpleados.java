@@ -21,10 +21,21 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
 
     private ControlGestionarEmpleados control;
 
+    /**
+     * Constructor por defecto que inicializa la fachada.
+     * Crea la instancia del controlador interno encargado de procesar la logica.
+     */
     public FachadaGestionarEmpleados() {
         this.control = new ControlGestionarEmpleados();
     }
 
+    /**
+     * Delega la peticion de registro y validacion del empleado al controlador del subsistema.
+     *
+     * @param empleado Objeto DTOContratacion con la informacion del candidato.
+     * @return El DTOContratacion con los datos del empleado confirmado.
+     * @throws NegocioException Si el registro no cumple con los criterios de aceptacion.
+     */
     @Override
     public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
         
@@ -32,6 +43,11 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
 
     }
 
+    /**
+     * Solicita al controlador interno la lista completa de trabajadores registrados.
+     *
+     * @return Una lista de objetos DTOEmpleado con los registros del sistema.
+     */
     @Override
     public List<DTOEmpleado> obtenerEmpleados() {
 

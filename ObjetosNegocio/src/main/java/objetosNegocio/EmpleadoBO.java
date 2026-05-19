@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 
 
 /**
+ * Clase de Objeto de Negocio (BO) que centraliza las reglas operativas de los empleados.
+ * Actua como intermediario entre los controladores del sistema y la capa de datos.
  *
  * @author RAMSES
  */
@@ -25,10 +27,15 @@ public class EmpleadoBO {
 
     private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
     
-    private final IAccesoEmpleados<Empleado> dao;
     FacadeAccesoDatos fachadaDAO;
     private static EmpleadoBO empleadosBO;
 
+    /**
+     * Recupera la instancia unica y global de la clase EmpleadoBO.
+     * Implementa sincronizacion para garantizar la seguridad con hilos (thread-safe).
+     *
+     * @return La instancia unica de tipo EmpleadoBO encargada de la logica de negocio.
+     */
     public static synchronized EmpleadoBO getInstance() {
         if (empleadosBO == null) {
             empleadosBO = new EmpleadoBO();
@@ -36,13 +43,24 @@ public class EmpleadoBO {
         return empleadosBO;
     }
     
+    /**
+     * Constructor privado que previene la instanciacion externa de la clase.
+     * Inicializa la referencia unica hacia la fachada de acceso a datos.
+     */
     private EmpleadoBO(){
         this.fachadaDAO = FacadeAccesoDatos.getInstance();
-        this.dao = EmpleadosDAO.getInstance();
 
     }
     
-
+    /**
+     * Valida los datos obligatorios y registra un nuevo empleado en el sistema.
+     * Verifica que no existan duplicados de CURP, RFC o NSS antes de proceder con el guardado.
+     *
+     * @param empleado Objeto DTOContratacion con los datos ingresados del aspirante.
+     * @return El DTOContratacion con los datos del empleado ya registrado.
+     * @throws NegocioException Si algun campo es nulo, si los datos ya estan duplicados 
+     * o si se genera un fallo en la capa de persistencia.
+     */
     public DTOContratacion crear(DTOContratacion empleado) throws NegocioException{
         
         if (empleado.getNombre() == null) {
@@ -87,9 +105,9 @@ public class EmpleadoBO {
 
         Empleado empleadoCrear = EmpleadoToDTOEmpleadoAdapter.adaptarDTOContratacionAEntidad(empleado);
         try {
-            Empleado buscadoCurp = dao.obtenerPorCurp(empleadoCrear);
-            Empleado buscadoNss = dao.obtenerPorNss(empleadoCrear);
-            Empleado buscadoRfc = dao.obtenerPorRfc(empleadoCrear);
+            Empleado buscadoCurp = fachadaDAO.obtenerPorCurp(empleadoCrear);
+            Empleado buscadoNss = fachadaDAO.obtenerPorNss(empleadoCrear);
+            Empleado buscadoRfc = fachadaDAO.obtenerPorRfc(empleadoCrear);
             
             
             if (buscadoCurp != null) {
@@ -111,7 +129,7 @@ public class EmpleadoBO {
             }
             
             
-            empleadoCrear = dao.crear(empleadoCrear);
+            empleadoCrear = fachadaDAO.crear(empleadoCrear);
             
         } catch (PersistenciaException ex) {
             
@@ -126,22 +144,32 @@ public class EmpleadoBO {
     }
 
     
-
+    /**
+     * Recupera un empleado especifico por medio de la informacion contenida en su DTO.
+     *
+     * @param turno Objeto DTOEmpleado que contiene el identificador a buscar.
+     * @return El DTOEmpleado con toda la informacion recuperada del sistema.
+     */
     public DTOEmpleado obtener(DTOEmpleado turno){
 
         
         Empleado empleadoObtener = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(turno);
-        empleadoObtener = dao.obtener(empleadoObtener);
+        empleadoObtener = fachadaDAO.obtener(empleadoObtener);
         DTOEmpleado turnoRecuperado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(empleadoObtener);
         return turnoRecuperado;
 
     }
 
     
-
+    /**
+     * Recupera el catalogo completo de empleados registrados en el sistema de negocio.
+     * Mapea de forma interna la lista de entidades a una lista de objetos de transferencia de datos.
+     *
+     * @return Una lista con todos los objetos DTOEmpleado encontrados.
+     */
     public List<DTOEmpleado> obtenerLista(){
 
-        List<Empleado> empleados = dao.obtenerLista();
+        List<Empleado> empleados = fachadaDAO.obtenerLista();
         List<DTOEmpleado> listaEmpleados = new ArrayList();
         for (Empleado e: empleados){
             DTOEmpleado empleadoNuevo = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(e);

@@ -5,6 +5,8 @@
 package seguro;
 
 /**
+ * Implementacion de la fachada que sirve como punto de acceso unico para el sistema del seguro social.
+ * Delega las solicitudes de verificacion de salud y prestaciones hacia los controladores internos del modulo.
  *
  * @author RAMSES
  */
@@ -13,15 +15,18 @@ public class FacadeSistemaSeguro implements ISistemaSeguro{
     private ControlSistemaSeguro control;
 
     /**
-     * Constructor de la fachada para el sistema externo del Seguro
-     * 
-     * @param control con el cual se llama a los metodos del control 
-     * que interactuan de manera directa con el servidor del Seguro
+     * Constructor que inicializa el controlador interno del sistema del seguro social.
      */
     public FacadeSistemaSeguro() {
         this.control = new ControlSistemaSeguro();
     }
     
+    /**
+     * Delega la validacion del NSS al controlador interno del seguro social.
+     *
+     * @param nss Cadena de texto con el Numero de Seguro Social a validar.
+     * @return true si el NSS es valido en el sistema; false en caso contrario.
+     */
     public boolean validacionSistemaSeguroConNSS(String nss){
         
         return control.validacionSistemaSeguroConNSS(nss);

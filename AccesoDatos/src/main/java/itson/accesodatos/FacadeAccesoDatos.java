@@ -10,6 +10,7 @@ import itson.entidades.HorarioEmpleado;
 import itson.entidades.Incidencia;
 import itson.entidades.Turno;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import org.bson.types.ObjectId;
@@ -149,6 +150,96 @@ public class FacadeAccesoDatos {
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al verificar los turnos de la base de datos. ");
+        }
+    }
+    
+    /**
+     * Registra un nuevo empleado en la base de datos de MongoDB.
+     *
+     * @param entidad Objeto de dominio con los datos del empleado a guardar.
+     * @return El objeto de dominio actualizado con el ID asignado por MongoDB.
+     * @throws PersistenciaException Si ocurre un error al intentar guardar en la base de datos.
+     */
+    public Empleado crear(Empleado entidad) throws PersistenciaException {
+        try {
+            return empleadosDAO.crear(entidad);
+        } catch (PersistenciaException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new PersistenciaException("Error al registrar el empleado en la base de datos.");
+        }
+    }
+
+    /**
+     * Busca un empleado utilizando su CURP encriptada de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene la CURP en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
+    public Empleado obtenerPorCurp(Empleado empleado) {
+        try {
+            return empleadosDAO.obtenerPorCurp(empleado);
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Busca un empleado utilizando su RFC encriptado de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene el RFC en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
+    public Empleado obtenerPorRfc(Empleado empleado) {
+        try {
+            return empleadosDAO.obtenerPorRfc(empleado);
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Busca un empleado utilizando su NSS encriptado de forma determinista.
+     *
+     * @param empleado Objeto de dominio que contiene el NSS en texto plano a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     */
+    public Empleado obtenerPorNss(Empleado empleado) {
+        try {
+            return empleadosDAO.obtenerPorNss(empleado);
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Busca un empleado en la base de datos por medio de su identificador unico ID.
+     *
+     * @param entidad Objeto de dominio que contiene el ID del empleado a buscar.
+     * @return El empleado convertido al modelo de dominio; null si no existe.
+     */
+    public Empleado obtener(Empleado entidad) {
+        try {
+            return empleadosDAO.obtener(entidad);
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Recupera todos los registros de empleados almacenados en la base de datos.
+     *
+     * @return Una lista de objetos Empleado convertidos al modelo de dominio.
+     */
+    public List<Empleado> obtenerLista() {
+        try {
+            return empleadosDAO.obtenerLista();
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
+            return new ArrayList<>();
         }
     }
 

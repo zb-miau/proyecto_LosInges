@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
+ * Clase adaptadora encargada de transformar datos entre las entidades de dominio
+ * del Empleado y sus diferentes Objetos de Transferencia de Datos (DTO).
  *
  * @author RAMSES
  */
@@ -24,6 +26,13 @@ public class EmpleadoToDTOEmpleadoAdapter {
 
     private static final Logger LOGGER = Logger.getLogger(EmpleadoToDTOEmpleadoAdapter.class.getName());
     
+    /**
+     * Transforma un DTO de contratacion en una entidad de dominio Empleado.
+     * Realiza el parseo de los datos de direccion de cadena de texto a enteros.
+     *
+     * @param dto Objeto DTOContratacion con los datos capturados en el registro.
+     * @return Instancia de la entidad Empleado poblada, o null si el dto es nulo.
+     */
     public static Empleado adaptarDTOContratacionAEntidad(DTOContratacion dto){
         if (dto == null) {
             return null;
@@ -51,6 +60,12 @@ public class EmpleadoToDTOEmpleadoAdapter {
         return empleado;
     }
     
+    /**
+     * Transforma una entidad Empleado a un formato simplificado de DTOContratacion.
+     *
+     * @param empleado Instancia de la entidad de dominio Empleado.
+     * @return Objeto DTOContratacion con datos basicos del empleado, o null si es nulo.
+     */
     public static DTOContratacion adaptarEntidadADTOContratacion(Empleado empleado){
             if (empleado == null) {
                 return null;
@@ -68,6 +83,13 @@ public class EmpleadoToDTOEmpleadoAdapter {
         
     }
     
+    /**
+     * Convierte un DTO de uso general a una entidad de dominio Empleado.
+     * Vincula de forma recursiva el horario actual del empleado si este existe.
+     *
+     * @param dto Objeto DTOEmpleado con los datos de transporte.
+     * @return Entidad Empleado con la informacion mapeada, o null si el dto es nulo.
+     */
     public static Empleado adaptarDTO(DTOEmpleado dto) {
         if (dto == null) return null;
 
@@ -91,6 +113,13 @@ public class EmpleadoToDTOEmpleadoAdapter {
         return empleado;
     }
     
+    /**
+     * Convierte una entidad de dominio Empleado a un objeto DTOEmpleado de uso general.
+     * Incluye la conversion anidada del horario asociado a la entidad.
+     *
+     * @param empleado Instancia de la entidad de dominio Empleado.
+     * @return Objeto DTOEmpleado listo para ser transferido, o null si es nulo.
+     */
     public static DTOEmpleado adaptarEntidad(Empleado empleado) {
         if (empleado == null) return null;
 

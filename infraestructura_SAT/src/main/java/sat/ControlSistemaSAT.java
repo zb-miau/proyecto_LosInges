@@ -10,6 +10,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /**
+ * Clase controladora encargada de gestionar la logica de negocio y el procesamiento
+ * de las peticiones de validacion de datos fiscales ante el sistema del SAT.
  *
  * @author RAMSES
  */
@@ -29,9 +31,9 @@ public class ControlSistemaSAT {
      * Realiza una peticion HTTP GET al servidor externo para validar si el RFC 
      * ingresado se encuentra registrado de forma legal en el padron del SAT.
      *
-     * @param rfc Cadena de texto que contiene el RFC con homoclave del empleado a validar
+     * @param rfc Cadena de texto que contiene el RFC con homoclave del empleado a validar.
      * @return true si el servidor responde con codigo 200 y el JSON contiene la confirmacion 
-     * de validez, false en caso contrario o si ocurre una falla de conexion
+     * de validez, false en caso contrario o si ocurre una falla de conexion.
      */
     public boolean validacionSistemaSATConRFC(String rfc) {
         try {

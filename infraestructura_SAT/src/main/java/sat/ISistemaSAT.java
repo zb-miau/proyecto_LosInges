@@ -5,6 +5,8 @@
 package sat;
 
 /**
+ * Interfaz que define el contrato para los servicios de validacion ante el SAT.
+ * Proporciona las operaciones necesarias para comprobar la existencia de identificadores oficiales.
  *
  * @author RAMSES
  */
@@ -14,12 +16,12 @@ public interface ISistemaSAT {
      * Manda un rfc a validacion dentro del servidor del SAT
      * al ser un rfc que si esta registrado dentro del
      * servidor del SAT, entonces cuando se identifica 
-     * si es que existe este rfc, se devuelve una respuesta
+     * si es que existe este rfc, se devuelve una respuesta.
      * 
      * @param rfc con el cual validamos que el empleado nuevo
-     * que esta por ser contratado si esta dado de alta en el SAT
+     * que esta por ser contratado si esta dado de alta en el SAT.
      * @return verdadero si es que el rfc que se valida esta 
-     * dado de alta en el servidor del SAT
+     * dado de alta en el servidor del SAT.
      */
     public boolean validacionSistemaSATConRFC(String rfc);
     
