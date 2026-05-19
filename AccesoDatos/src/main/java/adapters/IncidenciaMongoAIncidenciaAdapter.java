@@ -9,15 +9,39 @@ import itson.entidades.Incidencia;
 import org.bson.types.ObjectId;
 
 /**
+ * Clase adaptadora (Adapter) encargada de la conversión de datos entre el
+ * modelo de persistencia de MongoDB (IncidenciaMongo) y el modelo de dominio
+ * (Incidencia).
+ *
+ * Facilita el desacoplamiento entre la capa de base de datos y la lógica de
+ * negocio.
+ *
  *
  * @author Zaira
  */
 public class IncidenciaMongoAIncidenciaAdapter {
 
+    /**
+     * Adapta un objeto de persistencia IncidenciaMongo a un objeto de dominio
+     * Incidencia.
+     *
+     * Convierte los tipos de datos específicos de MongoDB (como ObjectId y
+     * Enums propios) a los tipos nativos o estándar del dominio. Además, si la
+     * incidencia contiene un empleado mapeado, también lo adapta de forma
+     * recursiva.
+     *
+     *
+     * @param incidenciaMongo El objeto de persistencia proveniente de MongoDB.
+     * No debe ser nulo.
+     * @return Un objeto Incidencia con los datos mapeados para la lógica de
+     * negocio.
+     * @throws NullPointerException si incidenciaMongo o su idEmpleado son
+     * nulos.
+     */
     public static Incidencia adaptarAIncidencia(IncidenciaMongo incidenciaMongo) {
 
         String idEmpleado = incidenciaMongo.getIdEmpleado().toHexString();
-        
+
         Incidencia incidencia = new Incidencia(
                 incidenciaMongo.getIdIncidencia(),
                 Incidencia.TiposIncidencia.valueOf(incidenciaMongo.getTipo().name()),
@@ -27,14 +51,29 @@ public class IncidenciaMongoAIncidenciaAdapter {
                 Incidencia.Estado.valueOf(incidenciaMongo.getEstado().name()),
                 incidenciaMongo.getObservaciones());
 
-        if (incidenciaMongo.getEmpleado() != null){
+        if (incidenciaMongo.getEmpleado() != null) {
             incidencia.setEmpleado(EmpleadoMongoAEmpleadoAdapter.toDomain(incidenciaMongo.getEmpleado()));
         }
-        
+
         return incidencia;
 
     }
 
+    /**
+     * Adapta un objeto de dominio Incidencia a un objeto de persistencia
+     * IncidenciaMongo.
+     *
+     * Prepara el objeto para ser almacenado en MongoDB, transformando el
+     * identificador del empleado de un formato String a un ObjectId de Mongo,
+     * así como sus respectivos Enums.
+     *
+     *
+     * @param incidencia El objeto de negocio Incidencia. No debe ser nulo.
+     * @return Un objeto IncidenciaMongo listo para ser persistido en la base de
+     * datos.
+     * @throws IllegalArgumentException si el idEmpleado de la incidencia no
+     * tiene un formato hexadecimal válido para ObjectId.
+     */
     public static IncidenciaMongo adaptarAIncidenciaMongo(Incidencia incidencia) {
 
         IncidenciaMongo incidenciaMongo = new IncidenciaMongo(

@@ -32,15 +32,17 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
     public Presentacion_registroDeIncidencias(Coordinador coordinador) {
         this.coordinador = coordinador;
         initComponents();
-        comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
+        txtDescripcion.setLineWrap(true);
+        txtDescripcion.setWrapStyleWord(true);
 
     }
 
     public void cargarTexto(DTOEmpleado empleado) {
 
         this.empleado = empleado;
-
+        comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
         fieldEmpleado.setText(empleado.getNombre() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno());
+        txtDescripcion.setText("");
     }
 
     ;
@@ -59,11 +61,12 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
         labelEmpleado = new javax.swing.JLabel();
         labelTipo = new javax.swing.JLabel();
         fieldEmpleado = new javax.swing.JTextField();
-        fieldDescripcion = new javax.swing.JTextField();
         botonRegistrarIncidencia = new javax.swing.JButton();
         botonCancelar = new javax.swing.JButton();
         labelDescripcion = new javax.swing.JLabel();
         comboTipos = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDescripcion = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de incidencias");
@@ -89,14 +92,6 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
         fieldEmpleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldEmpleadoActionPerformed(evt);
-            }
-        });
-
-        fieldDescripcion.setBackground(new java.awt.Color(255, 255, 255));
-        fieldDescripcion.setForeground(new java.awt.Color(0, 0, 0));
-        fieldDescripcion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldDescripcionActionPerformed(evt);
             }
         });
 
@@ -132,6 +127,12 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
             }
         });
 
+        txtDescripcion.setBackground(new java.awt.Color(255, 255, 255));
+        txtDescripcion.setColumns(20);
+        txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
+        txtDescripcion.setRows(5);
+        jScrollPane1.setViewportView(txtDescripcion);
+
         javax.swing.GroupLayout pnlRegistorIncidenciasLayout = new javax.swing.GroupLayout(pnlRegistorIncidencias);
         pnlRegistorIncidencias.setLayout(pnlRegistorIncidenciasLayout);
         pnlRegistorIncidenciasLayout.setHorizontalGroup(
@@ -144,9 +145,9 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
                     .addComponent(labelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlRegistorIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(fieldEmpleado)
                     .addComponent(comboTipos, 0, 273, Short.MAX_VALUE)
-                    .addComponent(fieldDescripcion))
+                    .addComponent(fieldEmpleado)
+                    .addComponent(jScrollPane1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegistorIncidenciasLayout.createSequentialGroup()
                 .addContainerGap(135, Short.MAX_VALUE)
@@ -173,11 +174,14 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
                 .addGroup(pnlRegistorIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelTipo)
                     .addComponent(comboTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addGroup(pnlRegistorIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelDescripcion)
-                    .addComponent(fieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(pnlRegistorIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlRegistorIncidenciasLayout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(labelDescripcion))
+                    .addGroup(pnlRegistorIncidenciasLayout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(pnlRegistorIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonRegistrarIncidencia)
                     .addComponent(botonCancelar))
@@ -212,17 +216,13 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldEmpleadoActionPerformed
 
-    private void fieldDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldDescripcionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldDescripcionActionPerformed
-
     private void botonRegistrarIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarIncidenciaActionPerformed
 
         boolean validacion = validarFormulario();
 
         if (validacion) {
 
-            DTOIncidencia incidencia = new DTOIncidencia((DTOIncidencia.TiposIncidencia) comboTipos.getSelectedItem(), empleado, fieldDescripcion.getText());
+            DTOIncidencia incidencia = new DTOIncidencia((DTOIncidencia.TiposIncidencia) comboTipos.getSelectedItem(), empleado, txtDescripcion.getText());
 
             incidencia.setFecha(LocalDate.now());
             incidencia.setEstado(DTOIncidencia.Estado.PENDIENTE);
@@ -234,9 +234,11 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
                 if (opcion == 0) {
 
-                    coordinador.gestionIncidencias.crearIncidencia(incidencia);
+                    incidencia = coordinador.gestionIncidencias.crearIncidencia(incidencia);
                     coordinador.gestionIncidencias.enviarSupervisor(incidencia);
                     JOptionPane.showMessageDialog(this, "Incidencia Registrada");
+                    coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+                    this.dispose();
 
                 } else {
 
@@ -274,18 +276,19 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
     private javax.swing.JButton botonCancelar;
     private javax.swing.JButton botonRegistrarIncidencia;
     private javax.swing.JComboBox<DTOIncidencia.TiposIncidencia> comboTipos;
-    private javax.swing.JTextField fieldDescripcion;
     private javax.swing.JTextField fieldEmpleado;
     private javax.swing.JLabel jLabelMenu;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelDescripcion;
     private javax.swing.JLabel labelEmpleado;
     private javax.swing.JLabel labelTipo;
     private javax.swing.JPanel pnlRegistorIncidencias;
+    private javax.swing.JTextArea txtDescripcion;
     // End of variables declaration//GEN-END:variables
 
     private boolean validarFormulario() {
 
-        if (fieldDescripcion.getText().isBlank()) {
+        if (txtDescripcion.getText().isBlank()) {
 
             JOptionPane.showMessageDialog(this,
                     "La descripción no puede estar vacía",
