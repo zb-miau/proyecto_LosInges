@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 public class DTORegistroMarca {
     private String idRegistroMarca;
-    private String idEmpleado;
-    private String nombreEmpleado;
+    private DTOEmpleado empleadoDTO; 
+    private DTOHorarioEmpleado horarioEmpledoDTO;
     private LocalDateTime entrada;
     private LocalDateTime salida;
     private LocalDate fecha; 
@@ -22,18 +22,25 @@ public class DTORegistroMarca {
     public DTORegistroMarca() {
     }
 
-    public DTORegistroMarca(String idRegistroMarca, String idEmpleado, String nombreEmpleado, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public DTORegistroMarca(String idRegistroMarca, DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
         this.idRegistroMarca = idRegistroMarca;
-        this.idEmpleado = idEmpleado;
-        this.nombreEmpleado = nombreEmpleado;
+        this.empleadoDTO = empleadoDTO;
+        this.horarioEmpledoDTO = horarioEmpledoDTO;
         this.entrada = entrada;
         this.salida = salida;
         this.fecha = fecha;
     }
 
-    public DTORegistroMarca(String idEmpleado, String nombreEmpleado, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
-        this.idEmpleado = idEmpleado;
-        this.nombreEmpleado = nombreEmpleado;
+    public DTORegistroMarca(DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+        this.empleadoDTO = empleadoDTO;
+        this.horarioEmpledoDTO = horarioEmpledoDTO;
+        this.entrada = entrada;
+        this.salida = salida;
+        this.fecha = fecha;
+    }
+
+    public DTORegistroMarca(String idRegistroMarca, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+        this.idRegistroMarca = idRegistroMarca;
         this.entrada = entrada;
         this.salida = salida;
         this.fecha = fecha;
@@ -47,20 +54,20 @@ public class DTORegistroMarca {
         this.idRegistroMarca = idRegistroMarca;
     }
 
-    public String getIdEmpleado() {
-        return idEmpleado;
+    public DTOEmpleado getEmpleadoDTO() {
+        return empleadoDTO;
     }
 
-    public void setIdEmpleado(String idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setEmpleadoDTO(DTOEmpleado empleadoDTO) {
+        this.empleadoDTO = empleadoDTO;
     }
 
-    public String getNombreEmpleado() {
-        return nombreEmpleado;
+    public DTOHorarioEmpleado getHorarioEmpledoDTO() {
+        return horarioEmpledoDTO;
     }
 
-    public void setNombreEmpleado(String nombreEmpleado) {
-        this.nombreEmpleado = nombreEmpleado;
+    public void setHorarioEmpledoDTO(DTOHorarioEmpleado horarioEmpledoDTO) {
+        this.horarioEmpledoDTO = horarioEmpledoDTO;
     }
 
     public LocalDateTime getEntrada() {
@@ -87,6 +94,5 @@ public class DTORegistroMarca {
         this.fecha = fecha;
     }
 
-    
     
 }
