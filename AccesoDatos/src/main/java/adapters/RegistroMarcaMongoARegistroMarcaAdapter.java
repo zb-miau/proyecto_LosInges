@@ -19,7 +19,7 @@ public class RegistroMarcaMongoARegistroMarcaAdapter {
      * @param registroMongo
      * @return 
      */
-    public static RegistroMarca toMongo(RegistroMarcaMongo registroMongo){
+    public static RegistroMarca toPersistencia(RegistroMarcaMongo registroMongo){
         if(registroMongo == null){
             return null; 
         }
@@ -46,7 +46,7 @@ public class RegistroMarcaMongoARegistroMarcaAdapter {
      * @param registroPersistencia
      * @return 
      */
-    public static RegistroMarcaMongo toPersistencia(RegistroMarca registroPersistencia){
+    public static RegistroMarcaMongo toMongo(RegistroMarca registroPersistencia){
         if (registroPersistencia == null) {
             return null; 
         }
