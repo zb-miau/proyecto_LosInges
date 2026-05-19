@@ -22,22 +22,15 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
-    private IGestionIncidencias control = new FacadeGestionIncidencias();
-
     private DTOEmpleado empleado;
 
-    private Coordinador coordinador;
-
-    public void setCoordinador(Coordinador coordinador) {
-
-        this.coordinador = coordinador;
-    }
+    private final Coordinador coordinador;
 
     /**
      * Creates new customizer Presentacion_gestionDeIncidenciasMenu
      */
-    public Presentacion_registroDeIncidencias() {
-
+    public Presentacion_registroDeIncidencias(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
         comboTipos.setModel(new DefaultComboBoxModel<>(DTOIncidencia.TiposIncidencia.values()));
 
@@ -241,8 +234,8 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
                 if (opcion == 0) {
 
-                    control.crearIncidencia(incidencia);
-//                    control.enviarSupervisor();
+                    coordinador.gestionIncidencias.crearIncidencia(incidencia);
+                    coordinador.gestionIncidencias.enviarSupervisor(incidencia);
                     JOptionPane.showMessageDialog(this, "Incidencia Registrada");
 
                 } else {

@@ -27,21 +27,19 @@ import objetosNegocio.NegocioException;
  */
 public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
-    IAsignarHorario control = new FacadeAsignarHorario();
     private static final Logger LOGGER = Logger.getLogger(Presentacion_listaDeEmpleados.class.getName());
     Coordinador coordinador;
-
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
 
     /**
      * Creates new form GestionDeHorariosMain
      */
-    public Presentacion_listaDeEmpleados() {
+    public Presentacion_listaDeEmpleados(Coordinador coordinador) {
+
+        this.coordinador = coordinador;
         initComponents();
         generarTabla();
         setVisible(true);
+
     }
 
     /**
@@ -56,7 +54,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
             }
         };
 
-        List<DTOEmpleado> empleados = control.recuperarEmpleados();
+        List<DTOEmpleado> empleados = coordinador.gestionarEmpleados.obtenerEmpleados();
         for (DTOEmpleado e : empleados) {
             Object[] fila = {
                 e.getId(),
@@ -111,7 +109,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                             String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
                             DTOEmpleado empleado = new DTOEmpleado();
                             empleado.setId(valorId);
-                            empleado = control.recuperarEmpleado(empleado);
+                            empleado = coordinador.gestionarEmpleados.recuperarEmpleado(empleado);
 
                             if (coordinador.getVentanaSiguiente() == Coordinador.GESTION_DE_HORARIOS) {
 
@@ -155,7 +153,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      */
     private void abrirVentana(DTOEmpleado empleado) {
         try {
-            List<DTOTurno> turnos = control.recuperarTurno();
+            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
             if (turnos.isEmpty()) {
                 coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS, empleado);
 

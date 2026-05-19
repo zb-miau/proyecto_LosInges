@@ -4,8 +4,17 @@
  */
 package coordinador;
 
+import asignarHorario.FacadeAsignarHorario;
+import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
+import gestionAsistencias.IGestionAsistencias;
+import gestionIncidencias.FacadeGestionIncidencias;
+import gestionIncidencias.IGestionIncidencias;
+import gestionarEmpleados.FachadaGestionarEmpleados;
+import gestionarEmpleados.IGestionarEmpleados;
+import gestionarTurnos.FachadaGestionarTurnos;
+import gestionarTurnos.IGestionarTurnos;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import presentacion.Presentacion_gestionDeHorarios;
@@ -22,6 +31,12 @@ import presentacion.Presentacion_validacionIncidenciasTabla;
  * @author RAMSES
  */
 public class Coordinador {
+
+    public final IAsignarHorario asignarHorario = new FacadeAsignarHorario();
+    public final IGestionIncidencias gestionIncidencias = new FacadeGestionIncidencias();
+//    private final IGestionAsistencias gestionAsistencias;
+    public final IGestionarEmpleados gestionarEmpleados = new FachadaGestionarEmpleados();
+    public final IGestionarTurnos gestionarTurnos = new FachadaGestionarTurnos();
 
     private Presentacion_gestionDeHorarios gestionDeHorarios;
     private Presentacion_gestionDeTurnos gestionDeTurnos;
@@ -51,102 +66,13 @@ public class Coordinador {
         return ventanaSiguiente;
     }
 
-    /**
-     * Abre la vantana de GestionHorariosMenu
-     *
-     */
-    public void abrirVentanaGestionHorariosMenu() {
-
-        // Si ya existe la ventana, la traemos al frente, si no, la creamos
-        if (listaDeEmpleados == null) {
-            listaDeEmpleados = new Presentacion_listaDeEmpleados();
-            listaDeEmpleados.setCoordinador(this);
-        }
-
-        listaDeEmpleados.setVisible(true);
-        listaDeEmpleados.setLocationRelativeTo(null);
-
-    }
-
-    /**
-     * Regresa a la pantalla de GestionHorariosMenu de la ventana de
-     * GestionHorarios
-     *
-     * @param ventana
-     */
-    public void regresarAGestionHorariosMenuDeGestionHorarios() {
-        if (gestionDeHorarios != null) {
-            gestionDeHorarios.dispose();
-        }
-        abrirVentanaGestionHorariosMenu();
-    }
-
-    /**
-     * Abre la ventana Turno desde la ventana de GestionHorariosMenu
-     *
-     * @param idEmpleado
-     */
-    public void abrirVentanaTurnoDeMenu(DTOEmpleado idEmpleado) {
-        // Creamos la pantalla pasándole el empleado que requiere su constructor
-        Presentacion_gestionDeTurnos ventanaTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
-
-        ventanaTurnos.setCoordinador(this);
-
-        ventanaTurnos.setVisible(true);
-        ventanaTurnos.setLocationRelativeTo(null);
-
-    }
-
-    /**
-     * Abre la ventana Turno desde la ventana de GestionHorario
-     *
-     * @param idEmpleado
-     */
-    public void abrirVentanaTurnoDeGestionHorario(DTOEmpleado idEmpleado) {
-        // Cerramos la de horarios si está abierta para evitar duplicidad
-        if (gestionDeHorarios != null) {
-            gestionDeHorarios.dispose();
-        }
-
-        gestionDeTurnos = new Presentacion_gestionDeTurnos(idEmpleado);
-        gestionDeTurnos.setCoordinador(this);
-        gestionDeTurnos.setVisible(true);
-        gestionDeTurnos.setLocationRelativeTo(null);
-    }
-
-    /**
-     * Regresa de la ventana turno a la ventana de GestionHorario
-     *
-     */
-    public void regresarDeVentanaTurnoAGestionHorario(DTOEmpleado idEmpleado) {
-
-        if (gestionDeTurnos != null) {
-            gestionDeTurnos.dispose();
-        }
-        abrirVentanaTurnoDeGestionHorario(idEmpleado);
-
-    }
-
-    /**
-     * Abre la pantalla de GestionHorarios desde la pantalla de
-     * GestionHorariosMenu
-     *
-     * @param idEmpleado
-     */
-//    public void abrirVentanaGestionHorariosDeMenu(DTOEmpleado idEmpleado) {
-//        Presentacion_gestionDeHorarios ventanaHorarios = new Presentacion_gestionDeHorarios(idEmpleado);
-//        ventanaHorarios.setCoordinador(this);
-//        ventanaHorarios.setVisible(true);
-//        ventanaHorarios.setLocationRelativeTo(null);
-//
-//    }
     public void cambioDeVentana(int ventana) {
 
         switch (ventana) {
             case 1 -> {
                 if (gestionDeTurnos == null) {
-                    gestionDeTurnos = new Presentacion_gestionDeTurnos(null);
-                    gestionDeTurnos.setCoordinador(this);
+                    gestionDeTurnos = new Presentacion_gestionDeTurnos(null, this);
+
                 }
                 gestionDeTurnos.setVisible(true);
                 gestionDeTurnos.setLocationRelativeTo(null);
@@ -154,8 +80,7 @@ public class Coordinador {
 
             case 2 -> {
                 if (listaDeEmpleados == null) {
-                    listaDeEmpleados = new Presentacion_listaDeEmpleados();
-                    listaDeEmpleados.setCoordinador(this);
+                    listaDeEmpleados = new Presentacion_listaDeEmpleados(this);
                 }
 
                 listaDeEmpleados.setVisible(true);
@@ -163,8 +88,7 @@ public class Coordinador {
             }
             case 3 -> {
                 if (menuPrincipal == null) {
-                    menuPrincipal = new Presentacion_menuPrincipal();
-                    menuPrincipal.setCoordinador(this);
+                    menuPrincipal = new Presentacion_menuPrincipal(this);
                 }
 
                 menuPrincipal.setVisible(true);
@@ -172,8 +96,7 @@ public class Coordinador {
             }
             case 6 -> {
                 if (validacionIncidenciasTabla == null) {
-                    validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla();
-                    validacionIncidenciasTabla.setCoordinador(this);
+                    validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla(this);
                 }
 
                 validacionIncidenciasTabla.setVisible(true);
@@ -181,8 +104,7 @@ public class Coordinador {
             }
             case 7 -> {
                 if (menuGerente == null) {
-                    menuGerente = new Presentacion_menuGerente();
-                    menuGerente.setCoordinador(this);
+                    menuGerente = new Presentacion_menuGerente(this);
                 }
 
                 menuGerente.setVisible(true);
@@ -199,8 +121,7 @@ public class Coordinador {
         switch (ventana) {
             case 0 -> {
                 if (gestionDeHorarios == null) {
-                    gestionDeHorarios = new Presentacion_gestionDeHorarios();
-                    gestionDeHorarios.setCoordinador(this);
+                    gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
                 }
 
                 gestionDeHorarios.cargardatos(empleado);
@@ -209,8 +130,7 @@ public class Coordinador {
             }
             case 1 -> {
                 if (gestionDeTurnos == null) {
-                    gestionDeTurnos = new Presentacion_gestionDeTurnos(empleado);
-                    gestionDeTurnos.setCoordinador(this);
+                    gestionDeTurnos = new Presentacion_gestionDeTurnos(empleado, this);
                 }
 
                 gestionDeTurnos.setVisible(true);
@@ -218,8 +138,7 @@ public class Coordinador {
             }
             case 4 -> {
                 if (registroDeIncidencias == null) {
-                    registroDeIncidencias = new Presentacion_registroDeIncidencias();
-                    registroDeIncidencias.setCoordinador(this);
+                    registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
                 }
 
                 registroDeIncidencias.cargarTexto(empleado);
@@ -237,8 +156,8 @@ public class Coordinador {
         switch (ventana) {
             case 5 -> {
                 if (validacionDeIncidencias == null) {
-                    validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia);
-                    validacionDeIncidencias.setCoordinador(this);
+                    validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia, this);
+
                 }
 
                 validacionDeIncidencias.setVisible(true);

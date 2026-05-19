@@ -16,7 +16,7 @@
         <module>negocios_GestionAsistencia</module>
         <module>infraestructura_Mensajeria</module>
         <module>negocios_GestionarEmpleados</module>
-        <module>negocios_GestrionarTurnos</module>
+        <module>negocios_GestionarTurnos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

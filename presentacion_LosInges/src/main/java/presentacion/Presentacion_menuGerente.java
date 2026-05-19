@@ -14,14 +14,11 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
 
     Coordinador coordinador;
 
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
-
     /**
      * Creates new form Presentacion_menuGerente
      */
-    public Presentacion_menuGerente() {
+    public Presentacion_menuGerente(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
     }
 
