@@ -5,6 +5,7 @@
 package itson.entidades;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *Clase para la entidad limpia de RegistroMarca que es la entidad encargada de guardar
@@ -14,26 +15,26 @@ import java.time.LocalDate;
 public class RegistroMarca {
     private String idRegistroMarca;
     private Empleado empleado;
-    private HorarioEmpleado horarioEmpleado; //<-- aun tengo que ver si si lo utilizo
-    private LocalDate registroEntrada;
-    private LocalDate registroSalida;
+    private LocalDateTime registroEntrada;
+    private LocalDateTime registroSalida;
+    private LocalDate fecha;
 
     public RegistroMarca() {
     }
 
-    public RegistroMarca(String idRegistroMarca, Empleado empleado, HorarioEmpleado horarioEmpleado, LocalDate registroEntrada, LocalDate registroSalida) {
+    public RegistroMarca(String idRegistroMarca, Empleado empleado, LocalDateTime registroEntrada, LocalDateTime registroSalida, LocalDate fecha) {
         this.idRegistroMarca = idRegistroMarca;
         this.empleado = empleado;
-        this.horarioEmpleado = horarioEmpleado;
         this.registroEntrada = registroEntrada;
         this.registroSalida = registroSalida;
+        this.fecha = fecha;
     }
 
-    public RegistroMarca(Empleado empleado, HorarioEmpleado horarioEmpleado, LocalDate registroEntrada, LocalDate registroSalida) {
+    public RegistroMarca(Empleado empleado, LocalDateTime registroEntrada, LocalDateTime registroSalida, LocalDate fecha) {
         this.empleado = empleado;
-        this.horarioEmpleado = horarioEmpleado;
         this.registroEntrada = registroEntrada;
         this.registroSalida = registroSalida;
+        this.fecha = fecha;
     }
 
     public String getIdRegistroMarca() {
@@ -51,30 +52,34 @@ public class RegistroMarca {
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+    
+    
 
-    public HorarioEmpleado getHorarioEmpleado() {
-        return horarioEmpleado;
-    }
-
-    public void setHorarioEmpleado(HorarioEmpleado horarioEmpleado) {
-        this.horarioEmpleado = horarioEmpleado;
-    }
-
-    public LocalDate getRegistroEntrada() {
+    public LocalDateTime getRegistroEntrada() {
         return registroEntrada;
     }
 
-    public void setRegistroEntrada(LocalDate registroEntrada) {
+    public void setRegistroEntrada(LocalDateTime registroEntrada) {
         this.registroEntrada = registroEntrada;
     }
 
-    public LocalDate getRegistroSalida() {
+    public LocalDateTime getRegistroSalida() {
         return registroSalida;
     }
 
-    public void setRegistroSalida(LocalDate registroSalida) {
+    public void setRegistroSalida(LocalDateTime registroSalida) {
         this.registroSalida = registroSalida;
     }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+    
+    
     
     
 }
