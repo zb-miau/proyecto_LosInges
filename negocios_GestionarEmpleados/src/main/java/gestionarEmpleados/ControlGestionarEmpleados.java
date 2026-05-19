@@ -19,6 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import objetosNegocio.EmpleadoBO;
 import objetosNegocio.NegocioException;
+import sat.FacadeSistemaSAT;
+import sat.ISistemaSAT;
+import seguro.FacadeSistemaSeguro;
+import seguro.ISistemaSeguro;
 import validaciones.Validaciones;
 
 /**
@@ -34,12 +38,18 @@ public class ControlGestionarEmpleados {
     private IAsignarHorario asignarHorario;
     
     private Validaciones validacion;
+    
+    private ISistemaSAT sat;
+    
+    private ISistemaSeguro seguro;
 
     public ControlGestionarEmpleados() {
         this.empleadoBO = EmpleadoBO.getInstance();
         this.gestionIncidencias = new FacadeGestionIncidencias();
         this.asignarHorario = new FacadeAsignarHorario();
         this.validacion = new Validaciones();
+        this.sat = new FacadeSistemaSAT();
+        this.seguro = new FacadeSistemaSeguro();
     }
 
     public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
@@ -88,6 +98,16 @@ public class ControlGestionarEmpleados {
         
         if (empleado.getRfc() == null || !validacion.validarRfc(empleado.getRfc())) {
             throw new NegocioException("El RFC no cumple con lo requerido.");
+        }
+        
+        boolean valorSAT = sat.validacionSistemaSATConRFC(empleado.getRfc());
+        if (!valorSAT) {
+            throw new NegocioException("El RFC del empleado a contratar no existe.");
+        }
+        
+        boolean valorSeguro = seguro.validacionSistemaSeguroConNSS(empleado.getNss());
+        if (!valorSeguro) {
+            throw new NegocioException("El NSS del empleado a contratar no existe.");
         }
         
             

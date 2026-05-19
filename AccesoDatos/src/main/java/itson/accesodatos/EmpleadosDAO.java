@@ -11,6 +11,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import encriptador.Encriptador;
 import entidadesMongo.EmpleadoMongo;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
@@ -69,6 +70,99 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
            throw new PersistenciaException("No fue posible persistir el empleado en la base de datos.");
        }
    }
+   
+   @Override
+    public Empleado obtenerPorCurp(Empleado empleado) {
+        if (empleado == null || empleado.getCurp() == null || empleado.getCurp().trim().isEmpty()) {
+            return null;
+        }
+
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
+
+            // Pasamos la CURP limpia por tu metodo estatico para obtener la cadena cifrada exacta
+            String curpEncriptada = Encriptador.encriptar(empleado.getCurp().trim());
+
+            // Realizamos el filtro apuntando a la propiedad raiz "curp" de tu documento en Mongo
+            EmpleadoMongo resultado = coleccion.find(Filters.eq("curp", curpEncriptada)).first();
+
+            if (resultado == null) {
+                return null;
+            }
+
+            // Convertimos al modelo de dominio usando adapter
+            return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
+            
+        } catch (Exception e) {
+            System.err.println("Error al consultar el empleado por CURP en MongoDB: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    @Override
+    public Empleado obtenerPorRfc(Empleado empleado) {
+        if (empleado == null || empleado.getRfc() == null || empleado.getRfc().trim().isEmpty()) {
+            return null;
+        }
+
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
+
+            // Pasamos el RFC limpio por el metodo estatico para obtener la cadena cifrada exacta
+            String rfcEncriptado = Encriptador.encriptar(empleado.getRfc().trim());
+
+            // Busqueda exacta apuntando al atributo raiz "rfc" del documento en MongoDB
+            EmpleadoMongo resultado = coleccion.find(Filters.eq("rfc", rfcEncriptado)).first();
+
+            // Validamos si MongoDB encontro el documento para evitar NullPointerException
+            if (resultado == null) {
+                return null;
+            }
+
+            // Convertimos el modelo de base de datos al modelo de dominio usando tu adapter
+            return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
+            
+        } catch (Exception e) {
+            System.err.println("Error al consultar el empleado por RFC en MongoDB: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    @Override
+    public Empleado obtenerPorNss(Empleado empleado) {
+        if (empleado == null || empleado.getNss() == null || empleado.getNss().trim().isEmpty()) {
+            System.out.println("Busqueda abortada: El objeto empleado o su NSS estan vacios.");
+            return null;
+        }
+
+        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
+            MongoDatabase bd = recuperarBaseDatos(cliente);
+            MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
+
+            // Pasamos el NSS limpio por el metodo estatico para obtener la cadena cifrada exacta
+            String nssEncriptado = Encriptador.encriptar(empleado.getNss().trim());
+
+            System.out.println("-> [DEBUG PERSISTENCIA] Buscando empleado con el NSS cifrado: " + nssEncriptado);
+
+            // Busqueda exacta apuntando al atributo raiz "nss" del documento en MongoDB
+            EmpleadoMongo resultado = coleccion.find(Filters.eq("nss", nssEncriptado)).first();
+
+            // Validamos si MongoDB encontro el documento para evitar NullPointerException
+            if (resultado == null) {
+                System.out.println("-> [DEBUG PERSISTENCIA] No se encontro ningun empleado con el NSS proporcionado.");
+                return null;
+            }
+
+            // Convertimos el modelo de base de datos al modelo de dominio usando tu adapter
+            return EmpleadoMongoAEmpleadoAdapter.toDomain(resultado);
+            
+        } catch (Exception e) {
+            System.err.println("Error al consultar el empleado por NSS en MongoDB: " + e.getMessage());
+            return null;
+        }
+    }
 
    @Override
    public Empleado obtener(Empleado entidad) {

@@ -87,6 +87,29 @@ public class EmpleadoBO {
 
         Empleado empleadoCrear = EmpleadoToDTOEmpleadoAdapter.adaptarDTOContratacionAEntidad(empleado);
         try {
+            Empleado buscadoCurp = dao.obtenerPorCurp(empleadoCrear);
+            Empleado buscadoNss = dao.obtenerPorNss(empleadoCrear);
+            Empleado buscadoRfc = dao.obtenerPorRfc(empleadoCrear);
+            
+            
+            if (buscadoCurp != null) {
+                if (buscadoCurp.getCurp().equalsIgnoreCase(empleadoCrear.getCurp())) {
+                    throw new NegocioException("El empleado que quiere contratar ya ha sido registrado.");
+                }
+            }
+            
+            if (buscadoNss != null) {
+                if (buscadoNss.getNss().equalsIgnoreCase(empleadoCrear.getNss())) {
+                    throw new NegocioException("El NSS que ingreso ya ha sido registrado.");
+                }
+            }
+            
+            if (buscadoRfc != null) {
+                if (buscadoRfc.getRfc().equalsIgnoreCase(empleadoCrear.getRfc())) {
+                    throw new NegocioException("El RFC que ingreso ya ha sido registrado.");
+                }
+            }
+            
             
             empleadoCrear = dao.crear(empleadoCrear);
             

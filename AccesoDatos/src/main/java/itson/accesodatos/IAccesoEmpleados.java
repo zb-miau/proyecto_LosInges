@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import itson.entidades.Empleado;
 import java.util.List;
 
 /**
@@ -19,6 +20,36 @@ public interface IAccesoEmpleados<Empleado> {
      * @return regresa la entidad creada en la base de datos.
      */
     public abstract Empleado crear(Empleado entidad) throws PersistenciaException;
+    
+    /**
+     * Realiza una busqueda en la coleccion de la base de datos de MongoDB 
+     * para encontrar un empleado utilizando su curp como criterio
+     * 
+     * @param empleado empleado que tiene la curp 
+     * @return Un objeto de tipo Empleado perteneciente a la capa de dominio si se 
+     * encuentra una coincidencia, null en caso de que no exista ningun registro
+     */
+    public Empleado obtenerPorCurp(Empleado empleado);
+    
+    /**
+     * Realiza una busqueda en la coleccion de empleados de MongoDB utilizando 
+     * el RFC encriptado de manera determinista como criterio de seleccion.
+     *
+     * @param empleado Objeto de dominio que contiene el RFC en texto plano a buscar.
+     * @return Un objeto de tipo Empleado del dominio si se encuentra la coincidencia; 
+     * null si no existe el registro o el parametro es invalido.
+     */
+    public Empleado obtenerPorRfc(Empleado empleado);
+    
+    /**
+     * Realiza una busqueda en la coleccion de empleados de MongoDB utilizando 
+     * el NSS encriptado de manera determinista como criterio de seleccion.
+     *
+     * @param empleado Objeto de dominio que contiene el NSS en texto plano a buscar
+     * @return Un objeto de tipo Empleado del dominio si se encuentra la coincidencia,
+     * null si no existe el registro o el parametro es invalido
+     */
+    public Empleado obtenerPorNss(Empleado empleado);
     
     /**
      * Método para obtener un objeto de la entidad que lo llama desde
