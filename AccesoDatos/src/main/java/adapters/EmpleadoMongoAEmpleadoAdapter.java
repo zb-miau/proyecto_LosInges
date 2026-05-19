@@ -4,6 +4,7 @@
  */
 package adapters;
 
+import encriptador.Encriptador;
 import entidadesMongo.DireccionMongo;
 import entidadesMongo.EmpleadoMongo;
 import entidadesMongo.HorarioEmpleadoMongo;
@@ -25,24 +26,24 @@ public class EmpleadoMongoAEmpleadoAdapter {
         mongo.setApellidoPaterno(domain.getApellidoPaterno());
         mongo.setApellidoMaterno(domain.getApellidoMaterno());
         mongo.setFechaNacimiento(domain.getFechaNacimiento());
-        mongo.setCurp(domain.getCurp());
-        mongo.setRfc(domain.getRfc());
-        mongo.setNss(domain.getNss());
         
-        if (domain.getId()!= null){
+        // --- NORMAS DE SEGURIDAD: ENCRIPTACION ---
+        mongo.setCurp(Encriptador.encriptar(domain.getCurp()));
+        mongo.setRfc(Encriptador.encriptar(domain.getRfc()));
+        mongo.setNss(Encriptador.encriptar(domain.getNss()));
+        
+        if (domain.getId() != null){
             mongo.setId(domain.getId());
         }
         
-        // Conversión de Dirección
+        // Conversion de Direccion
         if (domain.getDireccion() != null) {
             mongo.setDireccion(toDireccionMongo(domain.getDireccion()));
         }
 
-        // Conversión de Horario
+        // Conversion de Horario
         if (domain.getHorarioActual() != null) {
-            // AQUI DEBE DE IR EL ADPATER DEL HORARIO DEL EMPLEADO
             mongo.setHorarioActual(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(domain.getHorarioActual(), mongo));
-            // mongo.setHorarioActual(toHorarioMongo(domain.getHorarioActual()));
         }
 
         return mongo;
@@ -57,9 +58,11 @@ public class EmpleadoMongoAEmpleadoAdapter {
         domain.setApellidoPaterno(mongo.getApellidoPaterno());
         domain.setApellidoMaterno(mongo.getApellidoMaterno());
         domain.setFechaNacimiento(mongo.getFechaNacimiento());
-        domain.setCurp(mongo.getCurp());
-        domain.setRfc(mongo.getRfc());
-        domain.setNss(mongo.getNss());
+        
+        // --- NORMAS DE SEGURIDAD: DESENCRIPTACION ---
+        domain.setCurp(Encriptador.desencriptar(mongo.getCurp()));
+        domain.setRfc(Encriptador.desencriptar(mongo.getRfc()));
+        domain.setNss(Encriptador.desencriptar(mongo.getNss()));
 
         if (mongo.getDireccion() != null) {
             domain.setDireccion(toDireccionDomain(mongo.getDireccion()));
@@ -67,8 +70,6 @@ public class EmpleadoMongoAEmpleadoAdapter {
 
         if (mongo.getHorarioActual() != null) {
             domain.setHorarioActual(HorarioEmpleadoMongoAHorarioEmpleadoAdapter.adaptarConEmpleado(mongo.getHorarioActual(), domain));
-            //AQUI DEBE DE IR EL ADPATER DEL HORARIO DEL EMPLEADO
-            // domain.setHorarioActual(toHorarioDomain(mongo.getHorarioActual()));
         }
 
         return domain;

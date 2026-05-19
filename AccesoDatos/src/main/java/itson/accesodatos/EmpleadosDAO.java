@@ -70,39 +70,6 @@ public class EmpleadosDAO implements IAccesoEmpleados<Empleado>, IAccesoMongo{
        }
    }
 
-
-   @Override
-   public Empleado eliminar(Empleado entidad) {
-       if (entidad == null || entidad.getId() == null) return null;
-
-       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-           MongoDatabase bd = recuperarBaseDatos(cliente);
-           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
-
-           EmpleadoMongo eliminado = coleccion.findOneAndDelete(Filters.eq("_id", new ObjectId(entidad.getId())));
-           return EmpleadoMongoAEmpleadoAdapter.toDomain(eliminado);
-       }
-   }
-
-
-   @Override
-   public Empleado modificar(Empleado entidad) {
-       if (entidad == null || entidad.getId() == null) return null;
-
-       try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
-           MongoDatabase bd = recuperarBaseDatos(cliente);
-           MongoCollection<EmpleadoMongo> coleccion = bd.getCollection("empleados", EmpleadoMongo.class);
-
-           ObjectId id = new ObjectId(entidad.getId());
-           EmpleadoMongo mongoData = EmpleadoMongoAEmpleadoAdapter.toMongo(entidad);
-
-           // Usamos replaceOne para actualizar todo el documento basándonos en el objeto mapeado
-           coleccion.replaceOne(Filters.eq("_id", id), mongoData);
-
-           return obtener(entidad);
-       }
-   }
-
    @Override
    public Empleado obtener(Empleado entidad) {
        try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
