@@ -46,8 +46,8 @@ public class IncidenciaToDTOIncidenciaAdapter {
         DTOEmpleado empleado = new DTOEmpleado();
         if (incidencia.getEmpleado() != null){
             empleado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(incidencia.getEmpleado()); 
-        } else {
-            System.out.println("EMPLEADO NULL EN EL ADAPTER DTO");
+        } else if (incidencia.getIdEmpleado() != null){
+            empleado.setId(incidencia.getIdEmpleado());
         }
 
         DTOIncidencia dtoIncidencia = new DTOIncidencia(

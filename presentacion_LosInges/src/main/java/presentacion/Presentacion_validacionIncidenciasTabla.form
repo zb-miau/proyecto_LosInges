@@ -54,7 +54,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="rdbtnPendiente" min="-2" pref="93" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="rdbtnAceptada" min="-2" pref="90" max="-2" attributes="0"/>
+                          <Component id="rdbtnValidada" min="-2" pref="90" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="rdbtnRechazada" min="-2" pref="90" max="-2" attributes="0"/>
                           <EmptySpace pref="100" max="32767" attributes="0"/>
@@ -82,7 +82,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="rdbtnPendiente" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="rdbtnRechazada" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rdbtnAceptada" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbtnValidada" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="14" max="32767" attributes="0"/>
                       </Group>
@@ -219,12 +219,12 @@
             <Property name="text" type="java.lang.String" value="Empleado:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbtnAceptada">
+        <Component class="javax.swing.JRadioButton" name="rdbtnValidada">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Aceptada"/>
+            <Property name="text" type="java.lang.String" value="Validada"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -155,11 +155,7 @@ public class Coordinador {
 
         switch (ventana) {
             case 5 -> {
-                if (validacionDeIncidencias == null) {
-                    validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia, this);
-
-                }
-
+                validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia, this);
                 validacionDeIncidencias.setVisible(true);
                 validacionDeIncidencias.setLocationRelativeTo(null);
                 return validacionDeIncidencias.getIncidencia();

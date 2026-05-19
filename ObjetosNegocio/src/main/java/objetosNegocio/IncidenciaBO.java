@@ -94,6 +94,10 @@ public class IncidenciaBO {
                 throw new NegocioException("Error al modificar la incidencia: incidencia nula.");
 
             }
+            
+            if (incidencia.getIdIncidencia() == null){
+                throw new NegocioException("Error al modificar la incidencia: incidencia sin identificador.");
+            }
 
             Incidencia incidenciaModificar = IncidenciaToDTOIncidenciaAdapter.adaptar(incidencia);
 

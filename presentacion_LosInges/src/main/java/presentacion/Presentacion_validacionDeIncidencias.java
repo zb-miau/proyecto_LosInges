@@ -55,6 +55,7 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
     public DTOIncidencia getIncidencia() {
         return incidencia;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,7 +79,7 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         btnValidar = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panelValidacion.setBackground(new java.awt.Color(39, 71, 125));
 
@@ -206,12 +207,14 @@ public class Presentacion_validacionDeIncidencias extends javax.swing.JDialog {
         if (verificarObservaciones()) {
             incidencia.setEstado(DTOIncidencia.Estado.VALIDADA);
         }
+        this.dispose();
     }//GEN-LAST:event_btnValidarActionPerformed
 
     private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
         if (verificarObservaciones()) {
             incidencia.setEstado(DTOIncidencia.Estado.RECHAZADA);
         }
+        this.dispose();
     }//GEN-LAST:event_btnRechazarActionPerformed
 
 
