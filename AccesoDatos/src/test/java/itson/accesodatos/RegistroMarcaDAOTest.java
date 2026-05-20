@@ -97,7 +97,7 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testCrearMarca_Exito() throws PersistenciaException {
-        // 1. Preparamos el Empleado para que no truene
+        // 1. Preparamos el Empleado
         Empleado mockEmpleado = new Empleado();
         mockEmpleado.setId(new ObjectId().toHexString());
         mockEmpleado.setNombre("DaniBoy");
@@ -116,11 +116,10 @@ public class RegistroMarcaDAOTest {
         // 4. Ejecutamos la simulación
         RegistroMarca resultado = registroMarcaDAO.crear(registro);
 
-        // 5. Verificamos que si se haya "insertado"
+        // 5. Verificamos
         assertNotNull(resultado);
         verify(mockColeccion, times(1)).insertOne(any(RegistroMarcaMongo.class));
     }
-
     //----------------------------------------
     //TEST: CREAR MARCA - Fracaso
     //----------------------------------------
@@ -164,27 +163,35 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testObtenerLista_Exito() throws PersistenciaException {
-        //1. Preparamos los datos que le vamos a pasar a la dao
-        String idEmp = new ObjectId().toHexString();
+        // 1. Preparamos el objeto completo (Ajustado: ahora recibe RegistroMarca)
+        String idEmpHex = new ObjectId().toHexString();
+        Empleado emp = new Empleado();
+        emp.setId(idEmpHex);
+        
+        RegistroMarca filtro = new RegistroMarca();
+        filtro.setEmpleado(emp);
+        
         LocalDate inicio = LocalDate.now().minusDays(7);
         LocalDate fin = LocalDate.now();
-        //2. Simulamos el pipeline con AggragateIterable
+
+        // 2. Simulamos el pipeline
         AggregateIterable<RegistroMarcaMongo> mockAggregate = mock(AggregateIterable.class);
         when(mockColeccion.aggregate(anyList())).thenReturn(mockAggregate);
-        //Lista
+
         doAnswer(invocation -> {
             List<RegistroMarcaMongo> list = invocation.getArgument(0);
             RegistroMarcaMongo m = new RegistroMarcaMongo();
             m.setFecha(LocalDate.now());
-            m.setIdEmpleado(new ObjectId(idEmp));
+            m.setIdEmpleado(new ObjectId(idEmpHex));
             m.setId(new ObjectId().toString());
-
             list.add(m);
             return null;
         }).when(mockAggregate).into(anyList());
-        //3. Llamamos a la dao para realizar la obtencion simulada
-        List<RegistroMarca> resultado = registroMarcaDAO.obtenerLista(idEmp, inicio, fin);
-        //4. Por ultimo verifica que no se nula
+
+        // 3. Llamamos a la dao 
+        List<RegistroMarca> resultado = registroMarcaDAO.obtenerLista(emp, inicio, fin);
+
+        // 4. Verifica
         assertNotNull(resultado);
         assertFalse(resultado.isEmpty());
     }
@@ -198,10 +205,16 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testObtenerLista_Fracaso_MongoException() {
+        // Preparar objeto para evitar error antes de la llamada a mongo
+        Empleado emp = new Empleado();
+        emp.setId(new ObjectId().toHexString());
+        RegistroMarca filtro = new RegistroMarca();
+        filtro.setEmpleado(emp);
+
         when(mockColeccion.aggregate(anyList())).thenThrow(new MongoException("Error de conexión"));
 
         assertThrows(PersistenciaException.class, () -> {
-            registroMarcaDAO.obtenerLista(new ObjectId().toHexString(), LocalDate.now(), LocalDate.now());
+            registroMarcaDAO.obtenerLista(emp, LocalDate.now(), LocalDate.now());
         });
     }
 
@@ -216,22 +229,20 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testModificar_Exito() throws PersistenciaException {
-        //1. Preparamos un empleado para que no truene
         Empleado emp = new Empleado();
         emp.setId(new ObjectId().toHexString());
-        //Preparamos la marca que se va a modificar
+
         RegistroMarca marca = new RegistroMarca();
         marca.setIdRegistroMarca(new ObjectId().toHexString());
         marca.setEmpleado(emp);
         marca.setFecha(LocalDate.now());
-        //2. Se hace la llamada al método
+
         RegistroMarca resultado = registroMarcaDAO.modificar(marca);
-        //3. Verificamos que no sea nulo
+
         assertNotNull(resultado);
         assertEquals(marca.getIdRegistroMarca(), resultado.getIdRegistroMarca());
         verify(mockColeccion).findOneAndReplace(any(Document.class), any(RegistroMarcaMongo.class));
     }
-
     //----------------------------------------
     //TEST: MODIFICAR MARCA - Fracaso
     //----------------------------------------
@@ -241,14 +252,12 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testModificar_Fracaso_MongoException() {
-        //1. Preparamos las entidades
         Empleado emp = new Empleado();
         emp.setId(new ObjectId().toHexString());
         RegistroMarca marca = new RegistroMarca();
         marca.setIdRegistroMarca(new ObjectId().toHexString());
         marca.setEmpleado(emp);
 
-        //2. Simular el error
         when(mockColeccion.findOneAndReplace(any(Document.class), any(RegistroMarcaMongo.class)))
                 .thenThrow(new MongoException("Error al reemplazar"));
 
@@ -265,28 +274,29 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testObtenerPorEmpleadoYFecha_Exito() throws PersistenciaException {
-        // 1. Preparamos un ID ficticio para el empleado
-        ObjectId idEmp = new ObjectId();
+        // 1. Preparamos el objeto completo (Ajustado)
+        String idEmpHex = new ObjectId().toHexString();
+        Empleado emp = new Empleado();
+        emp.setId(idEmpHex);
+        RegistroMarca parametro = new RegistroMarca();
+        parametro.setEmpleado(emp);
 
         // 2. Mock del FindIterable
         FindIterable<RegistroMarcaMongo> mockFind = mock(FindIterable.class);
         when(mockColeccion.find(any(Bson.class))).thenReturn(mockFind);
 
-        // 3. Creamos el objeto Mongo
         RegistroMarcaMongo encontrado = new RegistroMarcaMongo();
         encontrado.setFecha(LocalDate.now());
-        encontrado.setIdEmpleado(idEmp);
+        encontrado.setIdEmpleado(new ObjectId(idEmpHex));
         encontrado.setId(new ObjectId().toString());
 
-        // 4. Hacemos que  el mock  devuelva la entidad llena
         when(mockFind.first()).thenReturn(encontrado);
 
-        // 5. Ejecutamos la dao
-        RegistroMarca resultado = registroMarcaDAO.obtenerPorEmpleadoYFecha(idEmp.toHexString(), LocalDate.now());
+        // 3. Ejecutamos (Ajustado: pasando objeto completo)
+        RegistroMarca resultado = registroMarcaDAO.obtenerPorEmpleadoYFecha(emp, LocalDate.now());
 
-        // 6. Verificamos que sea correcto y no nulo
         assertNotNull(resultado);
-        assertEquals(idEmp.toHexString(), resultado.getEmpleado().getId());
+        assertEquals(idEmpHex, resultado.getEmpleado().getId());
     }
 
     //----------------------------------------
@@ -299,15 +309,17 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testObtenerPorEmpleadoYFecha_NoExiste() throws PersistenciaException {
-        //1. Configurar el mock
+        Empleado emp = new Empleado();
+        emp.setId(new ObjectId().toHexString());
+        RegistroMarca parametro = new RegistroMarca();
+        parametro.setEmpleado(emp);
+
         FindIterable<RegistroMarcaMongo> mockFind = mock(FindIterable.class);
         when(mockColeccion.find(any(Bson.class))).thenReturn(mockFind);
-
-        // 2.Simulamos que el registro no existe en la bd
         when(mockFind.first()).thenReturn(null);
-        //3. Ejecutamos la DAO
-        RegistroMarca resultado = registroMarcaDAO.obtenerPorEmpleadoYFecha(new ObjectId().toHexString(), LocalDate.now());
-        //4. Veficar el resultado
+
+        RegistroMarca resultado = registroMarcaDAO.obtenerPorEmpleadoYFecha(emp, LocalDate.now());
+        
         assertNull(resultado, "Debe retornar null si no hay coincidencia");
     }
 
@@ -320,9 +332,13 @@ public class RegistroMarcaDAOTest {
      */
     @Test
     public void testObtenerPorEmpleadoYFecha_Fracaso_ErrorID() {
-        //Pasar un id incorrecto y hacerlo tronar
+        Empleado emp = new Empleado();
+        emp.setId("id-invalido"); // Esto hará que new ObjectId(emp.getId()) truene
+        RegistroMarca parametro = new RegistroMarca();
+        parametro.setEmpleado(emp);
+
         assertThrows(Exception.class, () -> {
-            registroMarcaDAO.obtenerPorEmpleadoYFecha("id-invalido", LocalDate.now());
+            registroMarcaDAO.obtenerPorEmpleadoYFecha(emp, LocalDate.now());
         });
     }
 

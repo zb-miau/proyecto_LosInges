@@ -235,9 +235,9 @@ public class ControlGestionarEmpleados {
 
     }
 
-    public List<DTORegistroMarca> obtenerListaMarcas(String idEmpleado, LocalDate incio, LocalDate fin) {
+    public List<DTORegistroMarca> obtenerListaMarcas(DTOEmpleado empleado, LocalDate incio, LocalDate fin) {
         try {
-            return gestionAsistencias.obtenerListaMarca(idEmpleado, incio, fin);
+            return gestionAsistencias.obtenerListaMarca(empleado, incio, fin);
         } catch (NegocioException e) {
             System.out.println("Ocurrio un error al intentar obtener la lista");
             e.printStackTrace();
@@ -257,9 +257,9 @@ public class ControlGestionarEmpleados {
 
     }
 
-    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) {
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) {
         try {
-            return gestionAsistencias.obtenerMarca(idEmpleado, fecha);
+            return gestionAsistencias.obtenerMarca(empleado, fecha);
         } catch (NegocioException e) {
             System.out.println("Algo fallo al intentar obtener la marca");
             e.printStackTrace();

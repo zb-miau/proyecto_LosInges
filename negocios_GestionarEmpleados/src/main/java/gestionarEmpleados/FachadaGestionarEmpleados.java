@@ -116,14 +116,14 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
     /**
      * Método que genera un reporte de todas las asistencias del empleado en un rango de
      * fechas establecido
-     * @param idEmpleado id del empleado al que se le atribuyen las asistencias
+     * @param empleado id del empleado al que se le atribuyen las asistencias
      * @param inicio rango de fecha mayor o igual
      * @param fin rango de fecha menor o igual 
      * @return regresa una Lista de DTO de marcas
      */ 
     @Override
-    public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) {
-        return control.obtenerListaMarcas(idEmpleado, inicio, fin);
+    public List<DTORegistroMarca> obtenerLista(DTOEmpleado empleado, LocalDate inicio, LocalDate fin) {
+        return control.obtenerListaMarcas(empleado, inicio, fin);
     }
     /**
      * Obtiene el total de asistencias completas del empleado
@@ -136,8 +136,8 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
     }
 
     @Override
-    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) {
-        return control.obtenerMarca(idEmpleado, fecha);
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) {
+        return control.obtenerMarca(empleado, fecha);
     }
 
 }

@@ -40,7 +40,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
 
         //2.Hacer una consulta para poder cambiar el texto del bóton
         try {
-            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado, LocalDate.now());
 
             if (marcaHoy == null) {
                 btnRegistrar.setText("Registrar Entrada");
@@ -63,7 +63,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
             btnRegistrar.setEnabled(false); // Evita clics accidentales
         try {
             // Buscamos el estado actual
-            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado, LocalDate.now());
             
             if (marcaHoy == null) {
                 DTORegistroMarca nuevo = new DTORegistroMarca();

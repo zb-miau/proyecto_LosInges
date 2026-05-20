@@ -77,7 +77,7 @@ public class ControlGestionAsistencias {
         }
 
         //2. Validar si existe una marca previa
-        DTORegistroMarca marcaExistente = registroMarcaBO.obtenerPorEmpleadoYFecha(empleado.getId(), fechaHoy);
+        DTORegistroMarca marcaExistente = registroMarcaBO.obtenerPorEmpleadoYFecha(empleado, fechaHoy);
         //Si no hay una marca previa
         if (marcaExistente == null) {
             //Validar que este intentando registrar dentro del rango del horario
@@ -109,19 +109,19 @@ public class ControlGestionAsistencias {
      * Genera una lista de asistencias filtrada por un rango de fechas para un
      * empleado específico.
      *
-     * @param idEmpleado Identificador único del empleado.
+     * @param empleado Identificador único del empleado.
      * @param fechaInicio Límite inferior del rango de fechas.
      * @param fechaFin Límite superior del rango de fechas.
      * @return Lista de DTORegistroMarca encontrados en el periodo.
      * @throws NegocioException Si la fecha de fin es anterior a la fecha de
      * inicio.
      */
-    protected List<DTORegistroMarca> reporteAsistencia(String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
+    protected List<DTORegistroMarca> reporteAsistencia(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
         //Validación de fechas coherente
         if (fechaFin.isBefore(fechaInicio) || fechaInicio.isAfter(fechaFin)) {
             throw new NegocioException("Los formatos de las fechas no son válidos");
         }
-        return registroMarcaBO.obtenerLista(idEmpleado, fechaInicio, fechaFin);
+        return registroMarcaBO.obtenerLista(empleado, fechaInicio, fechaFin);
     }
 
     /**
@@ -140,13 +140,13 @@ public class ControlGestionAsistencias {
      * Recupera una marca específica basada en el empleado y una fecha
      * determinada.
      *
-     * @param idEmpleado Identificador del empleado.
+     * @param empleado Identificador del empleado.
      * @param fecha Fecha de consulta.
      * @return El DTO de la marca o null si no existe registro.
      * @throws NegocioException Si ocurre un error en la consulta de negocio.
      */
-    protected DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) throws NegocioException {
-        return registroMarcaBO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
+    protected DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) throws NegocioException {
+        return registroMarcaBO.obtenerPorEmpleadoYFecha(empleado, fecha);
     }
 
 }

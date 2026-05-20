@@ -4,9 +4,11 @@
  */
 package objetosNegocio;
 
+import dto.DTOEmpleado;
 import dto.DTORegistroMarca;
 import itson.accesodatos.FacadeAccesoDatos;
 import itson.accesodatos.PersistenciaException;
+import itson.entidades.Empleado;
 import itson.entidades.RegistroMarca;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -100,19 +102,20 @@ public class RegistroMarcaBO {
     }
     /**
      * Busca una marca de asistencia específica por empleado y fecha.
-     * @param idEmpleado Identificador único del empleado.
+     * @param empleado Identificador único del empleado.
      * @param fecha Fecha de la marca a consultar.
      * @return DTORegistroMarca encontrado, o null si no existe registro.
      * @throws NegocioException Si los parámetros de búsqueda son nulos o hay error en la base de datos.
      */
-    public DTORegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws NegocioException{
+    public DTORegistroMarca obtenerPorEmpleadoYFecha(DTOEmpleado empleado, LocalDate fecha) throws NegocioException{
         //1. Validar que los campos no sean nulos
-        if (idEmpleado == null || fecha == null) {
+        if (empleado == null || fecha == null) {
             throw new NegocioException("Error: fecha o idEmpleado nulo");
         }
         try{
             //2. Obtener el resultado por los filtros de busqueda
-            RegistroMarca resultado = fachadaDAO.obtenerPorEmpleadoYFechaMarca(idEmpleado, fecha);
+            Empleado empleadoLimpio = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
+            RegistroMarca resultado = fachadaDAO.obtenerPorEmpleadoYFechaMarca(empleadoLimpio, fecha);
             
             if (resultado == null) {
                 return null;
@@ -125,15 +128,15 @@ public class RegistroMarcaBO {
     }
     /**
      * Obtiene una lista de marcas de un empleado dentro de un rango de fechas determinado.
-     * @param idEmpleado Identificador del empleado para el reporte.
+     * @param empleado Identificador del empleado para el reporte.
      * @param inicio Fecha de inicio del rango (inclusive).
      * @param fin Fecha de fin del rango (inclusive).
      * @return Lista de DTORegistroMarca que cumplen con los criterios.
      * @throws NegocioException Si alguno de los parámetros de rango es nulo.
      */
-    public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) throws NegocioException{
+    public List<DTORegistroMarca> obtenerLista(DTOEmpleado empleado, LocalDate inicio, LocalDate fin) throws NegocioException{
         //1.Validar que ningun campo sea nulo 
-        if (idEmpleado == null) {
+        if (empleado == null) {
             throw new NegocioException("El id del empleado es nulo");
         }
         if (inicio == null) {
@@ -145,7 +148,8 @@ public class RegistroMarcaBO {
         
         try{
             //2. Primero obtener la lista de marcas limpia
-            List<RegistroMarca> listaEntidadLimpia = fachadaDAO.obtenerListaRegistroMarca(idEmpleado, inicio, fin);
+            Empleado empleadoLimpio = EmpleadoToDTOEmpleadoAdapter.adaptarDTO(empleado);
+            List<RegistroMarca> listaEntidadLimpia = fachadaDAO.obtenerListaRegistroMarca(empleadoLimpio, inicio, fin);
             //3. Crear la lista de DTO
             List<DTORegistroMarca> listaDTOMarca = new ArrayList<>();
             //Adaptar las entidades limpia -> DTO

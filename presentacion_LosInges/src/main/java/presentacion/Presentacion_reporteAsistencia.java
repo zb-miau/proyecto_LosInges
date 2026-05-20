@@ -266,7 +266,7 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         
         try{
             //2. Llamar al coordinador
-            List<DTORegistroMarca> listaMarcas = coordinador.gestionAsistencias.obtenerListaMarca(empleado.getId(), fechaInicio, fechaFin);
+            List<DTORegistroMarca> listaMarcas = coordinador.gestionAsistencias.obtenerListaMarca(empleado, fechaInicio, fechaFin);
             //3. Llenar la tabla 
             
             DefaultTableModel modelo = (DefaultTableModel) tblAsistencias.getModel();

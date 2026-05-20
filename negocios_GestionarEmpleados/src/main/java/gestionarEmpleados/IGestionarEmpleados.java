@@ -48,11 +48,11 @@ public interface IGestionarEmpleados {
     
     public DTORegistroMarca crearMarca(DTORegistroMarca marca);
     
-    public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin);
+    public List<DTORegistroMarca> obtenerLista(DTOEmpleado empleado, LocalDate inicio, LocalDate fin);
     
     public int obtenerConteoAsistencia(List<DTORegistroMarca> listaMarcas);
     
-    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha);
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha);
     
     public DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado);
 

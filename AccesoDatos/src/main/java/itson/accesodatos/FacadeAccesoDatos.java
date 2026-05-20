@@ -473,14 +473,14 @@ public class FacadeAccesoDatos {
     }
     /**
      * Método para poder recuperar un registro en concreto, es auxiliar para poder modificar la marca
-     * @param idEmpleado atributo del empleado asociado a la marca
+     * @param empleado atributo del empleado asociado a la marca
      * @param fecha atributo de la fecha del registro
      * @return
      * @throws PersistenciaException 
      */
-    public RegistroMarca obtenerPorEmpleadoYFechaMarca(String idEmpleado, LocalDate fecha) throws PersistenciaException{
+    public RegistroMarca obtenerPorEmpleadoYFechaMarca(Empleado empleado, LocalDate fecha) throws PersistenciaException{
         try{
-            return registroMarcaDAO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
+            return registroMarcaDAO.obtenerPorEmpleadoYFecha(empleado, fecha);
         }catch(MongoException e){
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al intentar recuperar el registro");
@@ -488,9 +488,9 @@ public class FacadeAccesoDatos {
             
     }
     
-    public List<RegistroMarca> obtenerListaRegistroMarca(String idEmpleado, LocalDate inicio, LocalDate fin) throws PersistenciaException{
+    public List<RegistroMarca> obtenerListaRegistroMarca(Empleado empleado, LocalDate inicio, LocalDate fin) throws PersistenciaException{
         try{
-            return registroMarcaDAO.obtenerLista(idEmpleado, inicio, fin);
+            return registroMarcaDAO.obtenerLista(empleado, inicio, fin);
         }catch(MongoException e){
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al intentar recuperar la lista");

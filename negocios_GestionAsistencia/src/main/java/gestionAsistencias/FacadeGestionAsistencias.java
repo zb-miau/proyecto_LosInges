@@ -4,6 +4,7 @@
  */
 package gestionAsistencias;
 
+import dto.DTOEmpleado;
 import dto.DTORegistroMarca;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,15 +43,15 @@ public class FacadeGestionAsistencias implements IGestionAsistencias {
     }
     /**
      * Recupera una lista de marcas de asistencia de un empleado en un rango de fechas determinado.
-     * @param idEmpleado Identificador único del empleado.
+     * @param empleado Identificador único del empleado.
      * @param inicio Fecha inicial del rango de consulta.
      * @param fin Fecha final del rango de consulta.
      * @return Lista de DTORegistroMarca que coinciden con el criterio de búsqueda.
      * @throws NegocioException Si los parámetros de búsqueda son inválidos.
      */
     @Override
-    public List<DTORegistroMarca> obtenerListaMarca(String idEmpleado, LocalDate inicio, LocalDate fin) throws NegocioException {
-        return control.reporteAsistencia(idEmpleado, inicio, fin);
+    public List<DTORegistroMarca> obtenerListaMarca(DTOEmpleado empleado, LocalDate inicio, LocalDate fin) throws NegocioException {
+        return control.reporteAsistencia(empleado, inicio, fin);
     }
     /**
      * Calcula el número total de asistencias completas a partir de una lista de registros.
@@ -64,14 +65,15 @@ public class FacadeGestionAsistencias implements IGestionAsistencias {
     }
     /**
      * Obtiene un registro de marca específico basado en el ID del empleado y una fecha.
-     * @param idEmpleado Identificador único del empleado.
+     * @param empleado Identificador único del empleado.
      * @param fecha Fecha exacta del registro buscado.
      * @return El DTORegistroMarca correspondiente, o {@code null} si no se encuentra.
      * @throws NegocioException Si hay errores en la consulta de datos.
      */
     @Override
-    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) throws NegocioException{
-        return control.obtenerMarca(idEmpleado, fecha);
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) throws NegocioException{
+        return control.obtenerMarca(empleado, fecha);
     }
+
     
 }

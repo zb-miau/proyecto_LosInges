@@ -13,6 +13,7 @@ import static com.mongodb.client.model.Aggregates.match;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.InsertOneResult;
 import entidadesMongo.RegistroMarcaMongo;
+import itson.entidades.Empleado;
 import itson.entidades.RegistroMarca;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -109,14 +110,14 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
     /**
      * Obtiene una lista de asistencias pertenecientes a un empleado específico dentro de un rango de fechas.
      * Utiliza un pipeline de agregación para filtrar por ID de empleado y fechas (gte/lte).
-     * @param idEmpleado Identificador único del empleado (formato String para conversión a ObjectId).
+     * @param empleado Identificador único del empleado (formato String para conversión a ObjectId).
      * @param inicio Fecha inicial del rango de búsqueda (inclusive).
      * @param fin Fecha final del rango de búsqueda (inclusive).
      * @return Lista de RegistroMarca que coinciden con los criterios.
      * @throws PersistenciaException Si ocurre un error en la ejecución del pipeline de agregación.
      */
     @Override
-    public List<RegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) throws PersistenciaException {
+    public List<RegistroMarca> obtenerLista(Empleado empleado, LocalDate inicio, LocalDate fin) throws PersistenciaException {
         //1. Creamos la lista de RegistroMarcaMongo 
         List<RegistroMarcaMongo> registrosMongo = new ArrayList<>();
         //2. Establecemos conexion con la base de datos
@@ -128,7 +129,7 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             //que sean necesarios 
             coleccion.aggregate(Arrays.asList(
                     match(Filters.and(
-                            Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(idEmpleado)),
+                            Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(empleado.getId())),
                             Filters.gte(CAMPO_FECHA, inicio), //Mayor o igual
                             Filters.lte(CAMPO_FECHA, fin) //Menos o igual
                     ))
@@ -176,13 +177,13 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
     /**
      * Busca un registro de marca específico que coincida exactamente con un empleado y una fecha.
      * Este método es útil para determinar si un empleado ya registró su entrada en un día determinado.
-     * @param idEmpleado Identificador único del empleado.
+     * @param empleado Identificador único del empleado.
      * @param fecha Fecha exacta de la asistencia buscada.
      * @return El objeto RegistroMarca encontrado, o null si no existe registro.
      * @throws PersistenciaException Si ocurre un error durante la consulta.
      */
     @Override
-    public RegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws PersistenciaException {
+    public RegistroMarca obtenerPorEmpleadoYFecha(Empleado empleado, LocalDate fecha) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
         try (MongoClient cliente = ManejadorConexiones.crearConexion()) {
             MongoDatabase bd = recuperarBaseDatos(cliente);
@@ -195,7 +196,7 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             //y el empleado para asi poder actualizar, practimanete se esta usando como un método auxiliar
             //para cuando llegue la hora de registrar o una entrada  o una salida
             Bson filtro = Filters.and(
-                    Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(idEmpleado)),
+                    Filters.eq(CAMPO_ID_EMPLEADO, new ObjectId(empleado.getId())),
                     Filters.eq(CAMPO_FECHA, fecha)
             );
             //4. Obtenemos el resultado

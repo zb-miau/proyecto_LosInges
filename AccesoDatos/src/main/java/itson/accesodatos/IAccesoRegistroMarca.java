@@ -4,6 +4,7 @@
  */
 package itson.accesodatos;
 
+import itson.entidades.Empleado;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,13 +24,13 @@ public interface IAccesoRegistroMarca<RegistroMarca> {
     /**
      * Este metodo trae todos los registros de asistencia de un empleado
      * es meramente para reporte.
-     * @param idEmpleado
+     * @param empleado
      * @param inicio
      * @param fin
      * @return 
      * @throws PersistenciaException
      */
-    public abstract List<RegistroMarca> obtenerLista(String idEmpleado,LocalDate inicio, LocalDate fin) throws PersistenciaException;
+    public abstract List<RegistroMarca> obtenerLista(Empleado empleado,LocalDate inicio, LocalDate fin) throws PersistenciaException;
     /**
      * Este metodo es para cuando va a actualizar la marca, es decir se marca la salida.
      * @param marca
@@ -39,10 +40,10 @@ public interface IAccesoRegistroMarca<RegistroMarca> {
     public abstract RegistroMarca modificar(RegistroMarca marca) throws PersistenciaException;
     /**
      * Metodo auxiliar para la lógica de crear y modificar la marca.
-     * @param idEmpleado
+     * @param empleado
      * @param fecha
      * @return 
      * @throws PersistenciaException
      */
-    public abstract RegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws PersistenciaException;
+    public abstract RegistroMarca obtenerPorEmpleadoYFecha(Empleado empleado, LocalDate fecha) throws PersistenciaException;
 }
