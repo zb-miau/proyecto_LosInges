@@ -4,6 +4,7 @@
  */
 package sat;
 
+import dtos.DTO_Contratacion;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -35,10 +36,10 @@ public class ControlSistemaSAT {
      * @return true si el servidor responde con codigo 200 y el JSON contiene la confirmacion 
      * de validez, false en caso contrario o si ocurre una falla de conexion.
      */
-    public boolean validacionSistemaSATConRFC(String rfc) {
+    public boolean validacionSistemaSATConRFC(DTO_Contratacion rfc) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/validar-sat?rfc=" + rfc.trim()))
+                    .uri(URI.create(BASE_URL + "/validar-sat?rfc=" + rfc.getRfc().trim()))
                     .GET()
                     .build();
 

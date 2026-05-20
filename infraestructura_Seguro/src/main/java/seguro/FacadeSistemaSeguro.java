@@ -4,6 +4,8 @@
  */
 package seguro;
 
+import dtos.DTO_Contratacion;
+
 /**
  * Implementacion de la fachada que sirve como punto de acceso unico para el sistema del seguro social.
  * Delega las solicitudes de verificacion de salud y prestaciones hacia los controladores internos del modulo.
@@ -27,7 +29,7 @@ public class FacadeSistemaSeguro implements ISistemaSeguro{
      * @param nss Cadena de texto con el Numero de Seguro Social a validar.
      * @return true si el NSS es valido en el sistema; false en caso contrario.
      */
-    public boolean validacionSistemaSeguroConNSS(String nss){
+    public boolean validacionSistemaSeguroConNSS(DTO_Contratacion nss){
         
         return control.validacionSistemaSeguroConNSS(nss);
         

@@ -8,6 +8,13 @@
     </parent>
     <artifactId>infraestructura_Seguro</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>DTO_Infraestructura</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>itson.infraestructura_seguro.Infraestructura_Seguro</exec.mainClass>

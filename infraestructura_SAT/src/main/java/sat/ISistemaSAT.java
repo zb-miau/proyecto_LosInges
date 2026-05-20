@@ -4,6 +4,8 @@
  */
 package sat;
 
+import dtos.DTO_Contratacion;
+
 /**
  * Interfaz que define el contrato para los servicios de validacion ante el SAT.
  * Proporciona las operaciones necesarias para comprobar la existencia de identificadores oficiales.
@@ -23,6 +25,6 @@ public interface ISistemaSAT {
      * @return verdadero si es que el rfc que se valida esta 
      * dado de alta en el servidor del SAT.
      */
-    public boolean validacionSistemaSATConRFC(String rfc);
+    public boolean validacionSistemaSATConRFC(DTO_Contratacion rfc);
     
 }

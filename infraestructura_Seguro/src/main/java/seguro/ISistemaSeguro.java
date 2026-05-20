@@ -4,6 +4,8 @@
  */
 package seguro;
 
+import dtos.DTO_Contratacion;
+
 /**
  * Interfaz que define el contrato para los servicios de validacion ante el seguro social.
  * Proporciona las operaciones necesarias para comprobar la vigencia de prestaciones medicas.
@@ -20,6 +22,6 @@ public interface ISistemaSeguro {
      * @return true si el NSS existe y es valido en la plataforma; 
      * false si no existe o si ocurre un fallo en la conexion con el servidor.
      */
-    public boolean validacionSistemaSeguroConNSS(String nss);
+    public boolean validacionSistemaSeguroConNSS(DTO_Contratacion nss);
     
 }
