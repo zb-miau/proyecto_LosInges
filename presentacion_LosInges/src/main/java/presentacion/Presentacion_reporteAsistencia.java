@@ -249,7 +249,6 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
 
     private void btnConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaActionPerformed
         // TODO add your handling code here:
-        System.out.println("Hola fui clikiao");
         //1.Obtener las fechas  y validar
         if (datePickerInicio.getDate() == null || datePickerFin.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar ambas fechas", "Campos incompletos",

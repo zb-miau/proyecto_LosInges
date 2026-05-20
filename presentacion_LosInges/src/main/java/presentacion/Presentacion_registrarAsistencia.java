@@ -29,55 +29,70 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         initComponents();
         this.coordinador = coordinador;
         this.empleado = empleado;
+        asignarEventos();
+        actualizarEstadoBoton();
         setVisible(true);
-        configurarPantalla();
     }
 
-    private void configurarPantalla() {
+    private void actualizarEstadoBoton() {
         //1.Cambiar la etiqueta al nombre del usuario
         lblEmpleadoNombre.setText(empleado.getNombre());
-        
+
         //2.Hacer una consulta para poder cambiar el texto del bóton
         try {
-           DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
 
             if (marcaHoy == null) {
                 btnRegistrar.setText("Registrar Entrada");
+                btnRegistrar.setEnabled(true);
             } else if (marcaHoy.getSalida() == null) {
                 btnRegistrar.setText("Registrar Salida");
+                btnRegistrar.setEnabled(true);
             } else {
                 btnRegistrar.setText("Jornada terminada");
                 btnRegistrar.setEnabled(false);
             }
         } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(this, "Error al consultar el estado: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al consultar estado: " + e.getMessage());
         }
-        btnRegistrar.addActionListener(e -> {
-            try {
-                DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
-                if (marcaHoy == null) {
-                DTORegistroMarca dtoRegistro = new DTORegistroMarca();
-                dtoRegistro.setEmpleadoDTO(this.empleado);
-                dtoRegistro.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
-                dtoRegistro.setEntrada(LocalTime.now());
-                dtoRegistro.setFecha(LocalDate.now());
-                coordinador.gestionAsistencias.crearMarca(dtoRegistro);
-                JOptionPane.showMessageDialog(this, "Marca registrada con éxito");
-                configurarPantalla();
-                }else{
-                    marcaHoy.setSalida(LocalTime.now());
-                    coordinador.gestionAsistencias.crearMarca(marcaHoy);
-                }               
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.WARNING_MESSAGE);
-            }
-        });
 
-        btnRegresar.addActionListener(e -> {
-            coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
-            this.dispose();
+    }
+    
+    private void asignarEventos(){
+        btnRegistrar.addActionListener(e->{
+            btnRegistrar.setEnabled(false); // Evita clics accidentales
+        try {
+            // Buscamos el estado actual
+            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+            
+            if (marcaHoy == null) {
+                // LÓGICA DE ENTRADA
+                DTORegistroMarca nuevo = new DTORegistroMarca();
+                nuevo.setEmpleadoDTO(this.empleado);
+                nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
+                nuevo.setEntrada(LocalTime.now());
+                nuevo.setFecha(LocalDate.now());
+                
+                coordinador.gestionAsistencias.crearMarca(nuevo);
+                JOptionPane.showMessageDialog(this, "Entrada registrada");
+            } else {
+                // LÓGICA DE SALIDA
+                marcaHoy.setSalida(LocalTime.now());
+                // IMPORTANTE: Asegúrate de que tu coordinador tenga un método para MODIFICAR
+                coordinador.gestionAsistencias.crearMarca(marcaHoy); 
+                JOptionPane.showMessageDialog(this, "Salida registrada");
+            }
+            
+            // Refrescamos solo el texto del botón, no los eventos
+            actualizarEstadoBoton();
+            
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+            btnRegistrar.setEnabled(true); // Re-habilitar si falló la validación
+        }
         });
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

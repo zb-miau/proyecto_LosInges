@@ -18,39 +18,46 @@ import objetosNegocio.NegocioException;
 import objetosNegocio.RegistroMarcaBO;
 
 /**
- * Clase de control encargada de orquestar el flujo de trabajo del subsistema de asistencias.
- * Actúa como un controlador de casos de uso que coordina las interacciones entre los 
- * distintos objetos de negocio (BO) para realizar operaciones complejas como el 
- * registro validado de marcas y la generación de reportes.
+ * Clase de control encargada de orquestar el flujo de trabajo del subsistema de
+ * asistencias. Actúa como un controlador de casos de uso que coordina las
+ * interacciones entre los distintos objetos de negocio (BO) para realizar
+ * operaciones complejas como el registro validado de marcas y la generación de
+ * reportes.
  *
  * @author josma
  */
 public class ControlGestionAsistencias {
+
     private RegistroMarcaBO registroMarcaBO;
     private HorarioEmpleadoBO horarioEmpleadoBO;
     private EmpleadoBO empleadoBO;
+
     /**
-     * Constructor que inicializa las instancias de los objetos de negocio necesarios
-     * mediante sus respectivos métodos Singleton.
+     * Constructor que inicializa las instancias de los objetos de negocio
+     * necesarios mediante sus respectivos métodos Singleton.
      */
     public ControlGestionAsistencias() {
         this.registroMarcaBO = RegistroMarcaBO.getInstance();
         this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstance();
         this.empleadoBO = EmpleadoBO.getInstance();
     }
+
     /**
-     * Registra una nueva marca de entrada o actualiza una existente con la hora de salida.
-     * El flujo de validación incluye:
-     * 1. Verificar la existencia del horario del empleado.
-     * 2. Validar que el día actual sea un día laborable para el empleado.
-     * 3. Si no hay marca previa: validar que la hora esté dentro del rango permitido e insertar entrada.
-     * 4. Si hay marca previa: validar que no exista ya una salida y registrar la salida actual.
-     * @param registroDTO DTO con la información básica del empleado para procesar la marca.
+     * Registra una nueva marca de entrada o actualiza una existente con la hora
+     * de salida. El flujo de validación incluye: 1. Verificar la existencia del
+     * horario del empleado. 2. Validar que el día actual sea un día laborable
+     * para el empleado. 3. Si no hay marca previa: validar que la hora esté
+     * dentro del rango permitido e insertar entrada. 4. Si hay marca previa:
+     * validar que no exista ya una salida y registrar la salida actual.
+     *
+     * @param registroDTO DTO con la información básica del empleado para
+     * procesar la marca.
      * @return El DTORegistroMarca resultante tras la operación de persistencia.
-     * @throws NegocioException Si el empleado no tiene horario, si no es día laborable, 
-     * si está fuera de rango horario o si ya cuenta con una salida registrada.
+     * @throws NegocioException Si el empleado no tiene horario, si no es día
+     * laborable, si está fuera de rango horario o si ya cuenta con una salida
+     * registrada.
      */
-    protected DTORegistroMarca agregarMarca(DTORegistroMarca registroDTO) throws NegocioException {
+    protected  synchronized DTORegistroMarca agregarMarca(DTORegistroMarca registroDTO) throws NegocioException {
         LocalDate fechaHoy = LocalDate.now();
         LocalTime tiempoHoy = LocalTime.now();
 
@@ -69,7 +76,8 @@ public class ControlGestionAsistencias {
             throw new NegocioException("Hoy no es un día laborable para el empleado.");
         }
 
-        //2. Validar si existe una marca previa 
+        //2. Validar si existe una marca previa
+        System.out.println("DEBUG: Buscando marca para empleado: " + empleado.getId() + " en fecha: " + fechaHoy);
         DTORegistroMarca marcaExistente = registroMarcaBO.obtenerPorEmpleadoYFecha(empleado.getId(), fechaHoy);
         //Si no hay una marca previa
         if (marcaExistente == null) {
@@ -85,49 +93,62 @@ public class ControlGestionAsistencias {
             dtoNuevoRegistro.setHorarioEmpledoDTO(horarioHoy);
             dtoNuevoRegistro.setEntrada(tiempoHoy);
             dtoNuevoRegistro.setFecha(fechaHoy);
-            return registroMarcaBO.crear(registroDTO);
+            return registroMarcaBO.crear(dtoNuevoRegistro);
         } else {//SI YA TIENE UNA ENTRADA, MARCA LA SALIDA
             if (marcaExistente.getSalida() != null) {
-                throw new NegocioException("Ya hay una salida registrada");
+                
+                throw new NegocioException("ERROR DEPURACIÓN: La salida ya existe y es: " + marcaExistente.getSalida() + 
+                               " para el registro ID: " + marcaExistente.getIdRegistroMarca());
+            } else {
+                marcaExistente.setSalida(tiempoHoy);
+                return registroMarcaBO.modificar(marcaExistente);
             }
-            marcaExistente.setSalida(tiempoHoy);
-            return registroMarcaBO.modificar(marcaExistente);
 
         }
     }
+
     /**
-     * Genera una lista de asistencias filtrada por un rango de fechas para un empleado específico.
+     * Genera una lista de asistencias filtrada por un rango de fechas para un
+     * empleado específico.
+     *
      * @param idEmpleado Identificador único del empleado.
      * @param fechaInicio Límite inferior del rango de fechas.
      * @param fechaFin Límite superior del rango de fechas.
      * @return Lista de DTORegistroMarca encontrados en el periodo.
-     * @throws NegocioException Si la fecha de fin es anterior a la fecha de inicio.
+     * @throws NegocioException Si la fecha de fin es anterior a la fecha de
+     * inicio.
      */
-    protected List<DTORegistroMarca> reporteAsistencia(String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException{
+    protected List<DTORegistroMarca> reporteAsistencia(String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException {
         //Validación de fechas coherente
         if (fechaFin.isBefore(fechaInicio) || fechaInicio.isAfter(fechaFin)) {
             throw new NegocioException("Los formatos de las fechas no son válidos");
         }
         return registroMarcaBO.obtenerLista(idEmpleado, fechaInicio, fechaFin);
     }
+
     /**
-     * Calcula el conteo total de asistencias válidas (con entrada y salida) de una lista proporcionada.
+     * Calcula el conteo total de asistencias válidas (con entrada y salida) de
+     * una lista proporcionada.
+     *
      * @param listaMarcas Lista de registros a contabilizar.
      * @return Cantidad de asistencias completas.
      * @throws NegocioException Si ocurre un error en la lógica de cálculo.
      */
-    protected int ObtenerConteo(List<DTORegistroMarca> listaMarcas) throws NegocioException{
+    protected int ObtenerConteo(List<DTORegistroMarca> listaMarcas) throws NegocioException {
         return registroMarcaBO.calcularAsistencias(listaMarcas);
     }
+
     /**
-     * Recupera una marca específica basada en el empleado y una fecha determinada.
+     * Recupera una marca específica basada en el empleado y una fecha
+     * determinada.
+     *
      * @param idEmpleado Identificador del empleado.
      * @param fecha Fecha de consulta.
      * @return El DTO de la marca o null si no existe registro.
      * @throws NegocioException Si ocurre un error en la consulta de negocio.
      */
-    protected DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha)throws NegocioException{
+    protected DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) throws NegocioException {
         return registroMarcaBO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
     }
-    
+
 }
