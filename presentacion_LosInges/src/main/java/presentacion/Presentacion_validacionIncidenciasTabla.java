@@ -38,7 +38,7 @@ import objetosNegocio.NegocioException;
  * @author Zaira
  */
 public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame {
-
+    TableRowSorter<TableModel> buscador;
     DefaultTableModel modeloTablaIncidencias;
     IGestionIncidencias control = new FacadeGestionIncidencias();
     String rdbtnSeleccionado;
@@ -52,6 +52,25 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         this.coordinador = coordinador;
         initComponents();
         configuracionBotones();
+        rdbtnPendiente.addActionListener(e -> {
+            this.rdbtnSeleccionado = "PENDIENTE";
+            crearTabla();
+        });
+        rdbtnValidada.addActionListener(e -> {
+            this.rdbtnSeleccionado = "VALIDADA";
+            crearTabla();
+        });
+        rdbtnRechazada.addActionListener(e -> {
+            this.rdbtnSeleccionado = "RECHAZADA";
+            crearTabla();
+        });
+        
+        txtBuscarEmpleado.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                busquedaPorFiltros(buscador);
+            }
+        });
         crearTabla();
     }
 
@@ -67,6 +86,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         pnlIncidencias = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         pnlScroll = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
         cmbTipoIncidencia = new javax.swing.JComboBox<>();
@@ -77,6 +97,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         rdbtnValidada = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestión de Incidencias");
         setResizable(false);
 
         pnlIncidencias.setBackground(new java.awt.Color(255, 255, 255));
@@ -88,6 +109,10 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Tabla de Incidencias");
+
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
         panelEncabezadoLayout.setHorizontalGroup(
@@ -95,13 +120,17 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             .addGroup(panelEncabezadoLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(545, Short.MAX_VALUE))
+                .addGap(103, 103, 103)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
         panelEncabezadoLayout.setVerticalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap(40, Short.MAX_VALUE)
-                .addComponent(btnRegresar)
+                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegresar)
+                    .addComponent(jLabel1))
                 .addGap(37, 37, 37))
         );
 
@@ -136,7 +165,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         rdbtnRechazada.setText("Rechazada");
 
         lblEmpleado.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmpleado.setText("Empleado:");
+        lblEmpleado.setText("Filtrar por empleado:");
 
         rdbtnValidada.setForeground(new java.awt.Color(51, 51, 51));
         rdbtnValidada.setText("Validada");
@@ -151,20 +180,22 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             .addGroup(pnlIncidenciasLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIncidenciasLayout.createSequentialGroup()
-                        .addComponent(rdbtnPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdbtnValidada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdbtnRechazada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                        .addComponent(lblEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(124, 124, 124))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIncidenciasLayout.createSequentialGroup()
-                        .addComponent(cmbTipoIncidencia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(135, 135, 135)
-                        .addComponent(txtBuscarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnlScroll, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(pnlScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlIncidenciasLayout.createSequentialGroup()
+                        .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlIncidenciasLayout.createSequentialGroup()
+                                .addComponent(cmbTipoIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(135, 135, 135))
+                            .addGroup(pnlIncidenciasLayout.createSequentialGroup()
+                                .addComponent(rdbtnPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rdbtnValidada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rdbtnRechazada, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(82, 82, 82)))
+                        .addGroup(pnlIncidenciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuscarEmpleado))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlIncidenciasLayout.setVerticalGroup(
@@ -213,7 +244,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
      * Método que genera la tabla de incidencias.
      */
     public void crearTabla() {
-        String[] columnas = {"Id Incidencia", "Id Empleado", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado"};
+        String[] columnas = {"Id Incidencia", "Id Empleado", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo", "Fecha", "Estado", "Descripcion"};
         modeloTablaIncidencias = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -225,6 +256,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             Set<String> tipos = new HashSet<>();
             String filtro = (rdbtnSeleccionado != null) ? rdbtnSeleccionado : "PENDIENTE";
             List<DTOIncidencia> incidencias = control.obtenerIncidencias(filtro);
+           
             for (DTOIncidencia i : incidencias) {
                 DTOEmpleado empleado = i.getEmpleado();
                 tipos.add(i.getTipo().toString());
@@ -239,7 +271,8 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                     apeMaterno,
                     i.getTipo(),
                     i.getFecha(),
-                    i.getEstado().name()
+                    i.getEstado().name(),
+                    i.getDescripcion()
                 };
                 modeloTablaIncidencias.addRow(fila);
             }
@@ -257,34 +290,29 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
             tablaIncidencias.getColumnModel().getColumn(1).setMaxWidth(0);
             tablaIncidencias.getColumnModel().getColumn(1).setResizable(false);
             
-            TableRowSorter<TableModel> buscador = new TableRowSorter<>(modeloTablaIncidencias);
+            tablaIncidencias.getColumnModel().getColumn(8).setMinWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(8).setPreferredWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(8).setMaxWidth(0);
+            tablaIncidencias.getColumnModel().getColumn(8).setResizable(false);
+            
+            buscador = new TableRowSorter<>(modeloTablaIncidencias);
             tablaIncidencias.setRowSorter(buscador);
 
-            txtBuscarEmpleado.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    busquedaPorFiltros(buscador);
-                }
-            });
-
+            
             cmbTipoIncidencia.addActionListener(e -> busquedaPorFiltros(buscador));
-            rdbtnPendiente.addActionListener(e -> {
-                this.rdbtnSeleccionado = "PENDIENTE";
-                crearTabla();
-            });
-            rdbtnValidada.addActionListener(e -> {
-                this.rdbtnSeleccionado = "VALIDADA";
-                crearTabla();
-            });
-            rdbtnRechazada.addActionListener(e -> {
-                this.rdbtnSeleccionado = "RECHAZADA";
-                crearTabla();
-            });
-            busquedaPorFiltros(buscador);
+          
 
             tablaIncidencias.getColumnModel().getColumn(7).setCellRenderer(new RenderizadorEstado());
             tablaIncidencias.setRowHeight(60);
             accionAlSeleccionar();
+            
+            if (incidencias.isEmpty()){
+                JOptionPane.showMessageDialog(
+                    null,
+                    "No hay incidencias con estado " + rdbtnSeleccionado ,
+                    "Error.",
+                    JOptionPane.ERROR_MESSAGE);
+            }
 
         } catch (NegocioException ex) {
 
@@ -414,6 +442,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                             String apellidoP = tablaIncidencias.getValueAt(filaModelo, 3).toString();
                             String apellidoM = tablaIncidencias.getValueAt(filaModelo, 4).toString();
                             String tipo = tablaIncidencias.getValueAt(filaModelo, 5).toString();
+                            String descripcion = tablaIncidencias.getValueAt(filaModelo, 8).toString();
                             try {
                                 LocalDate fecha = LocalDate.parse(tablaIncidencias.getValueAt(filaModelo, 6).toString());
                            
@@ -434,10 +463,8 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                             incidenciaValidar.setEmpleado(empleado);
                             incidenciaValidar.setTipo(tipoIncidencia);
                             incidenciaValidar.setFecha(fecha);
+                            incidenciaValidar.setDescripcion(descripcion);
                             
-                            
-                            
-
                             incidenciaValidar = coordinador.cambioDeVentana(Coordinador.VALIDACION_DE_INCIDENCIAS, incidenciaValidar);
                             
                             
@@ -471,6 +498,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbTipoIncidencia;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblEmpleado;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JPanel pnlIncidencias;
