@@ -16,8 +16,6 @@ import gestionarEmpleados.FachadaGestionarEmpleados;
 import gestionarEmpleados.IGestionarEmpleados;
 import gestionarTurnos.FachadaGestionarTurnos;
 import gestionarTurnos.IGestionarTurnos;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import presentacion.Presentacion_contratacionEmpleados;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_listaDeEmpleados;

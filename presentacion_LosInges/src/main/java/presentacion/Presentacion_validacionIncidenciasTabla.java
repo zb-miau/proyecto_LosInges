@@ -108,6 +108,11 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
         btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -239,6 +244,11 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
     private void cmbTipoIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIncidenciaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * Método que genera la tabla de incidencias.
