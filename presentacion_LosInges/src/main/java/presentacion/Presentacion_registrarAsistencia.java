@@ -73,11 +73,11 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
                 nuevo.setFecha(LocalDate.now());
                 
                 coordinador.gestionAsistencias.crearMarca(nuevo);
-                JOptionPane.showMessageDialog(this, "Entrada registrada");
+                JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
             } else {
                 marcaHoy.setSalida(LocalTime.now());
                 coordinador.gestionAsistencias.crearMarca(marcaHoy); 
-                JOptionPane.showMessageDialog(this, "Salida registrada");
+                JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
             }
             
             actualizarEstadoBoton();
