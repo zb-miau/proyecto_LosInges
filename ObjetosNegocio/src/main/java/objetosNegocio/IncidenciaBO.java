@@ -6,6 +6,7 @@ package objetosNegocio;
 
 import dto.DTOIncidencia;
 import itson.accesodatos.FacadeAccesoDatos;
+import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Incidencia;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class IncidenciaBO {
     /**
      * Fachada de acceso a datos para delegar la persistencia de los cambios.
      */
-    private static FacadeAccesoDatos fachadaDAO;
+    private static IAccesoDatos fachadaDAO;
     /**
      * Instancia única de la clase (Patrón Singleton).
      */

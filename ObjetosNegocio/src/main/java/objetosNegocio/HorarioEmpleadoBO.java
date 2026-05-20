@@ -6,6 +6,7 @@ package objetosNegocio;
 
 import dto.DTOHorarioEmpleado;
 import itson.accesodatos.FacadeAccesoDatos;
+import itson.accesodatos.IAccesoDatos;
 import itson.accesodatos.PersistenciaException;
 import itson.entidades.HorarioEmpleado;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
  * @author josma
  */
 public class HorarioEmpleadoBO {
-    private final FacadeAccesoDatos fachada;
+    private final IAccesoDatos fachada;
     private static HorarioEmpleadoBO horarioEmpleadosBO;
     private static final Logger LOGGER = Logger.getLogger(HorarioEmpleadoBO.class.getName());
     

@@ -8,6 +8,7 @@ import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import itson.accesodatos.EmpleadosDAO;
 import itson.accesodatos.FacadeAccesoDatos;
+import itson.accesodatos.IAccesoDatos;
 import itson.entidades.Empleado;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class EmpleadoBO {
 
     private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
     
-    FacadeAccesoDatos fachadaDAO;
+    IAccesoDatos fachadaDAO;
     private static EmpleadoBO empleadosBO;
 
     /**

@@ -22,7 +22,7 @@ import org.bson.types.ObjectId;
  *
  * @author Zaira
  */
-public class FacadeAccesoDatos {
+public class FacadeAccesoDatos implements IAccesoDatos {
 
     private static IAccesoTurnos<Turno> turnosDAO;
     private static IAccesoEmpleados<Empleado> empleadosDAO;
@@ -56,6 +56,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Turno crearTurno(Turno turno) throws PersistenciaException {
         try {
             return turnosDAO.crear(turno);
@@ -74,6 +75,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Turno eliminarTurno(Turno turno) throws PersistenciaException {
         try {
             return turnosDAO.eliminar(turno);
@@ -92,6 +94,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Turno modificarTurno(Turno turno) throws PersistenciaException {
         try {
 
@@ -111,6 +114,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Turno obtenerTurno(Turno turno) throws PersistenciaException {
         try {
             return turnosDAO.obtener(turno);
@@ -128,6 +132,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public List<Turno> obtenerListaTurnos() throws PersistenciaException {
         try {
 
@@ -138,31 +143,36 @@ public class FacadeAccesoDatos {
             throw new PersistenciaException("Error al recuperar la lista de turnos de la base de datos. ");
         }
     }
-    
+
     /**
-     * Método para verificar que el turno no se está duplicando en la base de datos.
+     * Método para verificar que el turno no se está duplicando en la base de
+     * datos.
+     *
      * @param turno el turno a agregar.
      * @return true si existe otro turno igual, false en caso contrario
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
+    @Override
     public boolean turnoDuplicado(Turno turno) throws PersistenciaException {
         try {
             return turnosDAO.turnoDuplicado(turno);
-            
+
         } catch (MongoException ex) {
             LOGGER.severe(ex.getMessage());
             throw new PersistenciaException("Error al verificar los turnos de la base de datos. ");
         }
     }
-    
+
     /**
      * Registra un nuevo empleado en la base de datos de MongoDB.
      *
      * @param entidad Objeto de dominio con los datos del empleado a guardar.
      * @return El objeto de dominio actualizado con el ID asignado por MongoDB.
-     * @throws PersistenciaException Si ocurre un error al intentar guardar en la base de datos.
+     * @throws PersistenciaException Si ocurre un error al intentar guardar en
+     * la base de datos.
      */
+    @Override
     public Empleado crear(Empleado entidad) throws PersistenciaException {
         try {
             return empleadosDAO.crear(entidad);
@@ -175,9 +185,12 @@ public class FacadeAccesoDatos {
     /**
      * Busca un empleado utilizando su CURP encriptada de forma determinista.
      *
-     * @param empleado Objeto de dominio que contiene la CURP en texto plano a buscar.
-     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     * @param empleado Objeto de dominio que contiene la CURP en texto plano a
+     * buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se
+     * encuentra.
      */
+    @Override
     public Empleado obtenerPorCurp(Empleado empleado) {
         try {
             return empleadosDAO.obtenerPorCurp(empleado);
@@ -190,9 +203,12 @@ public class FacadeAccesoDatos {
     /**
      * Busca un empleado utilizando su RFC encriptado de forma determinista.
      *
-     * @param empleado Objeto de dominio que contiene el RFC en texto plano a buscar.
-     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     * @param empleado Objeto de dominio que contiene el RFC en texto plano a
+     * buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se
+     * encuentra.
      */
+    @Override
     public Empleado obtenerPorRfc(Empleado empleado) {
         try {
             return empleadosDAO.obtenerPorRfc(empleado);
@@ -205,9 +221,12 @@ public class FacadeAccesoDatos {
     /**
      * Busca un empleado utilizando su NSS encriptado de forma determinista.
      *
-     * @param empleado Objeto de dominio que contiene el NSS en texto plano a buscar.
-     * @return El empleado convertido al modelo de dominio; null si no se encuentra.
+     * @param empleado Objeto de dominio que contiene el NSS en texto plano a
+     * buscar.
+     * @return El empleado convertido al modelo de dominio; null si no se
+     * encuentra.
      */
+    @Override
     public Empleado obtenerPorNss(Empleado empleado) {
         try {
             return empleadosDAO.obtenerPorNss(empleado);
@@ -218,11 +237,14 @@ public class FacadeAccesoDatos {
     }
 
     /**
-     * Busca un empleado en la base de datos por medio de su identificador unico ID.
+     * Busca un empleado en la base de datos por medio de su identificador unico
+     * ID.
      *
-     * @param entidad Objeto de dominio que contiene el ID del empleado a buscar.
+     * @param entidad Objeto de dominio que contiene el ID del empleado a
+     * buscar.
      * @return El empleado convertido al modelo de dominio; null si no existe.
      */
+    @Override
     public Empleado obtener(Empleado entidad) {
         try {
             return empleadosDAO.obtener(entidad);
@@ -233,10 +255,12 @@ public class FacadeAccesoDatos {
     }
 
     /**
-     * Recupera todos los registros de empleados almacenados en la base de datos.
+     * Recupera todos los registros de empleados almacenados en la base de
+     * datos.
      *
      * @return Una lista de objetos Empleado convertidos al modelo de dominio.
      */
+    @Override
     public List<Empleado> obtenerLista() {
         try {
             return empleadosDAO.obtenerLista();
@@ -248,11 +272,13 @@ public class FacadeAccesoDatos {
 
     /**
      * Método que recupera el empleado y modifica su atributo de horario actual.
+     *
      * @param empleado empleado al que se le va a modificar su horario.
      * @return el empleado con su horario modificado.
-     * @throws PersistenciaException Lanza error si el horario se encuentra vacío o si hay un error
-     * al acceder a la base de datos.
+     * @throws PersistenciaException Lanza error si el horario se encuentra
+     * vacío o si hay un error al acceder a la base de datos.
      */
+    @Override
     public Empleado modificarHorarioActual(Empleado empleado) throws PersistenciaException {
         try {
             if (empleado.getHorarioActual().getIdHorarioEmpleado() == null) {
@@ -269,11 +295,13 @@ public class FacadeAccesoDatos {
 
     /**
      * Método para crear un horario y lo agrega a la base de datos.
+     *
      * @param horario el horario a agregar.
      * @return regresa el horario creado en la base de datos.
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
+    @Override
     public HorarioEmpleado crearHorarioHistorial(HorarioEmpleado horario) throws PersistenciaException {
         try {
 
@@ -285,14 +313,16 @@ public class FacadeAccesoDatos {
     }
 
     /**
-     * Método para obtener una lista de horarios de la base de datos
-     * que se traslapan con el horario del parámetro.
+     * Método para obtener una lista de horarios de la base de datos que se
+     * traslapan con el horario del parámetro.
+     *
      * @param horario horario a obtener.
-     * @return regresa la lista de horarios que se traslapan con el horario
-     * del parámetro.
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @return regresa la lista de horarios que se traslapan con el horario del
+     * parámetro.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
+    @Override
     public List<HorarioEmpleado> obtenerHorarioActivo(HorarioEmpleado horario) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.obtenerActivo(horario);
@@ -304,11 +334,13 @@ public class FacadeAccesoDatos {
 
     /**
      * Método para obtener una lista de horarios dentro de una fecha específica.
+     *
      * @return regresa la lista de horarios dentro del rango de fechas.
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
-    public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario,LocalDate fechaInicio, LocalDate fechaFin) throws PersistenciaException {
+    @Override
+    public List<HorarioEmpleado> obtenerHistorial(HorarioEmpleado horario, LocalDate fechaInicio, LocalDate fechaFin) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.obtenerListaPorFecha(horario, fechaInicio, fechaFin);
         } catch (MongoException ex) {
@@ -319,11 +351,13 @@ public class FacadeAccesoDatos {
 
     /**
      * Método para modificar un horario de la base de datos.
+     *
      * @param horario el horario a modificar.
      * @return regresa el horario modificado en la base de datos.
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
+    @Override
     public HorarioEmpleado modificarHistorial(HorarioEmpleado horario) throws PersistenciaException {
         try {
             return horarioEmpleadosDAO.modificar(horario);
@@ -342,6 +376,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Incidencia crearIncidencia(Incidencia incidencia) throws PersistenciaException {
         try {
             return incidenciasDAO.crear(incidencia);
@@ -360,6 +395,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Incidencia eliminarIncidencia(Incidencia incidencia) throws PersistenciaException {
         try {
             return incidenciasDAO.eliminar(incidencia);
@@ -378,6 +414,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Incidencia modificarIncidencia(Incidencia incidencia) throws PersistenciaException {
         try {
 
@@ -397,6 +434,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public Incidencia obtenerIncidencia(Incidencia incidencia) throws PersistenciaException {
         try {
             return incidenciasDAO.obtener(incidencia);
@@ -414,6 +452,7 @@ public class FacadeAccesoDatos {
      * @throws PersistenciaException Lanza una excepción si hay un problema al
      * acceder a la base de datos.
      */
+    @Override
     public List<Incidencia> obtenerListaIncidencia(String estado) throws PersistenciaException {
         try {
 
@@ -424,15 +463,17 @@ public class FacadeAccesoDatos {
             throw new PersistenciaException("Error al recuperar la lista de incidencias de la base de datos. ");
         }
     }
-    
+
     /**
      * Método para eliminar un horario de la base de datos.
+     *
      * @param horario el horario a eliminar.
      * @return regresa el horario eliminado en la base de datos.
-     * @throws PersistenciaException Lanza una excepción al presentar
-     * errores al acceder a la base de datos.
+     * @throws PersistenciaException Lanza una excepción al presentar errores al
+     * acceder a la base de datos.
      */
-    public HorarioEmpleado eliminarHistorial(HorarioEmpleado horario)throws PersistenciaException{
+    @Override
+    public HorarioEmpleado eliminarHistorial(HorarioEmpleado horario) throws PersistenciaException {
         try {
 
             return horarioEmpleadosDAO.eliminar(horario);
@@ -442,60 +483,71 @@ public class FacadeAccesoDatos {
             throw new PersistenciaException("Error al eliminar el horario del historial. ");
         }
     }
+
     /**
      * Método para crear un registro al empleado
+     *
      * @param registroMarca la entidad que se va a crear.
-     * @return 
-     * @throws PersistenciaException 
+     * @return
+     * @throws PersistenciaException
      */
-    public RegistroMarca crearMarca(RegistroMarca registroMarca) throws PersistenciaException{
-        
-        try{
-            return registroMarcaDAO.crear(registroMarca);           
-        }catch(MongoException e){
+    @Override
+    public RegistroMarca crearMarca(RegistroMarca registroMarca) throws PersistenciaException {
+
+        try {
+            return registroMarcaDAO.crear(registroMarca);
+        } catch (MongoException e) {
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al insertar la indencia a la base de datos:");
         }
     }
+
     /**
-     * Método que permite modificar el registro de la marca para poderb insertar la salida
+     * Método que permite modificar el registro de la marca para poderb insertar
+     * la salida
+     *
      * @param registroMarca es la entidad que se va a modificar
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
-    public RegistroMarca modificarMarca(RegistroMarca registroMarca) throws PersistenciaException{
-        try{
-        return registroMarcaDAO.modificar(registroMarca);
-        }catch(MongoException e){
+    @Override
+    public RegistroMarca modificarMarca(RegistroMarca registroMarca) throws PersistenciaException {
+        try {
+            return registroMarcaDAO.modificar(registroMarca);
+        } catch (MongoException e) {
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al intentar acutalizar el registro");
         }
     }
+
     /**
-     * Método para poder recuperar un registro en concreto, es auxiliar para poder modificar la marca
+     * Método para poder recuperar un registro en concreto, es auxiliar para
+     * poder modificar la marca
+     *
      * @param empleado atributo del empleado asociado a la marca
      * @param fecha atributo de la fecha del registro
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
-    public RegistroMarca obtenerPorEmpleadoYFechaMarca(Empleado empleado, LocalDate fecha) throws PersistenciaException{
-        try{
+    @Override
+    public RegistroMarca obtenerPorEmpleadoYFechaMarca(Empleado empleado, LocalDate fecha) throws PersistenciaException {
+        try {
             return registroMarcaDAO.obtenerPorEmpleadoYFecha(empleado, fecha);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al intentar recuperar el registro");
         }
-            
+
     }
-    
-    public List<RegistroMarca> obtenerListaRegistroMarca(Empleado empleado, LocalDate inicio, LocalDate fin) throws PersistenciaException{
-        try{
+
+    @Override
+    public List<RegistroMarca> obtenerListaRegistroMarca(Empleado empleado, LocalDate inicio, LocalDate fin) throws PersistenciaException {
+        try {
             return registroMarcaDAO.obtenerLista(empleado, inicio, fin);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             LOGGER.severe(e.getMessage());
             throw new PersistenciaException("Error al intentar recuperar la lista");
         }
     }
-            
 
 }

@@ -7,6 +7,7 @@ package objetosNegocio;
 import dto.DTOEmpleado;
 import dto.DTORegistroMarca;
 import itson.accesodatos.FacadeAccesoDatos;
+import itson.accesodatos.IAccesoDatos;
 import itson.accesodatos.PersistenciaException;
 import itson.entidades.Empleado;
 import itson.entidades.RegistroMarca;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
 public class RegistroMarcaBO {
     private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
     /** Fachada para el acceso a las operaciones de persistencia. */
-    FacadeAccesoDatos fachadaDAO;
+    IAccesoDatos fachadaDAO;
     /** Instancia única de la clase (Patrón Singleton). */
     private static RegistroMarcaBO registroMarcaBO;
     /**
