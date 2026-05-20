@@ -23,6 +23,7 @@ public class Presentacion_main {
 //        validarIncidencias.setVisible(true);
 //        DTOEmpleado empleado = new DTOEmpleado("6a0a2bf19169ab12da42ec29", "Hector", "Flores", "Montoya");
 //        Presentacion_registroDeIncidencias presentacion_registroDeIncidenciasMenu = new Presentacion_registroDeIncidencias(empleado);
-//        presentacion_registroDeIncidenciasMenu.setVisible(true);
+//        presentacion_registroDeIncidenciasMenu.setVisible(true); 
+//        CURP: FOCM850422MJCLSN09
     }
 }

@@ -8,13 +8,13 @@ PADRON_IMSS_NSS = ["12345678901", "98765432109", "55443322110"]
 
 @app.route('/api/validar-sat', methods=['GET'])
 def validar_sat():
-    # Obtener el parámetro y limpiar espacios
+    # Obtener el parametro y limpiar espacios
     rfc_recibido = request.args.get('rfc', '').strip()
     
     if not rfc_recibido:
         return jsonify({"valido": False, "mensaje": "RFC vacio"}), 400
         
-    # Comparación exacta en mayúsculas
+    # Comparacion en mayusculas
     existe = rfc_recibido.upper() in PADRON_SAT_RFC
     
     return jsonify({
@@ -24,7 +24,7 @@ def validar_sat():
 
 @app.route('/api/validar-imss', methods=['GET'])
 def validar_imss():
-    # ACTUALIZADO: Obtenemos el parametro nss limpiando espacios vacios accidentales
+    # Obtenemos el parametro nss limpiando espacios vacios accidentales
     nss_recibido = request.args.get('nss', '').strip()
     
     if not nss_recibido:
