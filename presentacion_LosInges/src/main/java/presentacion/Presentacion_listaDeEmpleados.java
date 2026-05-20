@@ -293,7 +293,12 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-
+        if (coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA) {
+            coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+            this.dispose();
+            return;
+        }
+        
         coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
         this.dispose();
 
