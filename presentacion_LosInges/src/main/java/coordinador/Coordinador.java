@@ -8,6 +8,7 @@ import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
+import gestionAsistencias.FacadeGestionAsistencias;
 import gestionAsistencias.IGestionAsistencias;
 import gestionIncidencias.FacadeGestionIncidencias;
 import gestionIncidencias.IGestionIncidencias;
@@ -23,7 +24,9 @@ import presentacion.Presentacion_listaDeEmpleados;
 import presentacion.Presentacion_gestionDeTurnos;
 import presentacion.Presentacion_menuGerente;
 import presentacion.Presentacion_menuPrincipal;
+import presentacion.Presentacion_registrarAsistencia;
 import presentacion.Presentacion_registroDeIncidencias;
+import presentacion.Presentacion_reporteAsistencia;
 import presentacion.Presentacion_validacionDeIncidencias;
 import presentacion.Presentacion_validacionIncidenciasTabla;
 
@@ -35,7 +38,7 @@ public class Coordinador {
 
     public final IAsignarHorario asignarHorario = new FacadeAsignarHorario();
     public final IGestionIncidencias gestionIncidencias = new FacadeGestionIncidencias();
-//    private final IGestionAsistencias gestionAsistencias;
+    private final IGestionAsistencias gestionAsistencias = new FacadeGestionAsistencias();
     public final IGestionarEmpleados gestionarEmpleados = new FachadaGestionarEmpleados();
     public final IGestionarTurnos gestionarTurnos = new FachadaGestionarTurnos();
 
@@ -48,6 +51,8 @@ public class Coordinador {
     private Presentacion_validacionIncidenciasTabla validacionIncidenciasTabla;
     private Presentacion_menuGerente menuGerente;
     private Presentacion_contratacionEmpleados contratacionEmpleado;
+    private Presentacion_registrarAsistencia registrarAsistencia;
+    private Presentacion_reporteAsistencia reporteAsistencia;
 
     public static final int GESTION_DE_HORARIOS = 0;
     public static final int GESTION_DE_TURNOS = 1;
@@ -58,6 +63,8 @@ public class Coordinador {
     public static final int VALIDACION_INCIDECIAS_TABLA = 6;
     public static final int MENU_GERENTE = 7;
     public static final int CONTRATACION_EMPLEADO = 8;
+    public static final int REGISTRAR_ASISTENCIA = 9;
+    public static final int REPORTE_ASISTENCIA = 10;
 
     private int ventanaSiguiente = -1;
 
@@ -121,6 +128,22 @@ public class Coordinador {
 
                 contratacionEmpleado.setVisible(true);
                 contratacionEmpleado.setLocationRelativeTo(null);
+            }
+            case 9 ->{
+                if (registrarAsistencia == null) {
+                    registrarAsistencia = new Presentacion_registrarAsistencia(null,this);
+                    
+                }
+                registrarAsistencia.setVisible(true);
+                registrarAsistencia.setLocationRelativeTo(null);
+            }
+            case 10 ->{
+                if (reporteAsistencia == null) {
+                    reporteAsistencia = new Presentacion_reporteAsistencia(this,null);
+                    
+                }
+                reporteAsistencia.setVisible(true);
+                reporteAsistencia.setLocationRelativeTo(null);
             }
             default ->
                 throw new AssertionError();

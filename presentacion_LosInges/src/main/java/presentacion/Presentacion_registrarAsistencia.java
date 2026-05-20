@@ -4,17 +4,25 @@
  */
 package presentacion;
 
+import coordinador.Coordinador;
+import dto.DTOEmpleado;
+
 /**
  *
  * @author josma
  */
 public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
-
+    private DTOEmpleado empleado; //Empleado que ya viene desde la tabla 
+    Coordinador coordinador; //Coordiandor
+    
     /**
      * Creates new form Presentacion_registrarAsistencia
      */
-    public Presentacion_registrarAsistencia() {
+    public Presentacion_registrarAsistencia(DTOEmpleado empleado, Coordinador coordinador) {
         initComponents();
+        this.coordinador = coordinador;
+        this.empleado = empleado; 
+        setVisible(true);
     }
 
     /**
