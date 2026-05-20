@@ -35,7 +35,7 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
     /**
      * Creates new form Presentacion_reporteAsistencia
      */
-    public Presentacion_reporteAsistencia(Coordinador coordiandor, DTOEmpleado empleado) {
+    public Presentacion_reporteAsistencia(Coordinador coordinador, DTOEmpleado empleado) {
         initComponents();
         this.coordinador = coordinador;
         this.empleado = empleado;
@@ -249,7 +249,7 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
 
     private void btnConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaActionPerformed
         // TODO add your handling code here:
-        
+        System.out.println("Hola fui clikiao");
         //1.Obtener las fechas  y validar
         if (datePickerInicio.getDate() == null || datePickerFin.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar ambas fechas", "Campos incompletos",
@@ -269,7 +269,7 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
             modelo.setRowCount(0);
             
             if (listaMarcas.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No se encontraron registeos en el rango");
+                JOptionPane.showMessageDialog(this, "No se encontraron registros en el rango");
             }else{
                 for(DTORegistroMarca registro: listaMarcas){
                     Object[] fila = {
@@ -283,7 +283,7 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
             
             //5. Actualizar contador
             int totalAsistencia = coordinador.gestionAsistencias.conteoAsistencia(listaMarcas);
-            lblAsistenciaContador.setText("Asistencias completas: totalAsistencias");
+            lblAsistenciaContador.setText("Asistencias completas: " + totalAsistencia);
         }catch(NegocioException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error de negocio", JOptionPane.ERROR_MESSAGE);
         }

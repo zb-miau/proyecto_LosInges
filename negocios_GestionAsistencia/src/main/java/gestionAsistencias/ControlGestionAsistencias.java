@@ -80,7 +80,7 @@ public class ControlGestionAsistencias {
             dtoNuevoRegistro.setFecha(fechaHoy);
             return registroMarcaBO.crear(registroDTO);
         } else {//SI YA TIENE UNA ENTRADA, MARCA LA SALIDA
-            if (registroDTO.getSalida() != null) {
+            if (marcaExistente.getSalida() != null) {
                 throw new NegocioException("Ya hay una salida registrada");
             }
             marcaExistente.setSalida(tiempoHoy);

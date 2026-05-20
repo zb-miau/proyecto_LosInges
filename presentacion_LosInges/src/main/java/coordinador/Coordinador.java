@@ -131,20 +131,13 @@ public class Coordinador {
             }
             case 9 ->{
                 if (registrarAsistencia == null) {
-                    registrarAsistencia = new Presentacion_registrarAsistencia(null,this);
+                    registrarAsistencia = new Presentacion_registrarAsistencia(null, this);
                     
                 }
                 registrarAsistencia.setVisible(true);
                 registrarAsistencia.setLocationRelativeTo(null);
             }
-            case 10 ->{
-                if (reporteAsistencia == null) {
-                    reporteAsistencia = new Presentacion_reporteAsistencia(this,null);
-                    
-                }
-                reporteAsistencia.setVisible(true);
-                reporteAsistencia.setLocationRelativeTo(null);
-            }
+            
             default ->
                 throw new AssertionError();
         }
@@ -179,6 +172,22 @@ public class Coordinador {
                 registroDeIncidencias.cargarTexto(empleado);
                 registroDeIncidencias.setVisible(true);
                 registroDeIncidencias.setLocationRelativeTo(null);
+            }
+            case 9 ->{
+                if (registrarAsistencia == null) {
+                    registrarAsistencia = new Presentacion_registrarAsistencia(empleado, this);
+                    
+                }
+                registrarAsistencia.setVisible(true);
+                registrarAsistencia.setLocationRelativeTo(null);
+            }
+            case 10 ->{
+                if (reporteAsistencia == null) {
+                    reporteAsistencia = new Presentacion_reporteAsistencia(this,empleado);
+                    
+                }
+                reporteAsistencia.setVisible(true);
+                reporteAsistencia.setLocationRelativeTo(null);
             }
             default ->
                 throw new AssertionError();

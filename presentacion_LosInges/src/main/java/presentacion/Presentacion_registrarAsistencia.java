@@ -9,6 +9,7 @@ import dto.DTOEmpleado;
 import dto.DTORegistroMarca;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.swing.JOptionPane;
 import objetosNegocio.NegocioException;
 
@@ -17,58 +18,66 @@ import objetosNegocio.NegocioException;
  * @author josma
  */
 public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
+
     private DTOEmpleado empleado; //Empleado que ya viene desde la tabla 
     Coordinador coordinador; //Coordiandor
-    
+
     /**
      * Creates new form Presentacion_registrarAsistencia
      */
     public Presentacion_registrarAsistencia(DTOEmpleado empleado, Coordinador coordinador) {
         initComponents();
         this.coordinador = coordinador;
-        this.empleado = empleado; 
+        this.empleado = empleado;
         setVisible(true);
         configurarPantalla();
     }
-    
-    private void configurarPantalla(){
+
+    private void configurarPantalla() {
         //1.Cambiar la etiqueta al nombre del usuario
         lblEmpleadoNombre.setText(empleado.getNombre());
+        
         //2.Hacer una consulta para poder cambiar el texto del bóton
-        try{
-            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
-            
+        try {
+           DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+
             if (marcaHoy == null) {
-                btnRegistrar.setText("RegistrarEntrada");
-            }else if(marcaHoy.getSalida() == null){
+                btnRegistrar.setText("Registrar Entrada");
+            } else if (marcaHoy.getSalida() == null) {
                 btnRegistrar.setText("Registrar Salida");
-            }else{
+            } else {
                 btnRegistrar.setText("Jornada terminada");
                 btnRegistrar.setEnabled(false);
             }
-        }catch(NegocioException e){
+        } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, "Error al consultar el estado: " + e.getMessage());
         }
-        
-    }
-    
-    private void btnRegistrarActionPerformed(ActionEvent evt){
-        try{
-            DTORegistroMarca dtoRegistro = new DTORegistroMarca();
-            dtoRegistro.setEmpleadoDTO(this.empleado);
-            coordinador.gestionAsistencias.crearMarca(dtoRegistro);
-            JOptionPane.showMessageDialog(this, "Marca registrada con éxito");
-            configurarPantalla();
-        }catch(NegocioException e){
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    private void btnRegresarActionPerformed(ActionEvent evt){
-        coordinador.cambioDeVentana(coordinador.MENU_PRINCIPAL);
-        this.dispose();
-    }
+        btnRegistrar.addActionListener(e -> {
+            try {
+                DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+                if (marcaHoy == null) {
+                DTORegistroMarca dtoRegistro = new DTORegistroMarca();
+                dtoRegistro.setEmpleadoDTO(this.empleado);
+                dtoRegistro.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
+                dtoRegistro.setEntrada(LocalTime.now());
+                dtoRegistro.setFecha(LocalDate.now());
+                coordinador.gestionAsistencias.crearMarca(dtoRegistro);
+                JOptionPane.showMessageDialog(this, "Marca registrada con éxito");
+                configurarPantalla();
+                }else{
+                    marcaHoy.setSalida(LocalTime.now());
+                    coordinador.gestionAsistencias.crearMarca(marcaHoy);
+                }               
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.WARNING_MESSAGE);
+            }
+        });
 
+        btnRegresar.addActionListener(e -> {
+            coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+            this.dispose();
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -47,6 +47,9 @@ public class TurnoToDTOTurnoAdapter {
      * @return regresa el DTO con la información de la entidad recibida.
      */
     public static DTOTurno adaptar(Turno turno){
+        if (turno == null) {
+            return null;
+        }
         String colorString = turno.getColorHexadecimal().trim();
         int r = Integer.parseInt(colorString.substring(1, 3), 16);
         int g = Integer.parseInt(colorString.substring(3, 5), 16);

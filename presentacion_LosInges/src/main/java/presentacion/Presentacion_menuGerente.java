@@ -38,6 +38,7 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
         btnGestionarHorarios = new javax.swing.JButton();
         btnGestionarTurno = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
 
         btnGestionarTurno1.setBackground(new java.awt.Color(255, 166, 43));
         btnGestionarTurno1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -103,38 +104,50 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
             }
         });
 
+        btnReporte.setBackground(new java.awt.Color(255, 166, 43));
+        btnReporte.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnReporte.setForeground(new java.awt.Color(39, 71, 125));
+        btnReporte.setText("Reporte Asistencia");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMenuGerenteLayout = new javax.swing.GroupLayout(pnlMenuGerente);
         pnlMenuGerente.setLayout(pnlMenuGerenteLayout);
         pnlMenuGerenteLayout.setHorizontalGroup(
             pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuGerenteLayout.createSequentialGroup()
-                .addContainerGap(100, Short.MAX_VALUE)
-                .addGroup(pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnRegistrarIncidencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGestionarHorarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGestionarTurno, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(101, 101, 101))
             .addGroup(pnlMenuGerenteLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(btnRegresar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuGerenteLayout.createSequentialGroup()
+                .addContainerGap(101, Short.MAX_VALUE)
+                .addGroup(pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrarIncidencia)
+                    .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGestionarHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGestionarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(100, 100, 100))
         );
         pnlMenuGerenteLayout.setVerticalGroup(
             pnlMenuGerenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuGerenteLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(btnRegresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
                 .addComponent(btnRegistrarEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(18, 18, 18)
                 .addComponent(btnGestionarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
                 .addComponent(btnGestionarHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addComponent(btnRegistrarIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                .addGap(18, 18, 18)
+                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -145,7 +158,9 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMenuGerente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlMenuGerente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -189,6 +204,13 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // TODO add your handling code here:      
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.setVentanaSiguiente(Coordinador.REPORTE_ASISTENCIA);
+        this.dispose();
+    }//GEN-LAST:event_btnReporteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -200,6 +222,7 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarEmpleado;
     private javax.swing.JButton btnRegistrarIncidencia;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReporte;
     private javax.swing.JPanel pnlMenuGerente;
     // End of variables declaration//GEN-END:variables
 }

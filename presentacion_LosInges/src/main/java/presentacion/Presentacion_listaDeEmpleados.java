@@ -120,6 +120,10 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
                                 abrirVentanaRegistroIncidenicias(empleado);
 
+                            }if(coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA){
+                                abrirVentanaRegistroAsistencia(empleado);
+                            }if (coordinador.getVentanaSiguiente() == Coordinador.REPORTE_ASISTENCIA) {
+                                abrirVentanaReporteAsistencia(empleado);
                             }
 
                         } catch (Exception ex) {
@@ -142,6 +146,20 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
         coordinador.cambioDeVentana(Coordinador.REGISTRO_DE_INCIDENCIAS, empleado);
         this.dispose();
 
+    }
+    /**
+     * Método para abrir la ventana de registro de asistencias
+     * @param empleado empleado al que se le atribuye la asistencia
+     */
+    private void abrirVentanaRegistroAsistencia(DTOEmpleado empleado){
+        coordinador.cambioDeVentana(Coordinador.REGISTRAR_ASISTENCIA, empleado);
+    }
+    /**
+     * Método que permite abrir la ventana de reporte de empleado
+     * @param empleado  el empleado al que se le genera el reporte
+     */
+    private void abrirVentanaReporteAsistencia(DTOEmpleado empleado){
+        coordinador.cambioDeVentana(Coordinador.REPORTE_ASISTENCIA, empleado);
     }
 
     /**
