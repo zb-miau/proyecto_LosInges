@@ -10,6 +10,7 @@ import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
+import dto.DTORegistroMarca;
 import dto.DTOTurno;
 import gestionAsistencias.FacadeGestionAsistencias;
 import gestionAsistencias.IGestionAsistencias;
@@ -214,6 +215,36 @@ public class ControlGestionarEmpleados {
 
         return empleadoBO.obtener(empleado);
 
+    }
+    
+    public DTORegistroMarca agregarMarca(DTORegistroMarca marcaDTO){
+       try{
+           return gestionAsistencias.crearMarca(marcaDTO);
+       }catch(NegocioException e){
+           System.out.println("Algo fallo al intentar insertar la marca");
+           e.printStackTrace();
+       }
+       return marcaDTO;
+    }
+    
+    public List<DTORegistroMarca> obtenerListaMarcas(String idEmpleado, LocalDate incio, LocalDate fin){
+        try{
+            return gestionAsistencias.obtenerListaMarca(idEmpleado, incio, fin);
+        }catch(NegocioException e){
+            System.out.println("Ocurrio un error al intentar obtener la lista");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public int conteoAsistencias(List<DTORegistroMarca> listaMarcas){
+        try{
+            return gestionAsistencias.conteoAsistencia(listaMarcas);
+        }catch(NegocioException e){
+            System.out.println("Ocurrio un error al intentar contar las asistencias");
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

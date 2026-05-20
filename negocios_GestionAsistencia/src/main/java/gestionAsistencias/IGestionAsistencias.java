@@ -41,5 +41,6 @@ public interface IGestionAsistencias {
      * @return regresa un valor entero de la cantidad de asistencias
      * @throws NegocioException
      */
-    public int conteoAsistencia(List<DTORegistroMarca> listaMarcas)throws NegocioException;
+    public int conteoAsistencia(List<DTORegistroMarca> listaMarcas)throws NegocioException
+            ;
 }

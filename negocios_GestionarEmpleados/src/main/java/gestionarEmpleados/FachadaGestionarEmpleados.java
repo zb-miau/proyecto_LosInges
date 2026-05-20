@@ -8,6 +8,7 @@ import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
+import dto.DTORegistroMarca;
 import dto.DTOTurno;
 import java.time.LocalDate;
 import java.util.List;
@@ -102,6 +103,36 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
 
         return control.recuperarEmpleado(empleado);
 
+    }
+    /**
+     * Crea una marca para el empleado por medio de una solicitud al controlador
+     * @param marca la marca que se va a registrar 
+     * @return devuelve un DTO con la marca
+     */
+    @Override
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca) {
+        return control.agregarMarca(marca);
+    }
+    /**
+     * Método que genera un reporte de todas las asistencias del empleado en un rango de
+     * fechas establecido
+     * @param idEmpleado id del empleado al que se le atribuyen las asistencias
+     * @param inicio rango de fecha mayor o igual
+     * @param fin rango de fecha menor o igual 
+     * @return regresa una Lista de DTO de marcas
+     */ 
+    @Override
+    public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) {
+        return control.obtenerListaMarcas(idEmpleado, inicio, fin);
+    }
+    /**
+     * Obtiene el total de asistencias completas del empleado
+     * @param listaMarcas lista de asistencias filtrada para obtener el conteo
+     * @return  regresa un valor entero de la cantidad de asistencias
+     */
+    @Override
+    public int obtenerConteoAsistencia(List<DTORegistroMarca> listaMarcas) {
+        return control.conteoAsistencias(listaMarcas);
     }
 
 }
