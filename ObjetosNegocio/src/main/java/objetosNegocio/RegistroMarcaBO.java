@@ -53,7 +53,7 @@ public class RegistroMarcaBO {
         if (registroDTO == null) {
             throw new NegocioException("Ocurrio un erro al intentar registrar: los datos son nulos");
         }
-        if (registroDTO.getIdEmpleado() == null) {
+        if (registroDTO.getEmpleadoDTO().getId()== null) {
             throw new NegocioException("Se requiere un empleado que sea válido para poder registrar la marca");
         }
         
@@ -152,4 +152,20 @@ public class RegistroMarcaBO {
             throw new NegocioException("Error al intentar obtener la lista de marcas");
         }
     }
+    /**
+     * Este metodo se trae la lista de los registros de asistencia de los empleados y los cuenta.
+     * @param listaMarcas
+     * @return 
+     */
+    public int calcularAsistencias(List<DTORegistroMarca> listaMarcas){
+        int total = 0; 
+        for(DTORegistroMarca marca : listaMarcas){
+            if (marca.getEntrada() != null && marca.getSalida() != null) {
+                total++;
+            }
+        }
+        return total;
+        
+    }
 }
+

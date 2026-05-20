@@ -6,6 +6,7 @@ package dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  *
@@ -15,14 +16,14 @@ public class DTORegistroMarca {
     private String idRegistroMarca;
     private DTOEmpleado empleadoDTO; 
     private DTOHorarioEmpleado horarioEmpledoDTO;
-    private LocalDateTime entrada;
-    private LocalDateTime salida;
+    private LocalTime entrada;
+    private LocalTime salida;
     private LocalDate fecha; 
 
     public DTORegistroMarca() {
     }
 
-    public DTORegistroMarca(String idRegistroMarca, DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public DTORegistroMarca(String idRegistroMarca, DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalTime entrada, LocalTime salida, LocalDate fecha) {
         this.idRegistroMarca = idRegistroMarca;
         this.empleadoDTO = empleadoDTO;
         this.horarioEmpledoDTO = horarioEmpledoDTO;
@@ -31,7 +32,7 @@ public class DTORegistroMarca {
         this.fecha = fecha;
     }
 
-    public DTORegistroMarca(DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public DTORegistroMarca(DTOEmpleado empleadoDTO, DTOHorarioEmpleado horarioEmpledoDTO, LocalTime entrada, LocalTime salida, LocalDate fecha) {
         this.empleadoDTO = empleadoDTO;
         this.horarioEmpledoDTO = horarioEmpledoDTO;
         this.entrada = entrada;
@@ -39,7 +40,7 @@ public class DTORegistroMarca {
         this.fecha = fecha;
     }
 
-    public DTORegistroMarca(String idRegistroMarca, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public DTORegistroMarca(String idRegistroMarca, LocalTime entrada, LocalTime salida, LocalDate fecha) {
         this.idRegistroMarca = idRegistroMarca;
         this.entrada = entrada;
         this.salida = salida;
@@ -70,19 +71,19 @@ public class DTORegistroMarca {
         this.horarioEmpledoDTO = horarioEmpledoDTO;
     }
 
-    public LocalDateTime getEntrada() {
+    public LocalTime getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(LocalDateTime entrada) {
+    public void setEntrada(LocalTime entrada) {
         this.entrada = entrada;
     }
 
-    public LocalDateTime getSalida() {
+    public LocalTime getSalida() {
         return salida;
     }
 
-    public void setSalida(LocalDateTime salida) {
+    public void setSalida(LocalTime salida) {
         this.salida = salida;
     }
 

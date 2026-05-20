@@ -6,6 +6,7 @@ package entidadesMongo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.*;
 import org.bson.types.*;
@@ -23,14 +24,14 @@ public class RegistroMarcaMongo {
     private ObjectId idEmpleado;
     @BsonProperty("nombre_empleado")
     private String nombreEmpleado;
-    private LocalDateTime entrada;
-    private LocalDateTime salida;
+    private LocalTime entrada;
+    private LocalTime salida;
     private LocalDate fecha;
 
     public RegistroMarcaMongo() {
     }
 
-    public RegistroMarcaMongo(String id, ObjectId idEmpleado, String nombreEmpleado, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public RegistroMarcaMongo(String id, ObjectId idEmpleado, String nombreEmpleado, LocalTime entrada, LocalTime salida, LocalDate fecha) {
         this.id = id;
         this.idEmpleado = idEmpleado;
         this.nombreEmpleado = nombreEmpleado;
@@ -39,7 +40,7 @@ public class RegistroMarcaMongo {
         this.fecha = fecha;
     }
 
-    public RegistroMarcaMongo(ObjectId idEmpleado, String nombreEmpleado, LocalDateTime entrada, LocalDateTime salida, LocalDate fecha) {
+    public RegistroMarcaMongo(ObjectId idEmpleado, String nombreEmpleado, LocalTime entrada, LocalTime salida, LocalDate fecha) {
         this.idEmpleado = idEmpleado;
         this.nombreEmpleado = nombreEmpleado;
         this.entrada = entrada;
@@ -71,19 +72,19 @@ public class RegistroMarcaMongo {
         this.nombreEmpleado = nombreEmpleado;
     }
 
-    public LocalDateTime getEntrada() {
+    public LocalTime getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(LocalDateTime entrada) {
+    public void setEntrada(LocalTime entrada) {
         this.entrada = entrada;
     }
 
-    public LocalDateTime getSalida() {
+    public LocalTime getSalida() {
         return salida;
     }
 
-    public void setSalida(LocalDateTime salida) {
+    public void setSalida(LocalTime salida) {
         this.salida = salida;
     }
 

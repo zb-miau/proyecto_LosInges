@@ -6,6 +6,7 @@ package adapters;
 
 import entidadesMongo.RegistroMarcaMongo;
 import itson.entidades.Empleado;
+import itson.entidades.HorarioEmpleado;
 import itson.entidades.RegistroMarca;
 import org.bson.types.ObjectId;
 
@@ -28,12 +29,15 @@ public class RegistroMarcaMongoARegistroMarcaAdapter {
         Empleado empleado = new Empleado();
         empleado.setId(registroMongo.getIdEmpleado().toHexString());
         empleado.setNombre(registroMongo.getNombreEmpleado());
-        
+        //Obtenemos el horario
+        HorarioEmpleado horario = new HorarioEmpleado();
+        horario.setEmpleado(empleado);
         //Ahora si hacemos la conversion de mongo -> persistencia 
         
         RegistroMarca marca = new RegistroMarca(
                 registroMongo.getId(),
                 empleado,
+                horario,
                 registroMongo.getEntrada(),
                 registroMongo.getSalida(),
                 registroMongo.getFecha()

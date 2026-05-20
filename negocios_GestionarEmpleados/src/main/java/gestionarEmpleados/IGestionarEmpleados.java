@@ -8,6 +8,7 @@ import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
+import dto.DTORegistroMarca;
 import dto.DTOTurno;
 import java.time.LocalDate;
 import java.util.List;
@@ -44,6 +45,12 @@ public interface IGestionarEmpleados {
     public DTOIncidencia validarIncidencia(DTOIncidencia incidencia);
 
     public DTOIncidencia rechazarIncidencia(DTOIncidencia incidencia);
+    
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca);
+    
+    public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin);
+    
+    public int obtenerConteoAsistencia(List<DTORegistroMarca> listaMarcas);
     
     public DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado);
 

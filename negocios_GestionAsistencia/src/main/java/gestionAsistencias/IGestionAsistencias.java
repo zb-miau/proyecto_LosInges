@@ -22,33 +22,24 @@ public interface IGestionAsistencias {
     /**
      * Registra y persiste una nueva instancia de RegistroMarca.
      * @param marcaDTO DTO de la marca que se quiere agregar.
-     * @return regresa un DTO de la marca registrada.
-     * @throws NegocioException 
+     * @return regresa un DTO de la marca registrada. 
+     * @throws NegocioException
      */
     public DTORegistroMarca crearMarca(DTORegistroMarca marcaDTO) throws NegocioException;
-    /**
-     * Modifica una marca ya registrada. Permite actualizar la hora de salida del empleado
-     * @param marcaDTO la marca para actualizar
-     * @return regresa un DTO de la marca ya actualizada
-     * @throws NegocioException 
-     */
-    public DTORegistroMarca modificarMarca(DTORegistroMarca marcaDTO) throws NegocioException;
-    /**
-     * Obtiene un registro en concreto. Método auxiliar para poder modificar una marca
-     * @param idEmpleado atributo del empleado asociado a la marca 
-     * @param fecha atributo del día en que la marca se creo
-     * @return regresa un DTORegistroMarca para poder modificarlo
-     * @throws NegocioException 
-     */
-    public DTORegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha)throws NegocioException;
     /**
      * Método para poder traer todas los registros de asistencia de un empleado
      * @param idEmpleado atributo para identificar al empleado
      * @param inicio periodo de comienzo de la filtración de reigstros
      * @param fin periodo de finalización de la filtración de reigstros
-     * @return
-     * @throws NegocioException 
+     * @return regresa una lista DTO con los registros
+     * @throws NegocioException
      */
-    public List<DTORegistroMarca> obtenerListaMarca(String idEmpleado, LocalDate inicio, LocalDate fin) throws NegocioException;
-    
+    public List<DTORegistroMarca> obtenerListaMarca(String idEmpleado, LocalDate inicio, LocalDate fin)throws NegocioException;
+    /**
+     * Método que realiza el conteo de las asistencias totales de un empleado.
+     * @param listaMarcas lista donde se realiza el conteo
+     * @return regresa un valor entero de la cantidad de asistencias
+     * @throws NegocioException
+     */
+    public int conteoAsistencia(List<DTORegistroMarca> listaMarcas)throws NegocioException;
 }

@@ -4,8 +4,11 @@
  */
 package objetosNegocio;
 
+import dto.DTOEmpleado;
+import dto.DTOHorarioEmpleado;
 import dto.DTORegistroMarca;
 import itson.entidades.Empleado;
+import itson.entidades.HorarioEmpleado;
 import itson.entidades.RegistroMarca;
 
 /**
@@ -22,14 +25,17 @@ public class RegistroMarcaToDTORegistroMarca {
         if (registroDTO  == null) {
             return null; 
         }
-        //Primero contruimos el objeto completo
+        //Primero contruimos el objeto completo de empleado 
         Empleado empleado = new Empleado();
-        empleado.setId(registroDTO.getIdEmpleado());
-        empleado.setNombre(registroDTO.getNombreEmpleado());
-        
+        empleado.setId(registroDTO.getEmpleadoDTO().getId());
+        empleado.setNombre(registroDTO.getEmpleadoDTO().getNombre());
+        //Horario empleado
+        HorarioEmpleado horario = new HorarioEmpleado();
+        horario.setEmpleado(empleado);
         RegistroMarca marca = new RegistroMarca(
                 registroDTO.getIdRegistroMarca(),
                 empleado,
+                horario,
                 registroDTO.getEntrada(),
                 registroDTO.getSalida(),
                 registroDTO.getFecha()
@@ -46,21 +52,19 @@ public class RegistroMarcaToDTORegistroMarca {
         if (registroPersistencia == null) {
             return null;
         }
-        
-        //Sacamos los datos que nos interesan 
-        
-        String idEmpleado = registroPersistencia.getEmpleado().getId();
-        String nombreEmpleado = registroPersistencia.getEmpleado().getNombre();
-        
-        DTORegistroMarca marca = new DTORegistroMarca(
-                registroPersistencia.getIdRegistroMarca(),
-                idEmpleado,
-                nombreEmpleado,
-                registroPersistencia.getRegistroEntrada(),
-                registroPersistencia.getRegistroSalida(),
-                registroPersistencia.getFecha()
-        );
-        
-        return marca; 
+       //Adaptar el empleado a DTO
+       DTOEmpleado empleado = EmpleadoToDTOEmpleadoAdapter.adaptarEntidad(registroPersistencia.getEmpleado());
+       DTOHorarioEmpleado horarioEmpleado =HorarioEmpleadoToDTOHorarioEmpleadoAdapter.adaptar(registroPersistencia.getHorarioEmpleado());
+       
+       DTORegistroMarca registroDTO = new DTORegistroMarca(
+               registroPersistencia.getIdRegistroMarca(),
+               empleado,
+               horarioEmpleado,
+               registroPersistencia.getRegistroEntrada(),
+               registroPersistencia.getRegistroSalida(),
+               registroPersistencia.getFecha()      
+       );
+       
+       return registroDTO; 
     }
 }
