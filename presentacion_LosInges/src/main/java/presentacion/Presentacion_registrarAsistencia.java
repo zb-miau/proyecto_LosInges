@@ -66,7 +66,6 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
             DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
             
             if (marcaHoy == null) {
-                // LÓGICA DE ENTRADA
                 DTORegistroMarca nuevo = new DTORegistroMarca();
                 nuevo.setEmpleadoDTO(this.empleado);
                 nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
@@ -76,19 +75,16 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
                 coordinador.gestionAsistencias.crearMarca(nuevo);
                 JOptionPane.showMessageDialog(this, "Entrada registrada");
             } else {
-                // LÓGICA DE SALIDA
                 marcaHoy.setSalida(LocalTime.now());
-                // IMPORTANTE: Asegúrate de que tu coordinador tenga un método para MODIFICAR
                 coordinador.gestionAsistencias.crearMarca(marcaHoy); 
                 JOptionPane.showMessageDialog(this, "Salida registrada");
             }
             
-            // Refrescamos solo el texto del botón, no los eventos
             actualizarEstadoBoton();
             
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
-            btnRegistrar.setEnabled(true); // Re-habilitar si falló la validación
+            btnRegistrar.setEnabled(true); 
         }
         });
     }
@@ -121,6 +117,11 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         lblBienvenida.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         lblBienvenida.setForeground(new java.awt.Color(255, 255, 255));
@@ -176,6 +177,12 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments

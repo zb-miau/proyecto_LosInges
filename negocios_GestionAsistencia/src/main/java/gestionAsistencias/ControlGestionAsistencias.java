@@ -77,7 +77,6 @@ public class ControlGestionAsistencias {
         }
 
         //2. Validar si existe una marca previa
-        System.out.println("DEBUG: Buscando marca para empleado: " + empleado.getId() + " en fecha: " + fechaHoy);
         DTORegistroMarca marcaExistente = registroMarcaBO.obtenerPorEmpleadoYFecha(empleado.getId(), fechaHoy);
         //Si no hay una marca previa
         if (marcaExistente == null) {
@@ -97,8 +96,7 @@ public class ControlGestionAsistencias {
         } else {//SI YA TIENE UNA ENTRADA, MARCA LA SALIDA
             if (marcaExistente.getSalida() != null) {
                 
-                throw new NegocioException("ERROR DEPURACIÓN: La salida ya existe y es: " + marcaExistente.getSalida() + 
-                               " para el registro ID: " + marcaExistente.getIdRegistroMarca());
+                throw new NegocioException("Ya existe un registro de salida");
             } else {
                 marcaExistente.setSalida(tiempoHoy);
                 return registroMarcaBO.modificar(marcaExistente);
