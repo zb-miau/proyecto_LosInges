@@ -14,9 +14,7 @@ public class Direccion {
     
     private String calle;
     private String colonia;
-    @BsonProperty("numero_casa") 
     private Integer numeroCasa;
-    @BsonProperty("codigo_postal") 
     private Integer codigoPostal;
 
     public Direccion(String calle, String colonia, Integer numeroCasa, Integer codigoPostal) {
