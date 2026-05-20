@@ -19,6 +19,7 @@
         <module>negocios_GestionarTurnos</module>
         <module>infraestructura_SAT</module>
         <module>infraestructura_Seguro</module>
+        <module>DTO_Infraestructura</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -135,4 +135,9 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
         return control.conteoAsistencias(listaMarcas);
     }
 
+    @Override
+    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha) {
+        return control.obtenerMarca(idEmpleado, fecha);
+    }
+
 }

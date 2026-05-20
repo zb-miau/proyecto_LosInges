@@ -6,6 +6,11 @@ package presentacion;
 
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
+import dto.DTORegistroMarca;
+import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import objetosNegocio.NegocioException;
 
 /**
  *
@@ -23,6 +28,45 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         this.coordinador = coordinador;
         this.empleado = empleado; 
         setVisible(true);
+        configurarPantalla();
+    }
+    
+    private void configurarPantalla(){
+        //1.Cambiar la etiqueta al nombre del usuario
+        lblEmpleadoNombre.setText(empleado.getNombre());
+        //2.Hacer una consulta para poder cambiar el texto del bóton
+        try{
+            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado.getId(), LocalDate.now());
+            
+            if (marcaHoy == null) {
+                btnRegistrar.setText("RegistrarEntrada");
+            }else if(marcaHoy.getSalida() == null){
+                btnRegistrar.setText("Registrar Salida");
+            }else{
+                btnRegistrar.setText("Jornada terminada");
+                btnRegistrar.setEnabled(false);
+            }
+        }catch(NegocioException e){
+            JOptionPane.showMessageDialog(this, "Error al consultar el estado: " + e.getMessage());
+        }
+        
+    }
+    
+    private void btnRegistrarActionPerformed(ActionEvent evt){
+        try{
+            DTORegistroMarca dtoRegistro = new DTORegistroMarca();
+            dtoRegistro.setEmpleadoDTO(this.empleado);
+            coordinador.gestionAsistencias.crearMarca(dtoRegistro);
+            JOptionPane.showMessageDialog(this, "Marca registrada con éxito");
+            configurarPantalla();
+        }catch(NegocioException e){
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    private void btnRegresarActionPerformed(ActionEvent evt){
+        coordinador.cambioDeVentana(coordinador.MENU_PRINCIPAL);
+        this.dispose();
     }
 
     /**

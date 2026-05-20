@@ -38,5 +38,10 @@ public class FacadeGestionAsistencias implements IGestionAsistencias {
     public int conteoAsistencia(List<DTORegistroMarca> listaMarcas) throws NegocioException {
         return control.ObtenerConteo(listaMarcas);
     }
+
+    @Override
+    public DTORegistroMarca obtenerMarca(String idEmplead, LocalDate fecha) throws NegocioException{
+        return control.obtenerMarca(idEmplead, fecha);
+    }
     
 }

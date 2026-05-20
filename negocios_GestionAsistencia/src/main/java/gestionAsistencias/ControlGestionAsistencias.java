@@ -104,9 +104,17 @@ public class ControlGestionAsistencias {
         }
         return registroMarcaBO.obtenerLista(idEmpleado, fechaInicio, fechaFin);
     }
-    
-    public int ObtenerConteo(List<DTORegistroMarca> listaMarcas) throws NegocioException{
+    /**
+     * Cuenta la cantidad de asistencias del empleado
+     * @param listaMarcas lista de todas las asistencias del empleado en un rango de fechas
+     * @return un valor entero con la cantidad de asistencias
+     * @throws NegocioException 
+     */
+    protected int ObtenerConteo(List<DTORegistroMarca> listaMarcas) throws NegocioException{
         return registroMarcaBO.calcularAsistencias(listaMarcas);
+    }
+    protected DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha)throws NegocioException{
+        return registroMarcaBO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
     }
     
 }

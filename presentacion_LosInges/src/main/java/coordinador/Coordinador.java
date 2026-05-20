@@ -38,7 +38,7 @@ public class Coordinador {
 
     public final IAsignarHorario asignarHorario = new FacadeAsignarHorario();
     public final IGestionIncidencias gestionIncidencias = new FacadeGestionIncidencias();
-    private final IGestionAsistencias gestionAsistencias = new FacadeGestionAsistencias();
+    public final IGestionAsistencias gestionAsistencias = new FacadeGestionAsistencias();
     public final IGestionarEmpleados gestionarEmpleados = new FachadaGestionarEmpleados();
     public final IGestionarTurnos gestionarTurnos = new FachadaGestionarTurnos();
 

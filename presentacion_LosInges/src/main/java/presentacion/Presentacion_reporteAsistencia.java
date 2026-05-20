@@ -4,16 +4,33 @@
  */
 package presentacion;
 
+import com.github.lgooddatepicker.components.DatePicker;
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
+import com.toedter.calendar.JDateChooser;
+import dto.DTORegistroMarca;
+import java.time.ZoneId;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import objetosNegocio.NegocioException;
 
 /**
  *
  * @author josma
  */
+
 public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
+
     private DTOEmpleado empleado;
     private Coordinador coordinador;
+
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    
+    private DatePicker datePickerFin;
+    private DatePicker datePickerInicio;
 
     /**
      * Creates new form Presentacion_reporteAsistencia
@@ -21,9 +38,10 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
     public Presentacion_reporteAsistencia(Coordinador coordiandor, DTOEmpleado empleado) {
         initComponents();
         this.coordinador = coordinador;
-        this.empleado = empleado; 
-    }
+        this.empleado = empleado;
 
+        lblEmpleado.setText(empleado.getNombre());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,10 +54,13 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblReporte = new javax.swing.JLabel();
         lblEmpleado = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         lblAsistenciaContador = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAsistencias = new javax.swing.JTable();
+        btnFechaIncio = new javax.swing.JButton();
+        btnFechaFin = new javax.swing.JButton();
+        btnConsulta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,10 +74,10 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         lblEmpleado.setForeground(new java.awt.Color(255, 255, 255));
         lblEmpleado.setText("jLabel1");
 
-        jButton1.setBackground(new java.awt.Color(224, 30, 72));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Regresar");
+        btnRegresar.setBackground(new java.awt.Color(224, 30, 72));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
 
         lblAsistenciaContador.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblAsistenciaContador.setForeground(new java.awt.Color(255, 255, 255));
@@ -83,42 +104,83 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblAsistencias);
 
+        btnFechaIncio.setBackground(new java.awt.Color(255, 153, 0));
+        btnFechaIncio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnFechaIncio.setForeground(new java.awt.Color(39, 71, 125));
+        btnFechaIncio.setText("Fecha inicio");
+        btnFechaIncio.setActionCommand("");
+        btnFechaIncio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFechaIncioActionPerformed(evt);
+            }
+        });
+
+        btnFechaFin.setBackground(new java.awt.Color(255, 153, 0));
+        btnFechaFin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnFechaFin.setForeground(new java.awt.Color(39, 71, 125));
+        btnFechaFin.setText("Fecha fin");
+        btnFechaFin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFechaFinActionPerformed(evt);
+            }
+        });
+
+        btnConsulta.setBackground(new java.awt.Color(224, 30, 72));
+        btnConsulta.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnConsulta.setForeground(new java.awt.Color(255, 255, 255));
+        btnConsulta.setText("Consultar");
+        btnConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(jButton1))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(15, 15, 15)
-                                    .addComponent(lblAsistenciaContador)))
-                            .addGap(475, 475, 475)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnRegresar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(lblAsistenciaContador))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
+                        .addContainerGap()
                         .addComponent(lblReporte)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(btnFechaIncio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(103, Short.MAX_VALUE))
+                        .addComponent(btnFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(btnConsulta)))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(btnRegresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFechaIncio)
+                    .addComponent(btnFechaFin)
+                    .addComponent(btnConsulta))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblReporte)
                     .addComponent(lblEmpleado))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addGap(19, 19, 19)
                 .addComponent(lblAsistenciaContador)
                 .addGap(25, 25, 25))
         );
@@ -137,13 +199,107 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnFechaIncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechaIncioActionPerformed
+        // TODO add your handling code here:
+        datePickerInicio = new DatePicker();
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                datePickerInicio,
+                "Seleccione la fecha de inicio",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        // Si el usuario presiono "Aceptar", recuperamos la fecha seleccionada
+        if (opcion == JOptionPane.OK_OPTION) {
+            if (datePickerInicio.getDate() != null) {
+                this.fechaInicio = datePickerInicio.getDate();
+
+                btnFechaIncio.setText(this.fechaInicio.toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "No seleccionó ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnFechaIncioActionPerformed
+
+    private void btnFechaFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechaFinActionPerformed
+        // TODO add your handling code here:
+        datePickerFin = new DatePicker();
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                datePickerFin,
+                "Seleccione la fecha de fin",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        // Si el usuario presiono "Aceptar", recuperamos la fecha seleccionada
+        if (opcion == JOptionPane.OK_OPTION) {
+            if (datePickerFin.getDate() != null) {
+                this.fechaFin = datePickerFin.getDate();
+
+                btnFechaFin.setText(this.fechaFin.toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "No seleccionó ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnFechaFinActionPerformed
+
+    private void btnConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaActionPerformed
+        // TODO add your handling code here:
+        
+        //1.Obtener las fechas  y validar
+        if (datePickerInicio.getDate() == null || datePickerFin.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar ambas fechas", "Campos incompletos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        fechaInicio = datePickerInicio.getDate();
+        fechaFin = datePickerFin.getDate();
+        
+        try{
+            //2. Llamar al coordinador
+            List<DTORegistroMarca> listaMarcas = coordinador.gestionAsistencias.obtenerListaMarca(empleado.getId(), fechaInicio, fechaFin);
+            //3. Llenar la tabla 
+            
+            DefaultTableModel modelo = (DefaultTableModel) tblAsistencias.getModel();
+            modelo.setRowCount(0);
+            
+            if (listaMarcas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron registeos en el rango");
+            }else{
+                for(DTORegistroMarca registro: listaMarcas){
+                    Object[] fila = {
+                           registro.getFecha(),
+                           registro.getEntrada(),
+                           registro.getSalida() != null ? registro.getSalida() : "Sin registro"
+                    };
+                    modelo.addRow(fila);
+                }
+            }
+            
+            //5. Actualizar contador
+            int totalAsistencia = coordinador.gestionAsistencias.conteoAsistencia(listaMarcas);
+            lblAsistenciaContador.setText("Asistencias completas: totalAsistencias");
+        }catch(NegocioException e){
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de negocio", JOptionPane.ERROR_MESSAGE);
+        }
+                
+        
+    }//GEN-LAST:event_btnConsultaActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnConsulta;
+    private javax.swing.JButton btnFechaFin;
+    private javax.swing.JButton btnFechaIncio;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAsistenciaContador;

@@ -52,6 +52,8 @@ public interface IGestionarEmpleados {
     
     public int obtenerConteoAsistencia(List<DTORegistroMarca> listaMarcas);
     
+    public DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha);
+    
     public DTOHorarioEmpleado obtenerHorarioEmpleado(DTOEmpleado empleado);
 
     public void actualizarHorarioEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fecha_inicio, LocalDate fecha_fin) throws NegocioException;

@@ -20,6 +20,11 @@
             <version>RELEASE220</version>
         </dependency>
         <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_AsignarHorario</artifactId>
             <version>${project.version}</version>
@@ -57,4 +62,18 @@
         <exec.mainClass>presentacion.Presentacion_main</exec.mainClass>
     </properties>
     <name>presentacion_LosInges</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
