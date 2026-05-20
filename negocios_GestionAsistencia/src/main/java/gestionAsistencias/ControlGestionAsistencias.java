@@ -18,30 +18,37 @@ import objetosNegocio.NegocioException;
 import objetosNegocio.RegistroMarcaBO;
 
 /**
- * Clase Control encargada de del flujo de trabajo del subistema, se encarga de
- * controlar los flujos de trabajo y las pantallas relacionadas con la
- * administración y gestión de asistencias.
+ * Clase de control encargada de orquestar el flujo de trabajo del subsistema de asistencias.
+ * Actúa como un controlador de casos de uso que coordina las interacciones entre los 
+ * distintos objetos de negocio (BO) para realizar operaciones complejas como el 
+ * registro validado de marcas y la generación de reportes.
  *
  * @author josma
  */
 public class ControlGestionAsistencias {
-
     private RegistroMarcaBO registroMarcaBO;
     private HorarioEmpleadoBO horarioEmpleadoBO;
     private EmpleadoBO empleadoBO;
-
+    /**
+     * Constructor que inicializa las instancias de los objetos de negocio necesarios
+     * mediante sus respectivos métodos Singleton.
+     */
     public ControlGestionAsistencias() {
         this.registroMarcaBO = RegistroMarcaBO.getInstance();
         this.horarioEmpleadoBO = HorarioEmpleadoBO.getInstance();
         this.empleadoBO = EmpleadoBO.getInstance();
     }
     /**
-     * Método que sirve para poder registrar o actualizar una marca del empleado
-     * Si la marca no existe le genera una entrada, si la marca ya existe actualiza
-     * la instancia y le agrega la salida.
-     * @param registroDTO 
-     * @return
-     * @throws NegocioException 
+     * Registra una nueva marca de entrada o actualiza una existente con la hora de salida.
+     * El flujo de validación incluye:
+     * 1. Verificar la existencia del horario del empleado.
+     * 2. Validar que el día actual sea un día laborable para el empleado.
+     * 3. Si no hay marca previa: validar que la hora esté dentro del rango permitido e insertar entrada.
+     * 4. Si hay marca previa: validar que no exista ya una salida y registrar la salida actual.
+     * @param registroDTO DTO con la información básica del empleado para procesar la marca.
+     * @return El DTORegistroMarca resultante tras la operación de persistencia.
+     * @throws NegocioException Si el empleado no tiene horario, si no es día laborable, 
+     * si está fuera de rango horario o si ya cuenta con una salida registrada.
      */
     protected DTORegistroMarca agregarMarca(DTORegistroMarca registroDTO) throws NegocioException {
         LocalDate fechaHoy = LocalDate.now();
@@ -89,13 +96,12 @@ public class ControlGestionAsistencias {
         }
     }
     /**
-     * Método para poder generar un reporte con todas las asistencias de un empleado en un rango de 
-     * fechas definido
-     * @param idEmpleado id del empleado con el que se va abuscar sus registros
-     * @param fechaInicio rango de fecha mayor  o igual 
-     * @param fechaFin rango de fecha menor o igual
-     * @return regresa una lista DTO con los registros
-     * @throws NegocioException 
+     * Genera una lista de asistencias filtrada por un rango de fechas para un empleado específico.
+     * @param idEmpleado Identificador único del empleado.
+     * @param fechaInicio Límite inferior del rango de fechas.
+     * @param fechaFin Límite superior del rango de fechas.
+     * @return Lista de DTORegistroMarca encontrados en el periodo.
+     * @throws NegocioException Si la fecha de fin es anterior a la fecha de inicio.
      */
     protected List<DTORegistroMarca> reporteAsistencia(String idEmpleado, LocalDate fechaInicio, LocalDate fechaFin) throws NegocioException{
         //Validación de fechas coherente
@@ -105,14 +111,21 @@ public class ControlGestionAsistencias {
         return registroMarcaBO.obtenerLista(idEmpleado, fechaInicio, fechaFin);
     }
     /**
-     * Cuenta la cantidad de asistencias del empleado
-     * @param listaMarcas lista de todas las asistencias del empleado en un rango de fechas
-     * @return un valor entero con la cantidad de asistencias
-     * @throws NegocioException 
+     * Calcula el conteo total de asistencias válidas (con entrada y salida) de una lista proporcionada.
+     * @param listaMarcas Lista de registros a contabilizar.
+     * @return Cantidad de asistencias completas.
+     * @throws NegocioException Si ocurre un error en la lógica de cálculo.
      */
     protected int ObtenerConteo(List<DTORegistroMarca> listaMarcas) throws NegocioException{
         return registroMarcaBO.calcularAsistencias(listaMarcas);
     }
+    /**
+     * Recupera una marca específica basada en el empleado y una fecha determinada.
+     * @param idEmpleado Identificador del empleado.
+     * @param fecha Fecha de consulta.
+     * @return El DTO de la marca o null si no existe registro.
+     * @throws NegocioException Si ocurre un error en la consulta de negocio.
+     */
     protected DTORegistroMarca obtenerMarca(String idEmpleado, LocalDate fecha)throws NegocioException{
         return registroMarcaBO.obtenerPorEmpleadoYFecha(idEmpleado, fecha);
     }

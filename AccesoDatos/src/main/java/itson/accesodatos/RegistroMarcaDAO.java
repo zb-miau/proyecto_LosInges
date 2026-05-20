@@ -23,10 +23,10 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
- * DAO para la gestión de asistencias del empleado, podemos crear y consultar
- * nada más, no hay métodos de eliminación porque no son necearios para mi caso
- * de uso invidual.
- *
+ *DAO para la gestión de las asistencias (marcas) de los empleados en MongoDB.
+ * Implementa las operaciones de persistencia para registrar entradas/salidas y realizar consultas
+ * filtradas por empleado y rangos de fechas.
+ * * Esta clase utiliza el patrón Singleton para garantizar una única instancia de acceso.
  * @author josma
  */
 public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IAccesoMongo {
@@ -35,13 +35,15 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
     private static final String CAMPO_ID_EMPLEADO = "id_empleado";
     private static final String CAMPO_FECHA = "fecha";
     private static final String CAMPO_ID = "_id";
-
+    /**
+     * Instancia unica de la clase.
+     */
     private static RegistroMarcaDAO registroMarcaDAO; //Instancia de la DAO
 
     /**
-     * Método singleton
-     *
-     * @return
+     * Obtiene la instancia única de RegistroMarcaDAO.
+     * Si la instancia no existe, la crea de forma sincronizada para asegurar hilos.
+     * @return Instancia única de RegistroMarcaDAO.
      */
     public static synchronized RegistroMarcaDAO getInstance() {
         if (registroMarcaDAO == null) {
@@ -51,35 +53,37 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
     }
 
     /**
-     * Constructor privado por defecto.
+     * Constructor privado para evitar instanciación externa (Singleton).
      */
     private RegistroMarcaDAO() {
 
     }
 
     /**
-     * Obtiene la referencia a la base de datos de MongoDB configurada en el
-     * manejador.
-     *
+     * Recupera la base de datos de MongoDB configurada mediante el cliente proporcionado.
      * @param cliente Instancia activa de MongoClient.
-     * @return El objeto MongoDatabase correspondiente.
+     * @return Objeto MongoDatabase para realizar operaciones.
      */
     @Override
     public MongoDatabase recuperarBaseDatos(MongoClient cliente) {
         return cliente.getDatabase(ManejadorConexiones.BASE_DATOS);
     }
     /**
-     * Obtiene la colección de registro de marca tipada explícitamente para trabajar
-     * con mapeo de POJOs de tipo RegistroMarcaMongo.
-     *
+     * Recupera la colección de registros de asistencia tipada para mapeo automático de POJOs.
      * @param baseDatos Conexión activa a la base de datos.
-     * @return La MongoCollection configurada para la entidad RegistroMarcaMongo.
+     * @return Una MongoCollection configurada para objetos de tipo RegistroMarcaMongo.
      */
     @Override
     public MongoCollection recuperarColeccion(MongoDatabase baseDatos) {
         return baseDatos.getCollection(COLECCION_ASISTENCIA, RegistroMarcaMongo.class);
     }
-
+    /**
+     * Inserta un nuevo registro de asistencia en la base de datos.
+     * Realiza la conversión de la entidad de dominio a formato de persistencia y asigna el ID generado.
+     * @param marca Objeto de dominio RegistroMarca a persistir.
+     * @return El objeto RegistroMarca procesado con su identificador de base de datos asignado.
+     * @throws PersistenciaException Si ocurre un error durante la comunicación con MongoDB.
+     */
     @Override
     public RegistroMarca crear(RegistroMarca marca) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
@@ -102,7 +106,15 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             throw new PersistenciaException("Algo fallo al intentar insertar el registro marca: " + e.getMessage());
         }
     }
-
+    /**
+     * Obtiene una lista de asistencias pertenecientes a un empleado específico dentro de un rango de fechas.
+     * Utiliza un pipeline de agregación para filtrar por ID de empleado y fechas (gte/lte).
+     * @param idEmpleado Identificador único del empleado (formato String para conversión a ObjectId).
+     * @param inicio Fecha inicial del rango de búsqueda (inclusive).
+     * @param fin Fecha final del rango de búsqueda (inclusive).
+     * @return Lista de RegistroMarca que coinciden con los criterios.
+     * @throws PersistenciaException Si ocurre un error en la ejecución del pipeline de agregación.
+     */
     @Override
     public List<RegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) throws PersistenciaException {
         //1. Creamos la lista de RegistroMarcaMongo 
@@ -134,7 +146,13 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
         }
 
     }
-
+    /**
+     * Actualiza un registro de asistencia existente mediante su identificador único.
+     * Realiza un reemplazo completo del documento en la colección.
+     * @param marca Objeto RegistroMarca con los datos actualizados e ID válido.
+     * @return El mismo objeto {@link RegistroMarca} proporcionado.
+     * @throws PersistenciaException Si ocurre un error durante la actualización del documento.
+     */
     @Override
     public RegistroMarca modificar(RegistroMarca marca) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos
@@ -155,7 +173,14 @@ public class RegistroMarcaDAO implements IAccesoRegistroMarca<RegistroMarca>, IA
             throw new PersistenciaException("Algo fallo al intentar modificar el registro marca: " + e.getMessage());
         }
     }
-
+    /**
+     * Busca un registro de marca específico que coincida exactamente con un empleado y una fecha.
+     * Este método es útil para determinar si un empleado ya registró su entrada en un día determinado.
+     * @param idEmpleado Identificador único del empleado.
+     * @param fecha Fecha exacta de la asistencia buscada.
+     * @return El objeto RegistroMarca encontrado, o null si no existe registro.
+     * @throws PersistenciaException Si ocurre un error durante la consulta.
+     */
     @Override
     public RegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws PersistenciaException {
         //1. Establecemos conexion con la base de datos

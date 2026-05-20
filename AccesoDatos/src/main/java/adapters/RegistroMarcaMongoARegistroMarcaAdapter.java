@@ -11,14 +11,21 @@ import itson.entidades.RegistroMarca;
 import org.bson.types.ObjectId;
 
 /**
- *Adaptador para convertir entre la entidad limpia y la entidad de mongo
+ * Clase adaptadora encargada de la transformación de datos entre el modelo de dominio
+ * y el modelo de persistencia de MongoDB.
+ * * Permite desacoplar la lógica de negocio (entidades limpias) de los detalles
+ * de implementación de la base de datos (POJOs de MongoDB).
  * @author josma
  */
 public class RegistroMarcaMongoARegistroMarcaAdapter {
     /**
-     * convertir de entidad mongo (dominio) a entidad limpia (persistencia)
-     * @param registroMongo
-     * @return 
+     * Convierte un objeto de persistencia de MongoDB a una entidad de dominio limpia.
+     * Este método reconstruye la jerarquía de objetos necesaria para la lógica de negocio,
+     * creando instancias parciales de Empleado y HorarioEmpleado a partir
+     * de los datos aplanados almacenados en el documento de Mongo.
+     * @param registroMongo Objeto de tipo RegistroMarcaMongo proveniente de la base de datos.
+     * @return Una instancia de RegistroMarca lista para ser utilizada por la capa de negocio,
+     * o null si el parámetro de entrada es nulo.
      */
     public static RegistroMarca toPersistencia(RegistroMarcaMongo registroMongo){
         if(registroMongo == null){
@@ -46,9 +53,14 @@ public class RegistroMarcaMongoARegistroMarcaAdapter {
         return marca; 
     }
     /**
-     * Convertir de entidad limpia (persistencia) a entidad mongo (dominio)
-     * @param registroPersistencia
-     * @return 
+     * Convierte una entidad de dominio limpia a un objeto de persistencia compatible con MongoDB.
+     * Extrae los identificadores y atributos necesarios de la entidad RegistroMarca
+     * y sus objetos anidados para conformar un documento plano representado por RegistroMarcaMongo.
+     * @param registroPersistencia La entidad de dominio RegistroMarca a convertir.
+     * @return Una instancia de RegistroMarcaMongo lista para ser persistida, 
+     * o null si el parámetro de entrada es nulo.
+     * @throws IllegalArgumentException Si el ID del empleado en la entidad no tiene un formato 
+     * válido para convertirse en ObjectId.
      */
     public static RegistroMarcaMongo toMongo(RegistroMarca registroPersistencia){
         if (registroPersistencia == null) {

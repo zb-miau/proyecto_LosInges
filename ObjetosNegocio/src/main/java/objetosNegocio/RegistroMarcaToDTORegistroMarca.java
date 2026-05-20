@@ -12,14 +12,23 @@ import itson.entidades.HorarioEmpleado;
 import itson.entidades.RegistroMarca;
 
 /**
- *Clase que sirve como adaptador para convertir de entidad a dto y viceversa
+ * Clase adaptadora (Mapper) encargada de la conversión de datos entre la entidad 
+ * de dominio RegistroMarca y su objeto de transferencia DTORegistroMarca.
+ * Esta clase facilita el flujo de información hacia la capa de presentación, 
+ * asegurando que los objetos de negocio permanezcan encapsulados y protegidos 
+ * de cambios en la interfaz de usuario.
  * @author josma
  */
 public class RegistroMarcaToDTORegistroMarca {
     /**
-     * Convertir de DTO a persistencia (entidad limpia) 
-     * @param registroDTO
-     * @return 
+     * Convierte un objeto DTORegistroMarca proveniente de la capa de presentación 
+     * en una entidad RegistroMarca de la capa de negocio.
+     * * El proceso reconstruye las asociaciones internas necesarias (Empleado y Horario) 
+     * para que la entidad resultante sea apta para el procesamiento de reglas de negocio 
+     * o persistencia.
+     * @param registroDTO Objeto de transferencia de datos a convertir.
+     * @return Una instancia de RegistroMarca con la información del DTO, 
+     * o null si el parámetro de entrada es nulo.
      */
     public static RegistroMarca toPersistencia(DTORegistroMarca registroDTO){
         if (registroDTO  == null) {
@@ -44,9 +53,13 @@ public class RegistroMarcaToDTORegistroMarca {
         return marca; 
     }
     /**
-     * Convertir de entidad limpia (persistencia) a DTO
-     * @param registroPersistencia
-     * @return 
+     * Convierte una entidad RegistroMarca de la capa de negocio en un 
+     * DTORegistroMarca para su uso en la capa de presentación.
+     * Utiliza otros adaptadores especializados para transformar los objetos anidados 
+     * (Empleado y Horario) a sus versiones DTO correspondientes.
+     * @param registroPersistencia La entidad de dominio a convertir.
+     * @return Un objeto DTORegistroMarca con la información formateada 
+     * para la vista, o null si la entrada es nula.
      */
     public static DTORegistroMarca toDTO(RegistroMarca registroPersistencia){
         if (registroPersistencia == null) {

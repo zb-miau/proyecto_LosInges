@@ -14,18 +14,22 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Clase centraliza exclusivamente en las reglas de neogcio (BO).
- * Se enfoca en las reglas para la gestión de registro de asistencias del empleado
+ * Business Object (BO) encargado de centralizar las reglas de negocio para la 
+ * gestión de registros de asistencia de los empleados.
+ * Esta clase actúa como mediadora entre la capa de presentación y la capa de datos,
+ * realizando validaciones de integridad, orquestando conversiones de datos 
+ * y manejando la lógica de cálculo de asistencias.
  * @author josma
  */
 public class RegistroMarcaBO {
     private static final Logger LOGGER = Logger.getLogger(EmpleadoBO.class.getName());
-    
+    /** Fachada para el acceso a las operaciones de persistencia. */
     FacadeAccesoDatos fachadaDAO;
+    /** Instancia única de la clase (Patrón Singleton). */
     private static RegistroMarcaBO registroMarcaBO;
     /**
-     * Recupera la variable global y única de la clase RegistroMarcaBO
-     * @return 
+     * Recupera la instancia única y global de RegistroMarcaBO.
+     * @return Instancia única del controlador de negocio de marcas.
      */
     public static synchronized RegistroMarcaBO getInstance() {
         if (registroMarcaBO == null) {
@@ -35,18 +39,21 @@ public class RegistroMarcaBO {
     }
     
     /**
-     * Constructor privado que evita que se cree una instancia externa de la clase.
-     * Inicializa la referencia unica hacia la fachada de acceso a datos.
+     * Constructor privado que inicializa la referencia a la fachada de acceso a datos.
+     * Implementa el patrón Singleton para restringir la instanciación externa.
      */
     private RegistroMarcaBO(){
         this.fachadaDAO = FacadeAccesoDatos.getInstance();
 
     }
     /**
-     * Método para crear un registro de marca 
-     * @param registroDTO
-     * @return
-     * @throws NegocioException 
+     * Crea un nuevo registro de marca de asistencia.
+     * Valida que los datos obligatorios del DTO no sean nulos y transforma el 
+     * objeto para su persistencia a través de la fachada de datos.
+     * @param registroDTO Objeto de transferencia con los datos de la marca a crear.
+     * @return El DTORegistroMarca persistido con su ID generado.
+     * @throws NegocioException Si los datos son nulos, el empleado es inválido o 
+     * ocurre un error en la capa de persistencia.
      */
     public DTORegistroMarca crear(DTORegistroMarca registroDTO) throws NegocioException{
         //1. Se valida que nada venga vacio y que todo sea válido
@@ -70,10 +77,10 @@ public class RegistroMarcaBO {
         }
     }
     /**
-     * Método para actualizar el registro de marca
-     * @param registroDTO con la marca y la hora de salida seteada.
-     * @return DTO del registro actualizado
-     * @throws NegocioException 
+     * Actualiza un registro de marca existente, típicamente para registrar una salida.
+     * @param registroDTO DTO que contiene el ID de la marca y los datos actualizados.
+     * @return El DTORegistroMarca actualizado.
+     * @throws NegocioException Si el DTO o el ID de la marca son nulos, o si falla la persistencia.
      */
     public DTORegistroMarca modificar(DTORegistroMarca registroDTO) throws NegocioException{
         //1. Corroborar que no sea nulo 
@@ -92,11 +99,11 @@ public class RegistroMarcaBO {
         }               
     }
     /**
-     * Método para obtener una marca en especifico 
-     * @param idEmpleado que tiene la marca
-     * @param fecha del dia en que se registro la marca
-     * @return DTO de la marca
-     * @throws NegocioException 
+     * Busca una marca de asistencia específica por empleado y fecha.
+     * @param idEmpleado Identificador único del empleado.
+     * @param fecha Fecha de la marca a consultar.
+     * @return DTORegistroMarca encontrado, o null si no existe registro.
+     * @throws NegocioException Si los parámetros de búsqueda son nulos o hay error en la base de datos.
      */
     public DTORegistroMarca obtenerPorEmpleadoYFecha(String idEmpleado, LocalDate fecha) throws NegocioException{
         //1. Validar que los campos no sean nulos
@@ -117,12 +124,12 @@ public class RegistroMarcaBO {
         }                  
     }
     /**
-     * Método para obtener todas las marcas en un rango de fechas de un empleado en concreto
-     * @param idEmpleado empleado del cual queremos generar su reporte
-     * @param inicio fecha de inicio igual o mayor
-     * @param fin fecha de fin menor o igual
-     * @return una lista de DTO de las marcas
-     * @throws NegocioException 
+     * Obtiene una lista de marcas de un empleado dentro de un rango de fechas determinado.
+     * @param idEmpleado Identificador del empleado para el reporte.
+     * @param inicio Fecha de inicio del rango (inclusive).
+     * @param fin Fecha de fin del rango (inclusive).
+     * @return Lista de DTORegistroMarca que cumplen con los criterios.
+     * @throws NegocioException Si alguno de los parámetros de rango es nulo.
      */
     public List<DTORegistroMarca> obtenerLista(String idEmpleado, LocalDate inicio, LocalDate fin) throws NegocioException{
         //1.Validar que ningun campo sea nulo 
@@ -153,9 +160,10 @@ public class RegistroMarcaBO {
         }
     }
     /**
-     * Este metodo se trae la lista de los registros de asistencia de los empleados y los cuenta.
-     * @param listaMarcas
-     * @return 
+     * Realiza el cálculo lógico del total de asistencias completas en una lista de registros.
+     * Se considera una asistencia válida si el registro tiene tanto hora de entrada como de salida.
+     * @param listaMarcas Lista de DTOs de marcas a procesar.
+     * @return Cantidad total de asistencias completas.
      */
     public int calcularAsistencias(List<DTORegistroMarca> listaMarcas){
         int total = 0; 
