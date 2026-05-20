@@ -12,6 +12,7 @@ import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
 import dto.DTORegistroMarca;
 import dto.DTOTurno;
+import dtos.DTO_Contratacion;
 import gestionAsistencias.FacadeGestionAsistencias;
 import gestionAsistencias.IGestionAsistencias;
 import gestionIncidencias.FacadeGestionIncidencias;
@@ -123,12 +124,14 @@ public class ControlGestionarEmpleados {
             throw new NegocioException("El RFC no cumple con lo requerido.");
         }
         
-        boolean valorSAT = sat.validacionSistemaSATConRFC(empleado.getRfc());
+        DTO_Contratacion rfcYNss = new DTO_Contratacion(empleado.getRfc(), empleado.getNss());
+        
+        boolean valorSAT = sat.validacionSistemaSATConRFC(rfcYNss);
         if (!valorSAT) {
             throw new NegocioException("El RFC del empleado a contratar no existe.");
         }
         
-        boolean valorSeguro = seguro.validacionSistemaSeguroConNSS(empleado.getNss());
+        boolean valorSeguro = seguro.validacionSistemaSeguroConNSS(rfcYNss);
         if (!valorSeguro) {
             throw new NegocioException("El NSS del empleado a contratar no existe.");
         }

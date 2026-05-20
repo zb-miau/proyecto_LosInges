@@ -4,6 +4,7 @@
  */
 package seguro;
 
+import dtos.DTO_Contratacion;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -34,10 +35,10 @@ public class ControlSistemaSeguro {
      * @param nss Cadena de texto que contiene el Numero de Seguro Social del empleado.
      * @return true si el NSS es valido y existe; false si no existe o falla la conexion.
      */
-    public boolean validacionSistemaSeguroConNSS(String nss) {
+    public boolean validacionSistemaSeguroConNSS(DTO_Contratacion nss) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/validar-imss?nss=" + nss.trim()))
+                    .uri(URI.create(BASE_URL + "/validar-imss?nss=" + nss.getNss().trim()))
                     .GET()
                     .build();
 

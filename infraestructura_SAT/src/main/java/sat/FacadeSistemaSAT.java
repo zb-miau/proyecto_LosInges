@@ -4,6 +4,8 @@
  */
 package sat;
 
+import dtos.DTO_Contratacion;
+
 /**
  * Implementacion de la fachada que sirve como punto de acceso unico para el sistema del SAT.
  * Delega las solicitudes de verificacion de credenciales hacia los controladores internos del modulo.
@@ -27,7 +29,7 @@ public class FacadeSistemaSAT implements ISistemaSAT{
      * @param rfc Cadena de texto con el RFC a validar en el padron.
      * @return true si el RFC es valido en el sistema; false en caso contrario.
      */
-    public boolean validacionSistemaSATConRFC(String rfc){
+    public boolean validacionSistemaSATConRFC(DTO_Contratacion rfc){
         
         return control.validacionSistemaSATConRFC(rfc);
         
