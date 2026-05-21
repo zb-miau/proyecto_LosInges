@@ -83,6 +83,7 @@ public class ControlMensajeria {
             mensaje.setText("Se le ha registrado una incidencia a " + correo.getNombreEmpleado() + "\n"
                     + "ID incidencia: " + correo.getIdIncidencia() + "\n"
                     + "ID empleado: " + correo.getIdEmpleado() + "\n"
+                    + "Tipo: " +  correo.getTipoIncidencia()  + "\n"   
                     + "Descripción\n"
                     + correo.getDescripcion());
 

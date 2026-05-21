@@ -6,6 +6,7 @@ package itson.accesodatos;
 
 import itson.entidades.Empleado;
 import itson.entidades.Incidencia;
+import java.time.LocalDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,19 @@ public class TestInicializar {
          empleadoCreado = daoEmpleado.crear(empleado);
          assertNotNull(empleadoCreado);
          assertNotNull(empleadoCreado.getId());
-       });
+         
+//         Incidencia incidencia = new Incidencia(
+//                 Incidencia.TiposIncidencia.AUSENTISMO,
+//                 empleadoCreado.getId(),
+//                 "Grosero"
+//         );
+//         
+//         incidencia.setFecha(LocalDate.now());
+//         
+//         daoIncidencias = IncidenciasDAO.getInstance();
+//         daoIncidencias.crear(incidencia);
+//         
+//       });
        
      
    }
