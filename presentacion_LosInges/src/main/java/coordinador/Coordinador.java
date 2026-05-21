@@ -44,12 +44,12 @@ import presentacion.Presentacion_validacionIncidenciasTabla;
  * @author RAMSES
  */
 public class Coordinador {
-
+    
     public final IGestionarEmpleados gestionarEmpleadosF = new FachadaGestionarEmpleados();
     public final IGestionarTurnos gestionTurnosF = new FachadaGestionarTurnos();
     private DTOEmpleado empleadoDTO;
     private DTOIncidencia incidenciaDTO;
-
+    
     private Presentacion_gestionDeHorarios gestionDeHorarios;
     private Presentacion_gestionDeTurnos gestionDeTurnos;
     private Presentacion_listaDeEmpleados listaDeEmpleados;
@@ -69,22 +69,21 @@ public class Coordinador {
     public static final int REPORTE_ASISTENCIA = 10;
     
     public void cambioDeVentana(int ventana) {
-
+        
         switch (ventana) {
             case 1 -> {
                 if (gestionDeTurnos == null) {
                     gestionDeTurnos = new Presentacion_gestionDeTurnos(null, this);
-
+                    
                 }
                 gestionDeTurnos.setVisible(true);
                 gestionDeTurnos.setLocationRelativeTo(null);
             }
-
             
-            case 9 ->{
+            case 9 -> {
                 if (registrarAsistencia == null) {
-                    registrarAsistencia = new Presentacion_registrarAsistencia(null, this);
-                    
+//                    registrarAsistencia = new Presentacion_registrarAsistencia(null, this);
+
                 }
                 registrarAsistencia.setVisible(true);
                 registrarAsistencia.setLocationRelativeTo(null);
@@ -93,17 +92,17 @@ public class Coordinador {
             default ->
                 throw new AssertionError();
         }
-
+        
     }
     
     public void cambioDeVentana(int ventana, DTOEmpleado empleado) {
-
+        
         switch (ventana) {
             case 0 -> {
                 if (gestionDeHorarios == null) {
                     gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
                 }
-
+                
                 gestionDeHorarios.cargardatos(empleado);
                 gestionDeHorarios.setVisible(true);
                 gestionDeHorarios.setLocationRelativeTo(null);
@@ -112,7 +111,7 @@ public class Coordinador {
                 if (gestionDeTurnos == null) {
                     gestionDeTurnos = new Presentacion_gestionDeTurnos(empleado, this);
                 }
-
+                
                 gestionDeTurnos.setVisible(true);
                 gestionDeTurnos.setLocationRelativeTo(null);
             }
@@ -120,22 +119,23 @@ public class Coordinador {
                 if (registroDeIncidencias == null) {
                     registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
                 }
-
+                
                 registroDeIncidencias.cargarTexto(empleado);
                 registroDeIncidencias.setVisible(true);
                 registroDeIncidencias.setLocationRelativeTo(null);
             }
-            case 9 ->{
+            case 9 -> {
                 if (registrarAsistencia == null) {
-                    registrarAsistencia = new Presentacion_registrarAsistencia(empleado, this);
+                    registrarAsistencia = new Presentacion_registrarAsistencia(this);
                     
                 }
+                registrarAsistencia.cargarDatos(empleado);
                 registrarAsistencia.setVisible(true);
                 registrarAsistencia.setLocationRelativeTo(null);
             }
-            case 10 ->{
+            case 10 -> {
                 if (reporteAsistencia == null) {
-                    reporteAsistencia = new Presentacion_reporteAsistencia(this,empleado);
+                    reporteAsistencia = new Presentacion_reporteAsistencia(this, empleado);
                     
                 }
                 reporteAsistencia.setVisible(true);
@@ -144,25 +144,22 @@ public class Coordinador {
             default ->
                 throw new AssertionError();
         }
-
+        
     }
-
     
     private int ventanaSiguiente = -1;
-
+    
     public void setVentanaSiguiente(int ventanaSiguiente) {
         this.ventanaSiguiente = ventanaSiguiente;
     }
-
+    
     public int getVentanaSiguiente() {
         return ventanaSiguiente;
     }
     
-    
-    public void setEmpleado(DTOEmpleado empleado){
+    public void setEmpleado(DTOEmpleado empleado) {
         this.empleadoDTO = empleado;
     }
-    
     
     public void abrirPresentacionRoles() {
         if (menuPrincipal == null) {
@@ -171,7 +168,7 @@ public class Coordinador {
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
     }
-
+    
     public void abrirPresentacionListaEmpleados() {
         if (listaDeEmpleados == null) {
             listaDeEmpleados = new Presentacion_listaDeEmpleados(this);
@@ -179,7 +176,7 @@ public class Coordinador {
         listaDeEmpleados.setVisible(true);
         listaDeEmpleados.setLocationRelativeTo(null);
     }
-
+    
     public void abrirContratacionEmpleados() {
         if (contratacionEmpleado == null) {
             contratacionEmpleado = new Presentacion_contratacionEmpleados(this);
@@ -187,7 +184,7 @@ public class Coordinador {
         contratacionEmpleado.setVisible(true);
         contratacionEmpleado.setLocationRelativeTo(null);
     }
-
+    
     public void abrirVentanaGestionHorarios() {
         if (gestionDeHorarios == null) {
             gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
@@ -195,7 +192,7 @@ public class Coordinador {
         gestionDeHorarios.setVisible(true);
         gestionDeHorarios.setLocationRelativeTo(null);
     }
-
+    
     public void abrirGestionTurnos() {
         if (gestionDeTurnos == null) {
             gestionDeTurnos = new Presentacion_gestionDeTurnos(empleadoDTO, this);
@@ -203,7 +200,7 @@ public class Coordinador {
         gestionDeTurnos.setVisible(true);
         gestionDeTurnos.setLocationRelativeTo(null);
     }
-
+    
     public void abrirMenuGerente() {
         if (menuGerente == null) {
             menuGerente = new Presentacion_menuGerente(this);
@@ -211,15 +208,17 @@ public class Coordinador {
         menuGerente.setVisible(true);
         menuGerente.setLocationRelativeTo(null);
     }
-
+    
     public void abrirRegistroAsistencia() {
         if (registrarAsistencia == null) {
-            registrarAsistencia = new Presentacion_registrarAsistencia(empleadoDTO, this);
+            registrarAsistencia = new Presentacion_registrarAsistencia(this);
         }
+        
+        registrarAsistencia.cargarDatos(empleadoDTO);
         registrarAsistencia.setVisible(true);
         registrarAsistencia.setLocationRelativeTo(null);
     }
-
+    
     public void abrirReporteAsistencia() {
         if (reporteAsistencia == null) {
             reporteAsistencia = new Presentacion_reporteAsistencia(this, empleadoDTO);
@@ -227,19 +226,21 @@ public class Coordinador {
         reporteAsistencia.setVisible(true);
         reporteAsistencia.setLocationRelativeTo(null);
     }
-
-    public void abrirRegistroIncidencia() {
+    
+    public void abrirRegistroIncidencia(DTOEmpleado empleado) {
         if (registroDeIncidencias == null) {
             registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
         }
+        
+        registroDeIncidencias.cargarTexto(empleado);
         registroDeIncidencias.setVisible(true);
         registroDeIncidencias.setLocationRelativeTo(null);
     }
     
-    public void setIncidencia(DTOIncidencia incidencia){
+    public void setIncidencia(DTOIncidencia incidencia) {
         this.incidenciaDTO = incidencia;
     }
-
+    
     public DTOIncidencia abrirValidacionIncidencia() {
         if (validacionDeIncidencias == null) {
             validacionDeIncidencias = new Presentacion_validacionDeIncidencias(null, incidenciaDTO, this);
@@ -248,7 +249,7 @@ public class Coordinador {
         validacionDeIncidencias.setLocationRelativeTo(null);
         return validacionDeIncidencias.getIncidencia();
     }
-
+    
     public void abrirValidacionIncidenciaTabla() {
         if (validacionIncidenciasTabla == null) {
             validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla(this);
@@ -256,7 +257,6 @@ public class Coordinador {
         validacionIncidenciasTabla.setLocationRelativeTo(null);
         validacionIncidenciasTabla.setVisible(true);
     }
-
     
     public void registrarEmpleado(DTOContratacion empleado) {
         try {
@@ -266,7 +266,7 @@ public class Coordinador {
         }
     }
     
-    public List<DTOTurno> recuperarListaTurno(){
+    public List<DTOTurno> recuperarListaTurno() {
         try {
             return this.gestionTurnosF.recuperarTurno();
         } catch (NegocioException ex) {
@@ -276,12 +276,12 @@ public class Coordinador {
         
     }
     
-    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
-        this.gestionarEmpleadosF.recuperarEmpleado(empleado);
+    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado) {
+        empleado = this.gestionarEmpleadosF.recuperarEmpleado(empleado);
         return empleado;
     }
     
-    public List<DTOHorarioEmpleado> listaDeHistorial(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+    public List<DTOHorarioEmpleado> listaDeHistorial(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) {
         try {
             return this.gestionarEmpleadosF.listaHistorial(empleado, fechaInicio, fechaFin);
         } catch (NegocioException ex) {
@@ -290,7 +290,7 @@ public class Coordinador {
         }
     }
     
-    public void actualizarHorarioDelEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+    public void actualizarHorarioDelEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) {
         try {
             this.gestionarEmpleadosF.actualizarHorarioEmpleado(turno, empleado, fechaInicio, fechaFin);
         } catch (NegocioException ex) {
@@ -298,7 +298,7 @@ public class Coordinador {
         }
     }
     
-    public void agregarTurno(DTOTurno turno){
+    public void agregarTurno(DTOTurno turno) {
         try {
             this.gestionTurnosF.agregarTurno(turno);
         } catch (NegocioException ex) {
@@ -306,7 +306,7 @@ public class Coordinador {
         }
     }
     
-    public List<DTOTurno> recuperarTurno(){
+    public List<DTOTurno> recuperarTurno() {
         try {
             return this.gestionTurnosF.recuperarTurno();
         } catch (NegocioException ex) {
@@ -315,7 +315,7 @@ public class Coordinador {
         }
     }
     
-    public void eliminarTurno(DTOTurno turno){
+    public void eliminarTurno(DTOTurno turno) {
         try {
             this.gestionTurnosF.eliminarTurno(turno);
         } catch (NegocioException ex) {
@@ -323,7 +323,7 @@ public class Coordinador {
         }
     }
     
-    public void modificarTurno(DTOTurno turno){
+    public void modificarTurno(DTOTurno turno) {
         try {
             this.gestionTurnosF.modificarTurno(turno);
         } catch (NegocioException ex) {
@@ -331,35 +331,34 @@ public class Coordinador {
         }
     }
     
-    public List<DTOEmpleado> obtenerEmpleados(){
+    public List<DTOEmpleado> obtenerEmpleados() {
         
         return this.gestionarEmpleadosF.obtenerEmpleados();
         
     }
     
-    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha){
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) {
         return this.gestionarEmpleadosF.obtenerMarca(empleadoDTO, fecha);
     }
     
-    public DTORegistroMarca crearMarca(DTORegistroMarca marca){
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca) {
         return this.gestionarEmpleadosF.crearMarca(marca);
     }
     
-    public DTOIncidencia crearIncidencia(DTOIncidencia incidencia){
+    public DTOIncidencia crearIncidencia(DTOIncidencia incidencia) {
         return this.gestionarEmpleadosF.registrarIncidencia(incidencia);
     }
     
-    public void enviarSupervisor(DTOIncidencia incidencia){
+    public void enviarSupervisor(DTOIncidencia incidencia) {
         this.gestionarEmpleadosF.enviarSupervisor(incidencia);
     }
     
-    public int conteoAsistencia(List<DTORegistroMarca> lista){
+    public int conteoAsistencia(List<DTORegistroMarca> lista) {
         return this.gestionarEmpleadosF.obtenerConteoAsistencia(lista);
     }
     
-    public List<DTORegistroMarca> obtenerListaMarca(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+    public List<DTORegistroMarca> obtenerListaMarca(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin) {
         return this.gestionarEmpleadosF.obtenerLista(empleado, fechaInicio, fechaFin);
     }
     
-
 }

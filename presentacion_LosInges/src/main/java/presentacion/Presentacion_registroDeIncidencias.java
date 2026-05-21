@@ -7,14 +7,9 @@ package presentacion;
 import coordinador.Coordinador;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
-import gestionIncidencias.FacadeGestionIncidencias;
-import gestionIncidencias.IGestionIncidencias;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import objetosNegocio.NegocioException;
 
 /**
  *

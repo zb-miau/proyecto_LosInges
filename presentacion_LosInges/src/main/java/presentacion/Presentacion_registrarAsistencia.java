@@ -25,13 +25,19 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
     /**
      * Creates new form Presentacion_registrarAsistencia
      */
-    public Presentacion_registrarAsistencia(DTOEmpleado empleado, Coordinador coordinador) {
+    public Presentacion_registrarAsistencia(Coordinador coordinador) {
         initComponents();
         this.coordinador = coordinador;
-        this.empleado = empleado;
         asignarEventos();
+
+    }
+
+    public void cargarDatos(DTOEmpleado empleado) {
+
+        this.empleado = empleado;
+
         actualizarEstadoBoton();
-        setVisible(true);
+
     }
 
     private void actualizarEstadoBoton() {
@@ -39,7 +45,6 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         lblEmpleadoNombre.setText(empleado.getNombre());
 
         //2.Hacer una consulta para poder cambiar el texto del bóton
-        
         DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
 
         if (marcaHoy == null) {
@@ -53,33 +58,32 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
             btnRegistrar.setEnabled(false);
         }
 
-
     }
-    
-    private void asignarEventos(){
-        btnRegistrar.addActionListener(e->{
-        btnRegistrar.setEnabled(false); // Evita clics accidentales
-        // Buscamos el estado actual
-        DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
 
-        if (marcaHoy == null) {
-            DTORegistroMarca nuevo = new DTORegistroMarca();
-            nuevo.setEmpleadoDTO(this.empleado);
-            nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
-            nuevo.setEntrada(LocalTime.now());
-            nuevo.setFecha(LocalDate.now());
+    private void asignarEventos() {
+        btnRegistrar.addActionListener(e -> {
+            btnRegistrar.setEnabled(false); // Evita clics accidentales
+            // Buscamos el estado actual
+            DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
 
-            coordinador.crearMarca(nuevo);
-            JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
-        } else {
-            marcaHoy.setSalida(LocalTime.now());
-            coordinador.crearMarca(marcaHoy); 
-            JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
-        }
+            if (marcaHoy == null) {
+                DTORegistroMarca nuevo = new DTORegistroMarca();
+                nuevo.setEmpleadoDTO(this.empleado);
+                nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
+                nuevo.setEntrada(LocalTime.now());
+                nuevo.setFecha(LocalDate.now());
 
-        actualizarEstadoBoton();
+                coordinador.crearMarca(nuevo);
+                JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
+            } else {
+                marcaHoy.setSalida(LocalTime.now());
+                coordinador.crearMarca(marcaHoy);
+                JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
+            }
 
-    });
+            actualizarEstadoBoton();
+
+        });
     }
 
     /**
