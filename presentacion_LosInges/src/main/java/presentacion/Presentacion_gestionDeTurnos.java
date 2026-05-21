@@ -401,23 +401,12 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
             DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias);
             turno.setColorEvento(colorTurno);
-            try {
-                coordinador.gestionarTurnos.agregarTurno(turno);
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Se agregó el turno",
-                        "Turno Agregado",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Error al agregar el turno: " + ex.getMessage(),
-                        "Error al agregar.",
-                        JOptionPane.ERROR_MESSAGE);
-
-            }
+            coordinador.agregarTurno(turno);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Se agregó el turno",
+                    "Turno Agregado",
+                    JOptionPane.INFORMATION_MESSAGE);
 
         }
 
@@ -448,7 +437,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
      * @param evt click en el boton regresar.
      */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        coordinador.abrirMenuGerente();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
@@ -457,40 +446,29 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
      * @param evt click en el boton eliminar.
      */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-
-            int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-            Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
-            String idEliminar = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-
-            int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Eliminar este turno?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION) {
-
-                DTOTurno turno = new DTOTurno();
-                turno.setIdTurno(idEliminar);
-                coordinador.gestionarTurnos.eliminarTurno(turno);
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Se eliminó el turno.");
-                tablaTurnosDisponibles.removeAll();
-                configurarTabla();
-            } else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "No se eliminó el turno.");
-            }
-
-        } catch (NegocioException ex) {
+        int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+        Set<DayOfWeek> semana = (Set<DayOfWeek>) tablaTurnosDisponibles.getValueAt(filaSeleccionada, 4);
+        String idEliminar = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Eliminar este turno?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            
+            DTOTurno turno = new DTOTurno();
+            turno.setIdTurno(idEliminar);
+            coordinador.eliminarTurno(turno);
+            
             JOptionPane.showMessageDialog(
                     this,
-                    "Error al eliminar el turno: " + ex.getMessage(),
-                    "Error al eliminar.",
-                    JOptionPane.ERROR_MESSAGE);
+                    "Se eliminó el turno.");
+            tablaTurnosDisponibles.removeAll();
+            configurarTabla();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se eliminó el turno.");
         }
 
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -503,49 +481,37 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
         int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
         if (filaSeleccionada != -1) {
             String id = tablaTurnosDisponibles.getValueAt(filaSeleccionada, 0).toString();
-            try {
-
-                boolean validacion = validarFormulario();
-                Color colorTurno = this.colorTurno;
-
-                if (this.colorTurno == null) {
-                    colorTurno = Color.RED;
-                }
-
-                if (validacion) {
-                    DTOTurno turnoModificar = new DTOTurno();
-                    turnoModificar.setIdTurno(id);
-                    turnoModificar.setNombre(txtNombre.getText());
-
-                    LocalTime[] horas = getHoras();
-                    turnoModificar.setHoraInicio(horas[0]);
-                    turnoModificar.setHoraFin(horas[1]);
-
-                    Set<DayOfWeek> dias = getDias();
-                    turnoModificar.setDiasTrabajo(dias);
-
-                    turnoModificar.setColorEvento(colorTurno);
-                    coordinador.gestionarTurnos.modificarTurno(turnoModificar);
-                    configurarTabla();
-
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Se modificó el turno",
-                            "Turno modificado",
-                            JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Campos inválidos",
-                            "Error al modificar",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-
-            } catch (NegocioException ex) {
+            boolean validacion = validarFormulario();
+            Color colorTurno = this.colorTurno;
+            if (this.colorTurno == null) {
+                colorTurno = Color.RED;
+            }
+            if (validacion) {
+                DTOTurno turnoModificar = new DTOTurno();
+                turnoModificar.setIdTurno(id);
+                turnoModificar.setNombre(txtNombre.getText());
+                
+                LocalTime[] horas = getHoras();
+                turnoModificar.setHoraInicio(horas[0]);
+                turnoModificar.setHoraFin(horas[1]);
+                
+                Set<DayOfWeek> dias = getDias();
+                turnoModificar.setDiasTrabajo(dias);
+                
+                turnoModificar.setColorEvento(colorTurno);
+                coordinador.modificarTurno(turnoModificar);
+                configurarTabla();
+                
                 JOptionPane.showMessageDialog(
                         this,
-                        "Error al modificar el turno: " + ex.getMessage(),
-                        "Error al modificar.",
+                        "Se modificó el turno",
+                        "Turno modificado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Campos inválidos",
+                        "Error al modificar",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -615,87 +581,74 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
             }
         };
 
-        try {
-            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
-            for (DTOTurno t : turnos) {
-                Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
-                Set<String> diasDisplay = new HashSet();
-                for (DayOfWeek d : diasTrabajo) {
-                    String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                    diasDisplay.add(dia);
-                }
-                Object[] fila = {
-                    t.getIdTurno(),
-                    t.getNombre(),
-                    t.getHoraInicio(),
-                    t.getHoraFin(),
-                    diasTrabajo,
-                    t.getColorEvento(),
-                    diasDisplay
-                };
-                modeloTabla.addRow(fila);
+        List<DTOTurno> turnos = coordinador.recuperarListaTurno();
+        for (DTOTurno t : turnos) {
+            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+            Set<String> diasDisplay = new HashSet();
+            for (DayOfWeek d : diasTrabajo) {
+                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                diasDisplay.add(dia);
             }
-
-            tablaTurnosDisponibles.setModel(modeloTabla);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
-
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
-
-            tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-                @Override
-                public Component getTableCellRendererComponent(JTable table, Object value,
-                        boolean isSelected, boolean hasFocus, int row, int column) {
-
-                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                    if (value instanceof Color) {
-                        Color colorEvento = (Color) value;
-
-                        ((JLabel) c).setOpaque(true);
-
-                        if (!isSelected) {
-                            c.setBackground(colorEvento);
-                            c.setForeground(colorEvento);
-                        } else {
-                            c.setBackground(table.getSelectionBackground());
-                            c.setForeground(table.getSelectionForeground());
-                        }
-
-                        ((JLabel) c).setText("");
-
-                    } else {
-                        c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-                    }
-
-                    return c;
-                }
-            });
-
-            tablaTurnosDisponibles.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (!e.getValueIsAdjusting()) {
-                        int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
-                        if (filaSeleccionada != -1) {
-                            llenarFormulario(filaSeleccionada);
-                        }
-                    }
-                }
-            });
-
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al recuperar los turnos: " + ex.getMessage(),
-                    "Error al recuperar.",
-                    JOptionPane.ERROR_MESSAGE);
+            Object[] fila = {
+                t.getIdTurno(),
+                t.getNombre(),
+                t.getHoraInicio(),
+                t.getHoraFin(),
+                diasTrabajo,
+                t.getColorEvento(),
+                diasDisplay
+            };
+            modeloTabla.addRow(fila);
         }
+        tablaTurnosDisponibles.setModel(modeloTabla);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
+        tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                if (value instanceof Color) {
+                    Color colorEvento = (Color) value;
+                    
+                    ((JLabel) c).setOpaque(true);
+                    
+                    if (!isSelected) {
+                        c.setBackground(colorEvento);
+                        c.setForeground(colorEvento);
+                    } else {
+                        c.setBackground(table.getSelectionBackground());
+                        c.setForeground(table.getSelectionForeground());
+                    }
+                    
+                    ((JLabel) c).setText("");
+                    
+                } else {
+                    c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                }
+                
+                return c;
+            }
+        });
+        tablaTurnosDisponibles.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int filaSeleccionada = tablaTurnosDisponibles.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        llenarFormulario(filaSeleccionada);
+                    }
+                }
+            }
+        });
 
     }
 

@@ -8,7 +8,9 @@ import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
 import dto.DTOContratacion;
 import dto.DTOEmpleado;
+import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
+import dto.DTOTurno;
 import gestionAsistencias.FacadeGestionAsistencias;
 import gestionAsistencias.IGestionAsistencias;
 import gestionIncidencias.FacadeGestionIncidencias;
@@ -18,6 +20,8 @@ import gestionarEmpleados.IGestionarEmpleados;
 import gestionarTurnos.FachadaGestionarTurnos;
 import gestionarTurnos.IGestionarTurnos;
 import java.awt.Frame;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -41,6 +45,7 @@ import presentacion.Presentacion_validacionIncidenciasTabla;
 public class Coordinador {
 
     public final IGestionarEmpleados gestionarEmpleadosF = new FachadaGestionarEmpleados();
+    public final IGestionarTurnos gestionTurnosF = new FachadaGestionarTurnos();
     private DTOEmpleado empleadoDTO;
     private DTOIncidencia incidenciaDTO;
 
@@ -138,6 +143,62 @@ public class Coordinador {
             this.gestionarEmpleadosF.registrarEmpleado(empleado);
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null, "Error al intentar registrar empleado: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public List<DTOTurno> recuperarListaTurno(){
+        try {
+            return this.gestionTurnosF.recuperarTurno();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar recuperar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
+    }
+    
+    public DTOEmpleado recuperarEmpleado(DTOEmpleado empleado){
+        this.gestionarEmpleadosF.recuperarEmpleado(empleado);
+        return empleado;
+    }
+    
+    public List<DTOHorarioEmpleado> listaDeHistorial(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+        try {
+            return this.gestionarEmpleadosF.listaHistorial(empleado, fechaInicio, fechaFin);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar recuperar el la lista: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+    }
+    
+    public void actualizarHorarioDelEmpleado(DTOTurno turno, DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+        try {
+            this.gestionarEmpleadosF.actualizarHorarioEmpleado(turno, empleado, fechaInicio, fechaFin);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar actualizar el horario del empleado: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void agregarTurno(DTOTurno turno){
+        try {
+            this.gestionTurnosF.agregarTurno(turno);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar agregar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void eliminarTurno(DTOTurno turno){
+        try {
+            this.gestionTurnosF.eliminarTurno(turno);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar eliminar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void modificarTurno(DTOTurno turno){
+        try {
+            this.gestionTurnosF.modificarTurno(turno);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar modificar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
 

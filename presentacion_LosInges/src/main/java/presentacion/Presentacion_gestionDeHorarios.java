@@ -104,74 +104,61 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
             }
         };
 
-        try {
-            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
-
-            for (DTOTurno t : turnos) {
-                Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
-                Set<String> diasDisplay = new HashSet();
-                for (DayOfWeek d : diasTrabajo) {
-                    String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                    diasDisplay.add(dia);
-                }
-                Object[] fila = {
-                    t.getIdTurno(),
-                    t.getNombre(),
-                    t.getHoraInicio(),
-                    t.getHoraFin(),
-                    t.getDiasTrabajo(),
-                    t.getColorEvento(),
-                    diasDisplay
-                };
-                modeloTabla.addRow(fila);
+        List<DTOTurno> turnos = coordinador.recuperarListaTurno();
+        for (DTOTurno t : turnos) {
+            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+            Set<String> diasDisplay = new HashSet();
+            for (DayOfWeek d : diasTrabajo) {
+                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                diasDisplay.add(dia);
             }
-
-            tablaTurnosDisponibles.setModel(modeloTabla);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
-
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
-            tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
-
-            tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-                @Override
-                public Component getTableCellRendererComponent(JTable table, Object value,
-                        boolean isSelected, boolean hasFocus, int row, int column) {
-
-                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                    if (value instanceof Color) {
-                        Color colorEvento = (Color) value;
-                        ((JLabel) c).setOpaque(true);
-
-                        if (!isSelected) {
-                            c.setBackground(colorEvento);
-                            c.setForeground(colorEvento);
-                        } else {
-                            c.setBackground(table.getSelectionBackground());
-                            c.setForeground(table.getSelectionForeground());
-                        }
-
-                        ((JLabel) c).setText("");
-                    } else {
-                        c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-                    }
-
-                    return c;
-                }
-            });
-
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al recuperar los turnos: " + ex.getMessage(),
-                    "Error al recuperar.",
-                    JOptionPane.ERROR_MESSAGE);
+            Object[] fila = {
+                t.getIdTurno(),
+                t.getNombre(),
+                t.getHoraInicio(),
+                t.getHoraFin(),
+                t.getDiasTrabajo(),
+                t.getColorEvento(),
+                diasDisplay
+            };
+            modeloTabla.addRow(fila);
         }
+        tablaTurnosDisponibles.setModel(modeloTabla);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(0).setResizable(false);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMinWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setPreferredWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setMaxWidth(0);
+        tablaTurnosDisponibles.getColumnModel().getColumn(4).setResizable(false);
+        tablaTurnosDisponibles.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                if (value instanceof Color) {
+                    Color colorEvento = (Color) value;
+                    ((JLabel) c).setOpaque(true);
+                    
+                    if (!isSelected) {
+                        c.setBackground(colorEvento);
+                        c.setForeground(colorEvento);
+                    } else {
+                        c.setBackground(table.getSelectionBackground());
+                        c.setForeground(table.getSelectionForeground());
+                    }
+                    
+                    ((JLabel) c).setText("");
+                } else {
+                    c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                }
+                
+                return c;
+            }
+        });
 
     }
 
@@ -233,94 +220,81 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      */
     private void llenarDias() {
         pnlCalendario.removeAll();
-        try {
-
-            idEmpleado = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
-
-            LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
-            if (idEmpleado != null) {
-                if (idEmpleado.getHorarioActual() != null) {
-                    todosLosHorarios.add(idEmpleado.getHorarioActual());
+        idEmpleado = coordinador.recuperarEmpleado(idEmpleado);
+        LocalDate[] rangoFechasActual = paginaCalendarioActual();
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        if (idEmpleado != null) {
+            if (idEmpleado.getHorarioActual() != null) {
+                todosLosHorarios.add(idEmpleado.getHorarioActual());
+            }
+        }
+        int primerDia = primerDiaMes();
+        int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
+        for (int i = 1; i < primerDia; i++) {
+            pnlCalendario.add(new JLabel(""));
+        }
+        for (int i = 1; i <= totalDias; i++) {
+            btnDia = new JButton(String.valueOf(i));
+            btnDia.setPreferredSize(new Dimension(80, 60));
+            
+            LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
+            
+            DTOHorarioEmpleado horarioParaEsteDia = null;
+            
+            for (DTOHorarioEmpleado h : todosLosHorarios) {
+                LocalDate fechaInicio = h.getFechaInicio();
+                LocalDate fin = h.getFechaFin();
+                
+                if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
+                    horarioParaEsteDia = h;
+                    break;
                 }
             }
-
-            int primerDia = primerDiaMes();
-            int totalDias = getAnio().atMonth(getMes()).lengthOfMonth();
-
-            for (int i = 1; i < primerDia; i++) {
-                pnlCalendario.add(new JLabel(""));
-            }
-
-            for (int i = 1; i <= totalDias; i++) {
-                btnDia = new JButton(String.valueOf(i));
-                btnDia.setPreferredSize(new Dimension(80, 60));
-
-                LocalDate fechaActual = LocalDate.of(getAnio().getValue(), getMes(), i);
-
-                DTOHorarioEmpleado horarioParaEsteDia = null;
-
-                for (DTOHorarioEmpleado h : todosLosHorarios) {
-                    LocalDate fechaInicio = h.getFechaInicio();
-                    LocalDate fin = h.getFechaFin();
-
-                    if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
-                        horarioParaEsteDia = h;
-                        break;
-                    }
-                }
-
-                if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                    DTOTurno turno = horarioParaEsteDia.getTurno();
-                    if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
-                        btnDia.setBackground(turno.getColorEvento());
-                        btnDia.setOpaque(true);
-                        btnDia.setContentAreaFilled(true);
-                        btnDia.setBorderPainted(false);
-                        btnDia.setForeground(new Color(128, 128, 128));
-
-                        btnDia.setToolTipText(turno.getNombre());
-                    } else {
-                        restablecerBotonDefecto(btnDia);
-                    }
+            
+            if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
+                DTOTurno turno = horarioParaEsteDia.getTurno();
+                if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
+                    btnDia.setBackground(turno.getColorEvento());
+                    btnDia.setOpaque(true);
+                    btnDia.setContentAreaFilled(true);
+                    btnDia.setBorderPainted(false);
+                    btnDia.setForeground(new Color(128, 128, 128));
+                    
+                    btnDia.setToolTipText(turno.getNombre());
                 } else {
                     restablecerBotonDefecto(btnDia);
                 }
-
-                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
-
-                btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
-                    @Override
-                    public void mouseClicked(java.awt.event.MouseEvent e) {
-                        if (horarioFinal != null && horarioFinal.getTurno() != null) {
-                            DTOTurno t = horarioFinal.getTurno();
-                            lblNombreDetalle.setText("Turno: " + t.getNombre());
-                            lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
-                            Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
-                            Set<String> diasDisplay = new HashSet();
-                            for (DayOfWeek d : diasTrabajo) {
-                                String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                                diasDisplay.add(dia);
-                            }
-                            lblDiasDetalle.setText("Días: " + diasDisplay);
-                            pnlTurno.setBackground(t.getColorEvento());
-                        } else {
-                            lblNombreDetalle.setText("Sin turno");
-                            lblHorarioDetalle.setText("");
-                            lblDiasDetalle.setText("");
-                            pnlTurno.setBackground(Color.LIGHT_GRAY);
-                        }
-                    }
-                });
-
-                pnlCalendario.add(btnDia);
+            } else {
+                restablecerBotonDefecto(btnDia);
             }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al acceder al historial: " + ex.getMessage(),
-                    "Error al obtener el historial.",
-                    JOptionPane.ERROR_MESSAGE);
+            
+            final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
+            
+            btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (horarioFinal != null && horarioFinal.getTurno() != null) {
+                        DTOTurno t = horarioFinal.getTurno();
+                        lblNombreDetalle.setText("Turno: " + t.getNombre());
+                        lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
+                        Set<DayOfWeek> diasTrabajo = t.getDiasTrabajo();
+                        Set<String> diasDisplay = new HashSet();
+                        for (DayOfWeek d : diasTrabajo) {
+                            String dia = d.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                            diasDisplay.add(dia);
+                        }
+                        lblDiasDetalle.setText("Días: " + diasDisplay);
+                        pnlTurno.setBackground(t.getColorEvento());
+                    } else {
+                        lblNombreDetalle.setText("Sin turno");
+                        lblHorarioDetalle.setText("");
+                        lblDiasDetalle.setText("");
+                        pnlTurno.setBackground(Color.LIGHT_GRAY);
+                    }
+                }
+            });
+            
+            pnlCalendario.add(btnDia);
         }
 
         pnlCalendario.revalidate();
@@ -337,79 +311,70 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      */
     private void llenarDias(LocalDate inicio) {
         pnlCalendario.removeAll();
-        try {
-            this.idEmpleado = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
-            LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
-            if (idEmpleado != null) {
-                if (idEmpleado.getHorarioActual() != null) {
-                    todosLosHorarios.add(idEmpleado.getHorarioActual());
+        this.idEmpleado = coordinador.recuperarEmpleado(idEmpleado);
+        LocalDate[] rangoFechasActual = paginaCalendarioActual();
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        if (idEmpleado != null) {
+            if (idEmpleado.getHorarioActual() != null) {
+                todosLosHorarios.add(idEmpleado.getHorarioActual());
+            }
+        }
+        for (int i = 0; i < 7; i++) {
+            LocalDate diaActual = inicio.plusDays(i);
+            
+            String textoBoton = String.valueOf(diaActual.getDayOfMonth());
+            
+            JButton btnDia = new JButton(textoBoton);
+            btnDia.setPreferredSize(new Dimension(80, 400));
+            
+            LocalDate fechaActual = diaActual;
+            
+            DTOHorarioEmpleado horarioParaEsteDia = null;
+            
+            for (DTOHorarioEmpleado h : todosLosHorarios) {
+                LocalDate fechaInicio = h.getFechaInicio();
+                LocalDate fin = h.getFechaFin();
+                
+                if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
+                    horarioParaEsteDia = h;
+                    break;
                 }
             }
-
-            for (int i = 0; i < 7; i++) {
-                LocalDate diaActual = inicio.plusDays(i);
-
-                String textoBoton = String.valueOf(diaActual.getDayOfMonth());
-
-                JButton btnDia = new JButton(textoBoton);
-                btnDia.setPreferredSize(new Dimension(80, 400));
-
-                LocalDate fechaActual = diaActual;
-
-                DTOHorarioEmpleado horarioParaEsteDia = null;
-
-                for (DTOHorarioEmpleado h : todosLosHorarios) {
-                    LocalDate fechaInicio = h.getFechaInicio();
-                    LocalDate fin = h.getFechaFin();
-
-                    if (!fechaActual.isBefore(fechaInicio) && (fin == null || !fechaActual.isAfter(fin))) {
-                        horarioParaEsteDia = h;
-                        break;
-                    }
+            
+            if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
+                DTOTurno turno = horarioParaEsteDia.getTurno();
+                if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
+                    btnDia.setBackground(turno.getColorEvento());
+                    btnDia.setOpaque(true);
+                    btnDia.setContentAreaFilled(true);
+                    btnDia.setBorderPainted(false);
+                    btnDia.setForeground(new Color(128, 128, 128));
+                    btnDia.setToolTipText(turno.getNombre());
                 }
-
-                if (horarioParaEsteDia != null && horarioParaEsteDia.getTurno() != null) {
-                    DTOTurno turno = horarioParaEsteDia.getTurno();
-                    if (turno.getDiasTrabajo().contains(fechaActual.getDayOfWeek())) {
-                        btnDia.setBackground(turno.getColorEvento());
-                        btnDia.setOpaque(true);
-                        btnDia.setContentAreaFilled(true);
-                        btnDia.setBorderPainted(false);
-                        btnDia.setForeground(new Color(128, 128, 128));
-                        btnDia.setToolTipText(turno.getNombre());
-                    }
-                } else {
-                    btnDia.setBackground(Color.WHITE);
-                }
-
-                final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
-
-                btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
-                    @Override
-                    public void mouseClicked(java.awt.event.MouseEvent e) {
-                        if (horarioFinal != null && horarioFinal.getTurno() != null) {
-                            DTOTurno t = horarioFinal.getTurno();
-                            lblNombreDetalle.setText("Turno: " + t.getNombre());
-                            lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
-                            lblDiasDetalle.setText("Días: " + t.getDiasTrabajo().toString());
-                            pnlTurno.setBackground(t.getColorEvento());
-                        } else {
-                            lblNombreDetalle.setText("Sin turno");
-                            lblHorarioDetalle.setText("");
-                            lblDiasDetalle.setText("");
-                            pnlTurno.setBackground(Color.LIGHT_GRAY);
-                        }
-                    }
-                });
-                pnlCalendario.add(btnDia);
+            } else {
+                btnDia.setBackground(Color.WHITE);
             }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al acceder al historial: " + ex.getMessage(),
-                    "Error al obtener el historial.",
-                    JOptionPane.ERROR_MESSAGE);
+            
+            final DTOHorarioEmpleado horarioFinal = horarioParaEsteDia;
+            
+            btnDia.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (horarioFinal != null && horarioFinal.getTurno() != null) {
+                        DTOTurno t = horarioFinal.getTurno();
+                        lblNombreDetalle.setText("Turno: " + t.getNombre());
+                        lblHorarioDetalle.setText("Horario: " + t.getHoraInicio() + " - " + t.getHoraFin());
+                        lblDiasDetalle.setText("Días: " + t.getDiasTrabajo().toString());
+                        pnlTurno.setBackground(t.getColorEvento());
+                    } else {
+                        lblNombreDetalle.setText("Sin turno");
+                        lblHorarioDetalle.setText("");
+                        lblDiasDetalle.setText("");
+                        pnlTurno.setBackground(Color.LIGHT_GRAY);
+                    }
+                }
+            });
+            pnlCalendario.add(btnDia);
         }
 
         pnlCalendario.revalidate();
@@ -860,32 +825,22 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
     private boolean existeConflicto(LocalDate inicio, LocalDate fin) {
         DTOEmpleado idEmp = new DTOEmpleado();
         idEmp.setId(idEmpleado.getId());
-        try {
-            DTOEmpleado empCompleto = coordinador.gestionarEmpleados.recuperarEmpleado(idEmp);
-            LocalDate[] rangoFechasActual = paginaCalendarioActual();
-            List<DTOHorarioEmpleado> todosLosHorarios = coordinador.gestionarEmpleados.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
-            if (empCompleto.getHorarioActual() != null) {
-                todosLosHorarios.add(empCompleto.getHorarioActual());
+        DTOEmpleado empCompleto = coordinador.recuperarEmpleado(idEmp);
+        LocalDate[] rangoFechasActual = paginaCalendarioActual();
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        if (empCompleto.getHorarioActual() != null) {
+            todosLosHorarios.add(empCompleto.getHorarioActual());
+        }
+        for (DTOHorarioEmpleado h : todosLosHorarios) {
+            LocalDate hInicio = h.getFechaInicio();
+            LocalDate hFin = h.getFechaFin();
+            
+            boolean comienzaAntesDeQueTermine = (hFin == null) || !inicio.isAfter(hFin);
+            boolean terminaDespuesDeQueEmpiece = (fin == null) || !fin.isBefore(hInicio);
+            
+            if (comienzaAntesDeQueTermine && terminaDespuesDeQueEmpiece) {
+                return true;
             }
-
-            for (DTOHorarioEmpleado h : todosLosHorarios) {
-                LocalDate hInicio = h.getFechaInicio();
-                LocalDate hFin = h.getFechaFin();
-
-                boolean comienzaAntesDeQueTermine = (hFin == null) || !inicio.isAfter(hFin);
-                boolean terminaDespuesDeQueEmpiece = (fin == null) || !fin.isBefore(hInicio);
-
-                if (comienzaAntesDeQueTermine && terminaDespuesDeQueEmpiece) {
-                    return true;
-                }
-            }
-
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al obtener el historial: " + ex.getMessage(),
-                    "Error al recuperar el historial.",
-                    JOptionPane.ERROR_MESSAGE);
         }
 
         return false;
@@ -984,7 +939,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
 
         if (filaSeleccionada != -1) {
 
-            DTOEmpleado empCompleto = coordinador.gestionarEmpleados.recuperarEmpleado(idEmpleado);
+            DTOEmpleado empCompleto = coordinador.recuperarEmpleado(idEmpleado);
 
             if (empCompleto == null) {
                 JOptionPane.showMessageDialog(this,
@@ -1057,17 +1012,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                     );
 
                     if (opcion == JOptionPane.YES_OPTION) {
-                        try {
-
-                            coordinador.gestionarEmpleados.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
-
-                        } catch (NegocioException ex) {
-                            JOptionPane.showMessageDialog(
-                                    this,
-                                    "Error al sobreescribir el horario del empleado: " + ex.getMessage(),
-                                    "Error al sobreescribir.",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
+                        coordinador.actualizarHorarioDelEmpleado(turno, empCompleto, inicioEvento, fin);
                         configurarCalendario();
                     } else {
                         JOptionPane.showMessageDialog(
@@ -1078,15 +1023,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
                         );
                     }
                 } else {
-                    try {
-                        coordinador.gestionarEmpleados.actualizarHorarioEmpleado(turno, empCompleto, inicioEvento, fin);
-                    } catch (NegocioException ex) {
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "Error al actualizar el horario del empleado: " + ex.getMessage(),
-                                "Error al actualizar.",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
+                    coordinador.actualizarHorarioDelEmpleado(turno, empCompleto, inicioEvento, fin);
                     configurarCalendario();
                 }
             }
@@ -1105,7 +1042,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      * @param evt click en el boton regresar.
      */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.abrirPresentacionListaEmpleados();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
