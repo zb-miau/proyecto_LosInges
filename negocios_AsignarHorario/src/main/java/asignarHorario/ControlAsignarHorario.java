@@ -96,7 +96,7 @@ public class ControlAsignarHorario {
                             horarioEmpleadoBO.modificarHorarioInfinito(t);
                         }
                     } //si el horario registrado inicia antes de que termine el nuevo
-                    else if (!t.getFechaInicio().isAfter(nuevo.getFechaFin())) {
+                    else if (!t.getFechaInicio().isAfter(nuevo.getFechaFin()) || nuevo.getFechaFin() == null) {
                         //se cambia su fecha de inicio a un dia de la fecha fin del nuevo
                         t.setFechaInicio(nuevo.getFechaFin().plusDays(1));
                         //pero si el horario registrado tiene fecha de fin

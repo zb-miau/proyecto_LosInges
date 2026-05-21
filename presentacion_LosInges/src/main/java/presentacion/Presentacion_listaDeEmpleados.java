@@ -171,6 +171,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      */
     private void abrirVentanaReporteAsistencia(DTOEmpleado empleado) {
         coordinador.cambioDeVentana(Coordinador.REPORTE_ASISTENCIA, empleado);
+        this.dispose();
     }
 
     /**
@@ -187,7 +188,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
             coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS);
 
         } else {
-            coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS);
+            coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS, empleado);
         }
 
         this.dispose();
