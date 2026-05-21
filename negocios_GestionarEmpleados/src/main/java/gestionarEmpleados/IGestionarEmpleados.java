@@ -46,6 +46,8 @@ public interface IGestionarEmpleados {
 
     public DTOIncidencia rechazarIncidencia(DTOIncidencia incidencia);
     
+    public void enviarSupervisor(DTOIncidencia incidencia);
+    
     public DTORegistroMarca crearMarca(DTORegistroMarca marca);
     
     public List<DTORegistroMarca> obtenerLista(DTOEmpleado empleado, LocalDate inicio, LocalDate fin);

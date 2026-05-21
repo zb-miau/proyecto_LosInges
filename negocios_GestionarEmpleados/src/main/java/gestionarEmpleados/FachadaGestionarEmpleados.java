@@ -140,4 +140,9 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
         return control.obtenerMarca(empleado, fecha);
     }
 
+    @Override
+    public void enviarSupervisor(DTOIncidencia incidencia) {
+        control.enviarSupervisor(incidencia);
+    }
+
 }

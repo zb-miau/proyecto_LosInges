@@ -246,7 +246,7 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
     }//GEN-LAST:event_cmbTipoIncidenciaActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        coordinador.abrirPresentacionRoles();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
@@ -475,7 +475,8 @@ public class Presentacion_validacionIncidenciasTabla extends javax.swing.JFrame 
                             incidenciaValidar.setFecha(fecha);
                             incidenciaValidar.setDescripcion(descripcion);
                             
-                            incidenciaValidar = coordinador.cambioDeVentana(Coordinador.VALIDACION_DE_INCIDENCIAS, incidenciaValidar);
+                            coordinador.setIncidencia(incidenciaValidar);
+                            incidenciaValidar = coordinador.abrirValidacionIncidencia();
                             
                             
                             if (incidenciaValidar.getEstado().equals(DTOIncidencia.Estado.VALIDADA)){

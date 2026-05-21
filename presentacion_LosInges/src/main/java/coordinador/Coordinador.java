@@ -10,6 +10,7 @@ import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOHorarioEmpleado;
 import dto.DTOIncidencia;
+import dto.DTORegistroMarca;
 import dto.DTOTurno;
 import gestionAsistencias.FacadeGestionAsistencias;
 import gestionAsistencias.IGestionAsistencias;
@@ -60,12 +61,115 @@ public class Coordinador {
     private Presentacion_contratacionEmpleados contratacionEmpleado;
     private Presentacion_registrarAsistencia registrarAsistencia;
     private Presentacion_reporteAsistencia reporteAsistencia;
+    
+    public static final int GESTION_DE_HORARIOS = 0;
+    public static final int GESTION_DE_TURNOS = 1;
+    public static final int REGISTRO_DE_INCIDENCIAS = 4;
+    public static final int REGISTRAR_ASISTENCIA = 9;
+    public static final int REPORTE_ASISTENCIA = 10;
+    
+    public void cambioDeVentana(int ventana) {
 
+        switch (ventana) {
+            case 1 -> {
+                if (gestionDeTurnos == null) {
+                    gestionDeTurnos = new Presentacion_gestionDeTurnos(null, this);
+
+                }
+                gestionDeTurnos.setVisible(true);
+                gestionDeTurnos.setLocationRelativeTo(null);
+            }
+
+            
+            case 9 ->{
+                if (registrarAsistencia == null) {
+                    registrarAsistencia = new Presentacion_registrarAsistencia(null, this);
+                    
+                }
+                registrarAsistencia.setVisible(true);
+                registrarAsistencia.setLocationRelativeTo(null);
+            }
+            
+            default ->
+                throw new AssertionError();
+        }
+
+    }
+    
+    public void cambioDeVentana(int ventana, DTOEmpleado empleado) {
+
+        switch (ventana) {
+            case 0 -> {
+                if (gestionDeHorarios == null) {
+                    gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
+                }
+
+                gestionDeHorarios.cargardatos(empleado);
+                gestionDeHorarios.setVisible(true);
+                gestionDeHorarios.setLocationRelativeTo(null);
+            }
+            case 1 -> {
+                if (gestionDeTurnos == null) {
+                    gestionDeTurnos = new Presentacion_gestionDeTurnos(empleado, this);
+                }
+
+                gestionDeTurnos.setVisible(true);
+                gestionDeTurnos.setLocationRelativeTo(null);
+            }
+            case 4 -> {
+                if (registroDeIncidencias == null) {
+                    registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
+                }
+
+                registroDeIncidencias.cargarTexto(empleado);
+                registroDeIncidencias.setVisible(true);
+                registroDeIncidencias.setLocationRelativeTo(null);
+            }
+            case 9 ->{
+                if (registrarAsistencia == null) {
+                    registrarAsistencia = new Presentacion_registrarAsistencia(empleado, this);
+                    
+                }
+                registrarAsistencia.setVisible(true);
+                registrarAsistencia.setLocationRelativeTo(null);
+            }
+            case 10 ->{
+                if (reporteAsistencia == null) {
+                    reporteAsistencia = new Presentacion_reporteAsistencia(this,empleado);
+                    
+                }
+                reporteAsistencia.setVisible(true);
+                reporteAsistencia.setLocationRelativeTo(null);
+            }
+            default ->
+                throw new AssertionError();
+        }
+
+    }
+
+    
+    private int ventanaSiguiente = -1;
+
+    public void setVentanaSiguiente(int ventanaSiguiente) {
+        this.ventanaSiguiente = ventanaSiguiente;
+    }
+
+    public int getVentanaSiguiente() {
+        return ventanaSiguiente;
+    }
+    
+    
+    public void setEmpleado(DTOEmpleado empleado){
+        this.empleadoDTO = empleado;
+    }
+    
+    
     public void abrirPresentacionRoles() {
         if (menuPrincipal == null) {
             menuPrincipal = new Presentacion_menuPrincipal(this);
         }
         menuPrincipal.setVisible(true);
+        menuPrincipal.setLocationRelativeTo(null);
     }
 
     public void abrirPresentacionListaEmpleados() {
@@ -73,6 +177,7 @@ public class Coordinador {
             listaDeEmpleados = new Presentacion_listaDeEmpleados(this);
         }
         listaDeEmpleados.setVisible(true);
+        listaDeEmpleados.setLocationRelativeTo(null);
     }
 
     public void abrirContratacionEmpleados() {
@@ -80,6 +185,7 @@ public class Coordinador {
             contratacionEmpleado = new Presentacion_contratacionEmpleados(this);
         }
         contratacionEmpleado.setVisible(true);
+        contratacionEmpleado.setLocationRelativeTo(null);
     }
 
     public void abrirVentanaGestionHorarios() {
@@ -87,6 +193,7 @@ public class Coordinador {
             gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
         }
         gestionDeHorarios.setVisible(true);
+        gestionDeHorarios.setLocationRelativeTo(null);
     }
 
     public void abrirGestionTurnos() {
@@ -94,6 +201,7 @@ public class Coordinador {
             gestionDeTurnos = new Presentacion_gestionDeTurnos(empleadoDTO, this);
         }
         gestionDeTurnos.setVisible(true);
+        gestionDeTurnos.setLocationRelativeTo(null);
     }
 
     public void abrirMenuGerente() {
@@ -101,6 +209,7 @@ public class Coordinador {
             menuGerente = new Presentacion_menuGerente(this);
         }
         menuGerente.setVisible(true);
+        menuGerente.setLocationRelativeTo(null);
     }
 
     public void abrirRegistroAsistencia() {
@@ -108,6 +217,7 @@ public class Coordinador {
             registrarAsistencia = new Presentacion_registrarAsistencia(empleadoDTO, this);
         }
         registrarAsistencia.setVisible(true);
+        registrarAsistencia.setLocationRelativeTo(null);
     }
 
     public void abrirReporteAsistencia() {
@@ -115,25 +225,35 @@ public class Coordinador {
             reporteAsistencia = new Presentacion_reporteAsistencia(this, empleadoDTO);
         }
         reporteAsistencia.setVisible(true);
+        reporteAsistencia.setLocationRelativeTo(null);
     }
 
-    public void abrirRegistroIndidencia() {
+    public void abrirRegistroIncidencia() {
         if (registroDeIncidencias == null) {
             registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
         }
         registroDeIncidencias.setVisible(true);
+        registroDeIncidencias.setLocationRelativeTo(null);
+    }
+    
+    public void setIncidencia(DTOIncidencia incidencia){
+        this.incidenciaDTO = incidencia;
     }
 
-    public void abrirValidacionIndidencia(Frame padre) {
+    public DTOIncidencia abrirValidacionIncidencia() {
         if (validacionDeIncidencias == null) {
-            validacionDeIncidencias = new Presentacion_validacionDeIncidencias(padre, incidenciaDTO, this);
+            validacionDeIncidencias = new Presentacion_validacionDeIncidencias(null, incidenciaDTO, this);
         }
+        validacionDeIncidencias.setVisible(true);
+        validacionDeIncidencias.setLocationRelativeTo(null);
+        return validacionDeIncidencias.getIncidencia();
     }
 
     public void abrirValidacionIncidenciaTabla() {
         if (validacionIncidenciasTabla == null) {
             validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla(this);
         }
+        validacionIncidenciasTabla.setLocationRelativeTo(null);
         validacionIncidenciasTabla.setVisible(true);
     }
 
@@ -186,6 +306,15 @@ public class Coordinador {
         }
     }
     
+    public List<DTOTurno> recuperarTurno(){
+        try {
+            return this.gestionTurnosF.recuperarTurno();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar agregar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+    }
+    
     public void eliminarTurno(DTOTurno turno){
         try {
             this.gestionTurnosF.eliminarTurno(turno);
@@ -201,5 +330,36 @@ public class Coordinador {
             JOptionPane.showMessageDialog(null, "Error al intentar modificar el turno: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
+    
+    public List<DTOEmpleado> obtenerEmpleados(){
+        
+        return this.gestionarEmpleadosF.obtenerEmpleados();
+        
+    }
+    
+    public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha){
+        return this.gestionarEmpleadosF.obtenerMarca(empleadoDTO, fecha);
+    }
+    
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca){
+        return this.gestionarEmpleadosF.crearMarca(marca);
+    }
+    
+    public DTOIncidencia crearIncidencia(DTOIncidencia incidencia){
+        return this.gestionarEmpleadosF.registrarIncidencia(incidencia);
+    }
+    
+    public void enviarSupervisor(DTOIncidencia incidencia){
+        this.gestionarEmpleadosF.enviarSupervisor(incidencia);
+    }
+    
+    public int conteoAsistencia(List<DTORegistroMarca> lista){
+        return this.gestionarEmpleadosF.obtenerConteoAsistencia(lista);
+    }
+    
+    public List<DTORegistroMarca> obtenerListaMarca(DTOEmpleado empleado, LocalDate fechaInicio, LocalDate fechaFin){
+        return this.gestionarEmpleadosF.obtenerLista(empleado, fechaInicio, fechaFin);
+    }
+    
 
 }

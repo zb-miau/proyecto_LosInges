@@ -167,13 +167,13 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadoActionPerformed
-        coordinador.cambioDeVentana(Coordinador.CONTRATACION_EMPLEADO);
+        coordinador.abrirContratacionEmpleados();
         this.dispose();
     }//GEN-LAST:event_btnRegistrarEmpleadoActionPerformed
 
     private void btnGestionarHorariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarHorariosActionPerformed
 
-        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.abrirPresentacionListaEmpleados();
         coordinador.setVentanaSiguiente(Coordinador.GESTION_DE_HORARIOS);
         this.dispose();
 
@@ -190,7 +190,7 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
 
     private void btnRegistrarIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarIncidenciaActionPerformed
 
-        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.abrirPresentacionListaEmpleados();
         coordinador.setVentanaSiguiente(Coordinador.REGISTRO_DE_INCIDENCIAS);
         this.dispose();
 
@@ -199,14 +199,14 @@ public class Presentacion_menuGerente extends javax.swing.JFrame {
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
 
-        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        coordinador.abrirPresentacionRoles();
         this.dispose();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:      
-        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.abrirPresentacionListaEmpleados();
         coordinador.setVentanaSiguiente(Coordinador.REPORTE_ASISTENCIA);
         this.dispose();
     }//GEN-LAST:event_btnReporteActionPerformed

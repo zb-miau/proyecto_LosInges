@@ -228,33 +228,24 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
             incidencia.setEstado(DTOIncidencia.Estado.PENDIENTE);
             incidencia.setObservaciones("");
 
-            try {
 
-                int opcion = JOptionPane.showConfirmDialog(this, "¿Está seguro de registrar esta incidencia?", "Confirmaciön", JOptionPane.YES_NO_OPTION);
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Está seguro de registrar esta incidencia?", "Confirmaciön", JOptionPane.YES_NO_OPTION);
 
-                if (opcion == 0) {
+            if (opcion == 0) {
 
-                    incidencia = coordinador.gestionIncidencias.crearIncidencia(incidencia);
-                    coordinador.gestionIncidencias.enviarSupervisor(incidencia);
-                    JOptionPane.showMessageDialog(this, "Incidencia Registrada");
-                    coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
-                    this.dispose();
+                incidencia = coordinador.crearIncidencia(incidencia);
+                coordinador.enviarSupervisor(incidencia);
+                JOptionPane.showMessageDialog(this, "Incidencia Registrada");
+                coordinador.abrirPresentacionListaEmpleados();
+                this.dispose();
 
-                } else {
+            } else {
 
-                    JOptionPane.showMessageDialog(this, "La incidencia no ha sido registrada");
-
-                }
-
-            } catch (NegocioException ex) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Error al registrar la incidencia: " + ex.getMessage(),
-                        "Error al registrar.",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La incidencia no ha sido registrada");
 
             }
+
+
 
         }
 
@@ -266,7 +257,7 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
 
-        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
+        coordinador.abrirPresentacionListaEmpleados();
         this.dispose();
 
     }//GEN-LAST:event_botonCancelarActionPerformed

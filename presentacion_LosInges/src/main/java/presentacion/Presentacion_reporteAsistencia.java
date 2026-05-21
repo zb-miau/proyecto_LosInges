@@ -264,40 +264,36 @@ public class Presentacion_reporteAsistencia extends javax.swing.JFrame {
         fechaInicio = datePickerInicio.getDate();
         fechaFin = datePickerFin.getDate();
         
-        try{
-            //2. Llamar al coordinador
-            List<DTORegistroMarca> listaMarcas = coordinador.gestionAsistencias.obtenerListaMarca(empleado, fechaInicio, fechaFin);
-            //3. Llenar la tabla 
-            
-            DefaultTableModel modelo = (DefaultTableModel) tblAsistencias.getModel();
-            modelo.setRowCount(0);
-            
-            if (listaMarcas.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No se encontraron registros en el rango");
-            }else{
-                for(DTORegistroMarca registro: listaMarcas){
-                    Object[] fila = {
-                           registro.getFecha(),
-                           registro.getEntrada(),
-                           registro.getSalida() != null ? registro.getSalida() : "Sin registro"
-                    };
-                    modelo.addRow(fila);
-                }
+        //2. Llamar al coordinador
+        List<DTORegistroMarca> listaMarcas = coordinador.obtenerListaMarca(empleado, fechaInicio, fechaFin);
+        //3. Llenar la tabla 
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAsistencias.getModel();
+        modelo.setRowCount(0);
+
+        if (listaMarcas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron registros en el rango");
+        }else{
+            for(DTORegistroMarca registro: listaMarcas){
+                Object[] fila = {
+                       registro.getFecha(),
+                       registro.getEntrada(),
+                       registro.getSalida() != null ? registro.getSalida() : "Sin registro"
+                };
+                modelo.addRow(fila);
             }
-            
-            //5. Actualizar contador
-            int totalAsistencia = coordinador.gestionAsistencias.conteoAsistencia(listaMarcas);
-            lblAsistenciaContador.setText("Asistencias completas: " + totalAsistencia);
-        }catch(NegocioException e){
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de negocio", JOptionPane.ERROR_MESSAGE);
         }
+
+        //5. Actualizar contador
+        int totalAsistencia = coordinador.conteoAsistencia(listaMarcas);
+        lblAsistenciaContador.setText("Asistencias completas: " + totalAsistencia);
                 
         
     }//GEN-LAST:event_btnConsultaActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        coordinador.abrirPresentacionRoles();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

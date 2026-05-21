@@ -266,4 +266,8 @@ public class ControlGestionarEmpleados {
             return null;
         }
     }
+    
+    public void enviarSupervisor(DTOIncidencia incidencia){
+        gestionIncidencias.enviarSupervisor(incidencia);
+    }
 }

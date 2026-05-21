@@ -55,19 +55,16 @@
                       <Component id="pnlScroll" min="-2" pref="592" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="cmbTipoIncidencia" min="-2" pref="232" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="cmbTipoIncidencia" min="-2" pref="232" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="rdbtnPendiente" min="-2" pref="93" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="rdbtnValidada" min="-2" pref="90" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="rdbtnRechazada" min="-2" pref="90" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblEmpleado" min="-2" pref="148" max="-2" attributes="0"/>
                               <Component id="txtBuscarEmpleado" max="32767" attributes="0"/>

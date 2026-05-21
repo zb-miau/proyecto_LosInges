@@ -39,54 +39,47 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         lblEmpleadoNombre.setText(empleado.getNombre());
 
         //2.Hacer una consulta para poder cambiar el texto del bóton
-        try {
-            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado, LocalDate.now());
+        
+        DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
 
-            if (marcaHoy == null) {
-                btnRegistrar.setText("Registrar Entrada");
-                btnRegistrar.setEnabled(true);
-            } else if (marcaHoy.getSalida() == null) {
-                btnRegistrar.setText("Registrar Salida");
-                btnRegistrar.setEnabled(true);
-            } else {
-                btnRegistrar.setText("Jornada terminada");
-                btnRegistrar.setEnabled(false);
-            }
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(this, "Error al consultar estado: " + e.getMessage());
+        if (marcaHoy == null) {
+            btnRegistrar.setText("Registrar Entrada");
+            btnRegistrar.setEnabled(true);
+        } else if (marcaHoy.getSalida() == null) {
+            btnRegistrar.setText("Registrar Salida");
+            btnRegistrar.setEnabled(true);
+        } else {
+            btnRegistrar.setText("Jornada terminada");
+            btnRegistrar.setEnabled(false);
         }
+
 
     }
     
     private void asignarEventos(){
         btnRegistrar.addActionListener(e->{
-            btnRegistrar.setEnabled(false); // Evita clics accidentales
-        try {
-            // Buscamos el estado actual
-            DTORegistroMarca marcaHoy = coordinador.gestionAsistencias.obtenerMarca(empleado, LocalDate.now());
-            
-            if (marcaHoy == null) {
-                DTORegistroMarca nuevo = new DTORegistroMarca();
-                nuevo.setEmpleadoDTO(this.empleado);
-                nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
-                nuevo.setEntrada(LocalTime.now());
-                nuevo.setFecha(LocalDate.now());
-                
-                coordinador.gestionAsistencias.crearMarca(nuevo);
-                JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
-            } else {
-                marcaHoy.setSalida(LocalTime.now());
-                coordinador.gestionAsistencias.crearMarca(marcaHoy); 
-                JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
-            }
-            
-            actualizarEstadoBoton();
-            
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
-            btnRegistrar.setEnabled(true); 
+        btnRegistrar.setEnabled(false); // Evita clics accidentales
+        // Buscamos el estado actual
+        DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
+
+        if (marcaHoy == null) {
+            DTORegistroMarca nuevo = new DTORegistroMarca();
+            nuevo.setEmpleadoDTO(this.empleado);
+            nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
+            nuevo.setEntrada(LocalTime.now());
+            nuevo.setFecha(LocalDate.now());
+
+            coordinador.crearMarca(nuevo);
+            JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
+        } else {
+            marcaHoy.setSalida(LocalTime.now());
+            coordinador.crearMarca(marcaHoy); 
+            JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
         }
-        });
+
+        actualizarEstadoBoton();
+
+    });
     }
 
     /**
@@ -180,7 +173,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+        coordinador.abrirPresentacionRoles();
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

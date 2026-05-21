@@ -54,7 +54,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
             }
         };
 
-        List<DTOEmpleado> empleados = coordinador.gestionarEmpleados.obtenerEmpleados();
+        List<DTOEmpleado> empleados = coordinador.obtenerEmpleados();
         for (DTOEmpleado e : empleados) {
             Object[] fila = {
                 e.getId(),
@@ -109,7 +109,8 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                             String valorId = tablaEmpleados.getModel().getValueAt(filaModelo, 0).toString();
                             DTOEmpleado empleado = new DTOEmpleado();
                             empleado.setId(valorId);
-                            empleado = coordinador.gestionarEmpleados.recuperarEmpleado(empleado);
+                            empleado = coordinador.recuperarEmpleado(empleado);
+                            coordinador.setEmpleado(empleado);
 
                             if (coordinador.getVentanaSiguiente() == Coordinador.GESTION_DE_HORARIOS) {
 
@@ -121,9 +122,13 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                                 abrirVentanaRegistroIncidenicias(empleado);
 
                             }if(coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA){
+                                
                                 abrirVentanaRegistroAsistencia(empleado);
+                                
                             }if (coordinador.getVentanaSiguiente() == Coordinador.REPORTE_ASISTENCIA) {
+                                
                                 abrirVentanaReporteAsistencia(empleado);
+                                
                             }
 
                         } catch (Exception ex) {
@@ -143,7 +148,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
     private void abrirVentanaRegistroIncidenicias(DTOEmpleado empleado) {
 
-        coordinador.cambioDeVentana(Coordinador.REGISTRO_DE_INCIDENCIAS, empleado);
+        coordinador.abrirRegistroIncidencia();
         this.dispose();
 
     }
@@ -170,21 +175,15 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      * @param empleado el id del empleado seleccionado
      */
     private void abrirVentana(DTOEmpleado empleado) {
-        try {
-            List<DTOTurno> turnos = coordinador.gestionarTurnos.recuperarTurno();
-            if (turnos.isEmpty()) {
-                coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS, empleado);
+        
+        List<DTOTurno> turnos = coordinador.recuperarTurno();
+        if (turnos.isEmpty()) {
+            coordinador.abrirGestionTurnos();
 
-            } else {
-                coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS, empleado);
-            }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al recuperar los turnos: " + ex.getMessage(),
-                    "Error al recuperar.",
-                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            coordinador.abrirVentanaGestionHorarios();
         }
+        
         this.dispose();
     }
 
@@ -294,12 +293,12 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
         if (coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA) {
-            coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
+            coordinador.abrirPresentacionRoles();
             this.dispose();
             return;
         }
         
-        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        coordinador.abrirMenuGerente();
         this.dispose();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
