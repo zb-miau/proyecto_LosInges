@@ -32,16 +32,6 @@ public class FacadeGestionAsistencias implements IGestionAsistencias {
     }
     
     /**
-     * Registra o actualiza una marca de asistencia (entrada/salida) para un empleado.
-     * @param marcaDTO Objeto de transferencia de datos con la información de la marca.
-     * @return El DTORegistroMarca procesado y persistido.
-     * @throws NegocioException Si ocurren errores en las reglas de validación (horario, días laborables, etc.).
-     */
-    @Override
-    public DTORegistroMarca crearMarca(DTORegistroMarca marcaDTO) throws NegocioException {
-        return control.agregarMarca(marcaDTO);
-    }
-    /**
      * Recupera una lista de marcas de asistencia de un empleado en un rango de fechas determinado.
      * @param empleado Identificador único del empleado.
      * @param inicio Fecha inicial del rango de consulta.
@@ -73,6 +63,16 @@ public class FacadeGestionAsistencias implements IGestionAsistencias {
     @Override
     public DTORegistroMarca obtenerMarca(DTOEmpleado empleado, LocalDate fecha) throws NegocioException{
         return control.obtenerMarca(empleado, fecha);
+    }
+    /**
+     * Registra o actualiza una marca de asistencia (entrada/salida) para un empleado.
+     * @param marcaDTO Objeto de transferencia de datos con la información de la marca.
+     * @return El DTORegistroMarca procesado y persistido.
+     * @throws NegocioException Si ocurren errores en las reglas de validación (horario, días laborables, etc.).
+     */
+    @Override
+    public DTORegistroMarca crearMarca(DTORegistroMarca marcaDTO) throws NegocioException {
+        return control.agregarMarca(marcaDTO);
     }
 
     
