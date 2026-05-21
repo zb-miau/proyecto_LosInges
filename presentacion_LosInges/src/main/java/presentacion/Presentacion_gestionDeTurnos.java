@@ -401,12 +401,15 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
 
             DTOTurno turno = new DTOTurno(nombre, horas[0], horas[1], dias);
             turno.setColorEvento(colorTurno);
-            coordinador.agregarTurno(turno);
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Se agregó el turno",
-                    "Turno Agregado",
-                    JOptionPane.INFORMATION_MESSAGE);
+            turno = coordinador.agregarTurno(turno);
+            
+            if (turno != null){
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Se agregó el turno",
+                        "Turno Agregado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
 
         }
 

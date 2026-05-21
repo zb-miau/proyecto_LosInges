@@ -35,8 +35,10 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
         btnGerenteGeneral = new javax.swing.JButton();
         btnEmpleado = new javax.swing.JButton();
         btnGerente = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menu principal");
         setResizable(false);
 
         pnlMenuPrincipal.setBackground(new java.awt.Color(39, 71, 125));
@@ -71,22 +73,33 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Iniciar como:");
+
         javax.swing.GroupLayout pnlMenuPrincipalLayout = new javax.swing.GroupLayout(pnlMenuPrincipal);
         pnlMenuPrincipal.setLayout(pnlMenuPrincipalLayout);
         pnlMenuPrincipalLayout.setHorizontalGroup(
             pnlMenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuPrincipalLayout.createSequentialGroup()
-                .addGap(104, 104, 104)
-                .addGroup(pnlMenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnGerente, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGerenteGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlMenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMenuPrincipalLayout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addGroup(pnlMenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnGerente, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGerenteGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlMenuPrincipalLayout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(104, Short.MAX_VALUE))
         );
         pnlMenuPrincipalLayout.setVerticalGroup(
             pnlMenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuPrincipalLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addGap(30, 30, 30)
                 .addComponent(btnEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(96, 96, 96)
                 .addComponent(btnGerente, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,6 +147,7 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnEmpleado;
     private javax.swing.JButton btnGerente;
     private javax.swing.JButton btnGerenteGeneral;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnlMenuPrincipal;
     // End of variables declaration//GEN-END:variables
 }

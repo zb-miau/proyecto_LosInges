@@ -82,8 +82,24 @@ public class ControlAsignarHorario {
 
             if (traslapeHistorial != null && !traslapeHistorial.isEmpty()) {
                 for (DTOHorarioEmpleado t : traslapeHistorial) {
+                    //si los horarios inician al mismo tiempo
+                    if (t.getFechaInicio().isEqual(nuevo.getFechaInicio())) {
+                        //si el horario nuevo absorbe el horario anterior
+                        if (nuevo.getFechaFin() == null || t.getFechaFin() == null || !t.getFechaFin().isAfter(nuevo.getFechaFin())) {
+                            // se elimina
+                            horarioEmpleadoBO.eliminarHistorial(t);
+                        } else {
+                            //si el horario registrado dura más que el nuevo entonces se ajusta la fecha de inicio del anterior
+                            t.setFechaInicio(nuevo.getFechaFin().plusDays(1));
+                            if (t.getEmpleado() == null) {
+                                t.setEmpleado(empleado);
+                            }
+                            horarioEmpleadoBO.modificarHorarioInfinito(t);
+                        }
+                    }
+                    
                     //si el horario registrado empieza antes que el nuevo
-                    if (t.getFechaInicio().isBefore(nuevo.getFechaInicio())) {
+                    else if (t.getFechaInicio().isBefore(nuevo.getFechaInicio())) {
                         //y si la fecha de fin del horario registrado es nula o termina despues de que
                         // el horario nuevo inicie
                         if (t.getFechaFin() == null || t.getFechaFin().isAfter(nuevo.getFechaInicio().minusDays(1))) {
@@ -96,7 +112,7 @@ public class ControlAsignarHorario {
                             horarioEmpleadoBO.modificarHorarioInfinito(t);
                         }
                     } //si el horario registrado inicia antes de que termine el nuevo
-                    else if (!t.getFechaInicio().isAfter(nuevo.getFechaFin()) || nuevo.getFechaFin() == null) {
+                    else if (nuevo.getFechaFin() !=null && !t.getFechaInicio().isAfter(nuevo.getFechaFin())) {
                         //se cambia su fecha de inicio a un dia de la fecha fin del nuevo
                         t.setFechaInicio(nuevo.getFechaFin().plusDays(1));
                         //pero si el horario registrado tiene fecha de fin

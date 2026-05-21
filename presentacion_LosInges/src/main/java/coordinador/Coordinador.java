@@ -261,7 +261,7 @@ public class Coordinador {
         try {
             return gestionarTurnos.agregarTurno(turno);
         } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(null,"No se pudo agregar el turno.");
+            JOptionPane.showMessageDialog(null,"No se pudo agregar el turno. " + ex.getMessage());
             return null; 
         }
     }
