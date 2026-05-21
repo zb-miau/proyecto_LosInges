@@ -134,7 +134,6 @@ public class Coordinador {
                     contratacionEmpleado = new Presentacion_contratacionEmpleados(this);
                     
                 }
-
                 contratacionEmpleado.setVisible(true);
                 contratacionEmpleado.setLocationRelativeTo(null);
             }

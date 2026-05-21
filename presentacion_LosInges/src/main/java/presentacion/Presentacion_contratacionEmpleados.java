@@ -7,6 +7,7 @@ package presentacion;
 import com.github.lgooddatepicker.components.DatePicker;
 import coordinador.Coordinador;
 import dto.DTOContratacion;
+import dto.DTOEmpleado;
 import gestionarEmpleados.FachadaGestionarEmpleados;
 import gestionarEmpleados.IGestionarEmpleados;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
     Coordinador coordinador;
 
     private LocalDate fechaNacimiento;
+    private DTOEmpleado empleado;
 
     /**
      * Creates new form Presentacion_menuGerente
@@ -32,7 +34,10 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
         this.coordinador = coordinador;
         initComponents();
     }
-    
+    public void cargarDatos(DTOEmpleado empleado) {
+
+        this.empleado = empleado;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
