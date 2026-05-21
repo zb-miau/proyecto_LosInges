@@ -28,7 +28,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
     public Presentacion_registrarAsistencia(Coordinador coordinador) {
         initComponents();
         this.coordinador = coordinador;
-
+        asignarEventos();
     }
 
     public void cargarDatos(DTOEmpleado empleado) {
@@ -36,7 +36,6 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         this.empleado = empleado;
 
         actualizarEstadoBoton();
-        asignarEventos();
     }
 
     private void actualizarEstadoBoton() {
@@ -61,26 +60,42 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
 
     private void asignarEventos() {
         btnRegistrar.addActionListener(e -> {
-            btnRegistrar.setEnabled(false); // Evita clics accidentales
-            // Buscamos el estado actual
-            DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
+            try {
+                DTORegistroMarca marcaHoy = coordinador.obtenerMarca(empleado, LocalDate.now());
 
-            if (marcaHoy == null) {
-                DTORegistroMarca nuevo = new DTORegistroMarca();
-                nuevo.setEmpleadoDTO(this.empleado);
-                nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
-                nuevo.setEntrada(LocalTime.now());
-                nuevo.setFecha(LocalDate.now());
+                // 1. Validar si el empleado tiene un horario asignado a nivel general
+                if (empleado.getHorarioActual() == null) {
+                    JOptionPane.showMessageDialog(this, "El empleado no tiene un horario asignado en el sistema.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                coordinador.crearMarca(nuevo);
-                JOptionPane.showMessageDialog(this, "Entrada registrada para el empleado: " + empleado.getNombre());
-            } else {
-                marcaHoy.setSalida(LocalTime.now());
-                coordinador.crearMarca(marcaHoy);
-                JOptionPane.showMessageDialog(this, "Salida registrada para el empleado: " + empleado.getNombre());
+                if (marcaHoy == null) {
+                    // Intento de Entrada
+                    DTORegistroMarca nuevo = new DTORegistroMarca();
+                    nuevo.setEmpleadoDTO(this.empleado);
+                    nuevo.setHorarioEmpledoDTO(this.empleado.getHorarioActual());
+                    nuevo.setEntrada(LocalTime.now());
+                    nuevo.setFecha(LocalDate.now());
+                    
+                    coordinador.crearMarca(nuevo);
+
+                    JOptionPane.showMessageDialog(this, "Entrada registrada con éxito.");
+                } else if (marcaHoy.getSalida() == null) {
+                    // Intento de Salida
+                    marcaHoy.setSalida(LocalTime.now());
+                    coordinador.crearMarca(marcaHoy);
+                    JOptionPane.showMessageDialog(this, "Salida registrada con éxito.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "El empleado ya registró entrada y salida hoy.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                // Aquí capturas la excepción que lanza tu Facade (ej. "Hoy no es día laboral para el empleado")
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                btnRegistrar.setEnabled(true);
+                actualizarEstadoBoton();
             }
-
-            actualizarEstadoBoton();
 
         });
     }

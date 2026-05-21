@@ -224,13 +224,8 @@ public class ControlGestionarEmpleados {
 
     }
 
-    public DTORegistroMarca agregarMarca(DTORegistroMarca marcaDTO) {
-        try {
+    public DTORegistroMarca agregarMarca(DTORegistroMarca marcaDTO) throws NegocioException{
             return gestionAsistencias.crearMarca(marcaDTO);
-        } catch (NegocioException e) {
-            System.err.println("Algo fallo al intentar insertar la marca");
-            return marcaDTO;
-        }
 
     }
 

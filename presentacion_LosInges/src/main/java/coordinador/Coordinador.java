@@ -221,13 +221,9 @@ public class Coordinador {
         }
     }
     
-    public DTOContratacion registrarEmpleado(DTOContratacion empleado){
-        try {
+    public DTOContratacion registrarEmpleado(DTOContratacion empleado) throws NegocioException{
             return gestionarEmpleados.registrarEmpleado(empleado);
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(null,"No se pudo registrar el empleado.");
-            return null;
-        }
+
     }
     
     public List<DTOTurno> recuperarListaTurno(){
@@ -296,8 +292,8 @@ public class Coordinador {
         return gestionarEmpleados.obtenerMarca(empleado, fecha);
     }
     
-    public DTORegistroMarca crearMarca(DTORegistroMarca marca){
-        return gestionarEmpleados.crearMarca(marca);
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca) throws NegocioException{
+            return gestionarEmpleados.crearMarca(marca);
     }
     
     public DTOIncidencia crearIncidencia(DTOIncidencia incidencia){

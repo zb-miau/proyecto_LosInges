@@ -125,7 +125,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
                             if (coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA) {
 
                                 abrirVentanaRegistroAsistencia(empleado);
-
+                                
                             }
                             if (coordinador.getVentanaSiguiente() == Coordinador.REPORTE_ASISTENCIA) {
 
@@ -162,6 +162,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      */
     private void abrirVentanaRegistroAsistencia(DTOEmpleado empleado) {
         coordinador.cambioDeVentana(Coordinador.REGISTRAR_ASISTENCIA, empleado);
+        this.dispose();
     }
 
     /**

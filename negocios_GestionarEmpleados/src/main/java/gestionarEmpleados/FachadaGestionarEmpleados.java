@@ -108,9 +108,10 @@ public class FachadaGestionarEmpleados implements IGestionarEmpleados {
      * Crea una marca para el empleado por medio de una solicitud al controlador
      * @param marca la marca que se va a registrar 
      * @return devuelve un DTO con la marca
+     * @throws NegocioException
      */
     @Override
-    public DTORegistroMarca crearMarca(DTORegistroMarca marca) {
+    public DTORegistroMarca crearMarca(DTORegistroMarca marca) throws NegocioException {
         return control.agregarMarca(marca);
     }
     /**

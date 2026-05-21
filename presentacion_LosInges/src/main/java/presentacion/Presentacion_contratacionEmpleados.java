@@ -10,6 +10,8 @@ import dto.DTOContratacion;
 import gestionarEmpleados.FachadaGestionarEmpleados;
 import gestionarEmpleados.IGestionarEmpleados;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import objetosNegocio.NegocioException;
 
@@ -20,11 +22,8 @@ import objetosNegocio.NegocioException;
 public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
     Coordinador coordinador;
-    
-    private LocalDate fechaNacimiento;
-    
 
-   
+    private LocalDate fechaNacimiento;
 
     /**
      * Creates new form Presentacion_menuGerente
@@ -33,6 +32,7 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
         this.coordinador = coordinador;
         initComponents();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -342,40 +342,44 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
         String curp = txtCurp.getText();
         String rfc = txtRFC.getText();
         String nss = txtNSS.getText();
-        if (nombre.trim().isEmpty() &&
-                apePaterno.trim().isEmpty() &&
-                apeMaterno.trim().isEmpty() &&
-                calle.trim().isEmpty() &&
-                col.trim().isEmpty() &&
-                numCasa.trim().isEmpty() &&
-                codigoPostal.trim().isEmpty() &&
-                curp.trim().isEmpty() &&
-                rfc.trim().isEmpty() && 
-                nss.trim().isEmpty()) {
-            
+        if (nombre.trim().isEmpty()
+                && apePaterno.trim().isEmpty()
+                && apeMaterno.trim().isEmpty()
+                && calle.trim().isEmpty()
+                && col.trim().isEmpty()
+                && numCasa.trim().isEmpty()
+                && codigoPostal.trim().isEmpty()
+                && curp.trim().isEmpty()
+                && rfc.trim().isEmpty()
+                && nss.trim().isEmpty()) {
+
             JOptionPane.showMessageDialog(this, "Todos los campos estan vacios.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // Crear la instancia del DTO utilizando su constructor
-        DTOContratacion dto = new DTOContratacion(
-                nombre,
-                apePaterno, 
-                this.fechaNacimiento,
-                calle,
-                col,
-                numCasa,
-                codigoPostal,
-                curp,
-                rfc, 
-                nss
-        );
-        //Si es que el apellido materno esta no esta vacio se valida
-        if ( !apeMaterno.isEmpty() && apeMaterno != "") {
-            dto.setApellidoMaterno(apeMaterno);
+        try {
+            // Crear la instancia del DTO utilizando su constructor
+            DTOContratacion dto = new DTOContratacion(
+                    nombre,
+                    apePaterno,
+                    this.fechaNacimiento,
+                    calle,
+                    col,
+                    numCasa,
+                    codigoPostal,
+                    curp,
+                    rfc,
+                    nss
+            );
+            //Si es que el apellido materno esta no esta vacio se valida
+            if (!apeMaterno.isEmpty() && apeMaterno != "") {
+                dto.setApellidoMaterno(apeMaterno);
+            }
+            // Enviar el DTO al coordinador
+            coordinador.registrarEmpleado(dto);
+            JOptionPane.showMessageDialog(null, "Se contrato de manera correcta el empleado", "Contratacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de registro", JOptionPane.ERROR_MESSAGE);
         }
-        // Enviar el DTO al coordinador
-        coordinador.registrarEmpleado(dto);
-        JOptionPane.showMessageDialog(null, "Se contrato de manera correcta el empleado", "Contratacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_btnContratarEmpleadoActionPerformed
 
@@ -396,13 +400,13 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
     private void btnFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechaActionPerformed
         DatePicker datePickerInicio = new DatePicker();
-        
+
         int opcion = JOptionPane.showConfirmDialog(
-            this, 
-            datePickerInicio, 
-            "Seleccione su Fecha de Nacimiento", 
-            JOptionPane.OK_CANCEL_OPTION, 
-            JOptionPane.PLAIN_MESSAGE
+                this,
+                datePickerInicio,
+                "Seleccione su Fecha de Nacimiento",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
         );
 
         // Si el usuario presiono "Aceptar", recuperamos la fecha seleccionada
@@ -410,7 +414,7 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
             if (datePickerInicio.getDate() != null) {
                 this.fechaNacimiento = datePickerInicio.getDate();
 
-                btnFecha.setText(this.fechaNacimiento.toString()); 
+                btnFecha.setText(this.fechaNacimiento.toString());
             } else {
                 JOptionPane.showMessageDialog(this, "No seleccionó ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
