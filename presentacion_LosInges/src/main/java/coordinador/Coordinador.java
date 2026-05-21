@@ -6,6 +6,7 @@ package coordinador;
 
 import asignarHorario.FacadeAsignarHorario;
 import asignarHorario.IAsignarHorario;
+import dto.DTOContratacion;
 import dto.DTOEmpleado;
 import dto.DTOIncidencia;
 import gestionAsistencias.FacadeGestionAsistencias;
@@ -16,6 +17,11 @@ import gestionarEmpleados.FachadaGestionarEmpleados;
 import gestionarEmpleados.IGestionarEmpleados;
 import gestionarTurnos.FachadaGestionarTurnos;
 import gestionarTurnos.IGestionarTurnos;
+import java.awt.Frame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import objetosNegocio.NegocioException;
 import presentacion.Presentacion_contratacionEmpleados;
 import presentacion.Presentacion_gestionDeHorarios;
 import presentacion.Presentacion_listaDeEmpleados;
@@ -34,11 +40,9 @@ import presentacion.Presentacion_validacionIncidenciasTabla;
  */
 public class Coordinador {
 
-    public final IAsignarHorario asignarHorario = new FacadeAsignarHorario();
-    public final IGestionIncidencias gestionIncidencias = new FacadeGestionIncidencias();
-    public final IGestionAsistencias gestionAsistencias = new FacadeGestionAsistencias();
-    public final IGestionarEmpleados gestionarEmpleados = new FachadaGestionarEmpleados();
-    public final IGestionarTurnos gestionarTurnos = new FachadaGestionarTurnos();
+    public final IGestionarEmpleados gestionarEmpleadosF = new FachadaGestionarEmpleados();
+    private DTOEmpleado empleadoDTO;
+    private DTOIncidencia incidenciaDTO;
 
     private Presentacion_gestionDeHorarios gestionDeHorarios;
     private Presentacion_gestionDeTurnos gestionDeTurnos;
@@ -52,159 +56,88 @@ public class Coordinador {
     private Presentacion_registrarAsistencia registrarAsistencia;
     private Presentacion_reporteAsistencia reporteAsistencia;
 
-    public static final int GESTION_DE_HORARIOS = 0;
-    public static final int GESTION_DE_TURNOS = 1;
-    public static final int LISTA_DE_EMPLEADOS = 2;
-    public static final int MENU_PRINCIPAL = 3;
-    public static final int REGISTRO_DE_INCIDENCIAS = 4;
-    public static final int VALIDACION_DE_INCIDENCIAS = 5;
-    public static final int VALIDACION_INCIDECIAS_TABLA = 6;
-    public static final int MENU_GERENTE = 7;
-    public static final int CONTRATACION_EMPLEADO = 8;
-    public static final int REGISTRAR_ASISTENCIA = 9;
-    public static final int REPORTE_ASISTENCIA = 10;
-
-    private int ventanaSiguiente = -1;
-
-    public void setVentanaSiguiente(int ventanaSiguiente) {
-        this.ventanaSiguiente = ventanaSiguiente;
-    }
-
-    public int getVentanaSiguiente() {
-        return ventanaSiguiente;
-    }
-
-    public void cambioDeVentana(int ventana) {
-
-        switch (ventana) {
-            case 1 -> {
-                if (gestionDeTurnos == null) {
-                    gestionDeTurnos = new Presentacion_gestionDeTurnos(null, this);
-
-                }
-                gestionDeTurnos.setVisible(true);
-                gestionDeTurnos.setLocationRelativeTo(null);
-            }
-
-            case 2 -> {
-                if (listaDeEmpleados == null) {
-                    listaDeEmpleados = new Presentacion_listaDeEmpleados(this);
-                }
-
-                listaDeEmpleados.setVisible(true);
-                listaDeEmpleados.setLocationRelativeTo(null);
-            }
-            case 3 -> {
-                if (menuPrincipal == null) {
-                    menuPrincipal = new Presentacion_menuPrincipal(this);
-                }
-
-                menuPrincipal.setVisible(true);
-                menuPrincipal.setLocationRelativeTo(null);
-            }
-            case 6 -> {
-                if (validacionIncidenciasTabla == null) {
-                    validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla(this);
-                }
-
-                validacionIncidenciasTabla.setVisible(true);
-                validacionIncidenciasTabla.setLocationRelativeTo(null);
-            }
-            case 7 -> {
-                if (menuGerente == null) {
-                    menuGerente = new Presentacion_menuGerente(this);
-                }
-
-                menuGerente.setVisible(true);
-                menuGerente.setLocationRelativeTo(null);
-            }
-            case 8 -> {
-                if (contratacionEmpleado == null) {
-                    contratacionEmpleado = new Presentacion_contratacionEmpleados();
-                    contratacionEmpleado.setCoordinador(this);
-                }
-
-                contratacionEmpleado.setVisible(true);
-                contratacionEmpleado.setLocationRelativeTo(null);
-            }
-            case 9 ->{
-                if (registrarAsistencia == null) {
-                    registrarAsistencia = new Presentacion_registrarAsistencia(null, this);
-                    
-                }
-                registrarAsistencia.setVisible(true);
-                registrarAsistencia.setLocationRelativeTo(null);
-            }
-            
-            default ->
-                throw new AssertionError();
+    public void abrirPresentacionRoles() {
+        if (menuPrincipal == null) {
+            menuPrincipal = new Presentacion_menuPrincipal(this);
         }
-
+        menuPrincipal.setVisible(true);
     }
 
-    public void cambioDeVentana(int ventana, DTOEmpleado empleado) {
-
-        switch (ventana) {
-            case 0 -> {
-                if (gestionDeHorarios == null) {
-                    gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
-                }
-
-                gestionDeHorarios.cargardatos(empleado);
-                gestionDeHorarios.setVisible(true);
-                gestionDeHorarios.setLocationRelativeTo(null);
-            }
-            case 1 -> {
-                if (gestionDeTurnos == null) {
-                    gestionDeTurnos = new Presentacion_gestionDeTurnos(empleado, this);
-                }
-
-                gestionDeTurnos.setVisible(true);
-                gestionDeTurnos.setLocationRelativeTo(null);
-            }
-            case 4 -> {
-                if (registroDeIncidencias == null) {
-                    registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
-                }
-
-                registroDeIncidencias.cargarTexto(empleado);
-                registroDeIncidencias.setVisible(true);
-                registroDeIncidencias.setLocationRelativeTo(null);
-            }
-            case 9 ->{
-                if (registrarAsistencia == null) {
-                    registrarAsistencia = new Presentacion_registrarAsistencia(empleado, this);
-                    
-                }
-                registrarAsistencia.setVisible(true);
-                registrarAsistencia.setLocationRelativeTo(null);
-            }
-            case 10 ->{
-                if (reporteAsistencia == null) {
-                    reporteAsistencia = new Presentacion_reporteAsistencia(this,empleado);
-                    
-                }
-                reporteAsistencia.setVisible(true);
-                reporteAsistencia.setLocationRelativeTo(null);
-            }
-            default ->
-                throw new AssertionError();
+    public void abrirPresentacionListaEmpleados() {
+        if (listaDeEmpleados == null) {
+            listaDeEmpleados = new Presentacion_listaDeEmpleados(this);
         }
-
+        listaDeEmpleados.setVisible(true);
     }
 
-    public DTOIncidencia cambioDeVentana(int ventana, DTOIncidencia incidencia) {
+    public void abrirContratacionEmpleados() {
+        if (contratacionEmpleado == null) {
+            contratacionEmpleado = new Presentacion_contratacionEmpleados(this);
+        }
+        contratacionEmpleado.setVisible(true);
+    }
 
-        switch (ventana) {
-            case 5 -> {
-                validacionDeIncidencias = new Presentacion_validacionDeIncidencias(validacionIncidenciasTabla, incidencia, this);
-                validacionDeIncidencias.setVisible(true);
-                validacionDeIncidencias.setLocationRelativeTo(null);
-                return validacionDeIncidencias.getIncidencia();
-            }
+    public void abrirVentanaGestionHorarios() {
+        if (gestionDeHorarios == null) {
+            gestionDeHorarios = new Presentacion_gestionDeHorarios(this);
+        }
+        gestionDeHorarios.setVisible(true);
+    }
 
-            default ->
-                throw new AssertionError();
+    public void abrirGestionTurnos() {
+        if (gestionDeTurnos == null) {
+            gestionDeTurnos = new Presentacion_gestionDeTurnos(empleadoDTO, this);
+        }
+        gestionDeTurnos.setVisible(true);
+    }
+
+    public void abrirMenuGerente() {
+        if (menuGerente == null) {
+            menuGerente = new Presentacion_menuGerente(this);
+        }
+        menuGerente.setVisible(true);
+    }
+
+    public void abrirRegistroAsistencia() {
+        if (registrarAsistencia == null) {
+            registrarAsistencia = new Presentacion_registrarAsistencia(empleadoDTO, this);
+        }
+        registrarAsistencia.setVisible(true);
+    }
+
+    public void abrirReporteAsistencia() {
+        if (reporteAsistencia == null) {
+            reporteAsistencia = new Presentacion_reporteAsistencia(this, empleadoDTO);
+        }
+        reporteAsistencia.setVisible(true);
+    }
+
+    public void abrirRegistroIndidencia() {
+        if (registroDeIncidencias == null) {
+            registroDeIncidencias = new Presentacion_registroDeIncidencias(this);
+        }
+        registroDeIncidencias.setVisible(true);
+    }
+
+    public void abrirValidacionIndidencia(Frame padre) {
+        if (validacionDeIncidencias == null) {
+            validacionDeIncidencias = new Presentacion_validacionDeIncidencias(padre, incidenciaDTO, this);
+        }
+    }
+
+    public void abrirValidacionIncidenciaTabla() {
+        if (validacionIncidenciasTabla == null) {
+            validacionIncidenciasTabla = new Presentacion_validacionIncidenciasTabla(this);
+        }
+        validacionIncidenciasTabla.setVisible(true);
+    }
+
+    
+    public void registrarEmpleado(DTOContratacion empleado) {
+        try {
+            this.gestionarEmpleadosF.registrarEmpleado(empleado);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar registrar empleado: " + ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
 

@@ -24,14 +24,13 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
     private LocalDate fechaNacimiento;
     
 
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
-    }
+   
 
     /**
      * Creates new form Presentacion_menuGerente
      */
-    public Presentacion_contratacionEmpleados() {
+    public Presentacion_contratacionEmpleados(Coordinador coordinador) {
+        this.coordinador = coordinador;
         initComponents();
     }
 
@@ -332,68 +331,58 @@ public class Presentacion_contratacionEmpleados extends javax.swing.JFrame {
 
     private void btnContratarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContratarEmpleadoActionPerformed
 
-        try {
-            // Obtener los valores de los campos de texto
-            String nombre = txtNombre.getText();
-            String apePaterno = txtApellidoPaterno.getText();
-            String apeMaterno = txtApellidoMaterno.getText();
-            String calle = txtCalle.getText();
-            String col = txtColonia.getText();
-            String numCasa = txtNumeroCasa.getText();
-            String codigoPostal = txtCodigoPostal.getText();
-            String curp = txtCurp.getText();
-            String rfc = txtRFC.getText();
-            String nss = txtNSS.getText();
-            
-            if (nombre.trim().isEmpty() && 
-                apePaterno.trim().isEmpty() && 
-                apeMaterno.trim().isEmpty() && 
-                calle.trim().isEmpty() && 
-                col.trim().isEmpty() && 
-                numCasa.trim().isEmpty() && 
-                codigoPostal.trim().isEmpty() && 
-                curp.trim().isEmpty() && 
+        // Obtener los valores de los campos de texto
+        String nombre = txtNombre.getText();
+        String apePaterno = txtApellidoPaterno.getText();
+        String apeMaterno = txtApellidoMaterno.getText();
+        String calle = txtCalle.getText();
+        String col = txtColonia.getText();
+        String numCasa = txtNumeroCasa.getText();
+        String codigoPostal = txtCodigoPostal.getText();
+        String curp = txtCurp.getText();
+        String rfc = txtRFC.getText();
+        String nss = txtNSS.getText();
+        if (nombre.trim().isEmpty() &&
+                apePaterno.trim().isEmpty() &&
+                apeMaterno.trim().isEmpty() &&
+                calle.trim().isEmpty() &&
+                col.trim().isEmpty() &&
+                numCasa.trim().isEmpty() &&
+                codigoPostal.trim().isEmpty() &&
+                curp.trim().isEmpty() &&
                 rfc.trim().isEmpty() && 
                 nss.trim().isEmpty()) {
-                
-                JOptionPane.showMessageDialog(this, "Todos los campos estan vacios.", "Aviso", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // Crear la instancia del DTO utilizando su constructor
-            DTOContratacion dto = new DTOContratacion(
-                nombre, 
+            
+            JOptionPane.showMessageDialog(this, "Todos los campos estan vacios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Crear la instancia del DTO utilizando su constructor
+        DTOContratacion dto = new DTOContratacion(
+                nombre,
                 apePaterno, 
                 this.fechaNacimiento,
-                calle, 
-                col, 
-                numCasa, 
-                codigoPostal, 
-                curp, 
+                calle,
+                col,
+                numCasa,
+                codigoPostal,
+                curp,
                 rfc, 
                 nss
-            );
-            
-            //Si es que el apellido materno esta no esta vacio se valida
-            if ( !apeMaterno.isEmpty() && apeMaterno != "") {
-                dto.setApellidoMaterno(apeMaterno);
-            }
-
-            // Enviar el DTO al coordinador
-            coordinador.gestionarEmpleados.registrarEmpleado(dto);
-            
-            JOptionPane.showMessageDialog(null, "Se contrato de manera correcta el empleado", "Contratacion exitosa", JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de formato", JOptionPane.ERROR_MESSAGE);
+        );
+        //Si es que el apellido materno esta no esta vacio se valida
+        if ( !apeMaterno.isEmpty() && apeMaterno != "") {
+            dto.setApellidoMaterno(apeMaterno);
         }
+        // Enviar el DTO al coordinador
+        coordinador.registrarEmpleado(dto);
+        JOptionPane.showMessageDialog(null, "Se contrato de manera correcta el empleado", "Contratacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_btnContratarEmpleadoActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
 
-        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
+        coordinador.abrirMenuGerente();
         this.dispose();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
