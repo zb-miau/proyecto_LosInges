@@ -228,8 +228,7 @@ public class ControlGestionarEmpleados {
         try {
             return gestionAsistencias.crearMarca(marcaDTO);
         } catch (NegocioException e) {
-            System.out.println("Algo fallo al intentar insertar la marca");
-            e.printStackTrace();
+            System.err.println("Algo fallo al intentar insertar la marca");
             return marcaDTO;
         }
 
@@ -239,8 +238,7 @@ public class ControlGestionarEmpleados {
         try {
             return gestionAsistencias.obtenerListaMarca(empleado, incio, fin);
         } catch (NegocioException e) {
-            System.out.println("Ocurrio un error al intentar obtener la lista");
-            e.printStackTrace();
+            System.err.println("Ocurrio un error al intentar obtener la lista");
             return null;
         }
 
@@ -251,7 +249,6 @@ public class ControlGestionarEmpleados {
             return gestionAsistencias.conteoAsistencia(listaMarcas);
         } catch (NegocioException e) {
             System.out.println("Ocurrio un error al intentar contar las asistencias");
-            e.printStackTrace();
             return 0;
         }
 
@@ -261,8 +258,7 @@ public class ControlGestionarEmpleados {
         try {
             return gestionAsistencias.obtenerMarca(empleado, fecha);
         } catch (NegocioException e) {
-            System.out.println("Algo fallo al intentar obtener la marca");
-            e.printStackTrace();
+            System.err.println("Algo fallo al intentar obtener la marca");
             return null;
         }
     }

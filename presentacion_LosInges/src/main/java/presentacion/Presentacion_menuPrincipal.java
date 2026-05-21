@@ -111,20 +111,20 @@ public class Presentacion_menuPrincipal extends javax.swing.JFrame {
 
     private void btnGerenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenteActionPerformed
 
-        coordinador.abrirMenuGerente();
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
         this.dispose();
 
     }//GEN-LAST:event_btnGerenteActionPerformed
 
     private void btnEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadoActionPerformed
-        coordinador.abrirPresentacionListaEmpleados();
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
         coordinador.setVentanaSiguiente(Coordinador.REGISTRAR_ASISTENCIA);
         this.dispose();
     }//GEN-LAST:event_btnEmpleadoActionPerformed
 
     private void btnGerenteGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenteGeneralActionPerformed
 
-        coordinador.abrirValidacionIncidenciaTabla();
+        coordinador.cambioDeVentana(Coordinador.VALIDACION_INCIDECIAS_TABLA);
         this.dispose();
 
 

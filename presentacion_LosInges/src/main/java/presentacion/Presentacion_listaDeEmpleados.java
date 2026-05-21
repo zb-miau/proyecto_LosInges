@@ -150,7 +150,7 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
 
     private void abrirVentanaRegistroIncidenicias(DTOEmpleado empleado) {
 
-        coordinador.abrirRegistroIncidencia(empleado);
+        coordinador.cambioDeVentana(Coordinador.REGISTRO_DE_INCIDENCIAS, empleado);
         this.dispose();
 
     }
@@ -182,12 +182,12 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
      */
     private void abrirVentana(DTOEmpleado empleado) {
 
-        List<DTOTurno> turnos = coordinador.recuperarTurno();
+        List<DTOTurno> turnos = coordinador.recuperarListaTurno();
         if (turnos.isEmpty()) {
-            coordinador.abrirGestionTurnos();
+            coordinador.cambioDeVentana(Coordinador.GESTION_DE_TURNOS);
 
         } else {
-            coordinador.abrirVentanaGestionHorarios();
+            coordinador.cambioDeVentana(Coordinador.GESTION_DE_HORARIOS);
         }
 
         this.dispose();
@@ -299,12 +299,12 @@ public class Presentacion_listaDeEmpleados extends javax.swing.JFrame {
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
         if (coordinador.getVentanaSiguiente() == Coordinador.REGISTRAR_ASISTENCIA) {
-            coordinador.abrirPresentacionRoles();
+            coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
             this.dispose();
             return;
         }
 
-        coordinador.abrirMenuGerente();
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
         this.dispose();
 
     }//GEN-LAST:event_btnRegresarActionPerformed

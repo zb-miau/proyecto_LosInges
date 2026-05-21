@@ -28,7 +28,6 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
     public Presentacion_registrarAsistencia(Coordinador coordinador) {
         initComponents();
         this.coordinador = coordinador;
-        asignarEventos();
 
     }
 
@@ -37,7 +36,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
         this.empleado = empleado;
 
         actualizarEstadoBoton();
-
+        asignarEventos();
     }
 
     private void actualizarEstadoBoton() {
@@ -177,7 +176,7 @@ public class Presentacion_registrarAsistencia extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        coordinador.abrirPresentacionRoles();
+        coordinador.cambioDeVentana(Coordinador.MENU_PRINCIPAL);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

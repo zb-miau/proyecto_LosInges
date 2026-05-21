@@ -222,7 +222,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         pnlCalendario.removeAll();
         idEmpleado = coordinador.recuperarEmpleado(idEmpleado);
         LocalDate[] rangoFechasActual = paginaCalendarioActual();
-        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
         if (idEmpleado != null) {
             if (idEmpleado.getHorarioActual() != null) {
                 todosLosHorarios.add(idEmpleado.getHorarioActual());
@@ -313,7 +313,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         pnlCalendario.removeAll();
         this.idEmpleado = coordinador.recuperarEmpleado(idEmpleado);
         LocalDate[] rangoFechasActual = paginaCalendarioActual();
-        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
         if (idEmpleado != null) {
             if (idEmpleado.getHorarioActual() != null) {
                 todosLosHorarios.add(idEmpleado.getHorarioActual());
@@ -827,7 +827,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
         idEmp.setId(idEmpleado.getId());
         DTOEmpleado empCompleto = coordinador.recuperarEmpleado(idEmp);
         LocalDate[] rangoFechasActual = paginaCalendarioActual();
-        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaDeHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
+        List<DTOHorarioEmpleado> todosLosHorarios = coordinador.listaHistorial(idEmpleado, rangoFechasActual[0], rangoFechasActual[1]);
         if (empCompleto.getHorarioActual() != null) {
             todosLosHorarios.add(empCompleto.getHorarioActual());
         }
@@ -1042,7 +1042,7 @@ public class Presentacion_gestionDeHorarios extends javax.swing.JFrame {
      * @param evt click en el boton regresar.
      */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.abrirPresentacionListaEmpleados();
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

@@ -437,7 +437,7 @@ public class Presentacion_gestionDeTurnos extends javax.swing.JFrame {
      * @param evt click en el boton regresar.
      */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        coordinador.abrirMenuGerente();
+        coordinador.cambioDeVentana(Coordinador.MENU_GERENTE);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

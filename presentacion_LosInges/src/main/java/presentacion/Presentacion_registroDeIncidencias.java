@@ -231,7 +231,7 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
                 incidencia = coordinador.crearIncidencia(incidencia);
                 coordinador.enviarSupervisor(incidencia);
                 JOptionPane.showMessageDialog(this, "Incidencia Registrada");
-                coordinador.abrirPresentacionListaEmpleados();
+                coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
                 this.dispose();
 
             } else {
@@ -252,7 +252,7 @@ public class Presentacion_registroDeIncidencias extends javax.swing.JFrame {
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
 
-        coordinador.abrirPresentacionListaEmpleados();
+        coordinador.cambioDeVentana(Coordinador.LISTA_DE_EMPLEADOS);
         this.dispose();
 
     }//GEN-LAST:event_botonCancelarActionPerformed
