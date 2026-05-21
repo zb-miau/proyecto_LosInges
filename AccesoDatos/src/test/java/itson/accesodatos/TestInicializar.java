@@ -80,7 +80,7 @@ public class TestInicializar {
 //         daoIncidencias = IncidenciasDAO.getInstance();
 //         daoIncidencias.crear(incidencia);
 //         
-//       });
+       });
        
      
    }
