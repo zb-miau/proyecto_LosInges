@@ -4,13 +4,12 @@
  */
 package gestionIncidencias;
 
-import dto.DTOEmpleado;
 import dto.DTOIncidencia;
+import dtos.DTO_CorreoElectronico;
 import java.util.List;
 import mensajeria.ControlMensajeria;
 import mensajeria.FacadeMensajeria;
 import mensajeria.IMensajeria;
-import objetosNegocio.EmpleadoBO;
 import objetosNegocio.IncidenciaBO;
 import objetosNegocio.NegocioException;
 
@@ -137,7 +136,14 @@ public class ControlGestionIncidencias {
      */
     public void enviarSupervisor(DTOIncidencia incidencia) {
 
-        mensajeria.enviarGmailSupervisor(incidencia);
+        DTO_CorreoElectronico correo = new DTO_CorreoElectronico(
+                incidencia.getEmpleado().getId(),
+                incidencia.getIdIncidencia(),
+                incidencia.getEmpleado().getNombre() + " " + incidencia.getEmpleado().getApellidoPaterno() + " " + incidencia.getEmpleado().getApellidoMaterno(),
+                incidencia.getTipo().toString(),
+                incidencia.getDescripcion());
+
+        mensajeria.enviarGmailSupervisor(correo);
 
     }
 

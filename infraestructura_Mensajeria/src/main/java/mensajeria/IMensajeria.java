@@ -4,7 +4,7 @@
  */
 package mensajeria;
 
-import dto.DTOIncidencia;
+import dtos.DTO_CorreoElectronico;
 
 /**
  * Interfaz que define el contrato abstracto para los servicios de mensajería y
@@ -31,9 +31,9 @@ public interface IMensajeria {
      * del transporte seguro del correo.
      *
      *
-     * @param incidencia Objeto DTOIncidencia que contiene toda la información
+     * @param correo Objeto DTO_CorreoElectronico que contiene toda la información
      * estructurada del reporte y el empleado involucrado. No debe ser nulo.
      */
-    public void enviarGmailSupervisor(DTOIncidencia incidencia);
+    public void enviarGmailSupervisor(DTO_CorreoElectronico correo);
 
 }

@@ -4,7 +4,7 @@
  */
 package mensajeria;
 
-import dto.DTOIncidencia;
+import dtos.DTO_CorreoElectronico;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
@@ -35,13 +35,12 @@ public class ControlMensajeria {
      * DTO de la incidencia.
      *
      *
-     * @param incidencia Objeto DTOIncidencia que contiene la información
-     * detallada de la incidencia y del empleado afectado. No debe ser nulo y
-     * debe contar con la relación de un DTOEmpleado válida.
+     * @param correo Objeto DTO_CorreoElectronico que contiene la información
+     * detallada de la incidencia y del empleado afectado. No debe ser nulo
      * @throws NullPointerException si incidencia o los datos del empleado son
      * nulos al estructurar el mensaje.
      */
-    public void enviarSupervisor(DTOIncidencia incidencia) {
+    public void enviarSupervisor(DTO_CorreoElectronico correo) {
 
         // 1. Configuración del servidor SMTP (Ejemplo con Gmail)
         String servidorSmtp = "smtp.gmail.com";
@@ -80,12 +79,12 @@ public class ControlMensajeria {
             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
 
             // Asunto y cuerpo del mensaje
-            mensaje.setSubject("Se le ha registrado una incidencia a " + incidencia.getEmpleado().getNombre() + " " + incidencia.getEmpleado().getApellidoPaterno() + " " + incidencia.getEmpleado().getApellidoMaterno());
-            mensaje.setText("Se le ha registrado una incidencia a " + incidencia.getEmpleado().getNombre() + " " + incidencia.getEmpleado().getApellidoPaterno() + " " + incidencia.getEmpleado().getApellidoMaterno() + "\n"
-                    + "ID incidencia: " + incidencia.getIdIncidencia() + "\n"
-                    + "ID empleado: " + incidencia.getEmpleado().getId() + "\n"
+            mensaje.setSubject("Se le ha registrado una incidencia a " + correo.getNombreEmpleado());
+            mensaje.setText("Se le ha registrado una incidencia a " + correo.getNombreEmpleado() + "\n"
+                    + "ID incidencia: " + correo.getIdIncidencia() + "\n"
+                    + "ID empleado: " + correo.getIdEmpleado() + "\n"
                     + "Descripción\n"
-                    + incidencia.getDescripcion());
+                    + correo.getDescripcion());
 
             // 5. Enviar el correo
             Transport.send(mensaje);

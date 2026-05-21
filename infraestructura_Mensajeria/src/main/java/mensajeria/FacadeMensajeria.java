@@ -4,7 +4,7 @@
  */
 package mensajeria;
 
-import dto.DTOIncidencia;
+import dtos.DTO_CorreoElectronico;
 
 /**
  * Implementación del patrón de diseño **Facade (Fachada)** para el subsistema
@@ -47,13 +47,13 @@ public class FacadeMensajeria implements IMensajeria {
      * método encapsulado enviarSupervisor del controlador.
      *
      *
-     * @param incidencia Objeto DTOIncidencia que contiene los datos del reporte
+     * @param correo Objeto DTO_CorreoElectronico que contiene los datos del reporte
      * y del empleado asociado que se enviarán en la notificación.
      */
     @Override
-    public void enviarGmailSupervisor(DTOIncidencia incidencia) {
+    public void enviarGmailSupervisor(DTO_CorreoElectronico correo) {
 
-        control.enviarSupervisor(incidencia);
+        control.enviarSupervisor(correo);
 
     }
 
